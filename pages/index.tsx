@@ -1,6 +1,5 @@
 import type { NextPage } from "next";
-import Image from "next/image";
-import { githubSignIn } from "../lib/firebase";
+import Link from "next/link";
 
 const Home: NextPage = () => {
   return (
@@ -13,19 +12,9 @@ const Home: NextPage = () => {
         width: "100%",
       }}
     >
-      <button
-        onClick={githubSignIn}
-        style={{
-          display: "flex",
-          justifyContent: "space-around",
-          alignItems: "center",
-          height: "8vh",
-          width: "200px",
-        }}
-      >
-        <Image src="/github.png" width="30px" height="30px" />
-        Sign in with GitHub
-      </button>
+      <Link href="/enter">
+        wow, this is a great idea! let's get started already 😛
+      </Link>
     </div>
   );
 };

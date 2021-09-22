@@ -1,7 +1,24 @@
-import { auth, githubProvider } from "./firebaseInit";
+import Image from "next/image";
+import { auth, githubProvider } from "@lib/firebase";
 import { signInWithPopup, GithubAuthProvider } from "firebase/auth";
 
-export const githubSignIn = async () => {
+export const SignInButton = () => (
+  <button
+    onClick={githubSignIn}
+    style={{
+      display: "flex",
+      justifyContent: "space-around",
+      alignItems: "center",
+      height: "8vh",
+      width: "200px",
+    }}
+  >
+    <Image src="/github.png" width="30px" height="30px" />
+    Sign in with GitHub
+  </button>
+);
+
+const githubSignIn = async () => {
   try {
     const result = await signInWithPopup(auth, githubProvider);
 
@@ -19,5 +36,3 @@ export const githubSignIn = async () => {
     console.error(error);
   }
 };
-
-// export sign out as well
