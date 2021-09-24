@@ -13,7 +13,7 @@ const Home: NextPage = () => {
       }}
     >
       <Link href="/enter">
-        wow, this is a great idea! let's get started already 😛
+        {"wow, this is a great idea! let's get started already 😛"}
       </Link>
     </div>
   );
