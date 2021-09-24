@@ -3,8 +3,7 @@ import type { NextPage } from "next";
 import { auth } from "@lib/firebase";
 import { useAuthState } from "react-firebase-hooks/auth";
 
-import { SignInButton } from "./SignInButton";
-import { SignOutButton } from "./SignOutButton";
+import { SignInButton, SignOutButton } from "../components";
 
 const Enter: NextPage = () => {
   const [user, loading, error] = useAuthState(auth);
