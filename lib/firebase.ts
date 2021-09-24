@@ -4,7 +4,7 @@ import {
   GithubAuthProvider,
   connectAuthEmulator,
 } from "firebase/auth";
-// import { getFirestore } from "firebase/firestore";
+import { getFirestore, connectFirestoreEmulator } from "firebase/firestore";
 
 const firebaseConfig = {
   apiKey: "AIzaSyD9TtYmaRl5deizFSPqQ0Ee_DGhccKr73o",
@@ -25,6 +25,8 @@ connectAuthEmulator(auth, "http://localhost:9099");
 export const githubProvider = new GithubAuthProvider();
 githubProvider.addScope("write:repo_hook");
 
-// export const firestore = getFirestore(firebaseApp);
+export const db = getFirestore(firebaseApp);
+connectFirestoreEmulator(db, "localhost", 8080);
+// TODO: Finesse this so it runs automatically in dev👌
 
 export default firebaseApp;
