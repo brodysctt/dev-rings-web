@@ -2,7 +2,7 @@ import { initializeApp } from "firebase/app";
 import {
   getAuth,
   GithubAuthProvider,
-  //connectAuthEmulator,
+  // connectAuthEmulator,
 } from "firebase/auth";
 import { getFirestore /*connectFirestoreEmulator */ } from "firebase/firestore";
 
