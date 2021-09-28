@@ -1,13 +1,10 @@
 import type { NextPage } from "next";
+import Link from "next/link";
 
 import { auth } from "@lib/firebase";
 import { useAuthState } from "react-firebase-hooks/auth";
 
-import {
-  SignInButton,
-  SignOutButton,
-  CreateWebhookButton,
-} from "../components";
+import { SignInButton, SignOutButton } from "../components";
 
 const Enter: NextPage = () => {
   const [user, loading, error] = useAuthState(auth);
@@ -34,13 +31,14 @@ const Enter: NextPage = () => {
           flexDirection: "column",
           justifyContent: "space-around",
           alignItems: "center",
-          height: "80vh",
+          height: "100vh",
           width: "100%",
         }}
       >
-        <p>Current User: {user.email}</p>
+        <Link href="/set-up-webhooks">
+          {"aiiight, you d to start tracking your commits?"}
+        </Link>
         <SignOutButton />
-        <CreateWebhookButton />
       </div>
     );
   }
