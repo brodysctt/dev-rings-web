@@ -36,6 +36,7 @@ const githubSignIn = async () => {
       token: token,
     });
     console.log("Document written with ID: ", docRef.id);
+    // TODO: Fetch public repos and store them in state
   } catch (error) {
     console.error(error);
   }

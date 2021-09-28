@@ -3,7 +3,11 @@ import type { NextPage } from "next";
 import { auth } from "@lib/firebase";
 import { useAuthState } from "react-firebase-hooks/auth";
 
-import { SignInButton, SignOutButton } from "../components";
+import {
+  SignInButton,
+  SignOutButton,
+  CreateWebhookButton,
+} from "../components";
 
 const Enter: NextPage = () => {
   const [user, loading, error] = useAuthState(auth);
@@ -24,9 +28,19 @@ const Enter: NextPage = () => {
   }
   if (user) {
     return (
-      <div>
+      <div
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "space-around",
+          alignItems: "center",
+          height: "80vh",
+          width: "100%",
+        }}
+      >
         <p>Current User: {user.email}</p>
         <SignOutButton />
+        <CreateWebhookButton />
       </div>
     );
   }
