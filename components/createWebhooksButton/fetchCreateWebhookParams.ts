@@ -3,9 +3,9 @@ import { fetchToken } from "helpers";
 
 const GITHUB_BASE_URL = "https://api.github.com";
 
-export const fetchCreateWebhookParams = async () => {
+export const fetchCreateWebhookParams = async (email: string) => {
   try {
-    const token = await fetchToken();
+    const token = await fetchToken(email);
 
     if (!token) {
       throw new Error("no token bruh");

@@ -1,9 +1,8 @@
 import { db } from "@lib/firebase";
 import { doc, getDoc } from "@firebase/firestore";
 
-export const fetchToken = async () => {
-  // TODO: Update to be dynamic
-  const docRef = doc(db, "users", "0bl9ZeYe9fd0HeHWrjc1");
+export const fetchToken = async (email: string) => {
+  const docRef = doc(db, "users", email);
   const docSnap = await getDoc(docRef);
 
   if (!docSnap) {

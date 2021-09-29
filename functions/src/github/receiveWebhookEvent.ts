@@ -1,6 +1,7 @@
 import * as functions from "firebase-functions";
 
 import * as cors from "cors";
+// @ts-ignore
 const corsHandler = cors({ origin: true });
 
 export const receiveWebhookEventHandler = functions.https.onRequest(

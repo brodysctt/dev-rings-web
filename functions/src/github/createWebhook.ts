@@ -1,6 +1,7 @@
 import * as functions from "firebase-functions";
 import axios from "axios";
 import * as cors from "cors";
+// @ts-ignore
 const corsHandler = cors({ origin: true });
 
 const GITHUB_BASE_URL = "https://api.github.com";
