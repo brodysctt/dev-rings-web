@@ -23,8 +23,11 @@ const Enter: NextPage = () => {
     );
   }
   if (user) {
-    const { email } = user;
-    console.log(`this mans is logged in: ${email}`);
+    const {
+      reloadUserInfo: { screenName: githubUser },
+    } = user;
+    console.log(`this mans is logged in: ${githubUser}`);
+
     return (
       <div
         style={{
@@ -36,7 +39,7 @@ const Enter: NextPage = () => {
           width: "100%",
         }}
       >
-        <CreateWebhooksButton email={email} />
+        <CreateWebhooksButton user={githubUser} />
         <SignOutButton />
       </div>
     );

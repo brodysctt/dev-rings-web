@@ -3,7 +3,7 @@ import { useState } from "react";
 
 import { createWebhookForEachRepo } from "./createWebhookForEachRepo";
 
-export const CreateWebhooksButton = ({ email }: { email: string }) => {
+export const CreateWebhooksButton = ({ user }: { user: string }) => {
   const [noRepos, setNoRepos] = useState(false);
 
   if (noRepos) {
@@ -14,7 +14,7 @@ export const CreateWebhooksButton = ({ email }: { email: string }) => {
 
   return (
     <button
-      onClick={() => createWebhookForEachRepo(email, setNoRepos)}
+      onClick={() => createWebhookForEachRepo(user, setNoRepos)}
       style={{
         display: "flex",
         justifyContent: "space-around",

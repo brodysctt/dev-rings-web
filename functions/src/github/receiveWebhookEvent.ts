@@ -19,22 +19,20 @@ export const receiveWebhookEventHandler = functions.https.onRequest(
 
         const { body: data } = req;
         const {
-          sender: { login },
+          sender: { login: user },
         } = data;
-        // TODO: update this to be dynamic
-        // ^ i.e. add github username to the User document when user first completes auth
-        if (login !== "bscott4") {
+
+        const userRef = db.collection("users").doc(user);
+        const doc = await userRef.get();
+        if (!doc.exists) {
           functions.logger.log(
-            `Event created by ${login} – this event won't be stored`
+            `${user} doesn't exist – this event won't be stored`
           );
           res.sendStatus(200);
           return;
         }
 
-        const ref = db
-          .collection("users")
-          .doc("brodyscott12+dev@gmail.com")
-          .collection("events");
+        const eventsRef = db.collection("users").doc(user).collection("events");
 
         if (eventType === "push") {
           const {
@@ -44,28 +42,21 @@ export const receiveWebhookEventHandler = functions.https.onRequest(
 
           if (!commits.length) {
             functions.logger.log(
-              `Push event for creating or deleting a branch – this event won't be stored.`
+              `Push event without a commit – this event won't be stored.`
             );
             res.sendStatus(200);
             return;
           }
 
           for (const commit of commits) {
-            const { id: commitId, message, url: url } = commit;
-            await ref.doc(commitId).set({
-              createdAt: admin.firestore.Timestamp.fromDate(new Date()),
-              message,
-              repo,
-              type: eventType,
-              url,
-            });
+            const { id, url } = commit;
+            await storeEvent({ eventsRef, eventType, id, repo, url });
           }
           res.sendStatus(200);
           return;
         }
 
         if (eventType === "pull_request") {
-          functions.logger.log(`officially within the pull_request block`);
           const { action } = data;
           if (action !== "opened") {
             functions.logger.log(
@@ -76,18 +67,11 @@ export const receiveWebhookEventHandler = functions.https.onRequest(
           }
 
           const {
-            pull_request: { id: pullRequestId, url, title: message },
+            pull_request: { id: prId, url },
             repository: { name: repo },
           } = data;
-
-          await ref.doc(pullRequestId).set({
-            createdAt: admin.firestore.Timestamp.fromDate(new Date()),
-            message,
-            repo,
-            type: eventType,
-            url,
-          });
-
+          const id = prId.toString();
+          await storeEvent({ eventsRef, eventType, id, repo, url });
           res.sendStatus(200);
           return;
         }
@@ -97,3 +81,25 @@ export const receiveWebhookEventHandler = functions.https.onRequest(
     });
   }
 );
+
+interface StoreEvent {
+  eventsRef: FirebaseFirestore.CollectionReference<FirebaseFirestore.DocumentData>;
+  eventType: "push" | "pull_request";
+  id: string;
+  repo: string;
+  url: string;
+}
+
+const storeEvent = async ({
+  eventsRef,
+  eventType,
+  id,
+  repo,
+  url,
+}: StoreEvent) =>
+  await eventsRef.doc(id).set({
+    createdAt: admin.firestore.Timestamp.fromDate(new Date()),
+    repo,
+    eventType,
+    url,
+  });
