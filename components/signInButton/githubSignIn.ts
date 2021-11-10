@@ -7,9 +7,13 @@ export const githubSignIn = async () => {
     const result = await signInWithPopup(auth, githubProvider);
 
     const {
-      user: { email },
+      user: {
+        // @ts-ignore
+        reloadUserInfo: { screenName: githubUser },
+      },
     } = result;
-    console.log(email);
+
+    console.log(`here be the user: ${githubUser}`);
 
     const credential = GithubAuthProvider.credentialFromResult(result);
     if (!credential) {
@@ -18,12 +22,8 @@ export const githubSignIn = async () => {
     const { accessToken: token } = credential;
     console.log(token);
 
-    if (!email) {
-      throw new Error("the email returned is null");
-    }
-
-    await setDoc(doc(db, "users", email), {
-      email,
+    await setDoc(doc(db, "users", githubUser), {
+      githubUser,
       token,
     });
   } catch (error) {

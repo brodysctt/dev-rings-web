@@ -3,9 +3,9 @@ import { fetchToken } from "helpers";
 
 const GITHUB_BASE_URL = "https://api.github.com";
 
-export const fetchCreateWebhookParams = async (email: string) => {
+export const fetchCreateWebhookParams = async (user: string) => {
   try {
-    const token = await fetchToken(email);
+    const token = await fetchToken(user);
 
     if (!token) {
       throw new Error("no token bruh");
@@ -18,15 +18,7 @@ export const fetchCreateWebhookParams = async (email: string) => {
       },
     });
 
-    const userResponse = await axiosClient.get("/user");
-
-    const {
-      data: { login: owner },
-    } = userResponse;
-
-    console.log(`here be the owner: ${owner}`);
-
-    const reposResponse = await axiosClient.get(`/users/${owner}/repos`);
+    const reposResponse = await axiosClient.get(`/users/${user}/repos`);
 
     const { data: reposData } = reposResponse;
 
@@ -43,7 +35,6 @@ export const fetchCreateWebhookParams = async (email: string) => {
 
     return {
       token,
-      owner,
       repos,
     };
   } catch (error) {

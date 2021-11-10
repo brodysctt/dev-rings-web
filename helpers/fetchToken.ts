@@ -1,8 +1,8 @@
 import { db } from "@lib/firebase";
 import { doc, getDoc } from "@firebase/firestore";
 
-export const fetchToken = async (email: string) => {
-  const docRef = doc(db, "users", email);
+export const fetchToken = async (user: string) => {
+  const docRef = doc(db, "users", user);
   const docSnap = await getDoc(docRef);
 
   if (!docSnap) {

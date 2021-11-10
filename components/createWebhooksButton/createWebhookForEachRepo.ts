@@ -2,16 +2,16 @@ import axios from "axios";
 import { fetchCreateWebhookParams } from "./fetchCreateWebhookParams";
 
 export const createWebhookForEachRepo = async (
-  email: string,
+  user: string,
   setNoRepos: (noRepos: boolean) => void
 ) => {
-  const createWebhookParams = await fetchCreateWebhookParams(email);
+  const createWebhookParams = await fetchCreateWebhookParams(user);
 
   if (!createWebhookParams) {
     throw new Error(`bruh, where's the params at?`);
   }
 
-  const { token, owner, repos } = createWebhookParams;
+  const { token, repos } = createWebhookParams;
 
   if (repos.length < 1) {
     setNoRepos(true);
@@ -22,7 +22,7 @@ export const createWebhookForEachRepo = async (
 
   repos.forEach(async (repo, i) => {
     console.log(`creating webhook #${i + 1} for ${repo}`);
-    const response = await sendCreateWebhookRequest(token, owner, repo);
+    const response = await sendCreateWebhookRequest(token, user, repo);
     response
       ? console.log(`webhook #${i + 1} is a go 🟢`)
       : console.log(
