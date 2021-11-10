@@ -31,6 +31,7 @@ const createWebhook = async (owner: string, repo: string, token: string) => {
         url: WEBHOOK_EVENTS_URL,
         content_type: "json",
       },
+      events: ["push", "pull_request"],
     },
     {
       headers: {
