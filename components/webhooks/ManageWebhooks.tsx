@@ -2,7 +2,7 @@ import { db } from "@lib/firebase";
 import { useCollection } from "react-firebase-hooks/firestore";
 import { collection } from "firebase/firestore";
 
-import { CreateWebhooksButton } from "components";
+import { CreateWebhooksButton, AddWebhookForm } from "components";
 
 export const ManageWebhooks = ({ userId }: { userId: string }) => {
   const webhooksRef = collection(db, "users", userId, "webhooks");
@@ -27,9 +27,10 @@ export const ManageWebhooks = ({ userId }: { userId: string }) => {
     if (!docs.length) {
       return <CreateWebhooksButton userId={userId} />;
     }
-    const urls = docs.map((doc) => {
+    const repos = docs.map((doc) => {
       const { url } = doc.data();
-      return url;
+      const re = new RegExp(`(?<=${userId}/).*(?=/hooks)`);
+      return url.match(re);
     });
     return (
       <div
@@ -41,9 +42,10 @@ export const ManageWebhooks = ({ userId }: { userId: string }) => {
           width: "100%",
         }}
       >
-        here be the webhooks that have been configured 👇
-        {urls.map((url) => (
-          <p>{url}</p>
+        <AddWebhookForm userId={userId} />
+        here are the repos that are now being tracked 👇
+        {repos.map((repo) => (
+          <p>{repo}</p>
         ))}
       </div>
     );

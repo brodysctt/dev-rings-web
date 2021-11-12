@@ -1,7 +1,7 @@
 import Image from "next/image";
 import { useState } from "react";
 
-import { createWebhookForEachRepo } from "./utils/createWebhookForEachRepo";
+import { createWebhookForEachRepo } from "./utils";
 
 export const CreateWebhooksButton = ({ userId }: { userId: string }) => {
   const [noRepos, setNoRepos] = useState(false);
