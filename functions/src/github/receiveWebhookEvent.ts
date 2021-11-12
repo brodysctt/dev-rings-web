@@ -11,46 +11,45 @@ export const receiveWebhookEventHandler = functions.https.onRequest(
     corsHandler(req, res, async () => {
       try {
         const eventType = req.header("X-GitHub-Event");
-        if (eventType !== "push" && eventType !== "pull_request") {
-          functions.logger.log(`${eventType} events are currently not handled`);
-          res.sendStatus(200);
-          return;
-        }
 
         const { body: data } = req;
         const {
-          sender: { login: user },
+          sender: { login: userId },
         } = data;
 
-        const userRef = db.collection("users").doc(user);
+        const userRef = db.collection("users").doc(userId);
         const doc = await userRef.get();
         if (!doc.exists) {
           functions.logger.log(
-            `${user} doesn't exist – this event won't be stored`
+            `${userId} doesn't exist – this event won't be stored 🙅‍♂️`
           );
           res.sendStatus(200);
           return;
         }
 
-        const eventsRef = db.collection("users").doc(user).collection("events");
+        const eventsRef = db
+          .collection("users")
+          .doc(userId)
+          .collection("events");
 
         if (eventType === "push") {
           const {
             commits,
             repository: { name: repo },
           } = data;
-
           if (!commits.length) {
             functions.logger.log(
-              `Push event without a commit – this event won't be stored.`
+              `User either created or deleted a branch (i.e. push event with 0 commits) – this event won't be stored 🙅‍♀️`
             );
             res.sendStatus(200);
             return;
           }
-
           for (const commit of commits) {
             const { id, url } = commit;
-            await storeEvent({ eventsRef, eventType, id, repo, url });
+            const eventId = id.toString();
+            functions.logger.log(`Storing ${eventType} event...`);
+            await storeEvent({ eventsRef, eventId, eventType, repo, url });
+            functions.logger.log(`Successfully stored event ${eventId} 🎉`);
           }
           res.sendStatus(200);
           return;
@@ -60,18 +59,33 @@ export const receiveWebhookEventHandler = functions.https.onRequest(
           const { action } = data;
           if (action !== "opened") {
             functions.logger.log(
-              `PR event for ${action} action – this event won't be stored`
+              `PR event for ${action} action – this event won't be stored 🙅‍♂️`
             );
             res.sendStatus(200);
             return;
           }
-
           const {
-            pull_request: { id: prId, url },
+            pull_request: { id, url },
             repository: { name: repo },
           } = data;
-          const id = prId.toString();
-          await storeEvent({ eventsRef, eventType, id, repo, url });
+          const eventId = id.toString();
+          functions.logger.log(`Storing ${eventType} event...`);
+          await storeEvent({ eventsRef, eventId, eventType, repo, url });
+          functions.logger.log(`Successfully stored event ${eventId} 🎉`);
+          res.sendStatus(200);
+          return;
+        }
+
+        if (eventType === "meta") {
+          const { hook_id } = data;
+          const webhookId = hook_id.toString();
+          const webhooksRef = db
+            .collection("users")
+            .doc(userId)
+            .collection("webhooks");
+          functions.logger.log(`This webhook was deleted. Deleting from db...`);
+          await webhooksRef.doc(webhookId).delete();
+          functions.logger.log(`Successfully deleted webhook ${webhookId} 🥲`);
           res.sendStatus(200);
           return;
         }
@@ -84,20 +98,20 @@ export const receiveWebhookEventHandler = functions.https.onRequest(
 
 interface StoreEvent {
   eventsRef: FirebaseFirestore.CollectionReference<FirebaseFirestore.DocumentData>;
+  eventId: string;
   eventType: "push" | "pull_request";
-  id: string;
   repo: string;
   url: string;
 }
 
 const storeEvent = async ({
   eventsRef,
+  eventId,
   eventType,
-  id,
   repo,
   url,
 }: StoreEvent) =>
-  await eventsRef.doc(id).set({
+  await eventsRef.doc(eventId).set({
     createdAt: admin.firestore.Timestamp.fromDate(new Date()),
     repo,
     eventType,

@@ -28,8 +28,9 @@ export const createWebhookHandler = functions.https.onRequest(
           .doc(user)
           .collection("webhooks");
 
+        const webhookId = id.toString();
         functions.logger.log("Storing webhook in Firestore...");
-        await reposRef.doc(id.toString()).set({
+        await reposRef.doc(webhookId).set({
           createdAt: admin.firestore.Timestamp.fromDate(new Date()),
           url,
           pingUrl,
@@ -54,7 +55,7 @@ const createWebhook = async (user: string, repo: string, token: string) => {
         url: WEBHOOK_EVENTS_URL,
         content_type: "json",
       },
-      events: ["push", "pull_request"],
+      events: ["push", "pull_request", "meta"],
     },
     {
       headers: {

@@ -28,11 +28,11 @@ const githubSignIn = async () => {
     const {
       user: {
         // @ts-ignore
-        reloadUserInfo: { screenName: githubUser },
+        reloadUserInfo: { screenName: userId },
       },
     } = result;
 
-    console.log(`here be the user: ${githubUser}`);
+    console.log(`here be the user: ${userId}`);
 
     const credential = GithubAuthProvider.credentialFromResult(result);
     if (!credential) {
@@ -41,8 +41,7 @@ const githubSignIn = async () => {
     const { accessToken: token } = credential;
     console.log(token);
 
-    await setDoc(doc(db, "users", githubUser), {
-      githubUser,
+    await setDoc(doc(db, "users", userId), {
       token,
     });
   } catch (error) {
