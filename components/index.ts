@@ -1,3 +1,2 @@
-export * from "./signInButton";
-export * from "./SignOutButton";
-export * from "./createWebhooksButton";
+export * from "./auth";
+export * from "./webhooks";

@@ -20,17 +20,16 @@ export const createWebhookForEachRepo = async (
 
   console.log(`about to create ${repos.length} webhooks. let's get it 🪝`);
 
-  repos.forEach(async (repo, i) => {
-    console.log(`creating webhook #${i + 1} for ${repo}`);
+  for (const repo of repos) {
+    console.log(`Creating webhook...`);
     const response = await sendCreateWebhookRequest(token, user, repo);
     response
-      ? console.log(`webhook #${i + 1} is a go 🟢`)
-      : console.log(
-          `webhook #${
-            i + 1
-          } didn't get created. it's possible a webhook already exists for this repo 👀`
+      ? console.log(`webhook is a go 🟢`)
+      : // TODO: This is a specific case, so it can't be used as a catch-all error message. Fix it!
+        console.log(
+          `webhook didn't get created. it's possible a webhook already exists for this repo 👀`
         );
-  });
+  }
 };
 
 const CLOUD_FUNCTION_URL =
@@ -38,12 +37,12 @@ const CLOUD_FUNCTION_URL =
 
 const sendCreateWebhookRequest = async (
   token: string,
-  owner: string,
+  user: string,
   repo: string
 ) => {
   try {
     const response = await axios.post(`${CLOUD_FUNCTION_URL}`, {
-      owner,
+      user,
       repo,
       token,
     });

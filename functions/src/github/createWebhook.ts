@@ -1,4 +1,7 @@
 import * as functions from "firebase-functions";
+import * as admin from "firebase-admin";
+import { db } from "../config";
+
 import axios from "axios";
 import * as cors from "cors";
 // @ts-ignore
@@ -12,10 +15,31 @@ export const createWebhookHandler = functions.https.onRequest(
   async (req, res) => {
     corsHandler(req, res, async () => {
       try {
-        const { owner, repo, token } = req.body;
-        functions.logger.log("Making GitHub request...");
-        await createWebhook(owner, repo, token);
-        res.sendStatus(200);
+        const { user, repo, token } = req.body;
+        functions.logger.log("Creating webhook...");
+        const createWebhookResponse = await createWebhook(user, repo, token);
+
+        const {
+          data: { id, url, ping_url: pingUrl },
+        } = createWebhookResponse;
+
+        const reposRef = db
+          .collection("users")
+          .doc(user)
+          .collection("webhooks");
+
+        const webhookId = id.toString();
+        functions.logger.log("Storing webhook in Firestore...");
+        await reposRef.doc(webhookId).set({
+          createdAt: admin.firestore.Timestamp.fromDate(new Date()),
+          url,
+          pingUrl,
+        });
+
+        functions.logger.log(
+          "Webhook was successfully created & stored! Exiting function 🎉"
+        );
+        await res.sendStatus(200);
       } catch (err) {
         res.status(400).send(err);
       }
@@ -23,15 +47,15 @@ export const createWebhookHandler = functions.https.onRequest(
   }
 );
 
-const createWebhook = async (owner: string, repo: string, token: string) => {
-  await axios.post(
-    `${GITHUB_BASE_URL}/repos/${owner}/${repo}/hooks`,
+const createWebhook = async (user: string, repo: string, token: string) => {
+  return await axios.post(
+    `${GITHUB_BASE_URL}/repos/${user}/${repo}/hooks`,
     {
       config: {
         url: WEBHOOK_EVENTS_URL,
         content_type: "json",
       },
-      events: ["push", "pull_request"],
+      events: ["push", "pull_request", "meta"],
     },
     {
       headers: {
