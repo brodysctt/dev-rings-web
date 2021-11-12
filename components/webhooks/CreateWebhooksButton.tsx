@@ -1,9 +1,9 @@
 import Image from "next/image";
 import { useState } from "react";
 
-import { createWebhookForEachRepo } from "./createWebhookForEachRepo";
+import { createWebhookForEachRepo } from "./utils/createWebhookForEachRepo";
 
-export const CreateWebhooksButton = ({ user }: { user: string }) => {
+export const CreateWebhooksButton = ({ userId }: { userId: string }) => {
   const [noRepos, setNoRepos] = useState(false);
 
   if (noRepos) {
@@ -14,7 +14,7 @@ export const CreateWebhooksButton = ({ user }: { user: string }) => {
 
   return (
     <button
-      onClick={() => createWebhookForEachRepo(user, setNoRepos)}
+      onClick={() => createWebhookForEachRepo(userId, setNoRepos)}
       style={{
         display: "flex",
         justifyContent: "space-around",

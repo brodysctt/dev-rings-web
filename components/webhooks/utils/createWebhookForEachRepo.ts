@@ -25,7 +25,8 @@ export const createWebhookForEachRepo = async (
     const response = await sendCreateWebhookRequest(token, user, repo);
     response
       ? console.log(`webhook is a go 🟢`)
-      : console.log(
+      : // TODO: This is a specific case, so it can't be used as a catch-all error message. Fix it!
+        console.log(
           `webhook didn't get created. it's possible a webhook already exists for this repo 👀`
         );
   }
