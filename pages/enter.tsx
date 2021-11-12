@@ -1,4 +1,5 @@
 import type { NextPage } from "next";
+import Link from "next/link";
 
 import { auth } from "@lib/firebase";
 import { useAuthState } from "react-firebase-hooks/auth";
@@ -24,6 +25,7 @@ const Enter: NextPage = () => {
   }
   if (user) {
     const {
+      // @ts-ignore
       reloadUserInfo: { screenName: githubUser },
     } = user;
     console.log(`this mans is logged in: ${githubUser}`);
@@ -40,6 +42,9 @@ const Enter: NextPage = () => {
         }}
       >
         <CreateWebhooksButton user={githubUser} />
+        <Link href="/webhooks">
+          Feel free to check out the webhooks once you've clicked the button ☝️
+        </Link>
         <SignOutButton />
       </div>
     );
