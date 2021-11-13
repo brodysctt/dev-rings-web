@@ -29,8 +29,8 @@ export const ManageWebhooks = ({ userId }: { userId: string }) => {
     }
     const repos = docs.map((doc) => {
       const { url } = doc.data();
-      const re = new RegExp(`(?<=${userId}/).*(?=/hooks)`);
-      return url.match(re);
+      const repoSubstring = new RegExp(`(?<=${userId}/).*(?=/hooks)`);
+      return url.match(repoSubstring);
     });
     return (
       <div
