@@ -4,7 +4,7 @@ import "react-toastify/dist/ReactToastify.css";
 
 import { fetchPublicRepos, createWebhook } from "./utils";
 
-export const AddWebhookCheckboxes = ({ userId }: { userId: string }) => {
+export const CreateWebhookCheckboxes = ({ userId }: { userId: string }) => {
   const [publicRepos, setPublicRepos] = useState([""]);
 
   useEffect(() => {

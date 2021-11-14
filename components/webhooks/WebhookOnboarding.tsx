@@ -3,11 +3,7 @@ import Link from "next/link";
 import { db } from "@lib/firebase";
 import { useCollection } from "react-firebase-hooks/firestore";
 import { collection } from "firebase/firestore";
-import {
-  AddWebhookInput,
-  CreateWebhooksButton,
-  AddWebhookCheckboxes,
-} from "components";
+import { CreateWebhooksButton, CreateWebhookCheckboxes } from "components";
 
 export const WebhookOnboarding = ({ userId }: { userId: string }) => {
   const webhooksRef = collection(db, "users", userId, "webhooks");
@@ -33,7 +29,7 @@ export const WebhookOnboarding = ({ userId }: { userId: string }) => {
       return (
         <div style={{ display: "flex", justifyContent: "space-around" }}>
           <CreateWebhooksButton userId={userId} />
-          <AddWebhookCheckboxes userId={userId} />
+          <CreateWebhookCheckboxes userId={userId} />
         </div>
       );
     }
@@ -55,7 +51,7 @@ export const WebhookOnboarding = ({ userId }: { userId: string }) => {
       >
         <div style={{ display: "flex", justifyContent: "space-around" }}>
           <CreateWebhooksButton userId={userId} />
-          <AddWebhookCheckboxes userId={userId} />
+          <CreateWebhookCheckboxes userId={userId} />
         </div>
         <div
           style={{

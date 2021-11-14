@@ -1,4 +1,4 @@
 export * from "./CreateWebhooksButton";
 export * from "./WebhookOnboarding";
-export * from "./AddWebhookInput";
-export * from "./AddWebhookCheckboxes";
+export * from "./CreateWebhookInput";
+export * from "./CreateWebhookCheckboxes";

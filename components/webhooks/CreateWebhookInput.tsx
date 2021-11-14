@@ -4,7 +4,7 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { createWebhook } from "./utils";
 
-export const AddWebhookInput = ({ userId }: { userId: string }) => {
+export const CreateWebhookInput = ({ userId }: { userId: string }) => {
   const [userNeedsHelp, setUserNeedsHelp] = useState(false);
   const { register, watch, handleSubmit } = useForm<{ repoUrl: string }>();
 

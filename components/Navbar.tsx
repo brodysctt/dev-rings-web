@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { auth } from "@lib/firebase";
 import { useAuthState } from "react-firebase-hooks/auth";
-import { SignOutButton, AddWebhookInput } from "components";
+import { SignOutButton, CreateWebhookInput } from "components";
 
 export const Navbar = () => {
   const [user] = useAuthState(auth);
@@ -29,7 +29,7 @@ export const Navbar = () => {
         <Link href="/dev-rings">
           <button className="btn-logo">DEV RINGS</button>
         </Link>
-        <AddWebhookInput userId={userId} />
+        <CreateWebhookInput userId={userId} />
         <SignOutButton />
       </nav>
     );
