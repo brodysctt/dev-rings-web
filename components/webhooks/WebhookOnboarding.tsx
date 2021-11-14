@@ -32,7 +32,6 @@ export const WebhookOnboarding = ({ userId }: { userId: string }) => {
     if (!docs.length) {
       return (
         <div style={{ display: "flex", justifyContent: "space-around" }}>
-          <AddWebhookInput userId={userId} />
           <CreateWebhooksButton userId={userId} />
           <AddWebhookCheckboxes userId={userId} />
         </div>
@@ -48,16 +47,31 @@ export const WebhookOnboarding = ({ userId }: { userId: string }) => {
         style={{
           display: "flex",
           flexDirection: "column",
-          justifyContent: "space-around",
+          justifyContent: "space-between",
           alignItems: "center",
+          height: "30vh",
           width: "100%",
         }}
       >
-        here are the repos that are now being tracked 👇
-        {repos.map((repo) => (
-          <p>{repo}</p>
-        ))}
-        <Link href="/dev-rings"> Noice! Now take me to see the rings</Link>
+        <div style={{ display: "flex", justifyContent: "space-around" }}>
+          <CreateWebhooksButton userId={userId} />
+          <AddWebhookCheckboxes userId={userId} />
+        </div>
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "space-around",
+            alignItems: "center",
+            width: "100%",
+          }}
+        >
+          here are the repos that are now being tracked 👇
+          {repos.map((repo) => (
+            <p>{repo}</p>
+          ))}
+          <Link href="/dev-rings"> Noice! Now take me to see the rings</Link>
+        </div>
       </div>
     );
   }

@@ -1,16 +1,23 @@
 import { useState, useEffect } from "react";
-import { createWebhook, fetchCreateWebhookParams } from "./utils";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
+import { fetchPublicRepos, createWebhook } from "./utils";
 
 export const AddWebhookCheckboxes = ({ userId }: { userId: string }) => {
-  // TODO: Is this initial state chill?
-  const [repos, setRepos] = useState([""]);
+  const [publicRepos, setPublicRepos] = useState([""]);
 
   useEffect(() => {
+    let isMounted = true;
     (async () => {
-      const { token, repos } = await fetchCreateWebhookParams(userId);
-      console.log(`refactor – I don't even need this token, lol: ${token}`);
-      setRepos(repos);
+      const publicRepos = await fetchPublicRepos(userId);
+      if (isMounted && Array.isArray(publicRepos)) {
+        setPublicRepos(publicRepos);
+      }
     })();
+    return () => {
+      isMounted = false;
+    };
   }, []);
 
   return (
@@ -25,19 +32,27 @@ export const AddWebhookCheckboxes = ({ userId }: { userId: string }) => {
     >
       <p> 👇 Here be the public repos ur not tracking, check em to start</p>
       <form>
-        {repos.map((repo) => (
+        {publicRepos.map((repo) => (
           <label>
             <input
               type="checkbox"
               onChange={async () => {
                 console.log(`create webhook for ${repo}`);
-                await createWebhook(userId, repo);
+                const response = await createWebhook(userId, repo);
+                if (response === 200) {
+                  toast.success("ayyy successfully created a webhook boi!");
+                  return;
+                }
+                toast.warn(
+                  "Webhook didn't get created – Ima guess ur already tracking it 👀"
+                );
               }}
             />
             {repo}
           </label>
         ))}
       </form>
+      <ToastContainer hideProgressBar />
     </div>
   );
 };

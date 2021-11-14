@@ -22,7 +22,7 @@ export const Navbar = () => {
           width: "100%",
           position: "fixed",
           top: 0,
-          padding: "0 10vw",
+          padding: "10px 10vw",
           zIndex: 99,
         }}
       >
