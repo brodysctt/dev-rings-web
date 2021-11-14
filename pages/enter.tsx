@@ -1,9 +1,9 @@
-import type { NextPage } from "next";
+import type { NextPage, GetServerSideProps } from "next";
 
 import { auth } from "@lib/firebase";
 import { useAuthState } from "react-firebase-hooks/auth";
 
-import { SignInButton, ManageWebhooks } from "components";
+import { SignInButton, WebhookOnboarding } from "components";
 
 const Enter: NextPage = () => {
   const [user, loading, error] = useAuthState(auth);
@@ -40,7 +40,7 @@ const Enter: NextPage = () => {
           width: "100%",
         }}
       >
-        <ManageWebhooks userId={userId} />
+        <WebhookOnboarding userId={userId} />
       </div>
     );
   }

@@ -1,12 +1,12 @@
 import axios from "axios";
 import { fetchToken } from "helpers";
 
-export const createWebhook = async (user: string, repo: string) => {
-  const token = await fetchToken(user);
+export const createWebhook = async (userId: string, repo: string) => {
+  const token = await fetchToken(userId);
 
   console.log(`about to create webhook for ${repo}. let's get it 🪝`);
   console.log(`Creating webhook...`);
-  const response = await sendCreateWebhookRequest(token, user, repo);
+  const response = await sendCreateWebhookRequest(token, userId, repo);
   response
     ? console.log(`webhook is a go 🟢`)
     : console.log(

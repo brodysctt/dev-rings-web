@@ -39,5 +39,10 @@ export const fetchCreateWebhookParams = async (user: string) => {
     };
   } catch (error) {
     console.error(error);
+    // TODO: What's the best practice here?
+    return {
+      token: "",
+      repos: [],
+    };
   }
 };

@@ -51,7 +51,7 @@ export const AddWebhookInput = ({ userId }: { userId: string }) => {
         width: "500px",
       }}
     >
-      <p> 👇 Copy your repo url and paste it here to start tracking it</p>
+      <p> 👇 To track a private repo, paste repo url here</p>
       <form>
         <input {...register("repo")} />
         {userNeedsHelp && <p>{`just copy & paste the github link bruh 😅`}</p>}

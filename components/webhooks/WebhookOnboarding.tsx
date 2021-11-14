@@ -1,9 +1,15 @@
+import Link from "next/link";
+
 import { db } from "@lib/firebase";
 import { useCollection } from "react-firebase-hooks/firestore";
 import { collection } from "firebase/firestore";
-import { CreateWebhooksButton } from "components";
+import {
+  AddWebhookInput,
+  CreateWebhooksButton,
+  AddWebhookCheckboxes,
+} from "components";
 
-export const ManageWebhooks = ({ userId }: { userId: string }) => {
+export const WebhookOnboarding = ({ userId }: { userId: string }) => {
   const webhooksRef = collection(db, "users", userId, "webhooks");
   const [snapshot, loading, error] = useCollection(webhooksRef);
 
@@ -24,7 +30,13 @@ export const ManageWebhooks = ({ userId }: { userId: string }) => {
   if (snapshot) {
     const { docs } = snapshot;
     if (!docs.length) {
-      return <CreateWebhooksButton userId={userId} />;
+      return (
+        <div style={{ display: "flex", justifyContent: "space-around" }}>
+          <AddWebhookInput userId={userId} />
+          <CreateWebhooksButton userId={userId} />
+          <AddWebhookCheckboxes userId={userId} />
+        </div>
+      );
     }
     const repos = docs.map((doc) => {
       const { url } = doc.data();
@@ -45,6 +57,7 @@ export const ManageWebhooks = ({ userId }: { userId: string }) => {
         {repos.map((repo) => (
           <p>{repo}</p>
         ))}
+        <Link href="/dev-rings"> Noice! Now take me to see the rings</Link>
       </div>
     );
   }

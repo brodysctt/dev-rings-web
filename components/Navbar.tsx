@@ -26,7 +26,7 @@ export const Navbar = () => {
           zIndex: 99,
         }}
       >
-        <Link href="/">
+        <Link href="/dev-rings">
           <button className="btn-logo">DEV RINGS</button>
         </Link>
         <AddWebhookInput userId={userId} />

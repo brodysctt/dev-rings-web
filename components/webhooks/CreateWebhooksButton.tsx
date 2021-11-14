@@ -14,13 +14,14 @@ export const CreateWebhooksButton = ({ userId }: { userId: string }) => {
 
   return (
     <button
-      onClick={() => createWebhookForEachRepo(userId, setNoRepos)}
+      onClick={async () => await createWebhookForEachRepo(userId, setNoRepos)}
       style={{
         display: "flex",
         justifyContent: "space-around",
         alignItems: "center",
         height: "8vh",
         width: "200px",
+        marginRight: "100px",
       }}
     >
       <Image src="/github.png" width="30px" height="30px" />
