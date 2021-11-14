@@ -3,7 +3,7 @@ import { useState } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { createWebhook } from "./utils";
+import { createWebhook, createWebhookToast } from "./utils";
 import {
   Box,
   Typography,
@@ -22,15 +22,15 @@ export const CreateWebhookInput = ({ userId }: { userId: string }) => {
     const repoSubstring = new RegExp(`(?<=${userId}/).*(?=[.]git)`);
     const result = repoSubstring.exec(repoUrl);
     if (!result) {
-      toast.error("Yoinks, something went wrong 😟");
+      createWebhookToast.error();
       return;
     }
     const repo = result[0];
     const status = await createWebhook(userId, repo);
     if (status === 200) {
-      toast.success("webhook successfully created 🎉");
+      createWebhookToast.success();
     } else {
-      toast.error("Webhook didn't get created – Ima guess it already exist 👀");
+      createWebhookToast.warn();
     }
   };
 
@@ -50,7 +50,7 @@ export const CreateWebhookInput = ({ userId }: { userId: string }) => {
     }
   });
 
-  userNeedsHelp && toast.info(`just copy & paste the github link bruh 😅`);
+  userNeedsHelp && createWebhookToast.info();
   return (
     <Box
       style={{
@@ -79,7 +79,6 @@ export const CreateWebhookInput = ({ userId }: { userId: string }) => {
           sx={{ width: "370px" }}
         />
       </FormControl>
-      {/* <TextField id="outlined-basic" label="Outlined" variant="outlined" /> */}
       <ToastContainer hideProgressBar />
     </Box>
   );

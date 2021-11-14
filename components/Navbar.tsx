@@ -12,7 +12,6 @@ export const Navbar = () => {
       reloadUserInfo: { screenName: userId },
     } = user;
     console.log(`this mans is logged in: ${userId}`);
-
     return (
       <Box
         sx={{
@@ -27,7 +26,6 @@ export const Navbar = () => {
           <Link href="/dev-rings">
             <Button variant="contained">DEV RINGS</Button>
           </Link>
-
           <CreateWebhookInput userId={userId} />
         </Box>
         <SignOutButton />

@@ -1,7 +1,7 @@
 import Image from "next/image";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { fetchPublicRepos, createWebhook } from "./utils";
+import { fetchPublicRepos, createWebhook, createWebhookToast } from "./utils";
 import { Button } from "@mui/material";
 
 export const CreateWebhooksButton = ({ userId }: { userId: string }) => (
@@ -28,7 +28,7 @@ export const CreateWebhooksButton = ({ userId }: { userId: string }) => (
 const createWebhooks = async (userId: string) => {
   const repos = await fetchPublicRepos(userId);
   if (!Array.isArray(repos)) {
-    toast.error("hmm, the fetchPublicRepos request failed 🤔");
+    createWebhookToast.error();
     return;
   }
   console.log(`here be the repos from the button: ${repos}}`);
@@ -41,12 +41,8 @@ const createWebhooks = async (userId: string) => {
   console.log(`about to create ${repos.length} webhooks. let's get it 🪝`);
   for (const repo of repos) {
     const response = await createWebhook(userId, repo);
-    if (response === 200) {
-      toast.success("Webhook successfully created 🎉");
-    } else {
-      toast.error(
-        "Webhook didn't get created – Ima guess ur already tracking it 👀"
-      );
-    }
+    response === 200
+      ? createWebhookToast.success()
+      : createWebhookToast.error();
   }
 };
