@@ -1,31 +1,39 @@
 import { useState } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
-// import { createWebhook } from "./utils";
+import { createWebhook } from "./utils";
 
 export const AddWebhookForm = ({ userId }: { userId: string }) => {
-  const [userIsTyping, setUserIsTyping] = useState(false);
+  const [repoOwner, setRepoOwner] = useState(true);
+  const [userNeedsHelp, setUserNeedsHelp] = useState(false);
 
   const {
     register,
     watch,
-    formState: { errors, isSubmitSuccessful },
+    formState: { isSubmitSuccessful },
     handleSubmit,
   } = useForm<{ repo: string }>();
 
-  const validRepoUrl = new RegExp(`https://github.com/${userId}/.*.git`);
-
-  const onSubmit: SubmitHandler<{ repo: string }> = ({ repo }) =>
-    console.log(`form submitted! here be the repo: ${repo}`);
+  const onSubmit: SubmitHandler<{ repo: string }> = async ({ repo }) => {
+    console.log(`url looking deeece. Creating webhook for ${repo}...`);
+    await createWebhook(userId, repo);
+  };
 
   watch(({ repo }) => {
-    if (repo && validRepoUrl.test(repo)) {
-      handleSubmit(onSubmit)();
-    }
-    // TODO: Handle case where the userId doesn't match – "you're not the owner of this repo. Try adding one you own 🤷‍♂️"
-    // TODO: Handle case where they paste in a non-github link – "bruh, that's not even a github link 😂 😂 😂 "
-    // TODO: ^ For this case, render gif for how to copy URL lol
-    if (repo && !validRepoUrl.test(repo)) {
-      setUserIsTyping(true);
+    if (repo) {
+      const isGitHubUrl = githubUrl.test(repo);
+      const isRepoOwner = repo.includes(userId);
+      const isValidUrl = isGitHubUrl && isRepoOwner;
+
+      if (!isGitHubUrl && !isRepoOwner) {
+        setUserNeedsHelp(true);
+      }
+
+      if (isGitHubUrl && !isRepoOwner) {
+        setRepoOwner(false);
+        setUserNeedsHelp(false);
+      }
+
+      isValidUrl && handleSubmit(onSubmit)();
     }
   });
 
@@ -39,25 +47,20 @@ export const AddWebhookForm = ({ userId }: { userId: string }) => {
         display: "flex",
         flexDirection: "column",
         justifyContent: "center",
-        alignItems: "center",
+        alignItems: "start",
         height: "16vh",
-        width: "200px",
+        width: "500px",
         marginBottom: "200px",
       }}
     >
-      <p>Add another repo 👇</p>
+      <p> 👇 Copy your repo url and paste it here to start tracking it</p>
       <form>
-        <input
-          {...register("repo", {
-            pattern: {
-              value: validRepoUrl,
-              message: "hey buddy, try pasting a proper url this time",
-            },
-          })}
-        />
-        {userIsTyping && <p>{`bruh, what part of PASTE don't u understand`}</p>}
-        {errors.repo && <p>{errors.repo.message}</p>}
+        <input {...register("repo")} />
+        {userNeedsHelp && <p>{`just copy & paste the github link bruh 😅`}</p>}
+        {!repoOwner && <p>{`you don't own this repo hossy 😅`}</p>}
       </form>
     </div>
   );
 };
+
+const githubUrl = new RegExp(`https://github.com/(.*)/(.*)[.]git`);
