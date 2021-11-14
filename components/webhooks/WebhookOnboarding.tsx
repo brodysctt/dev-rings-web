@@ -1,9 +1,9 @@
 import Link from "next/link";
-
 import { db } from "@lib/firebase";
 import { useCollection } from "react-firebase-hooks/firestore";
 import { collection } from "firebase/firestore";
 import { CreateWebhooksButton, CreateWebhookCheckboxes } from "components";
+import { Box, Typography, Button } from "@mui/material";
 
 export const WebhookOnboarding = ({ userId }: { userId: string }) => {
   const webhooksRef = collection(db, "users", userId, "webhooks");
@@ -11,26 +11,26 @@ export const WebhookOnboarding = ({ userId }: { userId: string }) => {
 
   if (loading) {
     return (
-      <div>
-        <p>Fetching data...</p>
-      </div>
+      <Box>
+        <Typography>Fetching data...</Typography>
+      </Box>
     );
   }
   if (error) {
     return (
-      <div>
-        <p>Error: {error}</p>
-      </div>
+      <Box>
+        <Typography>Error: {error}</Typography>
+      </Box>
     );
   }
   if (snapshot) {
     const { docs } = snapshot;
     if (!docs.length) {
       return (
-        <div style={{ display: "flex", justifyContent: "space-around" }}>
+        <Box style={{ display: "flex", justifyContent: "space-around" }}>
           <CreateWebhooksButton userId={userId} />
           <CreateWebhookCheckboxes userId={userId} />
-        </div>
+        </Box>
       );
     }
     const repos = docs.map((doc) => {
@@ -39,7 +39,7 @@ export const WebhookOnboarding = ({ userId }: { userId: string }) => {
       return url.match(repoSubstring);
     });
     return (
-      <div
+      <Box
         style={{
           display: "flex",
           flexDirection: "column",
@@ -49,26 +49,34 @@ export const WebhookOnboarding = ({ userId }: { userId: string }) => {
           width: "100%",
         }}
       >
-        <div style={{ display: "flex", justifyContent: "space-around" }}>
+        <Box style={{ display: "flex", justifyContent: "space-around" }}>
           <CreateWebhooksButton userId={userId} />
           <CreateWebhookCheckboxes userId={userId} />
-        </div>
-        <div
+        </Box>
+        <Box
           style={{
             display: "flex",
             flexDirection: "column",
             justifyContent: "space-around",
             alignItems: "center",
             width: "100%",
+            marginTop: "90px",
           }}
         >
-          here are the repos that are now being tracked 👇
+          <Typography variant={"h6"}>
+            Your commits and PRs in these repos are now being stored 🏪
+          </Typography>
           {repos.map((repo) => (
-            <p>{repo}</p>
+            <Typography>{repo}</Typography>
           ))}
-          <Link href="/dev-rings"> Noice! Now take me to see the rings</Link>
-        </div>
-      </div>
+
+          <Link href="/dev-rings">
+            <Button variant="text">
+              Noice! Now take me to see the rings 💍
+            </Button>
+          </Link>
+        </Box>
+      </Box>
     );
   }
 

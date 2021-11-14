@@ -1,8 +1,17 @@
+import Image from "next/image";
 import { useState } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { createWebhook } from "./utils";
+import {
+  Box,
+  Typography,
+  FormControl,
+  InputLabel,
+  Input,
+  InputAdornment,
+} from "@mui/material";
 
 export const CreateWebhookInput = ({ userId }: { userId: string }) => {
   const [userNeedsHelp, setUserNeedsHelp] = useState(false);
@@ -43,21 +52,36 @@ export const CreateWebhookInput = ({ userId }: { userId: string }) => {
 
   userNeedsHelp && toast.info(`just copy & paste the github link bruh 😅`);
   return (
-    <div
+    <Box
       style={{
         display: "flex",
         flexDirection: "column",
         justifyContent: "center",
         alignItems: "start",
-        width: "500px",
+        width: "700px",
+        marginLeft: "50px",
       }}
     >
-      <p> 👇 To track a private repo, paste repo url here</p>
-      <form>
-        <input {...register("repoUrl")} />
-      </form>
+      <FormControl variant="standard">
+        <InputLabel htmlFor="repoUrl">
+          Paste a GitHub repo URL here to start tracking it ⚡
+        </InputLabel>
+        <Input
+          {...register("repoUrl")}
+          id="repoUrl"
+          type="text"
+          placeholder={"https://github.com/you/your-awesome-repo.git"}
+          startAdornment={
+            <InputAdornment position="start">
+              <Image src="/github.png" width="20px" height="20px" />
+            </InputAdornment>
+          }
+          sx={{ width: "370px" }}
+        />
+      </FormControl>
+      {/* <TextField id="outlined-basic" label="Outlined" variant="outlined" /> */}
       <ToastContainer hideProgressBar />
-    </div>
+    </Box>
   );
 };
 

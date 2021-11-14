@@ -2,10 +2,10 @@ import Link from "next/link";
 import { auth } from "@lib/firebase";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { SignOutButton, CreateWebhookInput } from "components";
+import { Box, Button } from "@mui/material";
 
 export const Navbar = () => {
   const [user] = useAuthState(auth);
-
   if (user) {
     const {
       // @ts-ignore
@@ -14,26 +14,25 @@ export const Navbar = () => {
     console.log(`this mans is logged in: ${userId}`);
 
     return (
-      <nav
-        className="navbar"
-        style={{
+      <Box
+        sx={{
           display: "flex",
           justifyContent: "space-around",
+          height: "60px",
           width: "100%",
-          position: "fixed",
-          top: 0,
-          padding: "10px 10vw",
-          zIndex: 99,
+          marginTop: "20px",
         }}
       >
-        <Link href="/dev-rings">
-          <button className="btn-logo">DEV RINGS</button>
-        </Link>
-        <CreateWebhookInput userId={userId} />
+        <Box sx={{ display: "flex" }}>
+          <Link href="/dev-rings">
+            <Button variant="contained">DEV RINGS</Button>
+          </Link>
+
+          <CreateWebhookInput userId={userId} />
+        </Box>
         <SignOutButton />
-      </nav>
+      </Box>
     );
   }
-
   return null;
 };

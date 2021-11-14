@@ -1,9 +1,10 @@
 import { auth } from "@lib/firebase";
 import { signOut } from "firebase/auth";
+import { Button } from "@mui/material";
 
 export const SignOutButton = () => {
   return (
-    <button
+    <Button
       onClick={() => signOutUser()}
       style={{
         height: "8vh",
@@ -11,7 +12,7 @@ export const SignOutButton = () => {
       }}
     >
       Sign Out
-    </button>
+    </Button>
   );
 };
 

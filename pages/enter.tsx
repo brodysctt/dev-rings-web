@@ -1,25 +1,24 @@
 import type { NextPage } from "next";
-
 import { auth } from "@lib/firebase";
 import { useAuthState } from "react-firebase-hooks/auth";
-
 import { SignInButton, WebhookOnboarding } from "components";
+import { Box, Typography, Button } from "@mui/material";
 
 const Enter: NextPage = () => {
   const [user, loading, error] = useAuthState(auth);
 
   if (loading) {
     return (
-      <div>
-        <p>Initialising User...</p>
-      </div>
+      <Box>
+        <Typography>Initialising User...</Typography>
+      </Box>
     );
   }
   if (error) {
     return (
-      <div>
-        <p>Error: {error}</p>
-      </div>
+      <Box>
+        <Typography>Error: {error}</Typography>
+      </Box>
     );
   }
   if (user) {
@@ -30,7 +29,7 @@ const Enter: NextPage = () => {
     console.log(`this mans is logged in: ${userId}`);
 
     return (
-      <div
+      <Box
         style={{
           display: "flex",
           flexDirection: "column",
@@ -41,12 +40,12 @@ const Enter: NextPage = () => {
         }}
       >
         <WebhookOnboarding userId={userId} />
-      </div>
+      </Box>
     );
   }
 
   return (
-    <div
+    <Box
       style={{
         display: "flex",
         justifyContent: "space-around",
@@ -56,7 +55,7 @@ const Enter: NextPage = () => {
       }}
     >
       <SignInButton />
-    </div>
+    </Box>
   );
 };
 

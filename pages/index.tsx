@@ -1,9 +1,10 @@
 import type { NextPage } from "next";
 import Link from "next/link";
+import { Box } from "@mui/material";
 
 const Home: NextPage = () => {
   return (
-    <div
+    <Box
       style={{
         display: "flex",
         justifyContent: "center",
@@ -15,7 +16,7 @@ const Home: NextPage = () => {
       <Link href="/enter">
         {"wow, this is a great idea! let's get started already 😛"}
       </Link>
-    </div>
+    </Box>
   );
 };
 
