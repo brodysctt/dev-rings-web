@@ -2,23 +2,25 @@ import Image from "next/image";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { fetchPublicRepos, createWebhook } from "./utils";
+import { Button } from "@mui/material";
 
 export const CreateWebhooksButton = ({ userId }: { userId: string }) => (
   <>
-    <button
+    <Button
+      variant="contained"
       onClick={async () => await createWebhooks(userId)}
       style={{
         display: "flex",
         justifyContent: "space-around",
         alignItems: "center",
         height: "8vh",
-        width: "200px",
+        width: "430px",
         marginRight: "100px",
       }}
     >
-      <Image src="/github.png" width="30px" height="30px" />
-      Create webhooks for all public repos🪝
-    </button>
+      <Image src="/github.png" width="40px" height="40px" />
+      Create webhooks for all public repos 🎣
+    </Button>
     <ToastContainer hideProgressBar />
   </>
 );

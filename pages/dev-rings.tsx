@@ -1,9 +1,10 @@
 import type { NextPage } from "next";
 import Image from "next/image";
+import { Box } from "@mui/material";
 
 const DevRings: NextPage = () => {
   return (
-    <div
+    <Box
       style={{
         display: "flex",
         justifyContent: "center",
@@ -17,7 +18,7 @@ const DevRings: NextPage = () => {
         width="500px"
         height="300px"
       />
-    </div>
+    </Box>
   );
 };
 

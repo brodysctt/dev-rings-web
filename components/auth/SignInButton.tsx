@@ -2,10 +2,11 @@ import Image from "next/image";
 import { auth, githubProvider, db } from "lib/firebase";
 import { signInWithPopup, GithubAuthProvider } from "firebase/auth";
 import { doc, setDoc } from "@firebase/firestore";
+import { Button } from "@mui/material";
 
 export const SignInButton = () => {
   return (
-    <button
+    <Button
       onClick={() => githubSignIn()}
       style={{
         display: "flex",
@@ -17,7 +18,7 @@ export const SignInButton = () => {
     >
       <Image src="/github.png" width="30px" height="30px" />
       Sign in with GitHub
-    </button>
+    </Button>
   );
 };
 
@@ -31,7 +32,6 @@ const githubSignIn = async () => {
         reloadUserInfo: { screenName: userId },
       },
     } = result;
-
     console.log(`here be the user: ${userId}`);
 
     const credential = GithubAuthProvider.credentialFromResult(result);
