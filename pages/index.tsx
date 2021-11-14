@@ -5,7 +5,7 @@ import { Box, Button } from "@mui/material";
 
 const Home: NextPage = () => (
   <Box
-    style={{
+    sx={{
       display: "flex",
       flexDirection: "column",
       justifyContent: "center",
@@ -15,12 +15,12 @@ const Home: NextPage = () => (
     }}
   >
     <Link href="/enter">
-      <Button variant={"text"} sx={{ marginBottom: "20px" }}>
-        wow, this is a great idea! let's get started already 😛{" "}
+      <Button variant={"text"} sx={{ marginBottom: "40px" }}>
+        oh u better believe we about to get it 🤯
       </Button>
     </Link>
     <Image
-      src="https://media.giphy.com/media/054ZPjUUVPHPwrzpHJ/giphy.gif"
+      src="https://media.giphy.com/media/QIA28gtOux7n7hyGXF/giphy.gif"
       width="500px"
       height="300px"
     />
