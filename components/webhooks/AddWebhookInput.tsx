@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { createWebhook } from "./utils";
 
-export const AddWebhookForm = ({ userId }: { userId: string }) => {
+export const AddWebhookInput = ({ userId }: { userId: string }) => {
   const [repoOwner, setRepoOwner] = useState(true);
   const [userNeedsHelp, setUserNeedsHelp] = useState(false);
 
@@ -48,9 +48,7 @@ export const AddWebhookForm = ({ userId }: { userId: string }) => {
         flexDirection: "column",
         justifyContent: "center",
         alignItems: "start",
-        height: "16vh",
         width: "500px",
-        marginBottom: "200px",
       }}
     >
       <p> 👇 Copy your repo url and paste it here to start tracking it</p>

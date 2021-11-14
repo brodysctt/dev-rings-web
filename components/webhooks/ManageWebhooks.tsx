@@ -1,8 +1,7 @@
 import { db } from "@lib/firebase";
 import { useCollection } from "react-firebase-hooks/firestore";
 import { collection } from "firebase/firestore";
-
-import { CreateWebhooksButton, AddWebhookForm } from "components";
+import { CreateWebhooksButton } from "components";
 
 export const ManageWebhooks = ({ userId }: { userId: string }) => {
   const webhooksRef = collection(db, "users", userId, "webhooks");
@@ -42,7 +41,6 @@ export const ManageWebhooks = ({ userId }: { userId: string }) => {
           width: "100%",
         }}
       >
-        <AddWebhookForm userId={userId} />
         here are the repos that are now being tracked 👇
         {repos.map((repo) => (
           <p>{repo}</p>
