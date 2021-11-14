@@ -3,7 +3,7 @@ import type { NextPage } from "next";
 import { auth } from "@lib/firebase";
 import { useAuthState } from "react-firebase-hooks/auth";
 
-import { SignInButton, SignOutButton, ManageWebhooks } from "components";
+import { SignInButton, WebhookOnboarding } from "components";
 
 const Enter: NextPage = () => {
   const [user, loading, error] = useAuthState(auth);
@@ -36,12 +36,11 @@ const Enter: NextPage = () => {
           flexDirection: "column",
           justifyContent: "space-around",
           alignItems: "center",
-          height: "100vh",
+          height: "70vh",
           width: "100%",
         }}
       >
-        <ManageWebhooks userId={userId} />
-        <SignOutButton />
+        <WebhookOnboarding userId={userId} />
       </div>
     );
   }
