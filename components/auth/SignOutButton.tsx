@@ -5,10 +5,9 @@ import { Button } from "@mui/material";
 export const SignOutButton = () => {
   return (
     <Button
-      onClick={() => signOutUser()}
-      style={{
-        height: "8vh",
-        width: "200px",
+      onClick={signOutUser}
+      sx={{
+        mr: "20px",
       }}
     >
       Sign Out

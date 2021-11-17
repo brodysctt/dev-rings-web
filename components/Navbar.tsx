@@ -19,12 +19,14 @@ export const Navbar = () => {
           justifyContent: "space-around",
           height: "60px",
           width: "100%",
-          marginTop: "20px",
+          mt: "20px",
         }}
       >
         <Box sx={{ display: "flex" }}>
           <Link href="/dev-rings">
-            <Button variant="contained">DEV RINGS</Button>
+            <Button variant="contained" sx={{ ml: "20px" }}>
+              DEV RINGS
+            </Button>
           </Link>
           <CreateWebhookInput userId={userId} />
         </Box>

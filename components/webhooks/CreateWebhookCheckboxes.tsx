@@ -37,7 +37,7 @@ export const CreateWebhookCheckboxes = ({ userId }: { userId: string }) => {
       }}
     >
       <Typography paragraph variant={"h6"} sx={{ marginBottom: 0 }}>
-        ✔️ Click a repo or 5 to start tracking them
+        ✔️ a repo to start tracking it
       </Typography>
       <FormGroup>
         {publicRepos.map((repo) => (

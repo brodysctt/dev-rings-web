@@ -9,7 +9,7 @@ const corsHandler = cors({ origin: true });
 
 const GITHUB_BASE_URL = "https://api.github.com";
 const WEBHOOK_EVENTS_URL =
-  "http://5e85-172-103-147-5.ngrok.io/dev-rings/us-central1/receiveWebhookEventHandler";
+  "http://6ab0-172-103-147-5.ngrok.io/dev-rings/us-central1/receiveWebhookEventHandler";
 
 export const createWebhookHandler = functions.https.onRequest(
   async (req, res) => {

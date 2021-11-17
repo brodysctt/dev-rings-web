@@ -7,7 +7,8 @@ import { Button } from "@mui/material";
 export const SignInButton = () => {
   return (
     <Button
-      onClick={() => githubSignIn()}
+      variant="contained"
+      onClick={githubSignIn}
       style={{
         display: "flex",
         justifyContent: "space-around",

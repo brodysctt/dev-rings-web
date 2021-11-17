@@ -16,7 +16,7 @@ const Home: NextPage = () => (
   >
     <Link href="/enter">
       <Button variant={"text"} sx={{ marginBottom: "40px" }}>
-        oh u better believe we about to get it 🤯
+        oh u better believe it 🤯
       </Button>
     </Link>
     <Image

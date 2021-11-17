@@ -6,7 +6,6 @@ import "react-toastify/dist/ReactToastify.css";
 import { createWebhook, createWebhookToast } from "./utils";
 import {
   Box,
-  Typography,
   FormControl,
   InputLabel,
   Input,
