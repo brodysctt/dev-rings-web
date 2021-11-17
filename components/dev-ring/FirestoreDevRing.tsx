@@ -1,31 +1,38 @@
-import { Box, Typography } from "@mui/material";
+import { Typography } from "@mui/material";
 import { db } from "@lib/firebase";
-import { useCollection } from "react-firebase-hooks/firestore";
-import { collection } from "firebase/firestore";
-import { DevRing } from "./DevRing";
+import { useCollection, useDocument } from "react-firebase-hooks/firestore";
+import { collection, doc } from "firebase/firestore";
+import { DevRing, PushEvent } from "./DevRing";
+import { SetGoalModal } from "./SetGoalModal";
 
 export const FirestoreDevRing = ({ userId }: { userId: string }) => {
-  const eventsRef = collection(db, "users", userId, "events");
-  const [snapshot, loading, error] = useCollection(eventsRef);
+  const [userDoc] = useDocument(doc(db, "users", userId));
+  const [eventsSnapshot] = useCollection(
+    collection(db, "users", userId, "events")
+  );
 
-  if (loading) {
-    return (
-      <Box>
-        <Typography>Fetching data...</Typography>
-      </Box>
-    );
+  if (!userDoc) {
+    console.log("no user doc bruh");
+    console.dir(userDoc);
+    return <Typography>Hmmm, this is unexpected 😟</Typography>;
   }
-  if (error) {
-    return (
-      <Box>
-        <Typography>Error: {error}</Typography>
-      </Box>
-    );
+  const userData = userDoc.data();
+  if (!userData) {
+    console.log("no user data bruh");
+    console.dir(userData);
+    return <Typography>Hmmm, this is unexpected 😟</Typography>;
   }
-  if (snapshot) {
-    const { docs: events } = snapshot;
-    console.log(`here be the # of events: ${events.length}`);
-    return <DevRing events={events} />;
+  const hasGoal = userData.hasOwnProperty("dailyGoal");
+  if (!hasGoal) {
+    return <SetGoalModal userId={userId} />;
   }
-  return null;
+  const { dailyGoal } = userData;
+
+  if (!eventsSnapshot) {
+    return <Typography>Hmmm, this is unexpected 😟</Typography>;
+  }
+  const { docs } = eventsSnapshot;
+  const events = docs.map((doc) => doc.data() as PushEvent);
+
+  return <DevRing goal={dailyGoal} events={events} />;
 };

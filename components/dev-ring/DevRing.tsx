@@ -1,18 +1,27 @@
 import { useState, useEffect } from "react";
 import { Box } from "@mui/material";
+import type { Timestamp } from "firebase/firestore";
 import { Ring, RADIUS } from "./Ring";
 
-// TODO: Updates types
-export const DevRing = ({ events }: { events: any }) => {
-  const [offset, setOffset] = useState(0);
+export interface PushEvent {
+  createdAt: Timestamp;
+  eventType: string;
+  repo: string;
+  url: string;
+}
 
+interface DevRingProps {
+  goal: number;
+  events: PushEvent[];
+}
+
+export const DevRing = ({ goal, events }: DevRingProps) => {
+  const [offset, setOffset] = useState(0);
   const progress = events.length;
-  // TODO: Make this dynamic
-  const target = 5;
 
   useEffect(() => {
     const circumference = 2 * Math.PI * RADIUS;
-    const progressOffset = (target - progress / target) * circumference;
+    const progressOffset = (goal - progress / goal) * circumference;
     setOffset(progressOffset);
   }, [progress, offset]);
 
