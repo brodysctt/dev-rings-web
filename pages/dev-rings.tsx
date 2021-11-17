@@ -2,7 +2,7 @@ import type { NextPage } from "next";
 import { Box, Typography } from "@mui/material";
 import { auth } from "@lib/firebase";
 import { useAuthState } from "react-firebase-hooks/auth";
-import { SignInButton, FirestoreDevRing } from "components";
+import { SignInButton, DevRing } from "components";
 
 const DevRings: NextPage = () => {
   const [user, loading, error] = useAuthState(auth);
@@ -28,7 +28,7 @@ const DevRings: NextPage = () => {
     } = user;
     console.log(`this mans is logged in: ${userId}`);
 
-    return <FirestoreDevRing userId={userId} />;
+    return <DevRing userId={userId} />;
   }
   return (
     <Box

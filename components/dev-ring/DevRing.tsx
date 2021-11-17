@@ -1,49 +1,35 @@
-import { useState, useEffect } from "react";
-import { Box } from "@mui/material";
-import type { Timestamp } from "firebase/firestore";
-import { Ring, RADIUS } from "./Ring";
+import { db } from "@lib/firebase";
+import { useCollection, useDocument } from "react-firebase-hooks/firestore";
+import { collection, doc } from "firebase/firestore";
+import { Ring, PushEvent } from "./Ring";
+import { SetGoalModal } from "./SetGoalModal";
 
-export interface PushEvent {
-  createdAt: Timestamp;
-  eventType: string;
-  repo: string;
-  url: string;
-}
-
-interface DevRingProps {
-  goal: number;
-  events: PushEvent[];
-}
-
-export const DevRing = ({ goal, events }: DevRingProps) => {
-  const [offset, setOffset] = useState(0);
-  const progress = events.length;
-
-  useEffect(() => {
-    const circumference = 2 * Math.PI * RADIUS;
-    const progressOffset = (goal - progress / goal) * circumference;
-    setOffset(progressOffset);
-  }, [progress, offset]);
-
-  return (
-    <Box
-      sx={{
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-        height: "60vh",
-      }}
-    >
-      <Box
-        sx={{
-          position: "absolute",
-          borderRadius: "50%",
-          height: "120px",
-          width: "120px",
-          bgcolor: "white",
-        }}
-      />
-      <Ring offset={offset} />
-    </Box>
+export const DevRing = ({ userId }: { userId: string }) => {
+  const [userDoc] = useDocument(doc(db, "users", userId));
+  const [eventsSnapshot] = useCollection(
+    collection(db, "users", userId, "events")
   );
+
+  if (!userDoc) {
+    console.log("no user doc bruh");
+    return null;
+  }
+  const userData = userDoc.data();
+  if (!userData) {
+    console.log("no user data bruh");
+    return null;
+  }
+  const hasGoal = userData.hasOwnProperty("dailyGoal");
+  if (!hasGoal) {
+    return <SetGoalModal userId={userId} />;
+  }
+  const { dailyGoal } = userData;
+
+  if (!eventsSnapshot) {
+    return null;
+  }
+  const { docs } = eventsSnapshot;
+  const events = docs.map((doc) => doc.data() as PushEvent);
+
+  return <Ring goal={dailyGoal} events={events} />;
 };

@@ -1,1 +1,1 @@
-export * from "./FirestoreDevRing";
+export * from "./DevRing";
