@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
-import { ToastContainer, toast } from "react-toastify";
+import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { fetchPublicRepos, createWebhook } from "./utils";
+import { fetchPublicRepos, createWebhook, createWebhookToast } from "./utils";
 import {
   Box,
   Typography,
@@ -37,7 +37,7 @@ export const CreateWebhookCheckboxes = ({ userId }: { userId: string }) => {
       }}
     >
       <Typography paragraph variant={"h6"} sx={{ marginBottom: 0 }}>
-        ✔️ Click a repo or 5 to start tracking them
+        ✔️ a repo to start tracking it
       </Typography>
       <FormGroup>
         {publicRepos.map((repo) => (
@@ -48,13 +48,9 @@ export const CreateWebhookCheckboxes = ({ userId }: { userId: string }) => {
                 onChange={async () => {
                   console.log(`create webhook for ${repo}`);
                   const response = await createWebhook(userId, repo);
-                  if (response === 200) {
-                    toast.success("ayyy successfully created a webhook boi!");
-                    return;
-                  }
-                  toast.warn(
-                    "Webhook didn't get created – Ima guess ur already tracking it 👀"
-                  );
+                  response === 200
+                    ? createWebhookToast.success()
+                    : createWebhookToast.warn();
                 }}
               />
             }

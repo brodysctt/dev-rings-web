@@ -1,23 +1,30 @@
 import type { NextPage } from "next";
+import Image from "next/image";
 import Link from "next/link";
-import { Box } from "@mui/material";
+import { Box, Button } from "@mui/material";
 
-const Home: NextPage = () => {
-  return (
-    <Box
-      style={{
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-        height: "100vh",
-        width: "100%",
-      }}
-    >
-      <Link href="/enter">
-        {"wow, this is a great idea! let's get started already 😛"}
-      </Link>
-    </Box>
-  );
-};
+const Home: NextPage = () => (
+  <Box
+    sx={{
+      display: "flex",
+      flexDirection: "column",
+      justifyContent: "center",
+      alignItems: "center",
+      height: "80vh",
+      width: "100%",
+    }}
+  >
+    <Link href="/enter">
+      <Button variant={"text"} sx={{ marginBottom: "40px" }}>
+        oh u better believe it 🤯
+      </Button>
+    </Link>
+    <Image
+      src="https://media.giphy.com/media/QIA28gtOux7n7hyGXF/giphy.gif"
+      width="500px"
+      height="300px"
+    />
+  </Box>
+);
 
 export default Home;

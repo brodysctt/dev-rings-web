@@ -1,8 +1,8 @@
 import type { NextPage } from "next";
+import { Box, Typography } from "@mui/material";
 import { auth } from "@lib/firebase";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { SignInButton, WebhookOnboarding } from "components";
-import { Box, Typography, Button } from "@mui/material";
 
 const Enter: NextPage = () => {
   const [user, loading, error] = useAuthState(auth);

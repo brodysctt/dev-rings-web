@@ -1,13 +1,14 @@
 import Image from "next/image";
 import { auth, githubProvider, db } from "lib/firebase";
 import { signInWithPopup, GithubAuthProvider } from "firebase/auth";
-import { doc, setDoc } from "@firebase/firestore";
+import { doc, getDoc, setDoc, updateDoc } from "@firebase/firestore";
 import { Button } from "@mui/material";
 
 export const SignInButton = () => {
   return (
     <Button
-      onClick={() => githubSignIn()}
+      variant="contained"
+      onClick={githubSignIn}
       style={{
         display: "flex",
         justifyContent: "space-around",
@@ -41,7 +42,16 @@ const githubSignIn = async () => {
     const { accessToken: token } = credential;
     console.log(token);
 
-    await setDoc(doc(db, "users", userId), {
+    const docRef = doc(db, "users", userId);
+    const docSnap = await getDoc(docRef);
+    if (docSnap.exists()) {
+      await updateDoc(docRef, {
+        token,
+      });
+      return;
+    }
+
+    await setDoc(docRef, {
       token,
     });
   } catch (error) {

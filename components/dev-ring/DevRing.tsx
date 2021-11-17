@@ -1,0 +1,35 @@
+import { db } from "@lib/firebase";
+import { useCollection, useDocument } from "react-firebase-hooks/firestore";
+import { collection, doc } from "firebase/firestore";
+import { Ring, PushEvent } from "./Ring";
+import { SetGoalModal } from "./SetGoalModal";
+
+export const DevRing = ({ userId }: { userId: string }) => {
+  const [userDoc] = useDocument(doc(db, "users", userId));
+  const [eventsSnapshot] = useCollection(
+    collection(db, "users", userId, "events")
+  );
+
+  if (!userDoc) {
+    console.log("no user doc bruh");
+    return null;
+  }
+  const userData = userDoc.data();
+  if (!userData) {
+    console.log("no user data bruh");
+    return null;
+  }
+  const hasGoal = userData.hasOwnProperty("dailyGoal");
+  if (!hasGoal) {
+    return <SetGoalModal userId={userId} />;
+  }
+  const { dailyGoal } = userData;
+
+  if (!eventsSnapshot) {
+    return null;
+  }
+  const { docs } = eventsSnapshot;
+  const events = docs.map((doc) => doc.data() as PushEvent);
+
+  return <Ring goal={dailyGoal} events={events} />;
+};

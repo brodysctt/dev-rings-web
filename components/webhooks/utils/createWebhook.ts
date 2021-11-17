@@ -9,7 +9,7 @@ export const createWebhook = async (
     const token = await fetchToken(userId);
     console.log(`Creating webhook for ${repo}...`);
     const { status } = await axios.post(`${CLOUD_FUNCTION_URL}`, {
-      userId,
+      user: userId,
       repo,
       token,
     });

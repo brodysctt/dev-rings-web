@@ -1,23 +1,46 @@
 import type { NextPage } from "next";
-import Image from "next/image";
-import { Box } from "@mui/material";
+import { Box, Typography } from "@mui/material";
+import { auth } from "@lib/firebase";
+import { useAuthState } from "react-firebase-hooks/auth";
+import { SignInButton, DevRing } from "components";
 
 const DevRings: NextPage = () => {
+  const [user, loading, error] = useAuthState(auth);
+
+  if (loading) {
+    return (
+      <Box>
+        <Typography>Initialising User...</Typography>
+      </Box>
+    );
+  }
+  if (error) {
+    return (
+      <Box>
+        <Typography>Error: {error}</Typography>
+      </Box>
+    );
+  }
+  if (user) {
+    const {
+      // @ts-ignore
+      reloadUserInfo: { screenName: userId },
+    } = user;
+    console.log(`this mans is logged in: ${userId}`);
+
+    return <DevRing userId={userId} />;
+  }
   return (
     <Box
       style={{
         display: "flex",
-        justifyContent: "center",
+        justifyContent: "space-around",
         alignItems: "center",
         height: "100vh",
         width: "100%",
       }}
     >
-      <Image
-        src="https://media.giphy.com/media/054ZPjUUVPHPwrzpHJ/giphy.gif"
-        width="500px"
-        height="300px"
-      />
+      <SignInButton />
     </Box>
   );
 };
