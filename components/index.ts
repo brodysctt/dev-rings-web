@@ -1,4 +1,4 @@
 export * from "./auth";
 export * from "./webhooks";
 export * from "./Navbar";
-export * from "./Ring";
+export * from "./dev-ring";
