@@ -15,7 +15,7 @@ export const SignOutButton = () => {
   );
 };
 
-const signOutUser = async () => {
+export const signOutUser = async () => {
   try {
     await signOut(auth);
     console.log("User signed out");
