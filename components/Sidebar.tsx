@@ -15,19 +15,30 @@ import { signOutUser } from "components";
 
 export const Sidebar = ({ userId }: { userId: string }) => {
   const [open, setOpen] = useState(false);
-  // TODO: Peep the CodeSandbox to implement a toggleDrawer function
+
+  const toggleDrawer =
+    (open: boolean) => (event: KeyboardEvent | MouseEvent) => {
+      if (
+        event.type === "keydown" &&
+        ((event as KeyboardEvent).key === "Tab" ||
+          (event as KeyboardEvent).key === "Shift")
+      ) {
+        return;
+      }
+      setOpen(open);
+    };
+
   return (
     <>
       <Button onClick={() => setOpen(true)} sx={{ mr: 2 }}>
         <MenuIcon />
       </Button>
-      {/* Got rid of onClose property */}
-      <Drawer anchor={"right"} open={open}>
+      <Drawer anchor={"right"} open={open} onClose={toggleDrawer(false)}>
         <Box
           sx={{ width: 250 }}
           role="presentation"
-          onClick={() => setOpen(false)}
-          onKeyDown={() => setOpen(false)}
+          onClick={toggleDrawer(false)}
+          onKeyDown={toggleDrawer(false)}
         >
           <List>
             <Link href="/dev-rings">
@@ -66,11 +77,6 @@ export const Sidebar = ({ userId }: { userId: string }) => {
             <ListItem button onClick={signOutUser} key={"logout"}>
               👋
               <ListItemText primary={"Sign out"} sx={{ ml: 2 }} />
-            </ListItem>
-            <Divider />
-            <ListItem button onClick={() => console.log("hi")} key={"wuz"}>
-              🗄️
-              <ListItemText primary={"Close sidebar"} sx={{ ml: 2 }} />
             </ListItem>
           </List>
         </Box>
