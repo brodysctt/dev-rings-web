@@ -5,7 +5,7 @@ import { doc, updateDoc } from "@firebase/firestore";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-export const SetGoalModal = ({ userId }: { userId: string }) => {
+export const GoalModal = ({ userId }: { userId: string }) => {
   const { register, handleSubmit } = useForm<{ goal: number }>();
   const onSubmit: SubmitHandler<{ goal: string }> = async ({ goal }) => {
     const isOnlyNumbers = /^[0-9]*$/.test(goal);

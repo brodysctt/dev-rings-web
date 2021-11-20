@@ -11,10 +11,12 @@ import {
   ListItemText,
 } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
-import { signOutUser } from "components";
+import { GoalModal } from "components";
+import { signOutUser } from "helpers";
 
 export const Sidebar = ({ userId }: { userId: string }) => {
   const [open, setOpen] = useState(false);
+  const [goalModal, setGoalModal] = useState(false);
 
   const toggleDrawer =
     (open: boolean) => (event: KeyboardEvent | MouseEvent) => {
@@ -28,6 +30,10 @@ export const Sidebar = ({ userId }: { userId: string }) => {
       setOpen(open);
     };
 
+  // TODO: Pass the setGoalModal function down to SetGoalModal so that it closes lolol
+  if (goalModal) {
+    return <GoalModal userId={userId} />;
+  }
   return (
     <>
       <Button onClick={() => setOpen(true)} sx={{ mr: 2 }}>
@@ -57,12 +63,16 @@ export const Sidebar = ({ userId }: { userId: string }) => {
                 <ListItemText primary={"Add webhooks"} sx={{ ml: 2 }} />
               </ListItem>
             </Link>
+            <ListItem button onClick={() => setGoalModal(true)} key={"setGoal"}>
+              🎯
+              <ListItemText primary={"Set new goal"} sx={{ ml: 2 }} />
+            </ListItem>
             <ListItem
               button
               onClick={() => window.open(`${GITHUB_BASE_URL}${userId}`)}
               key={"wuz"}
             >
-              <Image src="/github.png" width={22} height={22} />
+              <Image src="/github.png" width={20} height={20} />
               <ListItemText primary={"Take me to GitHub"} sx={{ ml: 2 }} />
             </ListItem>
             <Divider />
