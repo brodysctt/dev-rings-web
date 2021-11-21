@@ -1,8 +1,9 @@
 import Link from "next/link";
 import { auth } from "@lib/firebase";
 import { useAuthState } from "react-firebase-hooks/auth";
-import { SignOutButton, CreateWebhookInput } from "components";
+import { CreateWebhookInput } from "components";
 import { Box, Button } from "@mui/material";
+import { Sidebar } from "./Sidebar";
 
 export const Navbar = () => {
   const [user] = useAuthState(auth);
@@ -17,20 +18,20 @@ export const Navbar = () => {
         sx={{
           display: "flex",
           justifyContent: "space-around",
-          height: "60px",
+          height: 60,
           width: "100%",
-          mt: "20px",
+          mt: 3,
         }}
       >
         <Box sx={{ display: "flex" }}>
           <Link href="/dev-rings">
-            <Button variant="contained" sx={{ ml: "20px" }}>
+            <Button variant="contained" sx={{ ml: 2 }}>
               DEV RINGS
             </Button>
           </Link>
           <CreateWebhookInput userId={userId} />
         </Box>
-        <SignOutButton />
+        <Sidebar userId={userId as string} />
       </Box>
     );
   }
