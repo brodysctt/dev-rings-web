@@ -2,7 +2,7 @@ import { db } from "@lib/firebase";
 import { useCollection, useDocument } from "react-firebase-hooks/firestore";
 import { collection, doc } from "firebase/firestore";
 import { Ring, PushEvent } from "./Ring";
-import { GoalModal } from "components";
+import { SetGoalModal } from "./SetGoalModal";
 
 export const DevRing = ({ userId }: { userId: string }) => {
   const [userDoc] = useDocument(doc(db, "users", userId));
@@ -21,7 +21,7 @@ export const DevRing = ({ userId }: { userId: string }) => {
   }
   const hasGoal = userData.hasOwnProperty("dailyGoal");
   if (!hasGoal) {
-    return <GoalModal userId={userId} />;
+    return <SetGoalModal userId={userId} />;
   }
   const { dailyGoal } = userData;
 
