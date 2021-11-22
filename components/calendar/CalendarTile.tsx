@@ -1,6 +1,6 @@
 import { Box, Typography } from "@mui/material";
 // import { Timestamp } from "firebase/firestore";
-import { Ring } from "./dev-ring/Ring";
+import { Ring } from "../dev-ring/Ring";
 
 interface RingProps {
   // timestamp: Timestamp;
