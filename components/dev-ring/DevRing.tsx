@@ -1,8 +1,15 @@
 import { db } from "@lib/firebase";
 import { useCollection, useDocument } from "react-firebase-hooks/firestore";
-import { collection, doc } from "firebase/firestore";
-import { Ring, PushEvent } from "./Ring";
+import { collection, doc, Timestamp } from "firebase/firestore";
 import { SetGoalModal } from "./SetGoalModal";
+import { Ring } from "./Ring";
+
+export interface PushEvent {
+  createdAt: Timestamp;
+  eventType: string;
+  repo: string;
+  url: string;
+}
 
 export const DevRing = ({ userId }: { userId: string }) => {
   const [userDoc] = useDocument(doc(db, "users", userId));
@@ -30,6 +37,6 @@ export const DevRing = ({ userId }: { userId: string }) => {
   }
   const { docs } = eventsSnapshot;
   const events = docs.map((doc) => doc.data() as PushEvent);
-
-  return <Ring goal={dailyGoal} events={events} />;
+  const progress = events.length;
+  return <Ring goal={dailyGoal} progress={progress} />;
 };

@@ -28,7 +28,19 @@ const DevRings: NextPage = () => {
     } = user;
     console.log(`this mans is logged in: ${userId}`);
 
-    return <DevRing userId={userId} />;
+    return (
+      <Box
+        style={{
+          display: "flex",
+          justifyContent: "space-around",
+          alignItems: "center",
+          height: "60vh",
+          width: "100%",
+        }}
+      >
+        <DevRing userId={userId} />
+      </Box>
+    );
   }
   return (
     <Box
