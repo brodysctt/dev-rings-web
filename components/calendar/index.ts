@@ -1,3 +1,2 @@
-export * from "./CalendarTile";
+export * from "./DayTile";
 export * from "./Calendar";
-export * from "./Month";

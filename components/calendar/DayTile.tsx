@@ -1,21 +1,16 @@
 import { Box, Typography } from "@mui/material";
-// import { Timestamp } from "firebase/firestore";
+import { Timestamp } from "firebase/firestore";
 import { Ring } from "../dev-ring/Ring";
 
-interface RingProps {
-  // timestamp: Timestamp;
-  day: number;
+export interface Log {
+  createdAt: Timestamp;
   progress: number;
   goal: number;
 }
 
-export const CalendarTile = ({
-  /*timestamp*/ day,
-  progress,
-  goal,
-}: RingProps) => {
-  // const date = timestamp.toDate();
-  // const day = date.getDate();
+export const DayTile = ({ log }: { log: Log }) => {
+  const { createdAt, progress, goal } = log;
+  const day = createdAt.toDate().getDate();
   return (
     <Box
       sx={{

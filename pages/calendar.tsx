@@ -1,6 +1,6 @@
 import type { NextPage } from "next";
 import { Box } from "@mui/material";
-import { Calendar, Month } from "components";
+import { Calendar } from "components";
 import { Timestamp } from "firebase/firestore";
 
 const CalendarPage: NextPage = () => (
@@ -13,22 +13,8 @@ const CalendarPage: NextPage = () => (
       width: "100%",
     }}
   >
-    <Month logs={logs} />
+    <Calendar />
   </Box>
 );
 
 export default CalendarPage;
-
-export interface Log {
-  createdAt: Timestamp;
-  progress: number;
-  goal: number;
-}
-
-const logs = [
-  { createdAt: Timestamp.now(), progress: 3, goal: 4 },
-  { createdAt: Timestamp.now(), progress: 3, goal: 4 },
-  { createdAt: Timestamp.now(), progress: 3, goal: 4 },
-  { createdAt: Timestamp.now(), progress: 3, goal: 4 },
-  { createdAt: Timestamp.now(), progress: 3, goal: 4 },
-];
