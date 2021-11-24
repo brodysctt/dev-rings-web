@@ -52,12 +52,12 @@ export const CreateWebhookInput = ({ userId }: { userId: string }) => {
   userNeedsHelp && createWebhookToast.info();
   return (
     <Box
-      style={{
+      sx={{
         display: "flex",
         flexDirection: "column",
         justifyContent: "center",
         alignItems: "start",
-        width: "700px",
+        width: 400,
         marginLeft: "50px",
       }}
     >

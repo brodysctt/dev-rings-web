@@ -7,23 +7,13 @@ export const Calendar = () => {
   const currentMonth = logs.length - 1;
   const [month, setMonth] = useState(currentMonth);
   return (
-    <Box
-      sx={{
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-        height: "60vh",
-        width: "100%",
-      }}
-    >
-      <Month
-        logs={logs[month]}
-        hasPrevious={month !== 0}
-        hasNext={month !== logs.length - 1}
-        monthIndex={month}
-        setMonth={setMonth}
-      />
-    </Box>
+    <Month
+      logs={logs[month]}
+      hasPrevious={month !== 0}
+      hasNext={month !== logs.length - 1}
+      monthIndex={month}
+      setMonth={setMonth}
+    />
   );
 };
 // Oct 29 --> Nov 3
