@@ -38,6 +38,11 @@ const logs = [
     { createdAt: Timestamp.fromMillis(1635811920000), progress: 3, goal: 3 },
     { createdAt: Timestamp.fromMillis(1635898320000), progress: 3, goal: 8 },
     { createdAt: Timestamp.fromMillis(1635984720000), progress: 4, goal: 7 },
+    { createdAt: Timestamp.fromMillis(1636011720000), progress: 4, goal: 7 }, // 4
+    { createdAt: Timestamp.fromMillis(1636111720000), progress: 4, goal: 7 },
+    { createdAt: Timestamp.fromMillis(1636211720000), progress: 4, goal: 7 },
+    { createdAt: Timestamp.fromMillis(1636311720000), progress: 4, goal: 7 },
+    { createdAt: Timestamp.fromMillis(1636411720000), progress: 4, goal: 7 },
   ],
 ];
 

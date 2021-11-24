@@ -24,33 +24,38 @@ export const Month = ({
   const monthStart = firstLogTimestamp.toDate().getDay();
   const month = getMonthAsString(firstLogTimestamp);
   return (
-    <Box>
+    <Box
+      sx={{
+        display: "flex",
+        flexDirection: "column",
+        width: 480,
+        border: "2px solid #DCDEE6", //#CAD2F7 #DCDEE6
+        borderRadius: 10,
+        p: 2,
+      }}
+    >
       <Grid container justifyContent="center" sx={{ mb: 2 }}>
-        {/* Could refactor these buttons, but gonna hold off for now */}
-        {hasPrevious && (
-          <Button
-            variant="text"
-            // Kinda surprised I'm not getting a type error here, cuz it could be undefined 🤷‍♂️
-            onClick={() => setMonth(monthIndex - 1)}
-            startIcon={<ArrowBackRoundedIcon />}
-          />
-        )}
+        <Button
+          variant="text"
+          onClick={() => setMonth(monthIndex - 1)}
+          disabled={!hasPrevious}
+          startIcon={<ArrowBackRoundedIcon />}
+        />
         <Grid item xs={8}>
           <Typography variant="h6" textAlign="center">
             {month}
           </Typography>
         </Grid>
-        {hasNext && (
-          <Button
-            variant="text"
-            onClick={() => setMonth(monthIndex + 1)}
-            endIcon={<ArrowForwardRoundedIcon />}
-          />
-        )}
+        <Button
+          variant="text"
+          onClick={() => setMonth(monthIndex + 1)}
+          disabled={!hasNext}
+          endIcon={<ArrowForwardRoundedIcon />}
+        />
       </Grid>
-      <Grid container columns={7} sx={{ width: 420 }}>
-        {<Grid item xs={monthStart} />}
-        {[...logs].map((log) => (
+      <Grid container columns={7} gap={"3px"}>
+        {<Grid item xs={monthStart} sx={{ mr: "-3px" }} />}
+        {logs.map((log) => (
           <DayTile log={log} />
         ))}
       </Grid>
