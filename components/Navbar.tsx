@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { auth } from "@lib/firebase";
 import { useAuthState } from "react-firebase-hooks/auth";
-import { CreateWebhookInput } from "components";
+import { CreateWebhookInput, CalendarPopper } from "components";
 import { Box, Button } from "@mui/material";
 import { Sidebar } from "./Sidebar";
 
@@ -29,6 +29,7 @@ export const Navbar = () => {
               DEV RINGS
             </Button>
           </Link>
+          <CalendarPopper />
           <CreateWebhookInput userId={userId} />
         </Box>
         <Sidebar userId={userId as string} />
