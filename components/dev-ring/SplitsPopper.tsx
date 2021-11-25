@@ -1,45 +1,37 @@
-import Image from "next/image";
-import { Box, Typography, Button, Popper, Fade, Paper } from "@mui/material";
+import { Box, Button, Popper, Fade, Paper, Chip } from "@mui/material";
 import PopupState, { bindToggle, bindPopper } from "material-ui-popup-state";
 import type { PushEvent } from "components";
+import { EventIcon } from "./EventIcon";
 
 export const SplitsPopper = ({ events }: { events: PushEvent[] }) => (
   <PopupState variant="popper" popupId="demo-popup-popper">
     {(popupState) => (
       <>
-        <Button
-          variant="text"
-          {...bindToggle(popupState)}
-          sx={{ height: 60, ml: 1 }}
-        >
-          <Image src="/commit.svg" width={20} height={20} />
+        <Button variant="text" {...bindToggle(popupState)}>
+          <Box sx={iconContainerSx}>
+            <EventIcon variant="contained" />
+          </Box>
         </Button>
         <Popper {...bindPopper(popupState)} transition>
           {({ TransitionProps }) => (
             <Fade {...TransitionProps} timeout={350}>
-              <Paper elevation={0} sx={{ p: 2 }}>
+              <Paper elevation={0}>
                 <Box
                   sx={{
                     display: "flex",
-                    flexDirection: "column",
                     justifyContent: "space-between",
-                    border: "2px solid #DCDEE6", //#CAD2F7 #DCDEE6
-                    borderRadius: 10,
                     p: 2,
                   }}
                 >
-                  <Typography>Here be the commits on the day</Typography>
                   {events.map((event) => {
                     const { createdAt, eventType, repo, url } = event;
                     return (
-                      <>
-                        <Typography>
-                          {createdAt.toDate().toDateString()}
-                        </Typography>
-                        <Typography>{eventType}</Typography>
-                        <Typography>{repo}</Typography>
-                        <Typography>{url} </Typography>
-                      </>
+                      <Chip
+                        icon={<EventIcon type={eventType} variant="outline" />}
+                        label={repo}
+                        onClick={() => window.open(url)}
+                        sx={{ pl: 1 }}
+                      />
                     );
                   })}
                 </Box>
@@ -51,3 +43,12 @@ export const SplitsPopper = ({ events }: { events: PushEvent[] }) => (
     )}
   </PopupState>
 );
+
+const iconContainerSx = {
+  display: "flex",
+  justifyContent: "center",
+  alignItems: "center",
+  bgcolor: "primary.main", // #CAD2F7
+  borderRadius: 2,
+  height: 25,
+};
