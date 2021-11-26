@@ -18,6 +18,9 @@ export const receiveWebhookEventHandler = functions.https.onRequest(
         } = data;
 
         const userRef = db.collection("users").doc(userId);
+        const eventsRef = userRef.collection("events");
+        const ringsRef = userRef.collection("rings");
+
         const userDoc = await userRef.get();
         if (!userDoc.exists) {
           functions.logger.log(
@@ -26,6 +29,12 @@ export const receiveWebhookEventHandler = functions.https.onRequest(
           res.sendStatus(200);
           return;
         }
+        // TODO: Set a default daily goal when a user signs up to avoid case where this is empty
+        // @ts-ignore
+        const { dailyGoal: goal } = userDoc.data();
+        const date = new Date();
+        const createdAt = admin.firestore.Timestamp.fromDate(date);
+        const dateString = date.toLocaleDateString().replace(/\//g, "-");
 
         if (eventType === "push") {
           const {
@@ -42,15 +51,30 @@ export const receiveWebhookEventHandler = functions.https.onRequest(
           for (const commit of commits) {
             const { id, message, url } = commit;
             const eventId = id.toString();
-            await storeEvent({
-              userRef,
-              eventId,
+
+            functions.logger.log(`Storing ${eventType} event...`);
+            await eventsRef.doc(eventId).set({
+              createdAt,
               eventType,
               repo,
               message,
               url,
             });
+            functions.logger.log(`Successfully stored event ${eventId} 🎉`);
           }
+
+          functions.logger.log(`Updating ring for ${dateString}...`);
+          await ringsRef.doc(dateString).set(
+            {
+              progress: admin.firestore.FieldValue.increment(commits.length),
+              goal,
+            },
+            { merge: true }
+          );
+          functions.logger.log(
+            `Successfully updated ring for ${dateString} 🎉`
+          );
+
           res.sendStatus(200);
           return;
         }
@@ -70,14 +94,27 @@ export const receiveWebhookEventHandler = functions.https.onRequest(
           } = data;
           const eventId = id.toString();
 
-          await storeEvent({
-            userRef,
-            eventId,
+          functions.logger.log(`Storing ${eventType} event...`);
+          await eventsRef.doc(eventId).set({
+            createdAt,
             eventType,
             repo,
             message,
             url,
           });
+          functions.logger.log(`Successfully stored event ${eventId} 🎉`);
+
+          functions.logger.log(`Updating ring for ${dateString}...`);
+          await ringsRef.doc(dateString).set(
+            {
+              progress: admin.firestore.FieldValue.increment(1),
+              goal,
+            },
+            { merge: true }
+          );
+          functions.logger.log(
+            `Successfully updated ring for ${dateString} 🎉`
+          );
           res.sendStatus(200);
           return;
         }
@@ -101,53 +138,3 @@ export const receiveWebhookEventHandler = functions.https.onRequest(
     });
   }
 );
-
-interface StoreEvent {
-  // TODO: Make sure this type is correct
-  userRef: FirebaseFirestore.DocumentData;
-  eventId: string;
-  eventType: "push" | "pull_request";
-  repo: string;
-  message: string;
-  url: string;
-}
-
-const storeEvent = async ({
-  userRef,
-  eventId,
-  eventType,
-  repo,
-  message,
-  url,
-}: StoreEvent) => {
-  // TODO: Set a default daily goal when a user signs up to avoid case where this is empty
-  const userDoc = await userRef.get();
-  const { dailyGoal: goal } = userDoc.data();
-  functions.logger.log(`current goal be: ${goal}`);
-  const eventsRef = userRef.collection("events");
-  const ringsRef = userRef.collection("rings");
-  const date = new Date();
-  const createdAt = admin.firestore.Timestamp.fromDate(date);
-  const dateString = date.toLocaleDateString().replace(/\//g, "-");
-
-  functions.logger.log(`Storing ${eventType} event...`);
-  await eventsRef.doc(eventId).set({
-    createdAt,
-    eventType,
-    repo,
-    message,
-    url,
-  });
-  functions.logger.log(`Successfully stored event ${eventId} 🎉`);
-
-  functions.logger.log(`Updating ring for ${dateString}...`);
-  functions.logger.log(`Current goal: ${goal}`);
-
-  // // Note: "Increment operations are useful for implementing counters, but keep in mind that you can update a single document only once per second."
-  // // TODO: Gonna need to refactor this slightly for bulk commits – will do the for loop within this function, and then increment by the total number of commits after
-  await ringsRef.doc(dateString).set({
-    progress: admin.firestore.FieldValue.increment(1),
-    goal,
-  });
-  functions.logger.log(`Successfully updated ring for ${dateString} 🎉`);
-};
