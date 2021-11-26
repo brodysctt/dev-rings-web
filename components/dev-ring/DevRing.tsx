@@ -35,6 +35,7 @@ export const DevRing = ({ userId }: { userId: string }) => {
   }
   const { dailyGoal } = userData;
 
+  // TODO: Properly handle this – log to Sentry
   if (!eventsSnapshot) {
     return null;
   }
@@ -51,7 +52,7 @@ export const DevRing = ({ userId }: { userId: string }) => {
       }}
     >
       <Ring goal={dailyGoal} progress={progress} />
-      <EventsPopper events={events} />
+      {Boolean(progress) && <EventsPopper events={events} />}
     </Box>
   );
 };
