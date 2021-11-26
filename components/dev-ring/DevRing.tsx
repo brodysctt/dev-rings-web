@@ -4,7 +4,7 @@ import { useCollection, useDocument } from "react-firebase-hooks/firestore";
 import { collection, doc, Timestamp } from "firebase/firestore";
 import { SetGoalModal } from "./SetGoalModal";
 import { Ring } from "./Ring";
-import { SplitsPopper } from "./SplitsPopper";
+import { EventsPopper } from "./events-popper";
 
 export interface PushEvent {
   createdAt: Timestamp;
@@ -54,7 +54,7 @@ export const DevRing = ({ userId }: { userId: string }) => {
       }}
     >
       <Ring goal={dailyGoal} progress={progress} />
-      <SplitsPopper events={events} />
+      <EventsPopper events={events} />
     </Box>
   );
 };

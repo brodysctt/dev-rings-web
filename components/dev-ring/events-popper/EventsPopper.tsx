@@ -3,7 +3,7 @@ import PopupState, { bindToggle, bindPopper } from "material-ui-popup-state";
 import type { PushEvent } from "components";
 import { EventIcon } from "./EventIcon";
 
-export const SplitsPopper = ({ events }: { events: PushEvent[] }) => (
+export const EventsPopper = ({ events }: { events: PushEvent[] }) => (
   <PopupState variant="popper" popupId="demo-popup-popper">
     {(popupState) => (
       <>
