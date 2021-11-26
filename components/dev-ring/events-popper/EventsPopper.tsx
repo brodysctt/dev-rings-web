@@ -38,6 +38,7 @@ export const EventsPopper = ({ events }: { events: RepoEvent[] }) => {
                     {chronologicalEvents.map((event, i) => {
                       const { createdAt, eventType, repo, message, url } =
                         event;
+                      // TODO: Can use toLocaleTimeString() method here instead
                       const time = getTimeAsString(createdAt);
                       return (
                         <Tooltip key={i} title={`${time} | ${repo}`}>
