@@ -3,7 +3,7 @@ import { Box, Grid, Typography, Button } from "@mui/material";
 import ArrowBackRoundedIcon from "@mui/icons-material/ArrowBackRounded";
 import ArrowForwardRoundedIcon from "@mui/icons-material/ArrowForwardRounded";
 import { DayTile, Log } from "components";
-import { getMonthAsString } from "./utils/getMonthAsString";
+import { getMonthAsString } from "utils";
 
 interface MonthProps {
   logs: Log[];

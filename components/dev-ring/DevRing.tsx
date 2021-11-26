@@ -6,10 +6,11 @@ import { SetGoalModal } from "./SetGoalModal";
 import { Ring } from "./Ring";
 import { EventsPopper } from "./events-popper";
 
-export interface PushEvent {
+export interface RepoEvent {
   createdAt: Timestamp;
   eventType: string;
   repo: string;
+  message: string;
   url: string;
 }
 
@@ -38,11 +39,7 @@ export const DevRing = ({ userId }: { userId: string }) => {
     return null;
   }
   const { docs } = eventsSnapshot;
-  const events = docs.map((doc) => doc.data() as PushEvent);
-  console.log("here be the events:");
-  console.dir(events);
-  console.log("does it have a repo property?");
-  console.log(events[0].hasOwnProperty("repo"));
+  const events = docs.map((doc) => doc.data() as RepoEvent);
   const progress = events.length;
   return (
     <Box

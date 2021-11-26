@@ -12,7 +12,15 @@ export const EventIcon = ({ type = "push", variant }: EventIconProps) => {
 
   if (isCommit) {
     return (
-      <Box sx={eventIconSx}>
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          height: 20,
+          width: 20,
+        }}
+      >
         <svg width="24" height="24" viewBox="0 0 24 24" fill={setColor()}>
           <path
             fill-rule="evenodd"
@@ -26,7 +34,16 @@ export const EventIcon = ({ type = "push", variant }: EventIconProps) => {
   }
 
   return (
-    <Box sx={eventIconSx}>
+    <Box
+      sx={{
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        height: 17,
+        width: 17,
+        ml: "5px",
+      }}
+    >
       <svg viewBox="0 0 512 512">
         <circle
           cx="128"
@@ -77,12 +94,4 @@ export const EventIcon = ({ type = "push", variant }: EventIconProps) => {
       </svg>
     </Box>
   );
-};
-
-const eventIconSx = {
-  display: "flex",
-  justifyContent: "center",
-  alignItems: "center",
-  height: 20,
-  width: 20,
 };

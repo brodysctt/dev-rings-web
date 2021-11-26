@@ -1,9 +1,19 @@
-import { Box, Button, Popper, Fade, Paper, Chip } from "@mui/material";
+import {
+  Box,
+  Typography,
+  Button,
+  Popper,
+  Fade,
+  Paper,
+  Chip,
+  Tooltip,
+} from "@mui/material";
 import PopupState, { bindToggle, bindPopper } from "material-ui-popup-state";
-import type { PushEvent } from "components";
+import type { RepoEvent } from "components";
+import { getTimeAsString } from "utils";
 import { EventIcon } from "./EventIcon";
 
-export const EventsPopper = ({ events }: { events: PushEvent[] }) => (
+export const EventsPopper = ({ events }: { events: RepoEvent[] }) => (
   <PopupState variant="popper" popupId="demo-popup-popper">
     {(popupState) => (
       <>
@@ -24,14 +34,23 @@ export const EventsPopper = ({ events }: { events: PushEvent[] }) => (
                   }}
                 >
                   {events.map((event) => {
-                    const { createdAt, eventType, repo, url } = event;
+                    const { createdAt, eventType, repo, message, url } = event;
+                    const time = getTimeAsString(createdAt);
                     return (
-                      <Chip
-                        icon={<EventIcon type={eventType} variant="outline" />}
-                        label={repo}
-                        onClick={() => window.open(url)}
-                        sx={{ pl: 1 }}
-                      />
+                      <Tooltip title={`${time} | ${repo}`}>
+                        <Chip
+                          icon={
+                            <EventIcon type={eventType} variant="outline" />
+                          }
+                          label={
+                            <Typography textAlign="left" sx={{ p: 0 }}>
+                              {message}
+                            </Typography>
+                          }
+                          onClick={() => window.open(url)}
+                          sx={{ pl: 1, mr: 1 }}
+                        />
+                      </Tooltip>
                     );
                   })}
                 </Box>

@@ -15,6 +15,7 @@ export const Ring = ({ progress, goal, size = "full" }: RingProps) => {
       size={isFullSize ? 200 : 30}
       thickness={8}
       value={percent}
+      sx={{ mb: 2 }}
     />
   );
 };

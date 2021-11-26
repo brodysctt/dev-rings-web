@@ -45,10 +45,17 @@ export const receiveWebhookEventHandler = functions.https.onRequest(
             return;
           }
           for (const commit of commits) {
-            const { id, url } = commit;
+            const { id, message, url } = commit;
             const eventId = id.toString();
             functions.logger.log(`Storing ${eventType} event...`);
-            await storeEvent({ eventsRef, eventId, eventType, repo, url });
+            await storeEvent({
+              eventsRef,
+              eventId,
+              eventType,
+              repo,
+              message,
+              url,
+            });
             functions.logger.log(`Successfully stored event ${eventId} 🎉`);
           }
           res.sendStatus(200);
@@ -57,7 +64,8 @@ export const receiveWebhookEventHandler = functions.https.onRequest(
 
         if (eventType === "pull_request") {
           const { action } = data;
-          if (action !== "opened") {
+          // was originally "opened"
+          if (action !== "closed") {
             functions.logger.log(
               `PR event for ${action} action – this event won't be stored 🙅‍♂️`
             );
@@ -65,12 +73,19 @@ export const receiveWebhookEventHandler = functions.https.onRequest(
             return;
           }
           const {
-            pull_request: { id, url },
+            pull_request: { id, title: message, html_url: url },
             repository: { name: repo },
           } = data;
           const eventId = id.toString();
           functions.logger.log(`Storing ${eventType} event...`);
-          await storeEvent({ eventsRef, eventId, eventType, repo, url });
+          await storeEvent({
+            eventsRef,
+            eventId,
+            eventType,
+            repo,
+            message,
+            url,
+          });
           functions.logger.log(`Successfully stored event ${eventId} 🎉`);
           res.sendStatus(200);
           return;
@@ -101,6 +116,7 @@ interface StoreEvent {
   eventId: string;
   eventType: "push" | "pull_request";
   repo: string;
+  message: string;
   url: string;
 }
 
@@ -109,11 +125,13 @@ const storeEvent = async ({
   eventId,
   eventType,
   repo,
+  message,
   url,
 }: StoreEvent) =>
   await eventsRef.doc(eventId).set({
     createdAt: admin.firestore.Timestamp.fromDate(new Date()),
-    repo,
     eventType,
+    repo,
+    message,
     url,
   });
