@@ -30,9 +30,9 @@ const DevRings: NextPage = () => {
 
     return (
       <Box
-        style={{
+        sx={{
           display: "flex",
-          justifyContent: "space-around",
+          justifyContent: "center",
           alignItems: "center",
           height: "60vh",
           width: "100%",
@@ -44,7 +44,7 @@ const DevRings: NextPage = () => {
   }
   return (
     <Box
-      style={{
+      sx={{
         display: "flex",
         justifyContent: "space-around",
         alignItems: "center",

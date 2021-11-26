@@ -1,13 +1,16 @@
+import { Box } from "@mui/material";
 import { db } from "@lib/firebase";
 import { useCollection, useDocument } from "react-firebase-hooks/firestore";
 import { collection, doc, Timestamp } from "firebase/firestore";
 import { SetGoalModal } from "./SetGoalModal";
 import { Ring } from "./Ring";
+import { EventsPopper } from "./events-popper";
 
-export interface PushEvent {
+export interface RepoEvent {
   createdAt: Timestamp;
   eventType: string;
   repo: string;
+  message: string;
   url: string;
 }
 
@@ -32,11 +35,24 @@ export const DevRing = ({ userId }: { userId: string }) => {
   }
   const { dailyGoal } = userData;
 
+  // TODO: Properly handle this – log to Sentry
   if (!eventsSnapshot) {
     return null;
   }
   const { docs } = eventsSnapshot;
-  const events = docs.map((doc) => doc.data() as PushEvent);
+  const events = docs.map((doc) => doc.data() as RepoEvent);
   const progress = events.length;
-  return <Ring goal={dailyGoal} progress={progress} />;
+  return (
+    <Box
+      sx={{
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "center",
+        alignItems: "center",
+      }}
+    >
+      <Ring goal={dailyGoal} progress={progress} />
+      {Boolean(progress) && <EventsPopper events={events} />}
+    </Box>
+  );
 };
