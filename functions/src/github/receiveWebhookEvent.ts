@@ -19,7 +19,7 @@ export const receiveWebhookEventHandler = functions.https.onRequest(
 
         const userRef = db.collection("users").doc(userId);
         const eventsRef = userRef.collection("events");
-        const ringsRef = userRef.collection("rings");
+        const logsRef = userRef.collection("logs");
 
         const userDoc = await userRef.get();
         if (!userDoc.exists) {
@@ -64,9 +64,9 @@ export const receiveWebhookEventHandler = functions.https.onRequest(
           }
 
           functions.logger.log(`Updating ring for ${dateString}...`);
-          await ringsRef.doc(dateString).set(
+          await logsRef.doc(dateString).set(
             {
-              progress: admin.firestore.FieldValue.increment(commits.length),
+              actual: admin.firestore.FieldValue.increment(commits.length),
               goal,
             },
             { merge: true }
@@ -105,9 +105,9 @@ export const receiveWebhookEventHandler = functions.https.onRequest(
           functions.logger.log(`Successfully stored event ${eventId} 🎉`);
 
           functions.logger.log(`Updating ring for ${dateString}...`);
-          await ringsRef.doc(dateString).set(
+          await logsRef.doc(dateString).set(
             {
-              progress: admin.firestore.FieldValue.increment(1),
+              actual: admin.firestore.FieldValue.increment(1),
               goal,
             },
             { merge: true }

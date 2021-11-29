@@ -3,7 +3,7 @@ import PopupState, { bindToggle, bindPopper } from "material-ui-popup-state";
 import CalendarTodayRoundedIcon from "@mui/icons-material/CalendarTodayRounded";
 import { Calendar } from "components";
 
-export const CalendarPopper = () => (
+export const CalendarPopper = ({ userId }: { userId: string }) => (
   <PopupState variant="popper" popupId="demo-popup-popper">
     {(popupState) => (
       <>
@@ -18,7 +18,7 @@ export const CalendarPopper = () => (
           {({ TransitionProps }) => (
             <Fade {...TransitionProps} timeout={350}>
               <Paper elevation={0} sx={{ p: 2 }}>
-                <Calendar />
+                <Calendar userId={userId} />
               </Paper>
             </Fade>
           )}

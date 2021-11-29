@@ -29,7 +29,7 @@ export const Navbar = () => {
               DEV RINGS
             </Button>
           </Link>
-          <CalendarPopper />
+          <CalendarPopper userId={userId} />
           <CreateWebhookInput userId={userId} />
         </Box>
         <Sidebar userId={userId as string} />

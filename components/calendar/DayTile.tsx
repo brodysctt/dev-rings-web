@@ -1,16 +1,16 @@
 import { Box, Typography } from "@mui/material";
-import { Timestamp } from "firebase/firestore";
 import { Ring } from "../dev-ring/Ring";
 
-export interface Log {
-  createdAt: Timestamp;
-  progress: number;
+interface LogData {
+  actual: number;
   goal: number;
 }
 
-export const DayTile = ({ log }: { log: Log }) => {
-  const { createdAt, progress, goal } = log;
-  const day = createdAt.toDate().getDate();
+export type DayLog = [string, LogData];
+
+export const DayTile = ({ log }: { log: DayLog }) => {
+  const [dateString, { actual, goal }] = log;
+  const day = new Date(dateString).getDate();
   return (
     <Box
       sx={{
@@ -28,7 +28,7 @@ export const DayTile = ({ log }: { log: Log }) => {
       <Typography sx={{ fontSize: 10, alignSelf: "flex-end", mr: "4px" }}>
         {day}
       </Typography>
-      <Ring progress={progress} goal={goal} size="mini" />
+      <Ring progress={actual} goal={goal} size="mini" />
     </Box>
   );
 };

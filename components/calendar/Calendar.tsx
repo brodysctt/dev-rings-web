@@ -1,42 +1,45 @@
 import { useState } from "react";
-import { Box } from "@mui/material";
-import { Timestamp } from "firebase/firestore";
+import { db } from "@lib/firebase";
+import { useCollection } from "react-firebase-hooks/firestore";
+import { collection } from "firebase/firestore";
 import { Month } from "./Month";
+import { DayLog } from "components";
 
-export const Calendar = () => {
-  const currentMonth = logs.length - 1;
-  const [month, setMonth] = useState(currentMonth);
-  return (
-    <Month
-      logs={logs[month]}
-      hasPrevious={month !== 0}
-      hasNext={month !== logs.length - 1}
-      monthIndex={month}
-      setMonth={setMonth}
-    />
-  );
+export const Calendar = ({ userId }: { userId: string }) => {
+  const currentYear = new Date().getFullYear();
+  const currentMonth = new Date().getMonth() + 1;
+  const [yearInView, setYearInView] = useState(currentYear);
+  const [monthInView, setMonthInView] = useState(currentMonth);
+
+  // TODO: Make decision on how I want to handle loading and error states
+  // Feel like a custom hook that fires Sentry errors would be hype 🤷‍♂️
+  const [logsSnapshot] = useCollection(collection(db, "users", userId, "logs"));
+
+  if (logsSnapshot) {
+    const { docs } = logsSnapshot;
+    const logs = docs.map((doc: any) => [doc.id, doc.data()]) as DayLog[];
+    const logsInView = filterLogs(logs, monthInView, yearInView);
+
+    const [[firstLogDate]] = logs;
+    const firstMonth = new Date(firstLogDate).getMonth() + 1;
+
+    return (
+      <Month
+        logs={logsInView}
+        hasPrevious={monthInView !== firstMonth}
+        hasNext={true} //TODO: Update once I delete demo date --> monthInView !== currentMonth
+        monthInView={monthInView}
+        setMonthInView={setMonthInView}
+      />
+    );
+  }
+  return null;
 };
-// Oct 29 --> Nov 3
-// Not exactly sure how it would be structured, this would be a good thing to have on lock
-const logs = [
-  [
-    { createdAt: Timestamp.fromMillis(1635552720000), progress: 3, goal: 4 },
-    { createdAt: Timestamp.fromMillis(1635639120000), progress: 3, goal: 6 },
-    { createdAt: Timestamp.fromMillis(1635725520000), progress: 2, goal: 3 },
-  ],
-  [
-    { createdAt: Timestamp.fromMillis(1635811920000), progress: 3, goal: 3 },
-    { createdAt: Timestamp.fromMillis(1635898320000), progress: 3, goal: 8 },
-    { createdAt: Timestamp.fromMillis(1635984720000), progress: 4, goal: 7 },
-    { createdAt: Timestamp.fromMillis(1636011720000), progress: 4, goal: 7 }, // 4
-    { createdAt: Timestamp.fromMillis(1636111720000), progress: 4, goal: 7 },
-    { createdAt: Timestamp.fromMillis(1636211720000), progress: 4, goal: 7 },
-    { createdAt: Timestamp.fromMillis(1636311720000), progress: 4, goal: 7 },
-    { createdAt: Timestamp.fromMillis(1636411720000), progress: 4, goal: 7 },
-  ],
-];
 
-// const days = [
-//   1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22,
-//   23, 24, 25, 26, 27, 28, 29, 30,
-// ];
+const filterLogs = (logs: DayLog[], month: number, year: number) => {
+  const dateMatch = new RegExp(`${month}.*${year}`);
+  return logs.filter((log) => {
+    const [dateString] = log;
+    return dateMatch.test(dateString);
+  });
+};

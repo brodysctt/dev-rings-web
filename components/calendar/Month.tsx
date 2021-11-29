@@ -2,27 +2,27 @@ import type { Dispatch, SetStateAction } from "react";
 import { Box, Grid, Typography, Button } from "@mui/material";
 import ArrowBackRoundedIcon from "@mui/icons-material/ArrowBackRounded";
 import ArrowForwardRoundedIcon from "@mui/icons-material/ArrowForwardRounded";
-import { DayTile, Log } from "components";
-import { getMonthAsString } from "utils";
+import { DayTile, DayLog } from "components";
+import { getMonthName } from "utils";
 
 interface MonthProps {
-  logs: Log[];
+  logs: DayLog[];
   hasPrevious: boolean;
   hasNext: boolean;
-  monthIndex: number;
-  setMonth: Dispatch<SetStateAction<number>>;
+  monthInView: number;
+  setMonthInView: Dispatch<SetStateAction<number>>;
 }
 
 export const Month = ({
   logs,
   hasPrevious,
   hasNext,
-  monthIndex,
-  setMonth,
+  monthInView,
+  setMonthInView,
 }: MonthProps) => {
-  const { createdAt: firstLogTimestamp } = logs[0];
-  const monthStart = firstLogTimestamp.toDate().getDay();
-  const month = getMonthAsString(firstLogTimestamp);
+  const monthName = getMonthName(monthInView);
+  const [firstDate] = logs[0];
+  const gridStart = new Date(firstDate).getDay();
   return (
     <Box
       sx={{
@@ -37,26 +37,26 @@ export const Month = ({
       <Grid container justifyContent="center" sx={{ mb: 2 }}>
         <Button
           variant="text"
-          onClick={() => setMonth(monthIndex - 1)}
+          onClick={() => setMonthInView(monthInView - 1)}
           disabled={!hasPrevious}
           startIcon={<ArrowBackRoundedIcon />}
         />
         <Grid item xs={8}>
           <Typography variant="h6" textAlign="center">
-            {month}
+            {monthName}
           </Typography>
         </Grid>
         <Button
           variant="text"
-          onClick={() => setMonth(monthIndex + 1)}
+          onClick={() => setMonthInView(monthInView + 1)}
           disabled={!hasNext}
           endIcon={<ArrowForwardRoundedIcon />}
         />
       </Grid>
       <Grid container columns={7} gap={"3px"}>
-        {<Grid item xs={monthStart} sx={{ mr: "-3px" }} />}
-        {logs.map((log) => (
-          <DayTile log={log} />
+        {<Grid item xs={gridStart} sx={{ mr: "-3px" }} />}
+        {logs.map((log, i) => (
+          <DayTile key={i} log={log} />
         ))}
       </Grid>
     </Box>
