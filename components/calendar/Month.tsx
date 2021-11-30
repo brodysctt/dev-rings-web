@@ -1,16 +1,16 @@
 import type { Dispatch, SetStateAction } from "react";
-import { Box, Grid, Typography, Button } from "@mui/material";
+import { Grid, Typography, Button } from "@mui/material";
 import ArrowBackRoundedIcon from "@mui/icons-material/ArrowBackRounded";
 import ArrowForwardRoundedIcon from "@mui/icons-material/ArrowForwardRounded";
-import { DayTile, DayLog } from "components";
+import { DayTile, DayLog, MonthYear } from "components";
 import { getMonthName } from "utils";
 
 interface MonthProps {
   logs: DayLog[];
   hasPrevious: boolean;
   hasNext: boolean;
-  monthInView: number;
-  setMonthInView: Dispatch<SetStateAction<number>>;
+  monthInView: MonthYear;
+  setMonthInView: Dispatch<SetStateAction<MonthYear>>;
 }
 
 export const Month = ({
@@ -20,24 +20,36 @@ export const Month = ({
   monthInView,
   setMonthInView,
 }: MonthProps) => {
-  const monthName = getMonthName(monthInView);
+  const [month, year] = monthInView;
+  const monthName = getMonthName(month);
+
+  console.log("here be the logs from month component");
+  console.dir(logs);
+
   const [firstDate] = logs[0];
   const gridStart = new Date(firstDate).getDay();
+
+  const decrementMonth = () => {
+    if (month === 1) {
+      setMonthInView([12, year - 1]);
+      return;
+    }
+    setMonthInView([month - 1, year]);
+  };
+  const incrementMonth = () => {
+    if (month === 12) {
+      setMonthInView([1, year + 1]);
+      return;
+    }
+    setMonthInView([month + 1, year]);
+  };
+
   return (
-    <Box
-      sx={{
-        display: "flex",
-        flexDirection: "column",
-        width: 480,
-        border: "2px solid #DCDEE6", //#CAD2F7 #DCDEE6
-        borderRadius: 10,
-        p: 2,
-      }}
-    >
+    <>
       <Grid container justifyContent="center" sx={{ mb: 2 }}>
         <Button
           variant="text"
-          onClick={() => setMonthInView(monthInView - 1)}
+          onClick={decrementMonth}
           disabled={!hasPrevious}
           startIcon={<ArrowBackRoundedIcon />}
         />
@@ -48,7 +60,7 @@ export const Month = ({
         </Grid>
         <Button
           variant="text"
-          onClick={() => setMonthInView(monthInView + 1)}
+          onClick={incrementMonth}
           disabled={!hasNext}
           endIcon={<ArrowForwardRoundedIcon />}
         />
@@ -59,6 +71,6 @@ export const Month = ({
           <DayTile key={i} log={log} />
         ))}
       </Grid>
-    </Box>
+    </>
   );
 };
