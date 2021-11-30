@@ -1,2 +1,2 @@
-export * from "./getMonthAsString";
+export * from "./getMonthName";
 export * from "./getTimeAsString";

@@ -18,19 +18,23 @@ export const receiveWebhookEventHandler = functions.https.onRequest(
         } = data;
 
         const userRef = db.collection("users").doc(userId);
-        const doc = await userRef.get();
-        if (!doc.exists) {
+        const eventsRef = userRef.collection("events");
+        const logsRef = userRef.collection("logs");
+
+        const userDoc = await userRef.get();
+        if (!userDoc.exists) {
           functions.logger.log(
             `${userId} doesn't exist – this event won't be stored 🙅‍♂️`
           );
           res.sendStatus(200);
           return;
         }
-
-        const eventsRef = db
-          .collection("users")
-          .doc(userId)
-          .collection("events");
+        // TODO: Set a default daily goal when a user signs up to avoid case where this is empty
+        // @ts-ignore
+        const { dailyGoal: goal } = userDoc.data();
+        const date = new Date();
+        const createdAt = admin.firestore.Timestamp.fromDate(date);
+        const dateString = date.toLocaleDateString().replace(/\//g, "-");
 
         if (eventType === "push") {
           const {
@@ -47,10 +51,10 @@ export const receiveWebhookEventHandler = functions.https.onRequest(
           for (const commit of commits) {
             const { id, message, url } = commit;
             const eventId = id.toString();
+
             functions.logger.log(`Storing ${eventType} event...`);
-            await storeEvent({
-              eventsRef,
-              eventId,
+            await eventsRef.doc(eventId).set({
+              createdAt,
               eventType,
               repo,
               message,
@@ -58,13 +62,25 @@ export const receiveWebhookEventHandler = functions.https.onRequest(
             });
             functions.logger.log(`Successfully stored event ${eventId} 🎉`);
           }
+
+          functions.logger.log(`Updating ring for ${dateString}...`);
+          await logsRef.doc(dateString).set(
+            {
+              actual: admin.firestore.FieldValue.increment(commits.length),
+              goal,
+            },
+            { merge: true }
+          );
+          functions.logger.log(
+            `Successfully updated ring for ${dateString} 🎉`
+          );
+
           res.sendStatus(200);
           return;
         }
 
         if (eventType === "pull_request") {
           const { action } = data;
-          // was originally "opened"
           if (action !== "closed") {
             functions.logger.log(
               `PR event for ${action} action – this event won't be stored 🙅‍♂️`
@@ -77,16 +93,28 @@ export const receiveWebhookEventHandler = functions.https.onRequest(
             repository: { name: repo },
           } = data;
           const eventId = id.toString();
+
           functions.logger.log(`Storing ${eventType} event...`);
-          await storeEvent({
-            eventsRef,
-            eventId,
+          await eventsRef.doc(eventId).set({
+            createdAt,
             eventType,
             repo,
             message,
             url,
           });
           functions.logger.log(`Successfully stored event ${eventId} 🎉`);
+
+          functions.logger.log(`Updating ring for ${dateString}...`);
+          await logsRef.doc(dateString).set(
+            {
+              actual: admin.firestore.FieldValue.increment(1),
+              goal,
+            },
+            { merge: true }
+          );
+          functions.logger.log(
+            `Successfully updated ring for ${dateString} 🎉`
+          );
           res.sendStatus(200);
           return;
         }
@@ -110,28 +138,3 @@ export const receiveWebhookEventHandler = functions.https.onRequest(
     });
   }
 );
-
-interface StoreEvent {
-  eventsRef: FirebaseFirestore.CollectionReference<FirebaseFirestore.DocumentData>;
-  eventId: string;
-  eventType: "push" | "pull_request";
-  repo: string;
-  message: string;
-  url: string;
-}
-
-const storeEvent = async ({
-  eventsRef,
-  eventId,
-  eventType,
-  repo,
-  message,
-  url,
-}: StoreEvent) =>
-  await eventsRef.doc(eventId).set({
-    createdAt: admin.firestore.Timestamp.fromDate(new Date()),
-    eventType,
-    repo,
-    message,
-    url,
-  });
