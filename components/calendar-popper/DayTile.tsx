@@ -1,12 +1,5 @@
 import { Box, Typography } from "@mui/material";
-import { Ring } from "../dev-ring/Ring";
-
-interface LogData {
-  actual: number;
-  goal: number;
-}
-
-export type DayLog = [string, LogData];
+import { Ring, DayLog } from "components";
 
 export const DayTile = ({ log }: { log: DayLog }) => {
   const [dateString, { actual, goal }] = log;

@@ -2,7 +2,8 @@ import type { Dispatch, SetStateAction } from "react";
 import { Grid, Typography, Button } from "@mui/material";
 import ArrowBackRoundedIcon from "@mui/icons-material/ArrowBackRounded";
 import ArrowForwardRoundedIcon from "@mui/icons-material/ArrowForwardRounded";
-import { DayTile, DayLog, MonthYear } from "components";
+import { DayTile, DayLog } from "./DayTile";
+import { MonthYear } from "components";
 import { getMonthName } from "utils";
 
 interface MonthProps {
