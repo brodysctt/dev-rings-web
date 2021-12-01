@@ -7,9 +7,6 @@ import { SignInButton, DevRing } from "components";
 const DevRings = ({ date }: { date: string }) => {
   const [user, loading, error] = useAuthState(auth);
 
-  console.log("here comes the date");
-  console.dir(date);
-
   if (loading) {
     return (
       <Box>
@@ -42,7 +39,7 @@ const DevRings = ({ date }: { date: string }) => {
           width: "100%",
         }}
       >
-        <DevRing userId={userId} />
+        <DevRing userId={userId} date={date} />
       </Box>
     );
   }
