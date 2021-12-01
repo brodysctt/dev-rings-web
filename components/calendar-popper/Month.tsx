@@ -2,8 +2,8 @@ import type { Dispatch, SetStateAction } from "react";
 import { Grid, Typography, Button } from "@mui/material";
 import ArrowBackRoundedIcon from "@mui/icons-material/ArrowBackRounded";
 import ArrowForwardRoundedIcon from "@mui/icons-material/ArrowForwardRounded";
-import { DayTile, DayLog } from "./DayTile";
-import { MonthYear } from "components";
+import { DayTile } from "./DayTile";
+import { MonthYear, DayLog } from "components";
 import { getMonthName } from "utils";
 
 interface MonthProps {
@@ -12,6 +12,7 @@ interface MonthProps {
   hasNext: boolean;
   monthInView: MonthYear;
   setMonthInView: Dispatch<SetStateAction<MonthYear>>;
+  setAnchorEl: Dispatch<SetStateAction<null | HTMLElement>>;
 }
 
 export const Month = ({
@@ -20,6 +21,7 @@ export const Month = ({
   hasNext,
   monthInView,
   setMonthInView,
+  setAnchorEl,
 }: MonthProps) => {
   const [month, year] = monthInView;
   const monthName = getMonthName(month);
@@ -69,7 +71,7 @@ export const Month = ({
       <Grid container columns={7} gap={"3px"}>
         {<Grid item xs={gridStart} sx={{ mr: "-3px" }} />}
         {logs.map((log, i) => (
-          <DayTile key={i} log={log} />
+          <DayTile key={i} log={log} setAnchorEl={setAnchorEl} />
         ))}
       </Grid>
     </>

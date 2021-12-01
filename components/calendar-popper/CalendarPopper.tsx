@@ -72,6 +72,7 @@ export const CalendarPopper = ({ userId }: { userId: string }) => {
                 hasNext={true} //TODO: Update once I delete demo date --> monthInView !== currentMonth
                 monthInView={monthInView}
                 setMonthInView={setMonthInView}
+                setAnchorEl={setAnchorEl}
               />
             </Box>
           </Paper>
