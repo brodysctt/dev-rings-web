@@ -1,20 +1,31 @@
 import { useState, Dispatch, SetStateAction } from "react";
 import Link from "next/link";
 import { Typography, ButtonBase } from "@mui/material";
-import { Ring, DayLog } from "components";
+import { Ring, MonthYear } from "components";
+
+export type DayLog = [
+  number,
+  {
+    actual: number;
+    goal: number;
+  }
+];
 
 interface DayTileProps {
   log: DayLog;
+  monthInView: MonthYear;
   setAnchorEl: Dispatch<SetStateAction<null | HTMLElement>>;
 }
 
-export const DayTile = ({ log, setAnchorEl }: DayTileProps) => {
+export const DayTile = ({ log, monthInView, setAnchorEl }: DayTileProps) => {
   const [hover, setHover] = useState(false);
 
-  const [dateString, { actual, goal }] = log;
-  const day = new Date(dateString).getDate();
+  const [month, year] = monthInView;
+
+  const [day, { actual, goal }] = log;
+  const dateString = `/${month}-${day < 10 ? 0 : ""}${day}-${year}`;
   return (
-    <Link href={`/${dateString}`}>
+    <Link href={dateString}>
       <ButtonBase
         onMouseEnter={() => setHover(true)}
         onMouseLeave={() => setHover(false)}
