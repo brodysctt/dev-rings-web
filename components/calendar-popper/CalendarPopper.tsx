@@ -16,7 +16,7 @@ import { Month } from "./Month";
 import { filterLogs, getFirstLogDate, createMonthYear } from "./utils";
 
 export type MonthYear = [number, number];
-export type DayLog = [
+export type Log = [
   string,
   {
     actual: number;
@@ -39,7 +39,7 @@ export const CalendarPopper = ({ userId }: { userId: string }) => {
   const logs = logsSnapshot.docs.map((doc: any) => [
     doc.id,
     doc.data(),
-  ]) as DayLog[];
+  ]) as Log[];
   const logsInView = filterLogs(logs, monthInView);
 
   const firstMonth = createMonthYear(getFirstLogDate(logs));
@@ -61,7 +61,7 @@ export const CalendarPopper = ({ userId }: { userId: string }) => {
           <CalendarTodayRoundedIcon />
         </Button>
         <Popper id={id} open={open} anchorEl={anchorEl}>
-          <Paper elevation={0} sx={{ p: 2 }}>
+          <Paper elevation={0} sx={{ pt: 2, borderRadius: 10 }}>
             <Box sx={containerSx}>
               <Typography sx={{ fontSize: 12, color: "primary.main" }}>
                 {monthInView[1]}

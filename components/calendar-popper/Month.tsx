@@ -3,11 +3,11 @@ import { Grid, Typography, Button } from "@mui/material";
 import ArrowBackRoundedIcon from "@mui/icons-material/ArrowBackRounded";
 import ArrowForwardRoundedIcon from "@mui/icons-material/ArrowForwardRounded";
 import { DayTile } from "./DayTile";
-import { MonthYear, DayLog } from "components";
-import { getMonthName } from "utils";
+import { MonthYear, Log } from "components";
+import { createMonthLogs, getMonthName } from "./utils";
 
 interface MonthProps {
-  logs: DayLog[];
+  logs: Log[];
   hasPrevious: boolean;
   hasNext: boolean;
   monthInView: MonthYear;
@@ -26,10 +26,9 @@ export const Month = ({
   const [month, year] = monthInView;
   const monthName = getMonthName(month);
 
-  console.log("here be the logs from month component");
-  console.dir(logs);
+  const monthLogs = createMonthLogs(logs, hasPrevious, monthInView);
 
-  const [firstDate] = logs[0];
+  const [firstDate] = monthLogs[0];
   const gridStart = new Date(firstDate).getDay();
 
   const decrementMonth = () => {
@@ -70,7 +69,7 @@ export const Month = ({
       </Grid>
       <Grid container columns={7} gap={"3px"}>
         {<Grid item xs={gridStart} sx={{ mr: "-3px" }} />}
-        {logs.map((log, i) => (
+        {monthLogs.map((log, i) => (
           <DayTile key={i} log={log} setAnchorEl={setAnchorEl} />
         ))}
       </Grid>
