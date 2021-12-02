@@ -1,35 +1,27 @@
 import { useState, Dispatch, SetStateAction } from "react";
 import Link from "next/link";
 import { Typography, ButtonBase } from "@mui/material";
-import { Ring, MonthYear } from "components";
-
-export type DayLog = [
-  number,
-  {
-    actual: number;
-    goal: number;
-  }
-];
+import { Ring, Log } from "components";
 
 interface DayTileProps {
-  log: DayLog;
-  monthInView: MonthYear;
+  log: Log;
   setAnchorEl: Dispatch<SetStateAction<null | HTMLElement>>;
 }
 
-export const DayTile = ({ log, monthInView, setAnchorEl }: DayTileProps) => {
+export const DayTile = ({ log, setAnchorEl }: DayTileProps) => {
   const [hover, setHover] = useState(false);
 
-  const [month, year] = monthInView;
-
-  const [day, { actual, goal }] = log;
-  const dateString = `/${month}-${day < 10 ? 0 : ""}${day}-${year}`;
+  // TODO: Ensure any user set goal is > 0
+  const [dateString, { actual, goal }] = log;
+  const isDayOff = !Boolean(actual) && !Boolean(goal);
+  const day = new Date(dateString).getDate();
   return (
     <Link href={dateString}>
       <ButtonBase
         onMouseEnter={() => setHover(true)}
         onMouseLeave={() => setHover(false)}
         onClick={() => setAnchorEl(null)}
+        disabled={isDayOff}
         sx={{
           display: "flex",
           flexDirection: "column",
@@ -46,7 +38,11 @@ export const DayTile = ({ log, monthInView, setAnchorEl }: DayTileProps) => {
         <Typography sx={{ fontSize: 10, alignSelf: "flex-end", mr: "4px" }}>
           {day}
         </Typography>
-        <Ring progress={actual} goal={goal} size="mini" />
+        <Ring
+          progress={isDayOff ? 0 : actual}
+          goal={isDayOff ? 1 : goal}
+          size="mini"
+        />
       </ButtonBase>
     </Link>
   );
