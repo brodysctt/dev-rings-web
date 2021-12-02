@@ -5,6 +5,7 @@ import { collection, doc, Timestamp } from "firebase/firestore";
 import { SetGoalModal } from "./SetGoalModal";
 import { Ring } from "./Ring";
 import { EventsPopper } from "./events-popper";
+import { DayLog } from "components";
 
 export interface RepoEvent {
   createdAt: Timestamp;
@@ -14,11 +15,20 @@ export interface RepoEvent {
   url: string;
 }
 
-export const DevRing = ({ userId }: { userId: string }) => {
+interface DevRingProps {
+  userId: string;
+  date: string;
+}
+
+export const DevRing = ({ userId, date }: DevRingProps) => {
+  // TODO: Once I auto create a goal, I can delete this hook
   const [userDoc] = useDocument(doc(db, "users", userId));
   const [eventsSnapshot] = useCollection(
     collection(db, "users", userId, "events")
   );
+  const [logsSnapshot] = useCollection(collection(db, "users", userId, "logs"));
+
+  const isToday = date === "today";
 
   if (!userDoc) {
     console.log("no user doc bruh");
@@ -39,9 +49,25 @@ export const DevRing = ({ userId }: { userId: string }) => {
   if (!eventsSnapshot) {
     return null;
   }
+
+  if (!logsSnapshot) {
+    return null;
+  }
+
   const { docs } = eventsSnapshot;
   const events = docs.map((doc) => doc.data() as RepoEvent);
-  const progress = events.length;
+
+  const logs = logsSnapshot.docs.map((doc: any) => [
+    doc.id,
+    doc.data(),
+  ]) as DayLog[];
+  const logInView = logs.find((log) => {
+    const [dateString] = log;
+    return dateString === date;
+  }) as DayLog;
+
+  const [dateString, { actual, goal }] = logInView;
+
   return (
     <Box
       sx={{
@@ -51,8 +77,11 @@ export const DevRing = ({ userId }: { userId: string }) => {
         alignItems: "center",
       }}
     >
-      <Ring goal={dailyGoal} progress={progress} />
-      {Boolean(progress) && <EventsPopper events={events} />}
+      <Ring
+        goal={isToday ? dailyGoal : goal}
+        progress={isToday ? events.length : actual}
+      />
+      {Boolean(events.length) && <EventsPopper events={events} />}
     </Box>
   );
 };
