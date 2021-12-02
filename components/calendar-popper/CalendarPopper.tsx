@@ -61,7 +61,7 @@ export const CalendarPopper = ({ userId }: { userId: string }) => {
           <CalendarTodayRoundedIcon />
         </Button>
         <Popper id={id} open={open} anchorEl={anchorEl}>
-          <Paper elevation={0} sx={{ p: 2 }}>
+          <Paper elevation={0} sx={{ pt: 2, borderRadius: 10 }}>
             <Box sx={containerSx}>
               <Typography sx={{ fontSize: 12, color: "primary.main" }}>
                 {monthInView[1]}

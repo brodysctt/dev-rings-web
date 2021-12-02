@@ -4,7 +4,7 @@ import ArrowBackRoundedIcon from "@mui/icons-material/ArrowBackRounded";
 import ArrowForwardRoundedIcon from "@mui/icons-material/ArrowForwardRounded";
 import { DayTile } from "./DayTile";
 import { MonthYear, Log } from "components";
-import { getMonthName } from "utils";
+import { createMonthLogs, getMonthName } from "./utils";
 
 interface MonthProps {
   logs: Log[];
@@ -26,9 +26,9 @@ export const Month = ({
   const [month, year] = monthInView;
   const monthName = getMonthName(month);
 
-  const dayLogs = createDayLogs(logs, hasPrevious, monthInView);
+  const monthLogs = createMonthLogs(logs, hasPrevious, monthInView);
 
-  const [firstDate] = dayLogs[0];
+  const [firstDate] = monthLogs[0];
   const gridStart = new Date(firstDate).getDay();
 
   const decrementMonth = () => {
@@ -69,64 +69,10 @@ export const Month = ({
       </Grid>
       <Grid container columns={7} gap={"3px"}>
         {<Grid item xs={gridStart} sx={{ mr: "-3px" }} />}
-        {dayLogs.map((log, i) => (
+        {monthLogs.map((log, i) => (
           <DayTile key={i} log={log} setAnchorEl={setAnchorEl} />
         ))}
       </Grid>
     </>
   );
-};
-
-type ZeroIndexDayLog = [
-  number, // zero-indexed day of month
-  {
-    actual: number;
-    goal: number;
-  }
-];
-
-const createDayLogs = (
-  logs: Log[],
-  hasPrevious: boolean,
-  monthInView: MonthYear
-) => {
-  const dayLogs: ZeroIndexDayLog[] = logs.map((log) => {
-    const [dateString, rest] = log;
-    return [new Date(dateString).getDate() - 1, rest];
-  });
-  const [[firstDay]] = dayLogs;
-
-  let i = 0;
-  let dayOffIndexes = [];
-  for (const dayLog of dayLogs) {
-    const dayCount = !hasPrevious ? i + firstDay : i;
-    const [day] = dayLog;
-    const daysOff: number = day - dayCount;
-    if (daysOff > 0) {
-      for (let i = 0; i < daysOff; i++) {
-        dayOffIndexes.push(dayCount + i);
-      }
-      i = i + daysOff;
-    }
-    i++;
-    console.log(`here be i: ${i}`);
-  }
-  console.log("here be the indexes to add empty tiles:");
-  console.dir(dayOffIndexes);
-
-  dayOffIndexes.forEach((dayOffIndex) => {
-    dayLogs.splice(dayOffIndex, 0, [dayOffIndex, { actual: 0, goal: 0 }]);
-  });
-
-  const [month, year] = monthInView;
-  const completeLogs: Log[] = dayLogs.map((dayLog) => {
-    const [zeroIndexDay, rest] = dayLog;
-    const day = zeroIndexDay + 1;
-    const dayString = day < 10 ? `0${day}` : day.toString();
-    const dateString = `/${month}-${dayString}-${year}`;
-    return [dateString, rest];
-  });
-  console.log("here be the complete day logs array");
-  console.dir(completeLogs);
-  return completeLogs;
 };
