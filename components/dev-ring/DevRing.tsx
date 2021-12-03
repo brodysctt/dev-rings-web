@@ -1,3 +1,5 @@
+import { useContext } from "react";
+import { UserContext } from "@lib/context";
 import { Box } from "@mui/material";
 import { db } from "@lib/firebase";
 import { useCollection, useDocument } from "react-firebase-hooks/firestore";
@@ -5,7 +7,7 @@ import { collection, doc, Timestamp } from "firebase/firestore";
 import { SetGoalModal } from "./SetGoalModal";
 import { Ring } from "./Ring";
 import { EventsPopper } from "./events-popper";
-import { DayLog } from "components";
+import { Log } from "components";
 
 export interface RepoEvent {
   createdAt: Timestamp;
@@ -16,19 +18,26 @@ export interface RepoEvent {
 }
 
 interface DevRingProps {
-  userId: string;
-  date: string;
+  log: Log; // TODO: How do I type this to be conditional? I.e., if isToday is omitted, log is required
+  isToday?: boolean;
 }
 
-export const DevRing = ({ userId, date }: DevRingProps) => {
-  // TODO: Once I auto create a goal, I can delete this hook
+// TODO: Can delete once I resolve comment above
+const logPlaceholder = ["", { actual: 0, goal: 0 }] as Log;
+
+export const DevRing = ({
+  log = logPlaceholder,
+  isToday = false,
+}: DevRingProps) => {
+  const { userId } = useContext(UserContext);
+  if (!userId) {
+    return null;
+  }
+  // TODO: Refactor so that I don't need to hit firestore again? 🤷‍♂️
   const [userDoc] = useDocument(doc(db, "users", userId));
   const [eventsSnapshot] = useCollection(
     collection(db, "users", userId, "events")
   );
-  const [logsSnapshot] = useCollection(collection(db, "users", userId, "logs"));
-
-  const isToday = date === "today";
 
   if (!userDoc) {
     console.log("no user doc bruh");
@@ -49,25 +58,14 @@ export const DevRing = ({ userId, date }: DevRingProps) => {
   if (!eventsSnapshot) {
     return null;
   }
-
-  if (!logsSnapshot) {
-    return null;
-  }
-
   const { docs } = eventsSnapshot;
   const events = docs.map((doc) => doc.data() as RepoEvent);
 
-  const logs = logsSnapshot.docs.map((doc: any) => [
-    doc.id,
-    doc.data(),
-  ]) as DayLog[];
-  const logInView = logs.find((log) => {
-    const [dateString] = log;
-    return dateString === date;
-  }) as DayLog;
-
-  const [dateString, { actual, goal }] = logInView;
-
+  // TODO: Improve this
+  if (!log) {
+    return null;
+  }
+  const [datestring, { actual, goal }] = log;
   return (
     <Box
       sx={{
@@ -78,8 +76,8 @@ export const DevRing = ({ userId, date }: DevRingProps) => {
       }}
     >
       <Ring
-        goal={isToday ? dailyGoal : goal}
         progress={isToday ? events.length : actual}
+        goal={isToday ? dailyGoal : goal}
       />
       {Boolean(events.length) && <EventsPopper events={events} />}
     </Box>
