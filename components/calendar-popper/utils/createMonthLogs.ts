@@ -5,52 +5,43 @@ export const createMonthLogs = (
   hasPrevious: boolean,
   monthInView: MonthYear
 ) => {
-  const [month, year] = monthInView;
-
   const dayLogs: ZeroIndexDayLog[] = logs.map((log) => {
     const [dateString, rest] = log;
     return [new Date(dateString).getDate() - 1, rest];
   });
-  const [[firstLoggedDay]] = dayLogs;
-  const [[lastLoggedDay]] = dayLogs.slice(-1);
+  const [[firstDay]] = dayLogs;
+  const [[lastDay]] = dayLogs.slice(-1);
 
   let i = 0;
-  let dayOffIndexes = [];
+  let dayOffIndices: number[] = [];
   for (const dayLog of dayLogs) {
-    const dayCount = !hasPrevious ? i + firstLoggedDay : i;
-    const [day] = dayLog;
-    const daysOff: number = day - dayCount;
+    const dayCount = !hasPrevious ? i + firstDay : i;
+    const daysOff: number = dayLog[0] - dayCount;
     if (daysOff > 0) {
-      for (let i = 0; i < daysOff; i++) {
-        dayOffIndexes.push(dayCount + i);
-      }
+      [...Array(daysOff)].forEach((d, k) => dayOffIndices.push(dayCount + k));
       i = i + daysOff;
     }
     i++;
   }
 
+  const [month, year] = monthInView;
   const lastDayOfMonth = new Date(year, month, 0).getDate() - 1; // zero-indexed
-  const endOfMonthDaysOff = lastDayOfMonth - lastLoggedDay;
-
-  if (endOfMonthDaysOff > 0) {
-    for (let i = 0; i < endOfMonthDaysOff; i++) {
-      dayOffIndexes.push(lastDayOfMonth + i);
-    }
-    i++;
+  const daysOff = lastDayOfMonth - lastDay;
+  if (daysOff > 0) {
+    [...Array(daysOff)].forEach((d, i) => dayOffIndices.push(lastDay + 1 + i));
   }
 
-  dayOffIndexes.forEach((dayOffIndex) => {
+  dayOffIndices.forEach((dayOffIndex) => {
     dayLogs.splice(dayOffIndex, 0, [dayOffIndex, { actual: 0, goal: 0 }]);
   });
 
-  const completeLogs: Log[] = dayLogs.map((dayLog) => {
+  const monthLogs: Log[] = dayLogs.map((dayLog) => {
     const [zeroIndexDay, rest] = dayLog;
     const day = zeroIndexDay + 1;
-    const dayString = day < 10 ? `0${day}` : day.toString();
-    const dateString = `/${month}-${dayString}-${year}`;
+    const dateString = `/${month}-${day < 10 ? 0 : ""}${day}-${year}`;
     return [dateString, rest];
   });
-  return completeLogs;
+  return monthLogs;
 };
 
 type ZeroIndexDayLog = [
