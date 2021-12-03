@@ -1,45 +1,24 @@
+import { useContext } from "react";
+import { UserContext } from "@lib/context";
 import type { NextPage } from "next";
-import { Box, Typography } from "@mui/material";
-import { auth } from "@lib/firebase";
-import { useAuthState } from "react-firebase-hooks/auth";
+import { Box } from "@mui/material";
 import { SignInButton, WebhookOnboarding } from "components";
 
 const Enter: NextPage = () => {
-  const [user, loading, error] = useAuthState(auth);
+  const { userId } = useContext(UserContext);
 
-  if (loading) {
-    return (
-      <Box>
-        <Typography>Initialising User...</Typography>
-      </Box>
-    );
-  }
-  if (error) {
-    return (
-      <Box>
-        <Typography>Error: {error}</Typography>
-      </Box>
-    );
-  }
-  if (user) {
-    const {
-      // @ts-ignore
-      reloadUserInfo: { screenName: userId },
-    } = user;
-    console.log(`this mans is logged in: ${userId}`);
-
+  if (!userId) {
     return (
       <Box
         style={{
           display: "flex",
-          flexDirection: "column",
           justifyContent: "space-around",
           alignItems: "center",
-          height: "70vh",
+          height: "100vh",
           width: "100%",
         }}
       >
-        <WebhookOnboarding userId={userId} />
+        <SignInButton />
       </Box>
     );
   }
@@ -48,13 +27,14 @@ const Enter: NextPage = () => {
     <Box
       style={{
         display: "flex",
+        flexDirection: "column",
         justifyContent: "space-around",
         alignItems: "center",
-        height: "100vh",
+        height: "70vh",
         width: "100%",
       }}
     >
-      <SignInButton />
+      <WebhookOnboarding userId={userId} />
     </Box>
   );
 };
