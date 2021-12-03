@@ -4,7 +4,7 @@ import CssBaseline from "@mui/material/CssBaseline";
 import { CacheProvider, EmotionCache } from "@emotion/react";
 import { theme, createEmotionCache } from "styles";
 import { Navbar } from "components";
-import { UserContext, LOGS_INIT } from "lib/context";
+import { UserContext } from "lib/context";
 
 import { auth, db } from "@lib/firebase";
 import { collection, getDocs } from "firebase/firestore";
@@ -25,13 +25,14 @@ export default function MyApp(props: MyAppProps) {
 
   const [user] = useAuthState(auth);
   const [userId, setUserId] = useState<string | null>(null);
-  const [logs, setLogs] = useState<Log[]>(LOGS_INIT); // TODO: What's the best practice here?
+  const [logs, setLogs] = useState<Log[] | null>(null); // TODO: What's the best practice here?
 
   useEffect(() => {
     // TODO: Not unsubscribing from realtime updates – what are the performance/cost implications?
     (async () => {
       if (!user) {
-        setLogs(LOGS_INIT);
+        setUserId(null);
+        setLogs(null);
         return;
       }
       const {

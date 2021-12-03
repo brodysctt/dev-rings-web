@@ -34,7 +34,7 @@ const Enter: NextPage = () => {
         width: "100%",
       }}
     >
-      <WebhookOnboarding userId={userId} />
+      <WebhookOnboarding />
     </Box>
   );
 };

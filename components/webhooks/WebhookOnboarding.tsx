@@ -1,11 +1,20 @@
+import { useContext } from "react";
+import { UserContext } from "@lib/context";
 import Link from "next/link";
 import { db } from "@lib/firebase";
 import { useCollection } from "react-firebase-hooks/firestore";
 import { collection } from "firebase/firestore";
 import { CreateWebhooksButton, CreateWebhookCheckboxes } from "components";
 import { Box, Typography, Button } from "@mui/material";
+import { SxProps } from "@mui/system";
 
-export const WebhookOnboarding = ({ userId }: { userId: string }) => {
+export const WebhookOnboarding = () => {
+  const { userId } = useContext(UserContext);
+  // TODO: Think thru how to better handle this
+  if (!userId) {
+    return null;
+  }
+
   const webhooksRef = collection(db, "users", userId, "webhooks");
   const [snapshot, loading, error] = useCollection(webhooksRef);
 
@@ -28,8 +37,8 @@ export const WebhookOnboarding = ({ userId }: { userId: string }) => {
     if (!docs.length) {
       return (
         <Box style={{ display: "flex", justifyContent: "space-around" }}>
-          <CreateWebhooksButton userId={userId} />
-          <CreateWebhookCheckboxes userId={userId} />
+          <CreateWebhooksButton />
+          <CreateWebhookCheckboxes />
         </Box>
       );
     }
@@ -39,30 +48,12 @@ export const WebhookOnboarding = ({ userId }: { userId: string }) => {
       return url.match(repoSubstring);
     });
     return (
-      <Box
-        style={{
-          display: "flex",
-          flexDirection: "column",
-          justifyContent: "space-between",
-          alignItems: "center",
-          height: "30vh",
-          width: "100%",
-        }}
-      >
+      <Box sx={{ ...baseContainerSx, height: "30vh" }}>
         <Box style={{ display: "flex", justifyContent: "space-around" }}>
-          <CreateWebhooksButton userId={userId} />
-          <CreateWebhookCheckboxes userId={userId} />
+          <CreateWebhooksButton />
+          <CreateWebhookCheckboxes />
         </Box>
-        <Box
-          style={{
-            display: "flex",
-            flexDirection: "column",
-            justifyContent: "space-around",
-            alignItems: "center",
-            width: "100%",
-            marginTop: "90px",
-          }}
-        >
+        <Box sx={{ ...baseContainerSx, mt: "90px" }}>
           <Typography variant={"h6"}>
             Your commits and PRs in these repos are now being stored 🏪
           </Typography>
@@ -79,6 +70,13 @@ export const WebhookOnboarding = ({ userId }: { userId: string }) => {
       </Box>
     );
   }
-
   return null;
 };
+
+const baseContainerSx = {
+  display: "flex",
+  flexDirection: "column",
+  justifyContent: "space-between",
+  alignItems: "center",
+  width: "100%",
+} as SxProps;
