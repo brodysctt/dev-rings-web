@@ -38,7 +38,7 @@ export const createMonthLogs = (
   const monthLogs: Log[] = dayLogs.map((dayLog) => {
     const [zeroIndexDay, rest] = dayLog;
     const day = zeroIndexDay + 1;
-    const dateString = `/${month}-${day < 10 ? 0 : ""}${day}-${year}`;
+    const dateString = `${month}-${day < 10 ? 0 : ""}${day}-${year}`;
     return [dateString, rest];
   });
   return monthLogs;

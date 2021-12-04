@@ -1,4 +1,5 @@
-import { useState, Dispatch, SetStateAction } from "react";
+import { useState, useContext, Dispatch, SetStateAction } from "react";
+import { UserContext } from "lib/context";
 import Link from "next/link";
 import { Typography, ButtonBase } from "@mui/material";
 import { Ring, Log } from "components";
@@ -9,6 +10,11 @@ interface DayTileProps {
 }
 
 export const DayTile = ({ log, setAnchorEl }: DayTileProps) => {
+  const { userId } = useContext(UserContext);
+  if (!userId) {
+    return null;
+  }
+
   const [hover, setHover] = useState(false);
 
   // TODO: Ensure any user set goal is > 0
@@ -16,7 +22,12 @@ export const DayTile = ({ log, setAnchorEl }: DayTileProps) => {
   const isDayOff = !Boolean(actual) && !Boolean(goal);
   const day = new Date(dateString).getDate();
   return (
-    <Link href={dateString}>
+    <Link
+      href={{
+        pathname: "/[userId]/[dateString]",
+        query: { userId, dateString },
+      }}
+    >
       <ButtonBase
         onMouseEnter={() => setHover(true)}
         onMouseLeave={() => setHover(false)}
