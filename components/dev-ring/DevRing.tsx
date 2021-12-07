@@ -1,5 +1,4 @@
-import { useContext } from "react";
-import { UserContext } from "@lib/context";
+import { useAuth } from "@lib/hooks";
 import { Box } from "@mui/material";
 import { db } from "@lib/firebase";
 import { useCollection, useDocument } from "react-firebase-hooks/firestore";
@@ -29,7 +28,13 @@ export const DevRing = ({
   log = logPlaceholder,
   isToday = false,
 }: DevRingProps) => {
-  const { userId } = useContext(UserContext);
+  const { user } = useAuth();
+
+  const {
+    // @ts-ignore
+    reloadUserInfo: { screenName: userId },
+  } = user;
+
   if (!userId) {
     return null;
   }

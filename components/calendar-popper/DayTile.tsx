@@ -1,5 +1,5 @@
-import { useState, useContext, Dispatch, SetStateAction } from "react";
-import { UserContext } from "lib/context";
+import { useState, Dispatch, SetStateAction } from "react";
+import { useAuth } from "lib/hooks";
 import Link from "next/link";
 import { Typography, ButtonBase } from "@mui/material";
 import { Ring, Log } from "components";
@@ -10,7 +10,16 @@ interface DayTileProps {
 }
 
 export const DayTile = ({ log, setAnchorEl }: DayTileProps) => {
-  const { userId } = useContext(UserContext);
+  const { user } = useAuth();
+
+  console.log("here comes the user from daytile:");
+  console.dir(user);
+
+  const {
+    // @ts-ignore
+    reloadUserInfo: { screenName: userId },
+  } = user;
+
   if (!userId) {
     return null;
   }
