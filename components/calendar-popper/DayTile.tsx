@@ -1,5 +1,5 @@
 import { useState, Dispatch, SetStateAction } from "react";
-import { useAuth } from "@lib/firebase/auth";
+import { useAuth, getUserId } from "@lib/firebase/auth";
 import Link from "next/link";
 import { Typography, ButtonBase } from "@mui/material";
 import { Ring, Log } from "components";
@@ -11,18 +11,11 @@ interface DayTileProps {
 
 export const DayTile = ({ log, setAnchorEl }: DayTileProps) => {
   const { user } = useAuth();
-
-  console.log("here comes the user from daytile:");
-  console.dir(user);
-
-  const {
-    // @ts-ignore
-    reloadUserInfo: { screenName: userId },
-  } = user;
-
-  if (!userId) {
+  if (!user) {
     return null;
   }
+  // TODO: ☝️ Why doesn't this cause problems with useState hook below?
+  const userId = getUserId(user);
 
   const [hover, setHover] = useState(false);
 

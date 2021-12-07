@@ -1,12 +1,12 @@
 import axios, { AxiosError } from "axios";
-import { fetchToken } from "helpers";
+import { fetchGitHubToken } from "@lib/firebase/firestore";
 
 export const createWebhook = async (
   userId: string,
   repo: string
 ): Promise<number | ServerError> => {
   try {
-    const token = await fetchToken(userId);
+    const token = await fetchGitHubToken(userId);
     console.log(`Creating webhook for ${repo}...`);
     const { status } = await axios.post(`${CLOUD_FUNCTION_URL}`, {
       user: userId,

@@ -1,45 +1,30 @@
-import { useAuth } from "@lib/firebase";
 import type { NextPage } from "next";
 import { Box } from "@mui/material";
+import type { SxProps } from "@mui/system";
+import { useAuth } from "@lib/firebase";
 import { SignInButton, WebhookOnboarding } from "components";
 
 const Enter: NextPage = () => {
   const { user } = useAuth();
-  const {
-    // @ts-ignore
-    reloadUserInfo: { screenName: userId },
-  } = user;
-
-  if (!userId) {
+  if (!user) {
     return (
-      <Box
-        style={{
-          display: "flex",
-          justifyContent: "space-around",
-          alignItems: "center",
-          height: "100vh",
-          width: "100%",
-        }}
-      >
+      <Box sx={{ ...containerSx, height: "100vh" }}>
         <SignInButton />
       </Box>
     );
   }
-
   return (
-    <Box
-      style={{
-        display: "flex",
-        flexDirection: "column",
-        justifyContent: "space-around",
-        alignItems: "center",
-        height: "70vh",
-        width: "100%",
-      }}
-    >
+    <Box sx={{ ...containerSx, flexDirection: "column", height: "70vh" }}>
       <WebhookOnboarding />
     </Box>
   );
 };
 
 export default Enter;
+
+const containerSx = {
+  display: "flex",
+  justifyContent: "space-around",
+  alignItems: "center",
+  width: 1,
+} as SxProps;
