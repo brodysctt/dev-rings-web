@@ -1,11 +1,14 @@
-import { useContext } from "react";
-import { UserContext } from "@lib/context";
+import { useAuth } from "@lib/firebase";
 import type { NextPage } from "next";
 import { Box } from "@mui/material";
 import { SignInButton, WebhookOnboarding } from "components";
 
 const Enter: NextPage = () => {
-  const { userId } = useContext(UserContext);
+  const { user } = useAuth();
+  const {
+    // @ts-ignore
+    reloadUserInfo: { screenName: userId },
+  } = user;
 
   if (!userId) {
     return (

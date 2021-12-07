@@ -1,7 +1,5 @@
-import { useContext } from "react";
-import { UserContext } from "@lib/context";
 import Link from "next/link";
-import { db } from "@lib/firebase";
+import { db, useAuth } from "@lib/firebase";
 import { useCollection } from "react-firebase-hooks/firestore";
 import { collection } from "firebase/firestore";
 import { CreateWebhooksButton, CreateWebhookCheckboxes } from "components";
@@ -9,7 +7,11 @@ import { Box, Typography, Button } from "@mui/material";
 import { SxProps } from "@mui/system";
 
 export const WebhookOnboarding = () => {
-  const { userId } = useContext(UserContext);
+  const { user } = useAuth();
+  const {
+    // @ts-ignore
+    reloadUserInfo: { screenName: userId },
+  } = user;
   // TODO: Think thru how to better handle this
   if (!userId) {
     return null;

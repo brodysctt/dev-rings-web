@@ -1,5 +1,4 @@
-import { useContext } from "react";
-import { UserContext } from "@lib/context";
+import { useAuth } from "@lib/firebase";
 import Image from "next/image";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -7,7 +6,13 @@ import { fetchPublicRepos, createWebhook, createWebhookToast } from "./utils";
 import { Button } from "@mui/material";
 
 export const CreateWebhooksButton = () => {
-  const { userId } = useContext(UserContext);
+  const { user } = useAuth();
+
+  const {
+    // @ts-ignore
+    reloadUserInfo: { screenName: userId },
+  } = user;
+
   if (!userId) {
     return null;
   }

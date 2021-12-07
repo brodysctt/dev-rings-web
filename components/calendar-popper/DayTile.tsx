@@ -1,5 +1,5 @@
 import { useState, Dispatch, SetStateAction } from "react";
-import { useAuth } from "lib/hooks";
+import { useAuth } from "@lib/firebase/auth";
 import Link from "next/link";
 import { Typography, ButtonBase } from "@mui/material";
 import { Ring, Log } from "components";

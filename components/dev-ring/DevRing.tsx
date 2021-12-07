@@ -1,6 +1,5 @@
-import { useAuth } from "@lib/hooks";
 import { Box } from "@mui/material";
-import { db } from "@lib/firebase";
+import { db, useAuth } from "@lib/firebase";
 import { useCollection, useDocument } from "react-firebase-hooks/firestore";
 import { collection, doc, Timestamp } from "firebase/firestore";
 import { SetGoalModal } from "./SetGoalModal";

@@ -1,7 +1,7 @@
-import { useAuth } from "@lib/hooks";
 import type { GetServerSideProps } from "next";
 import { Box } from "@mui/material";
 import { DevRing, Log } from "components";
+import { useAuth } from "@lib/firebase";
 import { firebaseAdmin } from "@lib/firebaseAdmin";
 import Cookies from "cookies";
 

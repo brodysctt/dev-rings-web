@@ -1,11 +1,15 @@
-import { useState, useEffect, createContext } from "react";
+import { useState, useEffect, createContext, useContext } from "react";
 import Cookies from "js-cookie";
 import { User } from "firebase/auth";
-import { auth } from "lib/firebase";
+import { auth } from "@lib/firebase";
 
-export const AuthContext = createContext<{ user: User | null }>({
+const AuthContext = createContext<{ user: User | null }>({
   user: null,
 });
+
+export const useAuth = () => {
+  return useContext(AuthContext);
+};
 
 // TODO: Understand all wtf is going on with Cookies
 

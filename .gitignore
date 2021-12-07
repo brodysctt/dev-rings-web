@@ -38,4 +38,5 @@ firebase-debug.log
 ui-debug.log
 firestore-debug.log
 
+firebaseConfig.json
 serviceAccountKey.json

@@ -1,5 +1,5 @@
-import { useState, useEffect, useContext } from "react";
-import { UserContext } from "lib/context";
+import { useState, useEffect } from "react";
+import { useAuth } from "@lib/firebase/auth";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { fetchPublicRepos, createWebhook, createWebhookToast } from "./utils";
@@ -12,7 +12,12 @@ import {
 } from "@mui/material";
 
 export const CreateWebhookCheckboxes = () => {
-  const { userId } = useContext(UserContext);
+  const { user } = useAuth();
+  const {
+    // @ts-ignore
+    reloadUserInfo: { screenName: userId },
+  } = user;
+
   if (!userId) {
     return null;
   }

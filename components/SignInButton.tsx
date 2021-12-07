@@ -1,5 +1,5 @@
 import Image from "next/image";
-import { auth, githubProvider, db } from "lib/firebase";
+import { auth, githubProvider, db } from "@lib/firebase";
 import { signInWithPopup, GithubAuthProvider } from "firebase/auth";
 import { doc, getDoc, setDoc, updateDoc } from "@firebase/firestore";
 import { Button } from "@mui/material";

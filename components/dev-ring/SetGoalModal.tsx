@@ -1,6 +1,6 @@
 import { Box, Typography, Modal, OutlinedInput } from "@mui/material";
 import { useForm, SubmitHandler } from "react-hook-form";
-import { db } from "lib/firebase";
+import { db } from "@lib/firebase";
 import { doc, updateDoc } from "@firebase/firestore";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
