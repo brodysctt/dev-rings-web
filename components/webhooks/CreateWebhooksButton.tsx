@@ -1,5 +1,5 @@
-import { useAuth } from "@lib/firebase";
 import Image from "next/image";
+import { useAuth, getUserId } from "@lib/firebase/auth";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { fetchPublicRepos, createWebhook, createWebhookToast } from "./utils";
@@ -7,15 +7,8 @@ import { Button } from "@mui/material";
 
 export const CreateWebhooksButton = () => {
   const { user } = useAuth();
-
-  const {
-    // @ts-ignore
-    reloadUserInfo: { screenName: userId },
-  } = user;
-
-  if (!userId) {
-    return null;
-  }
+  if (!user) return null;
+  const userId = getUserId(user);
   return (
     <>
       <Button

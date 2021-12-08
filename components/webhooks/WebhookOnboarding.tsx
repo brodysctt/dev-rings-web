@@ -7,21 +7,18 @@ import { CreateWebhooksButton, CreateWebhookCheckboxes } from "components";
 
 export const WebhookOnboarding = () => {
   const { user } = useAuth();
-  if (!user) {
-    return null;
-  }
+  if (!user) return null;
   const userId = getUserId(user);
 
   const repoNames = useWebhooksCollection(userId);
 
-  if (!repoNames) {
+  if (!repoNames)
     return (
       <Box style={{ display: "flex", justifyContent: "space-around" }}>
         <CreateWebhooksButton />
         <CreateWebhookCheckboxes />
       </Box>
     );
-  }
 
   return (
     <Box sx={{ ...containerSx, height: "30vh" }}>

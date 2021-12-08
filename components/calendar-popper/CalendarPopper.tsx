@@ -9,7 +9,7 @@ import {
 } from "@mui/material";
 import type { SxProps } from "@mui/system";
 import CalendarTodayRoundedIcon from "@mui/icons-material/CalendarTodayRounded";
-import { useLogsCollection } from "@lib/firebase";
+import { useLogsCollection } from "@lib/firebase/firestore";
 import { Month } from "./Month";
 import { filterLogs, getFirstLogDate, createMonthYear } from "./utils";
 

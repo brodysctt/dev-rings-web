@@ -1,8 +1,8 @@
 import type { GetServerSideProps } from "next";
+import { useAuth } from "@lib/firebase/auth";
+import { firebaseAdmin } from "@lib/firebaseAdmin";
 import { Box } from "@mui/material";
 import { DevRing, Log } from "components";
-import { useAuth } from "@lib/firebase";
-import { firebaseAdmin } from "@lib/firebaseAdmin";
 import Cookies from "cookies";
 
 const DevRings = ({ log }: { log: Log }) => {
@@ -43,9 +43,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     const cookies = new Cookies(req, res);
     const cookie = cookies.get("token");
 
-    if (!cookie) {
-      throw new Error("no cookie");
-    }
+    if (!cookie) throw new Error("no cookie");
 
     const token = await firebaseAdmin.auth().verifyIdToken(cookie);
     console.log(`here be the validated token`);
@@ -60,9 +58,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
       .doc(dateString);
     const logDoc = await logRef.get();
 
-    if (!logDoc.exists) {
-      throw new Error(`doc doesn't exist!`);
-    }
+    if (!logDoc.exists) throw new Error(`doc doesn't exist!`);
 
     return {
       props: { log: [dateString, logDoc.data()] as Log },

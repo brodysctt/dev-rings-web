@@ -6,13 +6,13 @@ import { SignInButton, WebhookOnboarding } from "components";
 
 const Enter: NextPage = () => {
   const { user } = useAuth();
-  if (!user) {
+  if (!user)
     return (
       <Box sx={{ ...containerSx, height: "100vh" }}>
         <SignInButton />
       </Box>
     );
-  }
+
   return (
     <Box sx={{ ...containerSx, flexDirection: "column", height: "70vh" }}>
       <WebhookOnboarding />

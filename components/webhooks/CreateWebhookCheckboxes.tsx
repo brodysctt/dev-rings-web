@@ -13,9 +13,7 @@ import {
 
 export const CreateWebhookCheckboxes = () => {
   const { user } = useAuth();
-  if (!user) {
-    return null;
-  }
+  if (!user) return null;
   const userId = getUserId(user);
 
   const [publicRepos, setPublicRepos] = useState([""]);

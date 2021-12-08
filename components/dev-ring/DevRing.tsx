@@ -5,7 +5,7 @@ import type { Timestamp } from "firebase/firestore";
 import { SetGoalModal } from "./SetGoalModal";
 import { Ring } from "./Ring";
 import { EventsPopper } from "./events-popper";
-import { Log } from "components";
+import type { Log } from "components";
 
 export interface RepoEvent {
   createdAt: Timestamp;
@@ -25,30 +25,21 @@ const emptyLog = ["", { actual: 0, goal: 0 }] as Log;
 
 export const DevRing = ({ log = emptyLog, isToday = false }: DevRingProps) => {
   const { user } = useAuth();
-  if (!user) {
-    return null;
-  }
+  if (!user) return null;
   const userId = getUserId(user);
 
   const userData = useUserDoc(userId);
-  if (!userData) {
-    return null;
-  }
+  if (!userData) return null;
 
   const hasGoal = userData.hasOwnProperty("dailyGoal");
-  if (!hasGoal) {
-    return <SetGoalModal userId={userId} />;
-  }
+  if (!hasGoal) return <SetGoalModal userId={userId} />;
   const { dailyGoal } = userData;
 
   const events = useEventsCollection(userId);
-  if (!events) {
-    return null;
-  }
+  if (!events) return null;
+
   // TODO: Improve this
-  if (!log) {
-    return null;
-  }
+  if (!log) return null;
   const [x, { actual, goal }] = log;
   return (
     <Box
