@@ -1,5 +1,4 @@
 import { Box } from "@mui/material";
-import { useAuth, getUserId } from "@lib/firebase/auth";
 import { useUserDoc, useEventsCollection } from "@lib/firebase/firestore";
 import type { Timestamp } from "firebase/firestore";
 import { SetGoalModal } from "./SetGoalModal";
@@ -17,7 +16,7 @@ export interface RepoEvent {
 
 interface DevRingProps {
   userId: string;
-  log: Log; // TODO: How do I type this to be conditional? I.e., if isToday is omitted, log is required
+  log?: Log; // TODO: How do I type this to be conditional? I.e., if isToday is omitted, log is required
   isToday?: boolean;
 }
 

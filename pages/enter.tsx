@@ -1,6 +1,5 @@
 import type { NextPage } from "next";
 import { Box } from "@mui/material";
-import type { SxProps } from "@mui/system";
 import { useAuth } from "@lib/firebase";
 import { SignInButton } from "components";
 

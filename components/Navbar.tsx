@@ -19,9 +19,9 @@ export const Navbar = () => {
       }}
     >
       <Box sx={{ display: "flex" }}>
-        <Link href="/dev-rings">
+        <Link href="/">
           <Button variant="contained" sx={{ ml: 2 }}>
-            DEV RINGS
+            view today
           </Button>
         </Link>
         <CalendarPopper userId={userId} />

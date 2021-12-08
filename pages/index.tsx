@@ -1,30 +1,25 @@
 import type { NextPage } from "next";
-import Image from "next/image";
-import Link from "next/link";
-import { Box, Button } from "@mui/material";
+import { useAuth, getUserId } from "@lib/firebase/auth";
+import { Box } from "@mui/material";
+import { DevRing } from "components";
 
-const Home: NextPage = () => (
-  <Box
-    sx={{
-      display: "flex",
-      flexDirection: "column",
-      justifyContent: "center",
-      alignItems: "center",
-      height: "80vh",
-      width: "100%",
-    }}
-  >
-    <Link href="/enter">
-      <Button variant={"text"} sx={{ marginBottom: "40px" }}>
-        oh u better believe it 🤯
-      </Button>
-    </Link>
-    <Image
-      src="https://media.giphy.com/media/QIA28gtOux7n7hyGXF/giphy.gif"
-      width="500px"
-      height="300px"
-    />
-  </Box>
-);
+const Today: NextPage = () => {
+  const { user } = useAuth();
+  if (!user) return null;
+  const userId = getUserId(user);
+  return (
+    <Box
+      sx={{
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        height: "80vh",
+        width: "100%",
+      }}
+    >
+      <DevRing userId={userId} isToday={true} />
+    </Box>
+  );
+};
 
-export default Home;
+export default Today;
