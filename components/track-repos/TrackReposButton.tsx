@@ -5,7 +5,7 @@ import "react-toastify/dist/ReactToastify.css";
 import { fetchPublicRepos, createWebhook, createWebhookToast } from "./utils";
 import { Button } from "@mui/material";
 
-export const CreateWebhooksButton = () => {
+export const TrackReposButton = () => {
   const { user } = useAuth();
   if (!user) return null;
   const userId = getUserId(user);

@@ -12,7 +12,7 @@ import {
   InputAdornment,
 } from "@mui/material";
 
-export const CreateWebhookInput = ({ userId }: { userId: string }) => {
+export const TrackRepoInput = ({ userId }: { userId: string }) => {
   const [userNeedsHelp, setUserNeedsHelp] = useState(false);
   const { register, watch, handleSubmit } = useForm<{ repoUrl: string }>();
 

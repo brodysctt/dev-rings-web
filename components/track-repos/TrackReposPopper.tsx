@@ -8,7 +8,7 @@ import {
   ClickAwayListener,
 } from "@mui/material";
 import type { SxProps } from "@mui/system";
-import { CreateWebhooksButton, TrackRepoCheckboxes } from "components";
+import { TrackReposButton, TrackRepoCheckboxes } from "components";
 
 // TODO: Handle case where user doesn't have any public repos
 export const TrackReposPopper = () => {
@@ -20,7 +20,7 @@ export const TrackReposPopper = () => {
       <Box
         sx={{ display: "flex", flexDirection: "column", alignItems: "center" }}
       >
-        <CreateWebhooksButton />
+        <TrackReposButton />
         <Button
           aria-describedby={id}
           variant="text"
