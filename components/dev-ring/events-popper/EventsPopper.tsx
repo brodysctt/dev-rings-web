@@ -31,7 +31,9 @@ export const EventsPopper = ({ events }: { events: RepoEvent[] }) => {
                   <Box
                     sx={{
                       display: "flex",
-                      justifyContent: "space-between",
+                      justifyContent: "center",
+                      flexWrap: "wrap",
+                      width: 800,
                       p: 2,
                     }}
                   >
@@ -52,7 +54,7 @@ export const EventsPopper = ({ events }: { events: RepoEvent[] }) => {
                               </Typography>
                             }
                             onClick={() => window.open(url)}
-                            sx={{ pl: 1, mr: 1 }}
+                            sx={{ pl: 1, mr: 1, mb: 1 }}
                           />
                         </Tooltip>
                       );

@@ -19,12 +19,11 @@ export const CreateWebhooksButton = () => {
           justifyContent: "space-around",
           alignItems: "center",
           height: "8vh",
-          width: "430px",
-          marginRight: "100px",
+          width: 300,
         }}
       >
-        <Image src="/github.png" width="40px" height="40px" />
-        Create webhooks for all public repos 🎣
+        <Image src="/github.png" width={30} height={30} />
+        Track all public repos
       </Button>
       <ToastContainer hideProgressBar />
     </>
