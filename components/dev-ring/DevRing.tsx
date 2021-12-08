@@ -16,6 +16,7 @@ export interface RepoEvent {
 }
 
 interface DevRingProps {
+  userId: string;
   log: Log; // TODO: How do I type this to be conditional? I.e., if isToday is omitted, log is required
   isToday?: boolean;
 }
@@ -23,20 +24,18 @@ interface DevRingProps {
 // TODO: Can delete once I resolve comment above
 const emptyLog = ["", { actual: 0, goal: 0 }] as Log;
 
-export const DevRing = ({ log = emptyLog, isToday = false }: DevRingProps) => {
-  const { user } = useAuth();
-  if (!user) return null;
-  const userId = getUserId(user);
-
+export const DevRing = ({
+  userId,
+  log = emptyLog,
+  isToday = false,
+}: DevRingProps) => {
   const userData = useUserDoc(userId);
-  if (!userData) return null;
+  const events = useEventsCollection(userId);
+  if (!userData || !events) return null;
 
   const hasGoal = userData.hasOwnProperty("dailyGoal");
   if (!hasGoal) return <SetGoalModal userId={userId} />;
   const { dailyGoal } = userData;
-
-  const events = useEventsCollection(userId);
-  if (!events) return null;
 
   // TODO: Improve this
   if (!log) return null;

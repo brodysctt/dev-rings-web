@@ -1,5 +1,5 @@
 import type { GetServerSideProps } from "next";
-import { useAuth } from "@lib/firebase/auth";
+import { useAuth, getUserId } from "@lib/firebase/auth";
 import { firebaseAdmin } from "@lib/firebaseAdmin";
 import { Box } from "@mui/material";
 import { DevRing, Log } from "components";
@@ -7,8 +7,8 @@ import Cookies from "cookies";
 
 const DevRings = ({ log }: { log: Log }) => {
   const { user } = useAuth();
-  console.log("here be the user from the useAuth hook");
-  console.dir(user);
+  if (!user) return null;
+  const userId = getUserId(user);
 
   const [dateString] = log;
   const date = new Date(dateString);
@@ -20,17 +20,18 @@ const DevRings = ({ log }: { log: Log }) => {
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
-        height: "60vh",
+        height: "80vh",
         width: "100%",
       }}
     >
-      <DevRing log={log} isToday={isToday} />
+      <DevRing userId={userId} log={log} isToday={isToday} />
     </Box>
   );
 };
 
 export default DevRings;
 
+// TODO: Clean this up, refactor to @lib/firebaseServer
 export const getServerSideProps: GetServerSideProps = async (context) => {
   try {
     const {
