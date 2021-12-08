@@ -1,7 +1,7 @@
 import axios, { AxiosError } from "axios";
 import { fetchGitHubToken } from "@lib/firebase/firestore";
 
-export const createWebhook = async (
+export const trackRepo = async (
   userId: string,
   repo: string
 ): Promise<number | ServerError> => {

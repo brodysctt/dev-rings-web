@@ -3,7 +3,7 @@ import { useState } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { createWebhook, createWebhookToast } from "./utils";
+import { trackRepo, trackRepoToast } from "./utils";
 import {
   Box,
   FormControl,
@@ -21,15 +21,15 @@ export const TrackRepoInput = ({ userId }: { userId: string }) => {
     const repoSubstring = new RegExp(`(?<=${userId}/).*(?=[.]git)`);
     const result = repoSubstring.exec(repoUrl);
     if (!result) {
-      createWebhookToast.error();
+      trackRepoToast.error();
       return;
     }
     const repo = result[0];
-    const status = await createWebhook(userId, repo);
+    const status = await trackRepo(userId, repo);
     if (status === 200) {
-      createWebhookToast.success();
+      trackRepoToast.success();
     } else {
-      createWebhookToast.warn();
+      trackRepoToast.warn();
     }
   };
 
@@ -49,7 +49,7 @@ export const TrackRepoInput = ({ userId }: { userId: string }) => {
     }
   });
 
-  userNeedsHelp && createWebhookToast.info();
+  userNeedsHelp && trackRepoToast.info();
   return (
     <Box
       sx={{

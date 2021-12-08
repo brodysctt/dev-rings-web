@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { useAuth, getUserId } from "@lib/firebase/auth";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { fetchPublicRepos, createWebhook, createWebhookToast } from "./utils";
+import { fetchPublicRepos, trackRepo, trackRepoToast } from "./utils";
 import { Box, FormGroup, FormControlLabel, Checkbox } from "@mui/material";
 
 export const TrackRepoCheckboxes = () => {
@@ -48,10 +48,10 @@ export const TrackRepoCheckboxes = () => {
                 <Checkbox
                   onChange={async () => {
                     console.log(`create webhook for ${repo}`);
-                    const response = await createWebhook(userId, repo);
+                    const response = await trackRepo(userId, repo);
                     response === 200
-                      ? createWebhookToast.success()
-                      : createWebhookToast.warn();
+                      ? trackRepoToast.success()
+                      : trackRepoToast.warn();
                   }}
                 />
               }
