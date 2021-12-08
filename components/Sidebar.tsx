@@ -41,20 +41,16 @@ export const Sidebar = ({ userId }: { userId: string }) => {
           onKeyDown={toggleDrawer(false)}
         >
           <List>
-            <Link href="/enter">
-              <ListItem
-                button
-                onClick={() => console.log("time to create another webhook")}
-                key={"createWebhook"}
-              >
+            <Link href="/repos">
+              <ListItem button key={"manageRepos"}>
                 🪝
-                <ListItemText primary={"Manage webhooks"} sx={{ ml: 2 }} />
+                <ListItemText primary={"Manage repos"} sx={{ ml: 2 }} />
               </ListItem>
             </Link>
             <ListItem
               button
               onClick={() => window.open(`${GITHUB_BASE_URL}${userId}`)}
-              key={"wuz"}
+              key={"github"}
             >
               <Image src="/github.png" width={20} height={20} />
               <ListItemText primary={"Take me to GitHub"} sx={{ ml: 2 }} />

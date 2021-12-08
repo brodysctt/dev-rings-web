@@ -2,10 +2,10 @@ import Image from "next/image";
 import { useAuth, getUserId } from "@lib/firebase/auth";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { fetchPublicRepos, createWebhook, createWebhookToast } from "./utils";
+import { fetchPublicRepos, trackRepo, trackRepoToast } from "./utils";
 import { Button } from "@mui/material";
 
-export const CreateWebhooksButton = () => {
+export const TrackReposButton = () => {
   const { user } = useAuth();
   if (!user) return null;
   const userId = getUserId(user);
@@ -19,12 +19,11 @@ export const CreateWebhooksButton = () => {
           justifyContent: "space-around",
           alignItems: "center",
           height: "8vh",
-          width: "430px",
-          marginRight: "100px",
+          width: 300,
         }}
       >
-        <Image src="/github.png" width="40px" height="40px" />
-        Create webhooks for all public repos 🎣
+        <Image src="/github.png" width={30} height={30} />
+        Track all public repos
       </Button>
       <ToastContainer hideProgressBar />
     </>
@@ -34,7 +33,7 @@ export const CreateWebhooksButton = () => {
 const createWebhooks = async (userId: string) => {
   const repos = await fetchPublicRepos(userId);
   if (!Array.isArray(repos)) {
-    createWebhookToast.error();
+    trackRepoToast.error();
     return;
   }
   console.log(`here be the repos from the button: ${repos}}`);
@@ -46,9 +45,7 @@ const createWebhooks = async (userId: string) => {
   }
   console.log(`about to create ${repos.length} webhooks. let's get it 🪝`);
   for (const repo of repos) {
-    const response = await createWebhook(userId, repo);
-    response === 200
-      ? createWebhookToast.success()
-      : createWebhookToast.error();
+    const response = await trackRepo(userId, repo);
+    response === 200 ? trackRepoToast.success() : trackRepoToast.error();
   }
 };

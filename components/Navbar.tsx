@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { useAuth, getUserId } from "@lib/firebase/auth";
 import { Box, Button } from "@mui/material";
-import { CreateWebhookInput, CalendarPopper, Sidebar } from "components";
+import { TrackRepoInput, CalendarPopper, Sidebar } from "components";
 
 export const Navbar = () => {
   const { user } = useAuth();
@@ -19,13 +19,13 @@ export const Navbar = () => {
       }}
     >
       <Box sx={{ display: "flex" }}>
-        <Link href="/dev-rings">
+        <Link href="/">
           <Button variant="contained" sx={{ ml: 2 }}>
-            DEV RINGS
+            view today
           </Button>
         </Link>
         <CalendarPopper userId={userId} />
-        <CreateWebhookInput userId={userId} />
+        <TrackRepoInput userId={userId} />
       </Box>
       <Sidebar userId={userId as string} />
     </Box>
