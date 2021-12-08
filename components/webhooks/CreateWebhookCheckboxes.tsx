@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useAuth, getUserId } from "@lib/firebase/auth";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { fetchPublicRepos, createWebhook, createWebhookToast } from "./utils";
@@ -10,9 +11,14 @@ import {
   Checkbox,
 } from "@mui/material";
 
-export const CreateWebhookCheckboxes = ({ userId }: { userId: string }) => {
+export const CreateWebhookCheckboxes = () => {
+  const { user } = useAuth();
+  if (!user) return null;
+  const userId = getUserId(user);
+
   const [publicRepos, setPublicRepos] = useState([""]);
 
+  // TODO: How we feeling about this useEffect hook? Anything suss?
   useEffect(() => {
     let isMounted = true;
     (async () => {

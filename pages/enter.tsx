@@ -1,62 +1,30 @@
 import type { NextPage } from "next";
-import { Box, Typography } from "@mui/material";
-import { auth } from "@lib/firebase";
-import { useAuthState } from "react-firebase-hooks/auth";
+import { Box } from "@mui/material";
+import type { SxProps } from "@mui/system";
+import { useAuth } from "@lib/firebase";
 import { SignInButton, WebhookOnboarding } from "components";
 
 const Enter: NextPage = () => {
-  const [user, loading, error] = useAuthState(auth);
-
-  if (loading) {
+  const { user } = useAuth();
+  if (!user)
     return (
-      <Box>
-        <Typography>Initialising User...</Typography>
+      <Box sx={{ ...containerSx, height: "100vh" }}>
+        <SignInButton />
       </Box>
     );
-  }
-  if (error) {
-    return (
-      <Box>
-        <Typography>Error: {error}</Typography>
-      </Box>
-    );
-  }
-  if (user) {
-    const {
-      // @ts-ignore
-      reloadUserInfo: { screenName: userId },
-    } = user;
-    console.log(`this mans is logged in: ${userId}`);
-
-    return (
-      <Box
-        style={{
-          display: "flex",
-          flexDirection: "column",
-          justifyContent: "space-around",
-          alignItems: "center",
-          height: "70vh",
-          width: "100%",
-        }}
-      >
-        <WebhookOnboarding userId={userId} />
-      </Box>
-    );
-  }
 
   return (
-    <Box
-      style={{
-        display: "flex",
-        justifyContent: "space-around",
-        alignItems: "center",
-        height: "100vh",
-        width: "100%",
-      }}
-    >
-      <SignInButton />
+    <Box sx={{ ...containerSx, flexDirection: "column", height: "70vh" }}>
+      <WebhookOnboarding />
     </Box>
   );
 };
 
 export default Enter;
+
+const containerSx = {
+  display: "flex",
+  justifyContent: "space-around",
+  alignItems: "center",
+  width: 1,
+} as SxProps;

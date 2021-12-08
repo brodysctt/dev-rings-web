@@ -1,11 +1,11 @@
 import axios, { AxiosError } from "axios";
-import { fetchToken } from "helpers";
+import { fetchGitHubToken } from "@lib/firebase/firestore";
 
 export const fetchPublicRepos = async (
   userId: string
 ): Promise<string[] | ServerError> => {
   try {
-    const token = await fetchToken(userId);
+    const token = await fetchGitHubToken(userId);
     if (!token) {
       throw new Error("no token bruh");
     }

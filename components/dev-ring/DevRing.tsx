@@ -1,11 +1,11 @@
 import { Box } from "@mui/material";
-import { db } from "@lib/firebase";
-import { useCollection, useDocument } from "react-firebase-hooks/firestore";
-import { collection, doc, Timestamp } from "firebase/firestore";
+import { useAuth, getUserId } from "@lib/firebase/auth";
+import { useUserDoc, useEventsCollection } from "@lib/firebase/firestore";
+import type { Timestamp } from "firebase/firestore";
 import { SetGoalModal } from "./SetGoalModal";
 import { Ring } from "./Ring";
 import { EventsPopper } from "./events-popper";
-import { DayLog } from "components";
+import type { Log } from "components";
 
 export interface RepoEvent {
   createdAt: Timestamp;
@@ -16,58 +16,31 @@ export interface RepoEvent {
 }
 
 interface DevRingProps {
-  userId: string;
-  date: string;
+  log: Log; // TODO: How do I type this to be conditional? I.e., if isToday is omitted, log is required
+  isToday?: boolean;
 }
 
-export const DevRing = ({ userId, date }: DevRingProps) => {
-  // TODO: Once I auto create a goal, I can delete this hook
-  const [userDoc] = useDocument(doc(db, "users", userId));
-  const [eventsSnapshot] = useCollection(
-    collection(db, "users", userId, "events")
-  );
-  const [logsSnapshot] = useCollection(collection(db, "users", userId, "logs"));
+// TODO: Can delete once I resolve comment above
+const emptyLog = ["", { actual: 0, goal: 0 }] as Log;
 
-  const isToday = date === "today";
+export const DevRing = ({ log = emptyLog, isToday = false }: DevRingProps) => {
+  const { user } = useAuth();
+  if (!user) return null;
+  const userId = getUserId(user);
 
-  if (!userDoc) {
-    console.log("no user doc bruh");
-    return null;
-  }
-  const userData = userDoc.data();
-  if (!userData) {
-    console.log("no user data bruh");
-    return null;
-  }
+  const userData = useUserDoc(userId);
+  if (!userData) return null;
+
   const hasGoal = userData.hasOwnProperty("dailyGoal");
-  if (!hasGoal) {
-    return <SetGoalModal userId={userId} />;
-  }
+  if (!hasGoal) return <SetGoalModal userId={userId} />;
   const { dailyGoal } = userData;
 
-  // TODO: Properly handle this – log to Sentry
-  if (!eventsSnapshot) {
-    return null;
-  }
+  const events = useEventsCollection(userId);
+  if (!events) return null;
 
-  if (!logsSnapshot) {
-    return null;
-  }
-
-  const { docs } = eventsSnapshot;
-  const events = docs.map((doc) => doc.data() as RepoEvent);
-
-  const logs = logsSnapshot.docs.map((doc: any) => [
-    doc.id,
-    doc.data(),
-  ]) as DayLog[];
-  const logInView = logs.find((log) => {
-    const [dateString] = log;
-    return dateString === date;
-  }) as DayLog;
-
-  const [dateString, { actual, goal }] = logInView;
-
+  // TODO: Improve this
+  if (!log) return null;
+  const [x, { actual, goal }] = log;
   return (
     <Box
       sx={{
@@ -78,8 +51,8 @@ export const DevRing = ({ userId, date }: DevRingProps) => {
       }}
     >
       <Ring
-        goal={isToday ? dailyGoal : goal}
         progress={isToday ? events.length : actual}
+        goal={isToday ? dailyGoal : goal}
       />
       {Boolean(events.length) && <EventsPopper events={events} />}
     </Box>

@@ -11,7 +11,7 @@ import {
   ListItemText,
 } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
-import { signOutUser } from "helpers";
+import { signOutUser } from "@lib/firebase/auth";
 
 export const Sidebar = ({ userId }: { userId: string }) => {
   const [open, setOpen] = useState(false);

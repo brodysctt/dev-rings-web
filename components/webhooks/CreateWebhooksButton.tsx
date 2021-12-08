@@ -1,29 +1,35 @@
 import Image from "next/image";
+import { useAuth, getUserId } from "@lib/firebase/auth";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { fetchPublicRepos, createWebhook, createWebhookToast } from "./utils";
 import { Button } from "@mui/material";
 
-export const CreateWebhooksButton = ({ userId }: { userId: string }) => (
-  <>
-    <Button
-      variant="contained"
-      onClick={async () => await createWebhooks(userId)}
-      style={{
-        display: "flex",
-        justifyContent: "space-around",
-        alignItems: "center",
-        height: "8vh",
-        width: "430px",
-        marginRight: "100px",
-      }}
-    >
-      <Image src="/github.png" width="40px" height="40px" />
-      Create webhooks for all public repos 🎣
-    </Button>
-    <ToastContainer hideProgressBar />
-  </>
-);
+export const CreateWebhooksButton = () => {
+  const { user } = useAuth();
+  if (!user) return null;
+  const userId = getUserId(user);
+  return (
+    <>
+      <Button
+        variant="contained"
+        onClick={async () => await createWebhooks(userId)}
+        style={{
+          display: "flex",
+          justifyContent: "space-around",
+          alignItems: "center",
+          height: "8vh",
+          width: "430px",
+          marginRight: "100px",
+        }}
+      >
+        <Image src="/github.png" width="40px" height="40px" />
+        Create webhooks for all public repos 🎣
+      </Button>
+      <ToastContainer hideProgressBar />
+    </>
+  );
+};
 
 const createWebhooks = async (userId: string) => {
   const repos = await fetchPublicRepos(userId);

@@ -1,5 +1,6 @@
 import { useState, Dispatch, SetStateAction } from "react";
 import Link from "next/link";
+import { useAuth, getUserId } from "@lib/firebase/auth";
 import { Typography, ButtonBase } from "@mui/material";
 import { Ring, Log } from "components";
 
@@ -9,14 +10,23 @@ interface DayTileProps {
 }
 
 export const DayTile = ({ log, setAnchorEl }: DayTileProps) => {
-  const [hover, setHover] = useState(false);
+  const { user } = useAuth();
+  if (!user) return null;
+  // TODO: ☝️ Why doesn't this cause problems with useState hook below?
+  const userId = getUserId(user);
 
+  const [hover, setHover] = useState(false);
   // TODO: Ensure any user set goal is > 0
   const [dateString, { actual, goal }] = log;
   const isDayOff = !Boolean(actual) && !Boolean(goal);
   const day = new Date(dateString).getDate();
   return (
-    <Link href={dateString}>
+    <Link
+      href={{
+        pathname: "/[userId]/[dateString]",
+        query: { userId, dateString },
+      }}
+    >
       <ButtonBase
         onMouseEnter={() => setHover(true)}
         onMouseLeave={() => setHover(false)}

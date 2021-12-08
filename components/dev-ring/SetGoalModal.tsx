@@ -1,7 +1,7 @@
 import { Box, Typography, Modal, OutlinedInput } from "@mui/material";
+import type { SxProps } from "@mui/system";
 import { useForm, SubmitHandler } from "react-hook-form";
-import { db } from "lib/firebase";
-import { doc, updateDoc } from "@firebase/firestore";
+import { updateDailyGoal } from "@lib/firebase/firestore";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
@@ -13,14 +13,9 @@ export const SetGoalModal = ({ userId }: { userId: string }) => {
       toast.error("Numbers only dawg 🙅‍♂️");
       return;
     }
-    console.log("Submitting goal...");
     const dailyGoal = Number(goal);
-    await updateDoc(doc(db, "users", userId), {
-      dailyGoal,
-    });
-    console.log("Sucessfully submitted goal 🎉");
+    await updateDailyGoal(userId, dailyGoal);
   };
-
   return (
     <Box>
       <Modal
@@ -32,25 +27,7 @@ export const SetGoalModal = ({ userId }: { userId: string }) => {
           },
         }}
       >
-        <Box
-          sx={{
-            display: "flex",
-            flexDirection: "column",
-            justifyContent: "center",
-            alignItems: "center",
-            position: "absolute",
-            top: "50%",
-            left: "50%",
-            transform: "translate(-50%, -50%)",
-            height: 200,
-            width: 500,
-            bgcolor: "background.paper",
-            borderRadius: 2,
-            p: 4,
-            borderColor: "#DBDBDD",
-            boxShadow: 3,
-          }}
-        >
+        <Box sx={containerSx}>
           <Typography variant="h6" color="primary.main">
             How many commits will you strive for today?
           </Typography>
@@ -74,3 +51,21 @@ export const SetGoalModal = ({ userId }: { userId: string }) => {
     </Box>
   );
 };
+
+const containerSx = {
+  display: "flex",
+  flexDirection: "column",
+  justifyContent: "center",
+  alignItems: "center",
+  position: "absolute",
+  top: "50%",
+  left: "50%",
+  transform: "translate(-50%, -50%)",
+  height: 200,
+  width: 500,
+  bgcolor: "background.paper",
+  borderRadius: 2,
+  p: 4,
+  borderColor: "#DBDBDD",
+  boxShadow: 3,
+} as SxProps;

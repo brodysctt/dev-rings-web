@@ -7,11 +7,9 @@ import {
   Paper,
   ClickAwayListener,
 } from "@mui/material";
-import { SxProps } from "@mui/system";
+import type { SxProps } from "@mui/system";
 import CalendarTodayRoundedIcon from "@mui/icons-material/CalendarTodayRounded";
-import { db } from "@lib/firebase";
-import { useCollection } from "react-firebase-hooks/firestore";
-import { collection } from "firebase/firestore";
+import { useLogsCollection } from "@lib/firebase/firestore";
 import { Month } from "./Month";
 import { filterLogs, getFirstLogDate, createMonthYear } from "./utils";
 
@@ -24,6 +22,8 @@ export type Log = [
   }
 ];
 
+// Still using userId prop cuz then I don't have to return null if user from useAuth is null
+// Which breaks the app, cuz I will "render more hooks than previous render"
 export const CalendarPopper = ({ userId }: { userId: string }) => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
@@ -31,15 +31,10 @@ export const CalendarPopper = ({ userId }: { userId: string }) => {
 
   const [monthInView, setMonthInView] = useState<MonthYear>(createMonthYear());
 
-  // TODO: Make decision on how I want to handle loading and error states – custom hook w/ Sentry? 👀
-  const [logsSnapshot] = useCollection(collection(db, "users", userId, "logs"));
-  if (!logsSnapshot) {
+  const logs = useLogsCollection(userId);
+  if (!logs) {
     return null;
   }
-  const logs = logsSnapshot.docs.map((doc: any) => [
-    doc.id,
-    doc.data(),
-  ]) as Log[];
   const logsInView = filterLogs(logs, monthInView);
 
   const firstMonth = createMonthYear(getFirstLogDate(logs));
