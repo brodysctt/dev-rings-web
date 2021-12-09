@@ -1,4 +1,5 @@
 import { useState, useEffect, createContext, useContext } from "react";
+import { useRouter } from "next/router";
 import type { User } from "firebase/auth";
 import { auth } from "@lib/firebase";
 import Cookies from "js-cookie";
@@ -13,13 +14,14 @@ export const useAuth = () => {
 
 export const AuthProvider = ({ children }: any) => {
   const [user, setUser] = useState<User | null>(null);
+  const router = useRouter();
 
-  // Listen for token changes -> on change, calls setUser and writes new token as a cookie
   useEffect(() => {
     return auth.onIdTokenChanged(async (user) => {
       if (!user) {
         setUser(null);
         Cookies.set("token", "");
+        router.push("/enter");
         return;
       }
       const token = await user.getIdToken();

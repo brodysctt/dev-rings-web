@@ -11,11 +11,11 @@ interface DayTileProps {
 
 export const DayTile = ({ log, setAnchorEl }: DayTileProps) => {
   const { user } = useAuth();
+  const [hover, setHover] = useState(false);
+
   if (!user) return null;
-  // TODO: ☝️ Why doesn't this cause problems with useState hook below?
   const userId = getUserId(user);
 
-  const [hover, setHover] = useState(false);
   // TODO: Ensure any user set goal is > 0
   const [dateString, { actual, goal }] = log;
   const isDayOff = !Boolean(actual) && !Boolean(goal);

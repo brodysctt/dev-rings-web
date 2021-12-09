@@ -7,10 +7,11 @@ import { Box, FormGroup, FormControlLabel, Checkbox } from "@mui/material";
 
 export const TrackRepoCheckboxes = () => {
   const { user } = useAuth();
-  if (!user) return null;
-  const userId = getUserId(user);
-
   const [publicRepos, setPublicRepos] = useState<string[] | null>(null);
+
+  if (!user) return null;
+  // ☝️ Why doesn't this mess with useEffect below? Or would it, I just haven't attempted to render this component while logged out
+  const userId = getUserId(user);
 
   // TODO: You able to explain what's good with this isMounted pattern dawg?
   useEffect(() => {

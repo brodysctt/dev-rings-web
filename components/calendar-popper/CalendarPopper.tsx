@@ -22,8 +22,10 @@ export type Log = [
   }
 ];
 
-// Still using userId prop cuz then I don't have to return null if user from useAuth is null
-// Which breaks the app, cuz I will "render more hooks than previous render"
+/*
+ * Still using userId prop cuz then I don't have to return null if user from useAuth is null,
+ * which breaks the app cuz we "render more hooks than previous render"
+ */
 export const CalendarPopper = ({ userId }: { userId: string }) => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
