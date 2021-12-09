@@ -5,5 +5,6 @@ export const middleware = async (req: NextRequest) => {
   const { name: route } = req.page;
   const isEnter = route === "/enter";
   if (!token && !isEnter) return NextResponse.redirect("/enter");
+  if (token && isEnter) return NextResponse.redirect("/");
   return NextResponse.next();
 };
