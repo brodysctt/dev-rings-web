@@ -41,22 +41,36 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     } = context;
 
     const cookies = new Cookies(req, res);
-    const token = cookies.get("token");
-
-    if (!token) throw new Error("No token!");
-    // TODO: Confirm this will error if it's not able to verify 👇
-    await verifyToken(token);
+    const cookie = cookies.get("token");
+    if (!cookie) throw new Error(`Cookie doesn't exist!`);
+    const token = await verifyToken(cookie);
+    if (!token) throw new Error(`Token verification failed`);
 
     const logDoc = await fetchLogDoc(userId, dateString);
-    if (!logDoc.exists) throw new Error(`Log doesn't exist!`);
+    if (!logDoc.exists) throw new Error(`Doc doesn't exist!`);
 
     return {
       props: { log: [dateString, logDoc.data()] as Log },
     };
   } catch (err: any) {
-    context.res.writeHead(302, { Location: "/enter" });
-    context.res.end();
+    const { message } = err;
+    const isAuthError =
+      message === `Cookie doesn't exist!` ||
+      message === `Token verification failed`;
 
-    return { props: {} as never };
+    if (isAuthError)
+      return {
+        redirect: {
+          destination: "/enter",
+          permanent: false,
+        },
+      };
+
+    return {
+      redirect: {
+        destination: "/",
+        permanent: false,
+      },
+    };
   }
 };
