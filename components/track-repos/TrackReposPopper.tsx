@@ -1,4 +1,5 @@
 import { useState, MouseEvent } from "react";
+import { useAuth, getUserId } from "@lib/firebase/auth";
 import {
   Box,
   Typography,
@@ -12,9 +13,14 @@ import { TrackReposButton, TrackRepoCheckboxes } from "components";
 
 // TODO: Handle case where user doesn't have any public repos
 export const TrackReposPopper = () => {
+  const { user } = useAuth();
+
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
   const id = open ? "calendar-popper" : undefined;
+
+  if (!user) return null;
+  const userId = getUserId(user);
   return (
     <ClickAwayListener onClickAway={() => setAnchorEl(null)}>
       <Box
@@ -36,7 +42,7 @@ export const TrackReposPopper = () => {
         <Popper id={id} open={open} anchorEl={anchorEl}>
           <Paper elevation={0} sx={{ borderRadius: 10 }}>
             <Box sx={containerSx}>
-              <TrackRepoCheckboxes />
+              <TrackRepoCheckboxes userId={userId} />
             </Box>
           </Paper>
         </Popper>

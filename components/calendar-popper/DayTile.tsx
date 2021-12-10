@@ -18,7 +18,7 @@ export const DayTile = ({ log, setAnchorEl }: DayTileProps) => {
 
   // TODO: Ensure any user set goal is > 0
   const [dateString, { actual, goal }] = log;
-  const isDayOff = !Boolean(actual) && !Boolean(goal);
+  const isDayOff = !actual && !goal;
   const day = new Date(dateString).getDate();
   return (
     <Link
@@ -26,6 +26,7 @@ export const DayTile = ({ log, setAnchorEl }: DayTileProps) => {
         pathname: "/[userId]/[dateString]",
         query: { userId, dateString },
       }}
+      passHref
     >
       <ButtonBase
         onMouseEnter={() => setHover(true)}

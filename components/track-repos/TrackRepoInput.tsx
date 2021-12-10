@@ -1,4 +1,3 @@
-import Image from "next/image";
 import { useState } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { ToastContainer, toast } from "react-toastify";
@@ -11,6 +10,7 @@ import {
   Input,
   InputAdornment,
 } from "@mui/material";
+import GitHubIcon from "@mui/icons-material/GitHub";
 
 export const TrackRepoInput = ({ userId }: { userId: string }) => {
   const [userNeedsHelp, setUserNeedsHelp] = useState(false);
@@ -72,7 +72,7 @@ export const TrackRepoInput = ({ userId }: { userId: string }) => {
           placeholder={"https://github.com/you/your-awesome-repo.git"}
           startAdornment={
             <InputAdornment position="start">
-              <Image src="/github.png" width="20px" height="20px" />
+              <GitHubIcon />
             </InputAdornment>
           }
           sx={{ width: "370px" }}

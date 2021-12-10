@@ -1,17 +1,11 @@
 import { useState, useEffect } from "react";
-import { useAuth, getUserId } from "@lib/firebase/auth";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { fetchPublicRepos, trackRepo, trackRepoToast } from "./utils";
 import { Box, FormGroup, FormControlLabel, Checkbox } from "@mui/material";
 
-export const TrackRepoCheckboxes = () => {
-  const { user } = useAuth();
+export const TrackRepoCheckboxes = ({ userId }: { userId: string }) => {
   const [publicRepos, setPublicRepos] = useState<string[] | null>(null);
-
-  if (!user) return null;
-  // ☝️ Why doesn't this mess with useEffect below? Or would it, I just haven't attempted to render this component while logged out
-  const userId = getUserId(user);
 
   // TODO: You able to explain what's good with this isMounted pattern dawg?
   useEffect(() => {
@@ -28,7 +22,6 @@ export const TrackRepoCheckboxes = () => {
   }, []);
 
   // TODO: Handle case where user has no public repos
-
   if (!publicRepos) return null;
 
   return (
@@ -42,8 +35,9 @@ export const TrackRepoCheckboxes = () => {
             width: 700,
           }}
         >
-          {publicRepos.map((repo) => (
+          {publicRepos.map((repo, i) => (
             <FormControlLabel
+              id={`${i}`}
               label={repo}
               control={
                 <Checkbox

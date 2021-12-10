@@ -32,13 +32,14 @@ export const DevRing = ({
   const events = useEventsCollection(userId);
   if (!userData || !events) return null;
 
-  const hasGoal = userData.hasOwnProperty("dailyGoal");
+  // TODO: Can delete this once I programmatically initialize dailyGoal
+  const hasGoal = Object.prototype.hasOwnProperty.call(userData, "dailyGoal");
   if (!hasGoal) return <SetGoalModal userId={userId} />;
   const { dailyGoal } = userData;
 
   // TODO: Improve this
   if (!log) return null;
-  const [x, { actual, goal }] = log;
+  const { actual, goal } = log[1];
   return (
     <Box
       sx={{
