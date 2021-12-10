@@ -1,8 +1,6 @@
 import type { GetServerSideProps } from "next";
 import { useAuth, getUserId } from "@lib/firebase/auth";
-import { firebaseAdmin } from "@lib/firebaseAdmin";
-import { getAuth } from "firebase-admin/auth";
-import { getFirestore } from "firebase-admin/firestore";
+import { verifyToken, fetchLogDoc } from "@lib/firebase-admin";
 import { Box } from "@mui/material";
 import { DevRing, Log } from "components";
 import Cookies from "cookies";
@@ -33,7 +31,6 @@ const DevRings = ({ log }: { log: Log }) => {
 
 export default DevRings;
 
-// TODO: Clean this up, refactor to @lib/firebaseServer
 export const getServerSideProps: GetServerSideProps = async (context) => {
   try {
     const {
@@ -44,29 +41,19 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     } = context;
 
     const cookies = new Cookies(req, res);
-    const cookie = cookies.get("token");
+    const token = cookies.get("token");
 
-    if (!cookie) throw new Error("no cookie");
+    if (!token) throw new Error("No token!");
+    // TODO: Confirm this will error if it's not able to verify 👇
+    await verifyToken(token);
 
-    const auth = getAuth(firebaseAdmin);
-    // TODO: Confirm this will error if it's not able to verify
-    await auth.verifyIdToken(cookie);
-
-    const db = getFirestore(firebaseAdmin);
-
-    const logRef = db
-      .collection("users")
-      .doc(userId)
-      .collection("logs")
-      .doc(dateString);
-    const logDoc = await logRef.get();
-
-    if (!logDoc.exists) throw new Error(`doc doesn't exist!`);
+    const logDoc = await fetchLogDoc(userId, dateString);
+    if (!logDoc.exists) throw new Error(`Log doesn't exist!`);
 
     return {
       props: { log: [dateString, logDoc.data()] as Log },
     };
-  } catch (err) {
+  } catch (err: any) {
     context.res.writeHead(302, { Location: "/enter" });
     context.res.end();
 
