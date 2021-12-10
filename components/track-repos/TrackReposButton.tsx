@@ -1,9 +1,9 @@
-import Image from "next/image";
 import { useAuth, getUserId } from "@lib/firebase/auth";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { fetchPublicRepos, trackRepo, trackRepoToast } from "./utils";
 import { Button } from "@mui/material";
+import GitHubIcon from "@mui/icons-material/GitHub";
 
 export const TrackReposButton = () => {
   const { user } = useAuth();
@@ -22,7 +22,7 @@ export const TrackReposButton = () => {
           width: 300,
         }}
       >
-        <Image src="/github.png" width={30} height={30} />
+        <GitHubIcon />
         Track all public repos
       </Button>
       <ToastContainer hideProgressBar />

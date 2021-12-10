@@ -18,7 +18,7 @@ export const Navbar = () => {
       }}
     >
       <Box sx={{ display: "flex" }}>
-        <Link href="/">
+        <Link href="/" passHref>
           <Button variant="contained" sx={{ ml: 2 }}>
             view today
           </Button>

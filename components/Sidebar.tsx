@@ -1,5 +1,4 @@
 import { useState, KeyboardEvent, MouseEvent } from "react";
-import Image from "next/image";
 import Link from "next/link";
 import {
   Box,
@@ -10,6 +9,7 @@ import {
   ListItem,
   ListItemText,
 } from "@mui/material";
+import GitHubIcon from "@mui/icons-material/GitHub";
 import MenuIcon from "@mui/icons-material/Menu";
 import { signOutUser } from "@lib/firebase/auth";
 
@@ -41,7 +41,7 @@ export const Sidebar = ({ userId }: { userId: string }) => {
           onKeyDown={toggleDrawer(false)}
         >
           <List>
-            <Link href="/repos">
+            <Link href="/repos" passHref>
               <ListItem button key={"manageRepos"}>
                 🪝
                 <ListItemText primary={"Manage repos"} sx={{ ml: 2 }} />
@@ -52,7 +52,7 @@ export const Sidebar = ({ userId }: { userId: string }) => {
               onClick={() => window.open(`${GITHUB_BASE_URL}${userId}`)}
               key={"github"}
             >
-              <Image src="/github.png" width={20} height={20} />
+              <GitHubIcon />
               <ListItemText primary={"Take me to GitHub"} sx={{ ml: 2 }} />
             </ListItem>
 
