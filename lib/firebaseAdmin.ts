@@ -1,11 +1,14 @@
-import * as firebaseAdmin from "firebase-admin";
-import serviceAccount from "serviceAccountKey.json";
+import { initializeApp, cert } from "firebase-admin/app";
 
-if (!firebaseAdmin.apps.length) {
-  firebaseAdmin.initializeApp({
-    // @ts-ignore
-    credential: firebaseAdmin.credential.cert(serviceAccount),
-  });
-}
-
-export { firebaseAdmin };
+export const firebaseAdmin = initializeApp(
+  {
+    credential: cert({
+      projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID,
+      clientEmail:
+        process.env.NEXT_PUBLIC_FIREBASE_SERVICE_ACCOUNT_CLIENT_EMAIL,
+      privateKey: process.env.NEXT_PUBLIC_FIREBASE_SERVICE_ACCOUNT_PRIVATE_KEY,
+    }),
+    databaseURL: `https://${process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID}.firebaseio.com`,
+  },
+  "dev-rings-admin"
+);

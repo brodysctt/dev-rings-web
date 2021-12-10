@@ -1,6 +1,8 @@
 import type { GetServerSideProps } from "next";
 import { useAuth, getUserId } from "@lib/firebase/auth";
 import { firebaseAdmin } from "@lib/firebaseAdmin";
+import { getAuth } from "firebase-admin/auth";
+import { getFirestore } from "firebase-admin/firestore";
 import { Box } from "@mui/material";
 import { DevRing, Log } from "components";
 import Cookies from "cookies";
@@ -46,11 +48,11 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 
     if (!cookie) throw new Error("no cookie");
 
-    const token = await firebaseAdmin.auth().verifyIdToken(cookie);
-    console.log(`here be the validated token`);
-    console.dir(token);
+    const auth = getAuth(firebaseAdmin);
+    // TODO: Confirm this will error if it's not able to verify
+    await auth.verifyIdToken(cookie);
 
-    const db = firebaseAdmin.firestore();
+    const db = getFirestore(firebaseAdmin);
 
     const logRef = db
       .collection("users")
