@@ -3,9 +3,8 @@ import { useDocument, useCollection } from "react-firebase-hooks/firestore";
 import { doc, collection } from "firebase/firestore";
 import type { Log, RepoEvent } from "components";
 
-// TODO:
-// Double check return types of useDocument and useCollection hooks
-// I know these hooks ☝️ update automatically – will mine inherit this functionality?
+// TODO: Double check return types of useDocument and useCollection hooks
+// I know these hooks ☝️ update automatically, will mine inherit this functionality?
 // How do I want to handle the "if !result return null" cases? Do I want to log to Sentry?
 // This also relates to every component where I'm using them – will be able to refactor there as well
 // Actually, should probably use the error state from react-firebase-hooks and then use Sentry

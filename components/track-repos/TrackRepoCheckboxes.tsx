@@ -19,7 +19,7 @@ export const TrackRepoCheckboxes = ({ userId }: { userId: string }) => {
     return () => {
       isMounted = false;
     };
-  }, []);
+  });
 
   // TODO: Handle case where user has no public repos
   if (!publicRepos) return null;
@@ -37,7 +37,7 @@ export const TrackRepoCheckboxes = ({ userId }: { userId: string }) => {
         >
           {publicRepos.map((repo, i) => (
             <FormControlLabel
-              id={`${i}`}
+              key={i}
               label={repo}
               control={
                 <Checkbox
