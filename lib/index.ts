@@ -1,2 +1,2 @@
 export * from "./firebase";
-export * from "./firebaseAdmin";
+export * from "./firebase-admin";

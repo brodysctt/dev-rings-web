@@ -7,7 +7,6 @@ export const Navbar = () => {
   const { user } = useAuth();
   if (!user) return null;
   const userId = getUserId(user);
-  console.log(`this mans is logged in: ${userId}`);
   return (
     <Box
       sx={{
