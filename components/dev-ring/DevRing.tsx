@@ -8,6 +8,7 @@ import type { Log } from "components";
 
 export interface RepoEvent {
   createdAt: Timestamp;
+  dateString: string;
   eventType: string;
   repo: string;
   message: string;
@@ -39,7 +40,10 @@ export const DevRing = ({
 
   // TODO: Improve this
   if (!log) return null;
-  const { actual, goal } = log[1];
+  const [dateString, { actual, goal }] = log;
+
+  const relevantEvents = filterEventsByDateString(events, dateString);
+
   return (
     <Box
       sx={{
@@ -53,7 +57,20 @@ export const DevRing = ({
         progress={isToday ? events.length : actual}
         goal={isToday ? dailyGoal : goal}
       />
-      {Boolean(events.length) && <EventsPopper events={events} />}
+      {Boolean(relevantEvents.length) && (
+        <EventsPopper events={relevantEvents} />
+      )}
     </Box>
   );
+};
+
+const filterEventsByDateString = (events: RepoEvent[], dateString: string) => {
+  const dateStringEvents = events.map((event) => [
+    event.createdAt.toDate().toLocaleDateString().replace(/\//g, "-"), // MM-DD-YYYY
+    event,
+  ]);
+
+  return dateStringEvents
+    .filter((event) => event[0] === dateString)
+    .map((event) => event[1]) as RepoEvent[];
 };

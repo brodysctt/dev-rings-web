@@ -14,6 +14,9 @@ export const useUserDoc = (userId: string) => {
   return userDoc.data();
 };
 
+// Create hook that snags events for that given day
+// Would need to add a dateString property to these events to accomplish this
+
 export const useEventsCollection = (userId: string) => {
   const [eventsSnapshot] = useCollection(
     collection(db, "users", userId, "events")

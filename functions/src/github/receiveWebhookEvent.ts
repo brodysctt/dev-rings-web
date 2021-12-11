@@ -55,6 +55,7 @@ export const receiveWebhookEventHandler = functions.https.onRequest(
             functions.logger.log(`Storing ${eventType} event...`);
             await eventsRef.doc(eventId).set({
               createdAt,
+              dateString,
               eventType,
               repo,
               message,
