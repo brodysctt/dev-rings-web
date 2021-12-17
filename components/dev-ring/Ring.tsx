@@ -7,7 +7,8 @@ interface RingProps {
 }
 
 export const Ring = ({ progress, goal, size = "full" }: RingProps) => {
-  const percent = (progress / goal) * 100;
+  const hitGoal = progress - goal >= 0;
+  const percent = hitGoal ? 100 : (progress / goal) * 100;
   const isFullSize = size === "full";
   return (
     <CircularProgress
