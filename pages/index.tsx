@@ -17,7 +17,7 @@ const Today: NextPage = () => {
         width: "100%",
       }}
     >
-      <DevRing userId={userId} isToday={true} />
+      <DevRing userId={userId} isToday />
     </Box>
   );
 };

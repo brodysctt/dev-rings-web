@@ -1,5 +1,10 @@
-import { Box } from "@mui/material";
-import { useUserDoc, useEventsCollection } from "@lib/firebase/firestore";
+import Link from "next/link";
+import { Box, Button } from "@mui/material";
+import {
+  useUserDoc,
+  useEventsCollection,
+  useWebhooksCollection,
+} from "@lib/firebase/firestore";
 import type { Timestamp } from "firebase/firestore";
 import { SetGoalModal } from "./SetGoalModal";
 import { Ring } from "./Ring";
@@ -31,7 +36,16 @@ export const DevRing = ({
 }: DevRingProps) => {
   const userData = useUserDoc(userId);
   const events = useEventsCollection(userId);
+  const repos = useWebhooksCollection(userId);
+
   if (!userData || !events) return null;
+
+  if (!repos)
+    return (
+      <Link href="/repos" passHref>
+        <Button>{`You aren't tracking any repos! Head to the repos page to add more`}</Button>
+      </Link>
+    );
 
   // TODO: Can delete this once I programmatically initialize dailyGoal
   const hasGoal = Object.prototype.hasOwnProperty.call(userData, "dailyGoal");
@@ -42,7 +56,12 @@ export const DevRing = ({
   if (!log) return null;
   const [dateString, { actual, goal }] = log;
 
-  const relevantEvents = filterEventsByDateString(events, dateString);
+  // TODO: Test this a bunch! Can't have any timezone mishaps
+  const dateStringFilter = isToday
+    ? new Date().toLocaleDateString().replace(/\//g, "-")
+    : dateString;
+
+  const relevantEvents = filterEventsByDateString(events, dateStringFilter);
 
   return (
     <Box
@@ -54,7 +73,7 @@ export const DevRing = ({
       }}
     >
       <Ring
-        progress={isToday ? events.length : actual}
+        progress={isToday ? relevantEvents.length : actual}
         goal={isToday ? dailyGoal : goal}
       />
       {Boolean(relevantEvents.length) && (
@@ -64,6 +83,7 @@ export const DevRing = ({
   );
 };
 
+// TODO: Test this a bunch! Can't have any timezone mishaps
 const filterEventsByDateString = (events: RepoEvent[], dateString: string) => {
   const dateStringEvents = events.map((event) => [
     event.createdAt.toDate().toLocaleDateString().replace(/\//g, "-"), // MM-DD-YYYY

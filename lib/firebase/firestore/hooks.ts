@@ -33,6 +33,7 @@ export const useLogsCollection = (userId: string): Log[] | null => {
   return logsSnapshot.docs.map((doc: any) => [doc.id, doc.data()]) as Log[];
 };
 
+// TODO: This does more than just use the webhooks collection – rename this
 export const useWebhooksCollection = (userId: string) => {
   const webhooksRef = collection(db, "users", userId, "webhooks");
   const [webhooksSnapshot] = useCollection(webhooksRef);
