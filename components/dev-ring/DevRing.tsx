@@ -1,5 +1,7 @@
 import Link from "next/link";
-import { Box, Button } from "@mui/material";
+import Image from "next/image";
+import { Box, Typography, Button } from "@mui/material";
+import type { SxProps } from "@mui/system";
 import {
   useUserDoc,
   useEventsCollection,
@@ -61,24 +63,30 @@ export const DevRing = ({
     ? new Date().toLocaleDateString().replace(/\//g, "-")
     : dateString;
 
-  const relevantEvents = filterEventsByDateString(events, dateStringFilter);
+  const dayEvents = filterEventsByDateString(events, dateStringFilter);
+  const hasDayEvents = dayEvents.length > 0;
+
+  if (isToday && !hasDayEvents)
+    return (
+      <Box sx={containerSx}>
+        <Typography variant="h4" sx={{ pb: 5 }}>
+          {`No code committed today – push a commit to see it here!`}
+        </Typography>
+        <Image
+          src="https://media.giphy.com/media/Yx5ns1mSPBle0/giphy.gif"
+          height={500}
+          width={700}
+        />
+      </Box>
+    );
 
   return (
-    <Box
-      sx={{
-        display: "flex",
-        flexDirection: "column",
-        justifyContent: "center",
-        alignItems: "center",
-      }}
-    >
+    <Box sx={containerSx}>
       <Ring
-        progress={isToday ? relevantEvents.length : actual}
+        progress={isToday ? dayEvents.length : actual}
         goal={isToday ? dailyGoal : goal}
       />
-      {Boolean(relevantEvents.length) && (
-        <EventsPopper events={relevantEvents} />
-      )}
+      {hasDayEvents && <EventsPopper events={dayEvents} />}
     </Box>
   );
 };
@@ -94,3 +102,10 @@ const filterEventsByDateString = (events: RepoEvent[], dateString: string) => {
     .filter((event) => event[0] === dateString)
     .map((event) => event[1]) as RepoEvent[];
 };
+
+const containerSx = {
+  display: "flex",
+  flexDirection: "column",
+  justifyContent: "center",
+  alignItems: "center",
+} as SxProps;
