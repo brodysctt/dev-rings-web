@@ -12,7 +12,6 @@ import { SetGoalModal } from "./SetGoalModal";
 import { Ring } from "./Ring";
 import { EventsPopper } from "./events-popper";
 import type { Log } from "components";
-
 export interface RepoEvent {
   createdAt: Timestamp;
   dateString: string;
@@ -66,7 +65,15 @@ export const DevRing = ({
   const dayEvents = filterEventsByDateString(events, dateStringFilter);
   const hasDayEvents = dayEvents.length > 0;
 
-  if (isToday && !hasDayEvents)
+  if (!isToday)
+    return (
+      <Box sx={containerSx}>
+        <Ring progress={actual} goal={goal} />
+        <EventsPopper events={dayEvents} />
+      </Box>
+    );
+
+  if (!hasDayEvents)
     return (
       <Box sx={containerSx}>
         <Typography variant="h4" sx={{ pb: 5 }}>
@@ -82,11 +89,8 @@ export const DevRing = ({
 
   return (
     <Box sx={containerSx}>
-      <Ring
-        progress={isToday ? dayEvents.length : actual}
-        goal={isToday ? dailyGoal : goal}
-      />
-      {hasDayEvents && <EventsPopper events={dayEvents} />}
+      <Ring progress={dayEvents.length} goal={dailyGoal} />
+      <EventsPopper events={dayEvents} />
     </Box>
   );
 };
