@@ -16,7 +16,6 @@ export const DayTile = ({ log, setAnchorEl }: DayTileProps) => {
   if (!user) return null;
   const userId = getUserId(user);
 
-  // TODO: Ensure any user set goal is > 0
   const [dateString, { actual, goal }] = log;
   const isDayOff = !actual && !goal;
   const day = new Date(dateString).getDate();

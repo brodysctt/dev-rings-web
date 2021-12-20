@@ -29,7 +29,6 @@ export const receiveWebhookEventHandler = functions.https.onRequest(
           res.sendStatus(200);
           return;
         }
-        // TODO: Set a default daily goal when a user signs up to avoid case where this is empty
         // @ts-ignore
         const { dailyGoal: goal } = userDoc.data();
         const date = new Date();
