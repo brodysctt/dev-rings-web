@@ -7,6 +7,7 @@ import { SetGoalInput } from "./SetGoalInput";
 // TODO: Refactor to use ClickAway pattern
 // TODO: A target icon would be nice 🤷‍♂️ 🎯
 // TODO: Finesse tooltip
+// TODO: Implement validation so goal cannot be less than 1
 
 export const SetGoalPopper = ({ userId }: { userId: string }) => {
   const userData = useUserDoc(userId);
