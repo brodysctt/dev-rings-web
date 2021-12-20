@@ -7,32 +7,15 @@ import {
   useEventsCollection,
   useWebhooksCollection,
 } from "@lib/firebase/firestore";
-import type { Timestamp } from "firebase/firestore";
 import { SetGoalModal } from "./SetGoalModal";
 import { Ring } from "./Ring";
+import type { RepoEvent } from "./DevRing";
 import { EventsPopper } from "./events-popper";
-import type { Log } from "components";
 
-export interface RepoEvent {
-  createdAt: Timestamp;
-  dateString: string;
-  eventType: string;
-  repo: string;
-  message: string;
-  url: string;
-}
-
-interface DevRingProps {
-  userId: string;
-  log: Log;
-}
-
-export const DevRing = ({ userId, log }: DevRingProps) => {
+export const TodayDevRing = ({ userId }: { userId: string }) => {
   const userData = useUserDoc(userId);
   const events = useEventsCollection(userId);
   const repos = useWebhooksCollection(userId);
-
-  const [dateString, { actual, goal }] = log;
 
   if (!userData || !events) return null;
 
@@ -48,7 +31,10 @@ export const DevRing = ({ userId, log }: DevRingProps) => {
   if (!hasGoal) return <SetGoalModal userId={userId} />;
   const { dailyGoal } = userData;
 
-  const dayEvents = filterEventsByDateString(events, dateString);
+  // TODO: Test this a bunch! Can't have any timezone mishaps
+  const dateStringFilter = new Date().toLocaleDateString().replace(/\//g, "-");
+
+  const dayEvents = filterEventsByDateString(events, dateStringFilter);
   const hasDayEvents = dayEvents.length > 0;
 
   if (!hasDayEvents)
@@ -67,7 +53,7 @@ export const DevRing = ({ userId, log }: DevRingProps) => {
 
   return (
     <Box sx={containerSx}>
-      <Ring progress={actual} goal={goal} />
+      <Ring progress={dayEvents.length} goal={dailyGoal} />
       <EventsPopper events={dayEvents} />
     </Box>
   );

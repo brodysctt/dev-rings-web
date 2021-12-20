@@ -2,7 +2,7 @@ import type { GetServerSideProps } from "next";
 import { useAuth, getUserId } from "@lib/firebase/auth";
 import { verifyToken, fetchLogDoc } from "@lib/firebase-admin";
 import { Box, Typography } from "@mui/material";
-import { DevRing, Log } from "components";
+import { DevRing, TodayDevRing, Log } from "components";
 import Cookies from "cookies";
 
 const DevRings = ({ log }: { log: Log }) => {
@@ -14,6 +14,25 @@ const DevRings = ({ log }: { log: Log }) => {
   const date = new Date(dateString);
   // TODO: Test this
   const isToday = date === new Date();
+
+  if (isToday)
+    return (
+      <Box
+        sx={{
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "center",
+          alignItems: "center",
+          height: "80vh",
+          width: "100%",
+        }}
+      >
+        {/* TODO: Add color to theme */}
+        <Typography sx={{ mb: 3, color: "#a2a2a2" }}>{dateString}</Typography>
+        <TodayDevRing userId={userId} />
+      </Box>
+    );
+
   return (
     <Box
       sx={{
@@ -27,7 +46,7 @@ const DevRings = ({ log }: { log: Log }) => {
     >
       {/* TODO: Add color to theme */}
       <Typography sx={{ mb: 3, color: "#a2a2a2" }}>{dateString}</Typography>
-      <DevRing userId={userId} log={log} isToday={isToday} />
+      <DevRing userId={userId} log={log} />
     </Box>
   );
 };
