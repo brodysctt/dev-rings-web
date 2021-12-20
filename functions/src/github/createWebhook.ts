@@ -9,7 +9,7 @@ const corsHandler = cors({ origin: true });
 
 const GITHUB_BASE_URL = "https://api.github.com";
 const WEBHOOK_EVENTS_URL =
-  "http://5c27-172-103-147-5.ngrok.io/dev-rings/us-central1/receiveWebhookEventHandler";
+  "http://0a4b-172-103-147-5.ngrok.io/dev-rings/us-central1/receiveWebhookEventHandler";
 
 export const createWebhookHandler = functions.https.onRequest(
   async (req, res) => {
@@ -23,14 +23,14 @@ export const createWebhookHandler = functions.https.onRequest(
           data: { id, url, ping_url: pingUrl },
         } = createWebhookResponse;
 
-        const reposRef = db
+        const webhooksRef = db
           .collection("users")
           .doc(user)
           .collection("webhooks");
 
         const webhookId = id.toString();
         functions.logger.log("Storing webhook in Firestore...");
-        await reposRef.doc(webhookId).set({
+        await webhooksRef.doc(webhookId).set({
           createdAt: admin.firestore.Timestamp.fromDate(new Date()),
           url,
           pingUrl,

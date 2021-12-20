@@ -14,6 +14,9 @@ export const useUserDoc = (userId: string) => {
   return userDoc.data();
 };
 
+// Create hook that snags events for that given day
+// Would need to add a dateString property to these events to accomplish this
+
 export const useEventsCollection = (userId: string) => {
   const [eventsSnapshot] = useCollection(
     collection(db, "users", userId, "events")
@@ -30,6 +33,7 @@ export const useLogsCollection = (userId: string): Log[] | null => {
   return logsSnapshot.docs.map((doc: any) => [doc.id, doc.data()]) as Log[];
 };
 
+// TODO: This does more than just use the webhooks collection – rename this
 export const useWebhooksCollection = (userId: string) => {
   const webhooksRef = collection(db, "users", userId, "webhooks");
   const [webhooksSnapshot] = useCollection(webhooksRef);

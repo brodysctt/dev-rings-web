@@ -18,9 +18,9 @@ export const setGitHubToken = async (userId: string, token: string) => {
     });
     return;
   }
-  // if doc doesn't exist, create a user
   await setDoc(docRef, {
     token,
+    dailyGoal: 1,
   });
 };
 
