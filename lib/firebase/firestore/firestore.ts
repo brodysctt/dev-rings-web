@@ -20,7 +20,7 @@ export const setGitHubToken = async (userId: string, token: string) => {
   }
   await setDoc(docRef, {
     token,
-    dailyGoal: 5,
+    dailyGoal: 1,
   });
 };
 
