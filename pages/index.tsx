@@ -1,7 +1,7 @@
 import type { NextPage } from "next";
 import { useAuth, getUserId } from "@lib/firebase/auth";
 import { Box } from "@mui/material";
-import { DevRing } from "components";
+import { TodayDevRing } from "components";
 
 const Today: NextPage = () => {
   const { user } = useAuth();
@@ -17,7 +17,7 @@ const Today: NextPage = () => {
         width: "100%",
       }}
     >
-      <DevRing userId={userId} isToday />
+      <TodayDevRing userId={userId} />
     </Box>
   );
 };
