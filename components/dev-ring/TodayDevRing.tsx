@@ -40,6 +40,7 @@ export const TodayDevRing = ({ userId }: { userId: string }) => {
         </Typography>
         <Image
           src="https://media.giphy.com/media/Yx5ns1mSPBle0/giphy.gif"
+          alt=""
           height={500}
           width={700}
         />
