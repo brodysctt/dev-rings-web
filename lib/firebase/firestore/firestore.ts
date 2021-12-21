@@ -20,7 +20,8 @@ export const setGitHubToken = async (userId: string, token: string) => {
   }
   await setDoc(docRef, {
     token,
-    dailyGoal: 1,
+    goal: 1,
+    hasSetGoal: false,
   });
 };
 
@@ -49,6 +50,7 @@ export const updateDailyGoal = async (userId: string, dailyGoal: number) => {
   console.log("Submitting goal...");
   await updateDoc(doc(db, "users", userId), {
     dailyGoal,
+    hasSetGoal: true,
   });
   console.log("Sucessfully submitted goal 🎉");
 };

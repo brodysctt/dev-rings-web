@@ -7,9 +7,11 @@ import "react-toastify/dist/ReactToastify.css";
 export const SetGoalInput = ({ userId }: { userId: string }) => {
   const { register, handleSubmit } = useForm<{ goal: number }>();
   const onSubmit: SubmitHandler<{ goal: string }> = async ({ goal }) => {
-    const isOnlyNumbers = /^[0-9]*$/.test(goal);
+    const isOnlyNumbers = /^[1-9]*$/.test(goal);
     if (!isOnlyNumbers) {
-      toast.error("Numbers only dawg 🙅‍♂️");
+      toast.error("Goal must be a number 1 or greater 🎯", {
+        position: "top-left",
+      });
       return;
     }
     const dailyGoal = Number(goal);

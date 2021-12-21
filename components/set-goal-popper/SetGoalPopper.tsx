@@ -1,5 +1,5 @@
 import { useUserDoc } from "@lib/firebase/firestore";
-import { Box, Button, Popper, Fade, Paper, Tooltip } from "@mui/material";
+import { Box, Typography, Button, Popper, Fade, Paper } from "@mui/material";
 import PopupState, { bindToggle, bindPopper } from "material-ui-popup-state";
 import EmojiEventsIcon from "@mui/icons-material/EmojiEvents";
 import { SetGoalInput } from "./SetGoalInput";
@@ -8,20 +8,22 @@ import { SetGoalInput } from "./SetGoalInput";
 // TODO: A target icon would be nice 🤷‍♂️ 🎯
 // TODO: Finesse tooltip
 // TODO: Implement validation so goal cannot be less than 1
+// TODO: Pass popper state down to input, close popper on goal submit
 
 export const SetGoalPopper = ({ userId }: { userId: string }) => {
   const userData = useUserDoc(userId);
   if (!userData) return null;
-  const { dailyGoal: goal } = userData;
+  const { dailyGoal, hasSetGoal } = userData;
 
   return (
     <PopupState variant="popper" popupId="demo-popup-popper">
       {(popupState) => (
         <>
-          <Button variant="text" {...bindToggle(popupState)}>
-            <Tooltip title={`Current goal is ${goal}`}>
-              <EmojiEventsIcon />
-            </Tooltip>
+          <Button
+            variant={!hasSetGoal ? "outlined" : "text"}
+            {...bindToggle(popupState)}
+          >
+            <EmojiEventsIcon />
           </Button>
           <Popper {...bindPopper(popupState)} transition>
             {({ TransitionProps }) => (
@@ -35,7 +37,20 @@ export const SetGoalPopper = ({ userId }: { userId: string }) => {
                       width: 800,
                     }}
                   >
-                    <SetGoalInput userId={userId} />
+                    <Box
+                      sx={{
+                        display: "flex",
+                        flexDirection: "column",
+                        justifyContent: "center",
+                        alignItems: "center",
+                      }}
+                    >
+                      <SetGoalInput userId={userId} />
+                      <Typography
+                        color="primary.main"
+                        sx={{ mt: 1, fontSize: "12px" }}
+                      >{`Current goal is ${dailyGoal}`}</Typography>
+                    </Box>
                   </Box>
                 </Paper>
               </Fade>
