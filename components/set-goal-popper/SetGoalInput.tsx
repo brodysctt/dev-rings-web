@@ -2,8 +2,7 @@ import { Dispatch, SetStateAction } from "react";
 import { OutlinedInput } from "@mui/material";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { updateDailyGoal } from "@lib/firebase/firestore";
-import { ToastContainer, toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
+import { toast } from "react-toastify";
 
 interface SetGoalInputProps {
   userId: string;
@@ -43,7 +42,6 @@ export const SetGoalInput = ({ userId, setAnchorEl }: SetGoalInputProps) => {
           }
         }}
       />
-      <ToastContainer hideProgressBar />
     </>
   );
 };

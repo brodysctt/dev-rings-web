@@ -5,6 +5,8 @@ import { CacheProvider, EmotionCache } from "@emotion/react";
 import { theme, createEmotionCache } from "styles";
 import { Navbar } from "components";
 import { AuthProvider } from "@lib/firebase/auth";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 // Client-side cache, shared for the whole session of the user in the browser.
 const clientSideEmotionCache = createEmotionCache();
@@ -23,6 +25,7 @@ export default function MyApp(props: MyAppProps) {
         <AuthProvider>
           <Navbar />
           <Component {...pageProps} />
+          <ToastContainer hideProgressBar />
         </AuthProvider>
       </ThemeProvider>
     </CacheProvider>

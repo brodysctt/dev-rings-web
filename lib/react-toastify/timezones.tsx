@@ -1,7 +1,8 @@
 import { toast } from "react-toastify";
-import { Box, Typography } from "@mui/material";
+import { Box, Typography, Button } from "@mui/material";
 import type { SxProps } from "@mui/system";
 import { dayjs } from "@lib/dayjs";
+import { updateTimezone } from "@lib/firebase/firestore";
 
 export const setTimezoneToast = () =>
   toast(
@@ -27,17 +28,27 @@ export const setTimezoneToast = () =>
     }
   );
 
-export const newTimezoneToast = (timezone: string) =>
+export const newTimezoneToast = (userId: string, currentTimezone: string) =>
   toast(
     <Box sx={containerSx}>
       <Typography
         align="center"
         color="primary.main"
-        sx={{ whiteSpace: "pre-wrap" }}
+        sx={{ mb: 2, whiteSpace: "pre-wrap" }}
       >
-        {`Here's the current local date: ${dayjs().utcOffset()} 
-  and here's timezone date: ${dayjs().tz(timezone).utcOffset()}`}
+        {`New timezone detected – would you like to change your timezone to ${dayjs.tz.guess()}?`}
       </Typography>
+      <Box>
+        <Button
+          variant="contained"
+          color="secondary"
+          onClick={() => updateTimezone(userId, dayjs.tz.guess())}
+        >{`Please!`}</Button>
+        <Button
+          variant="contained"
+          sx={{ ml: 2 }}
+        >{`Keep ${currentTimezone}`}</Button>
+      </Box>
     </Box>,
     {
       position: "bottom-left",
