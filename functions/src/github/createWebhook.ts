@@ -1,52 +1,41 @@
-import * as functions from "firebase-functions";
+import { https, logger } from "firebase-functions";
 import * as admin from "firebase-admin";
-import { db } from "../config";
-
 import axios from "axios";
-import * as cors from "cors";
-// @ts-ignore
-const corsHandler = cors({ origin: true });
+import { db } from "../config";
 
 const GITHUB_BASE_URL = "https://api.github.com";
 const WEBHOOK_EVENTS_URL =
   "http://0a4b-172-103-147-5.ngrok.io/dev-rings/us-central1/receiveWebhookEventHandler";
 
-export const createWebhookHandler = functions.https.onRequest(
-  async (req, res) => {
-    corsHandler(req, res, async () => {
-      try {
-        const { user, repo, token } = req.body;
-        functions.logger.log("Creating webhook...");
-        const createWebhookResponse = await createWebhook(user, repo, token);
+export const createWebhookHandler = https.onRequest(async (req, res) => {
+  try {
+    const { user, repo, token } = req.body;
+    logger.log("Creating webhook...");
+    const createWebhookResponse = await createWebhook(user, repo, token);
 
-        const {
-          data: { id, url, ping_url: pingUrl },
-        } = createWebhookResponse;
+    const {
+      data: { id, url, ping_url: pingUrl },
+    } = createWebhookResponse;
 
-        const webhooksRef = db
-          .collection("users")
-          .doc(user)
-          .collection("webhooks");
+    const webhooksRef = db.collection("users").doc(user).collection("webhooks");
 
-        const webhookId = id.toString();
-        functions.logger.log("Storing webhook in Firestore...");
-        await webhooksRef.doc(webhookId).set({
-          createdAt: admin.firestore.Timestamp.fromDate(new Date()),
-          url,
-          pingUrl,
-        });
-
-        functions.logger.log(
-          "Webhook was successfully created & stored! Exiting function 🎉"
-        );
-        await res.sendStatus(200);
-        return;
-      } catch (err) {
-        res.status(400).send(err);
-      }
+    const webhookId = id.toString();
+    logger.log("Storing webhook in Firestore...");
+    await webhooksRef.doc(webhookId).set({
+      createdAt: admin.firestore.Timestamp.fromDate(new Date()),
+      url,
+      pingUrl,
     });
+
+    logger.log(
+      "Webhook was successfully created & stored! Exiting function 🎉"
+    );
+    await res.sendStatus(200);
+    return;
+  } catch (err) {
+    res.status(400).send(err);
   }
-);
+});
 
 const createWebhook = async (user: string, repo: string, token: string) => {
   return await axios.post(
