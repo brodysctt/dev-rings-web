@@ -7,12 +7,17 @@ import {
   useEventsCollection,
   useWebhooksCollection,
 } from "@lib/firebase/firestore";
+import { dayjs } from "@lib/dayjs";
+import {
+  setGoalToast,
+  setTimezoneToast,
+  newTimezoneToast,
+} from "@lib/react-toastify";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import { Ring } from "./Ring";
 import { getDayEvents, createDateString } from "./utils";
 import { EventsPopper } from "./events-popper";
-import { toast } from "react-toastify";
-import { ToastContainer } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
 
 export const TodayDevRing = ({ userId }: { userId: string }) => {
   const userData = useUserDoc(userId);
@@ -29,18 +34,22 @@ export const TodayDevRing = ({ userId }: { userId: string }) => {
       </Link>
     );
 
-  const { dailyGoal, hasSetGoal } = userData;
+  const { dailyGoal, hasSetGoal, timezone } = userData;
+
+  setTimezoneToast();
 
   // TODO: Test this a bunch! Can't have any timezone mishaps
   const dateString = createDateString();
   const dayEvents = getDayEvents(events, dateString);
   const hasDayEvents = dayEvents.length > 0;
 
+  const newTimezone = dayjs().utcOffset() !== dayjs().tz(timezone).utcOffset();
+  if (newTimezone) newTimezoneToast(timezone);
+
   // TODO: Make the name-dropped repo a link to github, and the "or other" piece a link to manage repos page
   if (!hasDayEvents) return <NoEventsHero repos={repos} />;
 
-  // TODO: Think thru responsiveness here
-  if (!hasSetGoal) fireGoalToast();
+  if (!hasSetGoal) setGoalToast();
 
   return (
     <Box sx={containerSx}>
@@ -68,30 +77,6 @@ const NoEventsHero = ({ repos }: { repos: any[] }) => (
     />
   </Box>
 );
-
-const fireGoalToast = () =>
-  toast(
-    <Box sx={containerSx}>
-      <Typography
-        align="center"
-        color="primary.main"
-        sx={{ whiteSpace: "pre-wrap" }}
-      >
-        {`Woo! Congrats on tracking your first commit 🎉
-Now click the 🏆 to update your daily goal`}
-      </Typography>
-    </Box>,
-    {
-      position: "top-center",
-      autoClose: false,
-      hideProgressBar: true,
-      closeOnClick: true,
-      draggable: true,
-      style: {
-        width: 390,
-      },
-    }
-  );
 
 const containerSx = {
   display: "flex",

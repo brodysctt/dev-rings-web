@@ -6,6 +6,7 @@ import {
   setDoc,
   updateDoc,
 } from "firebase/firestore";
+import { dayjs } from "@lib/dayjs";
 
 export const db = getFirestore(firebaseApp);
 
@@ -22,6 +23,7 @@ export const setGitHubToken = async (userId: string, token: string) => {
     token,
     goal: 1,
     hasSetGoal: false,
+    timezone: dayjs.tz.guess(),
   });
 };
 
