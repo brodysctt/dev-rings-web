@@ -1,13 +1,5 @@
 import type { Log } from "components";
-import { dayjs } from "@lib/dayjs/dayjs";
-
-export type MonthYear = [number, number];
-
-export const createMonthYear = (date?: Date): MonthYear => [
-  // dayjs(undefined) === dayjs()
-  dayjs(date).month() + 1,
-  dayjs(date).year(),
-];
+import { dayjs, MonthYear } from "@lib/dayjs";
 
 export const createMonthLogs = (
   logs: Log[],
@@ -34,7 +26,8 @@ export const createMonthLogs = (
   }
 
   const [month, year] = monthInView;
-  const lastDayOfMonth = dayjs(new Date(year, month, 0)).date() - 1; // zero-indexed
+  // TODO: Triple check that month is right here
+  const lastDayOfMonth = dayjs([year, month, 0]).date() - 1; // zero-indexed
   const daysOff = lastDayOfMonth - lastDay;
   if (daysOff > 0) {
     [...Array(daysOff)].forEach((d, i) => dayOffIndices.push(lastDay + 1 + i));
@@ -44,14 +37,10 @@ export const createMonthLogs = (
     dayLogs.splice(dayOffIndex, 0, [dayOffIndex, { actual: 0, goal: 0 }]);
   });
 
-  const monthLogs: Log[] = dayLogs.map((dayLog) => {
-    const [zeroIndexDay, rest] = dayLog;
-    const day = zeroIndexDay + 1;
-    // TODO: Use dayjs here to format this automatically
-    const dateString = `${month}-${day < 10 ? 0 : ""}${day}-${year}`;
-    return [dateString, rest];
-  });
-  return monthLogs;
+  return dayLogs.map(([zeroIndexDay, rest]) => [
+    dayjs([year, month - 1, zeroIndexDay + 1]).format("MM-DD-YYYY"),
+    rest,
+  ]) as Log[];
 };
 
 type ZeroIndexDayLog = [

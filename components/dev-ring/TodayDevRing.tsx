@@ -1,7 +1,5 @@
 import Link from "next/link";
 import Image from "next/image";
-import { Box, Typography, Button } from "@mui/material";
-import type { SxProps } from "@mui/system";
 import {
   useUserDoc,
   useEventsCollection,
@@ -9,10 +7,11 @@ import {
 } from "@lib/firebase/firestore";
 import { dayjs } from "@lib/dayjs";
 import { setGoalToast, newTimezoneToast } from "@lib/react-toastify";
-import "react-toastify/dist/ReactToastify.css";
-import { Ring } from "./Ring";
-import { getDayEvents, createDateString } from "./utils";
+import { Box, Typography, Button } from "@mui/material";
+import type { SxProps } from "@mui/system";
 import { EventsPopper } from "./events-popper";
+import { Ring } from "./Ring";
+import { getDayEvents } from "./utils";
 
 export const TodayDevRing = ({ userId }: { userId: string }) => {
   const userData = useUserDoc(userId);
@@ -32,8 +31,7 @@ export const TodayDevRing = ({ userId }: { userId: string }) => {
   const { dailyGoal, hasSetGoal, timezone } = userData;
 
   // TODO: Test this a bunch! Can't have any timezone mishaps
-  const dateString = createDateString();
-  const dayEvents = getDayEvents(events, dateString);
+  const dayEvents = getDayEvents(events, dayjs().format("MM-DD-YYYY"));
   const hasDayEvents = dayEvents.length > 0;
 
   const newTimezone = dayjs().utcOffset() !== dayjs().tz(timezone).utcOffset();

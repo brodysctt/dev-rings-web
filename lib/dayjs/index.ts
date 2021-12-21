@@ -1,5 +1,4 @@
 export * from "./createMonthLogs";
+export * from "./createMonthYear";
 export * from "./dayjs";
-export * from "./getFirstLogDate";
 export * from "./getMonthName";
-export * from "./filterLogs";
