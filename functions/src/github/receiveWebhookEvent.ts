@@ -1,10 +1,16 @@
 import * as functions from "firebase-functions";
 import * as admin from "firebase-admin";
-import { db } from "../config";
+import * as dayjs from "dayjs";
+import * as utc from "dayjs/plugin/utc";
+import * as timezone from "dayjs/plugin/timezone";
 
+import { db } from "../config";
 import * as cors from "cors";
 // @ts-ignore
 const corsHandler = cors({ origin: true });
+
+dayjs.extend(utc);
+dayjs.extend(timezone);
 
 export const receiveWebhookEventHandler = functions.https.onRequest(
   async (req, res) => {
@@ -30,10 +36,10 @@ export const receiveWebhookEventHandler = functions.https.onRequest(
           return;
         }
         // @ts-ignore
-        const { dailyGoal: goal } = userDoc.data();
+        const { dailyGoal: goal, timezone } = userDoc.data();
         const date = new Date();
         const createdAt = admin.firestore.Timestamp.fromDate(date);
-        const dateString = date.toLocaleDateString().replace(/\//g, "-");
+        const dateString = dayjs(date).tz(timezone).format("YYYY-MM-DD");
 
         if (eventType === "push") {
           const {
@@ -97,6 +103,7 @@ export const receiveWebhookEventHandler = functions.https.onRequest(
           functions.logger.log(`Storing ${eventType} event...`);
           await eventsRef.doc(eventId).set({
             createdAt,
+            dateString,
             eventType,
             repo,
             message,

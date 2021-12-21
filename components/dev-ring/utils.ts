@@ -3,7 +3,6 @@ import type { Timestamp } from "firebase/firestore";
 
 export interface RepoEvent {
   createdAt: Timestamp;
-  dateString: string;
   eventType: string;
   repo: string;
   message: string;
@@ -14,7 +13,7 @@ export interface RepoEvent {
 
 export const getDayEvents = (events: RepoEvent[], dateString: string) => {
   const dateStringEvents = events.map((event) => [
-    dayjs(event.createdAt.toDate()).format("MM-DD-YYYY"),
+    dayjs(event.createdAt.toDate()).format("YYYY-MM-DD"),
     event,
   ]);
 

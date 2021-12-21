@@ -38,7 +38,7 @@ export const createMonthLogs = (
   });
 
   return dayLogs.map(([zeroIndexDay, rest]) => [
-    dayjs([year, month - 1, zeroIndexDay + 1]).format("MM-DD-YYYY"),
+    dayjs([year, month - 1, zeroIndexDay + 1]).format("YYYY-MM-DD"),
     rest,
   ]) as Log[];
 };

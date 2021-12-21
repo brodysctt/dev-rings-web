@@ -31,7 +31,7 @@ export const TodayDevRing = ({ userId }: { userId: string }) => {
   const { dailyGoal, hasSetGoal, timezone } = userData;
 
   // TODO: Test this a bunch! Can't have any timezone mishaps
-  const dayEvents = getDayEvents(events, dayjs().format("MM-DD-YYYY"));
+  const dayEvents = getDayEvents(events, dayjs().format("YYYY-MM-DD"));
   const hasDayEvents = dayEvents.length > 0;
 
   const newTimezone = dayjs().utcOffset() !== dayjs().tz(timezone).utcOffset();
