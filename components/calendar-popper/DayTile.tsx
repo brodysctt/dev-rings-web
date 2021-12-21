@@ -2,7 +2,7 @@ import { useState, Dispatch, SetStateAction } from "react";
 import Link from "next/link";
 import { useAuth, getUserId } from "@lib/firebase/auth";
 import { Typography, ButtonBase } from "@mui/material";
-import { Ring, Log } from "components";
+import { ProgressRing, Log } from "components";
 import { dayjs } from "@lib/dayjs";
 
 interface DayTileProps {
@@ -20,6 +20,7 @@ export const DayTile = ({ log, setAnchorEl }: DayTileProps) => {
   const [dateString, { actual, goal }] = log;
   const isDayOff = !actual && !goal;
   const day = dayjs(dateString).date();
+  const percent = isDayOff ? 0 : (actual / goal) * 100;
 
   return (
     <Link
@@ -50,11 +51,7 @@ export const DayTile = ({ log, setAnchorEl }: DayTileProps) => {
         <Typography sx={{ fontSize: 10, alignSelf: "flex-end", mr: "4px" }}>
           {day}
         </Typography>
-        <Ring
-          progress={isDayOff ? 0 : actual}
-          goal={isDayOff ? 1 : goal}
-          size="mini"
-        />
+        <ProgressRing percent={percent} />
       </ButtonBase>
     </Link>
   );

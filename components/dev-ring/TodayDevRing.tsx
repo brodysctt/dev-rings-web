@@ -9,8 +9,8 @@ import { dayjs } from "@lib/dayjs";
 import { setGoalToast, newTimezoneToast } from "@lib/react-toastify";
 import { Box, Typography, Button } from "@mui/material";
 import type { SxProps } from "@mui/system";
+import { ProgressRing } from "components";
 import { EventsPopper } from "./events-popper";
-import { Ring } from "./Ring";
 import { getDayEvents } from "./utils";
 
 export const TodayDevRing = ({ userId }: { userId: string }) => {
@@ -28,7 +28,7 @@ export const TodayDevRing = ({ userId }: { userId: string }) => {
       </Link>
     );
 
-  const { dailyGoal, hasSetGoal, timezone } = userData;
+  const { dailyGoal: goal, hasSetGoal, timezone } = userData;
 
   // TODO: Test this a bunch! Can't have any timezone mishaps
   const dayEvents = getDayEvents(events, dayjs().format("YYYY-MM-DD"));
@@ -42,9 +42,13 @@ export const TodayDevRing = ({ userId }: { userId: string }) => {
 
   if (!hasSetGoal) setGoalToast();
 
+  const progress = dayEvents.length;
+  const hitGoal = progress - goal >= 0;
+  const percent = hitGoal ? 100 : (progress / goal) * 100;
+
   return (
     <Box sx={containerSx}>
-      <Ring progress={dayEvents.length} goal={dailyGoal} />
+      <ProgressRing percent={percent} />
       <EventsPopper events={dayEvents} />
     </Box>
   );

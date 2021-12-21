@@ -1,16 +1,12 @@
-import { useState, useEffect, createContext, useContext } from "react";
+import { useState, useEffect, createContext } from "react";
 import { useRouter } from "next/router";
 import type { User } from "firebase/auth";
 import { auth } from "@lib/firebase";
 import Cookies from "js-cookie";
 
-const AuthContext = createContext<{ user: User | null }>({
+export const AuthContext = createContext<{ user: User | null }>({
   user: null,
 });
-
-export const useAuth = () => {
-  return useContext(AuthContext);
-};
 
 export const AuthProvider = ({ children }: any) => {
   const [user, setUser] = useState<User | null>(null);

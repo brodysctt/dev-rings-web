@@ -2,7 +2,8 @@ import type { GetServerSideProps } from "next";
 import { useAuth, getUserId } from "@lib/firebase/auth";
 import { verifyToken, fetchLogDoc } from "@lib/firebase-admin";
 import { Box, Typography } from "@mui/material";
-import { DevRing, TodayDevRing, Log } from "components";
+import type { SxProps } from "@mui/system";
+import { DevRing, TodayDevRing, ProgressRing, Log } from "components";
 import Cookies from "cookies";
 
 const DevRings = ({ log }: { log: Log }) => {
@@ -10,46 +11,41 @@ const DevRings = ({ log }: { log: Log }) => {
   if (!user) return null;
   const userId = getUserId(user);
 
-  const [dateString] = log;
+  const [dateString, { actual, goal }] = log;
+  // TODO: consider refactoring with dayjs
   const date = new Date(dateString);
-  // TODO: Test this
+  // TODO: Test this , consider refactoring with dayjs
   const isToday = date === new Date();
 
   if (isToday)
     return (
-      <Box
-        sx={{
-          display: "flex",
-          flexDirection: "column",
-          justifyContent: "center",
-          alignItems: "center",
-          height: "80vh",
-          width: "100%",
-        }}
-      >
-        {/* TODO: Add color to theme */}
+      <Box sx={containerSx}>
         <Typography sx={{ mb: 3, color: "#a2a2a2" }}>{dateString}</Typography>
         <TodayDevRing userId={userId} />
       </Box>
     );
 
+  const hitGoal = actual - goal >= 0;
+  const percent = hitGoal ? 100 : (actual / goal) * 100;
+
   return (
-    <Box
-      sx={{
-        display: "flex",
-        flexDirection: "column",
-        justifyContent: "center",
-        alignItems: "center",
-        height: "80vh",
-        width: "100%",
-      }}
-    >
-      {/* TODO: Add color to theme */}
+    <Box sx={containerSx}>
       <Typography sx={{ mb: 3, color: "#a2a2a2" }}>{dateString}</Typography>
-      <DevRing userId={userId} log={log} />
+      <DevRing userId={userId} dateString={dateString}>
+        <ProgressRing percent={percent} />
+      </DevRing>
     </Box>
   );
 };
+
+const containerSx = {
+  display: "flex",
+  flexDirection: "column",
+  justifyContent: "center",
+  alignItems: "center",
+  height: "80vh",
+  width: "100%",
+} as SxProps;
 
 export default DevRings;
 
