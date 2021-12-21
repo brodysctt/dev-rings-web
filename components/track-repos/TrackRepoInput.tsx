@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
-import { ToastContainer, toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
+import { toast } from "react-toastify";
 import { trackRepo, trackRepoToast } from "./utils";
 import {
   Box,
@@ -78,7 +77,6 @@ export const TrackRepoInput = ({ userId }: { userId: string }) => {
           sx={{ width: "370px" }}
         />
       </FormControl>
-      <ToastContainer hideProgressBar />
     </Box>
   );
 };

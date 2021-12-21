@@ -1,6 +1,4 @@
 import { useState, useEffect } from "react";
-import { ToastContainer } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
 import { fetchPublicRepos, trackRepo, trackRepoToast } from "./utils";
 import { Box, FormGroup, FormControlLabel, Checkbox } from "@mui/material";
 
@@ -54,7 +52,6 @@ export const TrackRepoCheckboxes = ({ userId }: { userId: string }) => {
           ))}
         </Box>
       </FormGroup>
-      <ToastContainer hideProgressBar />
     </>
   );
 };

@@ -1,18 +1,17 @@
 import Link from "next/link";
 import Image from "next/image";
-import { Box, Typography, Button } from "@mui/material";
-import type { SxProps } from "@mui/system";
 import {
   useUserDoc,
   useEventsCollection,
   useWebhooksCollection,
 } from "@lib/firebase/firestore";
-import { Ring } from "./Ring";
-import { getDayEvents, createDateString } from "./utils";
+import { dayjs } from "@lib/dayjs";
+import { setGoalToast, newTimezoneToast } from "@lib/react-toastify";
+import { Box, Typography, Button } from "@mui/material";
+import type { SxProps } from "@mui/system";
 import { EventsPopper } from "./events-popper";
-import { toast } from "react-toastify";
-import { ToastContainer } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
+import { Ring } from "./Ring";
+import { getDayEvents } from "./utils";
 
 export const TodayDevRing = ({ userId }: { userId: string }) => {
   const userData = useUserDoc(userId);
@@ -29,24 +28,24 @@ export const TodayDevRing = ({ userId }: { userId: string }) => {
       </Link>
     );
 
-  const { dailyGoal, hasSetGoal } = userData;
+  const { dailyGoal, hasSetGoal, timezone } = userData;
 
   // TODO: Test this a bunch! Can't have any timezone mishaps
-  const dateString = createDateString();
-  const dayEvents = getDayEvents(events, dateString);
+  const dayEvents = getDayEvents(events, dayjs().format("YYYY-MM-DD"));
   const hasDayEvents = dayEvents.length > 0;
+
+  const newTimezone = dayjs().utcOffset() !== dayjs().tz(timezone).utcOffset();
+  if (newTimezone) newTimezoneToast(userId, timezone);
 
   // TODO: Make the name-dropped repo a link to github, and the "or other" piece a link to manage repos page
   if (!hasDayEvents) return <NoEventsHero repos={repos} />;
 
-  // TODO: Think thru responsiveness here
-  if (!hasSetGoal) fireGoalToast();
+  if (!hasSetGoal) setGoalToast();
 
   return (
     <Box sx={containerSx}>
       <Ring progress={dayEvents.length} goal={dailyGoal} />
       <EventsPopper events={dayEvents} />
-      <ToastContainer />
     </Box>
   );
 };
@@ -68,30 +67,6 @@ const NoEventsHero = ({ repos }: { repos: any[] }) => (
     />
   </Box>
 );
-
-const fireGoalToast = () =>
-  toast(
-    <Box sx={containerSx}>
-      <Typography
-        align="center"
-        color="primary.main"
-        sx={{ whiteSpace: "pre-wrap" }}
-      >
-        {`Woo! Congrats on tracking your first commit 🎉
-Now click the 🏆 to update your daily goal`}
-      </Typography>
-    </Box>,
-    {
-      position: "top-center",
-      autoClose: false,
-      hideProgressBar: true,
-      closeOnClick: true,
-      draggable: true,
-      style: {
-        width: 390,
-      },
-    }
-  );
 
 const containerSx = {
   display: "flex",

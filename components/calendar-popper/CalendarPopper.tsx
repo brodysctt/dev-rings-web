@@ -1,4 +1,6 @@
 import { useState, MouseEvent } from "react";
+import { useLogsCollection } from "@lib/firebase/firestore";
+import { createMonthYear, MonthYear } from "@lib/dayjs";
 import {
   Box,
   Typography,
@@ -9,11 +11,9 @@ import {
 } from "@mui/material";
 import type { SxProps } from "@mui/system";
 import CalendarTodayRoundedIcon from "@mui/icons-material/CalendarTodayRounded";
-import { useLogsCollection } from "@lib/firebase/firestore";
 import { Month } from "./Month";
-import { filterLogs, getFirstLogDate, createMonthYear } from "./utils";
+import { filterLogs, getFirstLogDate } from "./utils";
 
-export type MonthYear = [number, number];
 export type Log = [
   string,
   {
@@ -39,6 +39,7 @@ export const CalendarPopper = ({ userId }: { userId: string }) => {
   }
   const logsInView = filterLogs(logs, monthInView);
 
+  // TODO: Test this a bunch
   const firstMonth = createMonthYear(getFirstLogDate(logs));
   const previousMonthExists = !(
     JSON.stringify(monthInView) === JSON.stringify(firstMonth)

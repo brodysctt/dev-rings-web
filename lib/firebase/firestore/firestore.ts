@@ -6,6 +6,9 @@ import {
   setDoc,
   updateDoc,
 } from "firebase/firestore";
+import { dayjs } from "@lib/dayjs";
+import { toast } from "react-toastify";
+import { setTimezoneToast } from "@lib/react-toastify";
 
 export const db = getFirestore(firebaseApp);
 
@@ -22,7 +25,10 @@ export const setGitHubToken = async (userId: string, token: string) => {
     token,
     goal: 1,
     hasSetGoal: false,
+    timezone: dayjs.tz.guess(),
   });
+  toast.success("Successfully created account 🎉");
+  setTimezoneToast();
 };
 
 export const fetchGitHubToken = async (userId: string) => {
@@ -53,4 +59,11 @@ export const updateDailyGoal = async (userId: string, dailyGoal: number) => {
     hasSetGoal: true,
   });
   console.log("Sucessfully submitted goal 🎉");
+};
+
+export const updateTimezone = async (userId: string, timezone: string) => {
+  await updateDoc(doc(db, "users", userId), {
+    timezone,
+  });
+  toast.success("Successfully updated timezone");
 };
