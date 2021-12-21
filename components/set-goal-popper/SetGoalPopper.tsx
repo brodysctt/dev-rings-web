@@ -1,48 +1,59 @@
+import { useState, MouseEvent } from "react";
+import {
+  Box,
+  Typography,
+  Button,
+  Popper,
+  Paper,
+  ClickAwayListener,
+} from "@mui/material";
 import { useUserDoc } from "@lib/firebase/firestore";
-import { Box, Button, Popper, Fade, Paper, Tooltip } from "@mui/material";
-import PopupState, { bindToggle, bindPopper } from "material-ui-popup-state";
 import EmojiEventsIcon from "@mui/icons-material/EmojiEvents";
 import { SetGoalInput } from "./SetGoalInput";
 
-// TODO: Refactor to use ClickAway pattern
-// TODO: A target icon would be nice 🤷‍♂️ 🎯
-// TODO: Finesse tooltip
-// TODO: Implement validation so goal cannot be less than 1
+// TODO: Pass popper state down to input, close popper on goal submit
 
 export const SetGoalPopper = ({ userId }: { userId: string }) => {
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const open = Boolean(anchorEl);
+  const id = open ? "calendar-popper" : undefined;
+
   const userData = useUserDoc(userId);
   if (!userData) return null;
-  const { dailyGoal: goal } = userData;
+  const { dailyGoal, hasSetGoal } = userData;
 
   return (
-    <PopupState variant="popper" popupId="demo-popup-popper">
-      {(popupState) => (
-        <>
-          <Button variant="text" {...bindToggle(popupState)}>
-            <Tooltip title={`Current goal is ${goal}`}>
-              <EmojiEventsIcon />
-            </Tooltip>
-          </Button>
-          <Popper {...bindPopper(popupState)} transition>
-            {({ TransitionProps }) => (
-              <Fade {...TransitionProps} timeout={350}>
-                <Paper elevation={0}>
-                  <Box
-                    sx={{
-                      display: "flex",
-                      justifyContent: "center",
-                      flexWrap: "wrap",
-                      width: 800,
-                    }}
-                  >
-                    <SetGoalInput userId={userId} />
-                  </Box>
-                </Paper>
-              </Fade>
-            )}
-          </Popper>
-        </>
-      )}
-    </PopupState>
+    <ClickAwayListener onClickAway={() => setAnchorEl(null)}>
+      <Box>
+        <Button
+          aria-describedby={id}
+          variant={!hasSetGoal ? "outlined" : "text"}
+          onClick={(event: MouseEvent<HTMLElement>) => {
+            setAnchorEl(anchorEl ? null : event.currentTarget);
+          }}
+          sx={{ height: 60 }}
+        >
+          <EmojiEventsIcon />
+        </Button>
+        <Popper id={id} open={open} anchorEl={anchorEl}>
+          <Paper elevation={0}>
+            <Box
+              sx={{
+                display: "flex",
+                flexDirection: "column",
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+            >
+              <SetGoalInput userId={userId} setAnchorEl={setAnchorEl} />
+              <Typography
+                color="primary.main"
+                sx={{ mt: 1, fontSize: "12px" }}
+              >{`Current goal is ${dailyGoal}`}</Typography>
+            </Box>
+          </Paper>
+        </Popper>
+      </Box>
+    </ClickAwayListener>
   );
 };
