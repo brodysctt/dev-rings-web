@@ -1,4 +1,4 @@
-import { Log } from "components";
+import type { Log } from "components";
 
 export const getFirstLogDate = (logs: Log[]) => {
   const sortedLogs = logs

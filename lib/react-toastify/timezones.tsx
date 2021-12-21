@@ -43,7 +43,7 @@ export const newTimezoneToast = (userId: string, currentTimezone: string) =>
           variant="contained"
           color="secondary"
           onClick={() => updateTimezone(userId, dayjs.tz.guess())}
-        >{`Please!`}</Button>
+        >{`change`}</Button>
         <Button
           variant="contained"
           sx={{ ml: 2 }}

@@ -11,9 +11,16 @@ import type { SxProps } from "@mui/system";
 import CalendarTodayRoundedIcon from "@mui/icons-material/CalendarTodayRounded";
 import { useLogsCollection } from "@lib/firebase/firestore";
 import { Month } from "./Month";
-import { filterLogs, getFirstLogDate, createMonthYear } from "./utils";
 
-export type MonthYear = [number, number];
+import { testToast } from "@lib/react-toastify";
+import {
+  dayjs,
+  createMonthYear,
+  MonthYear,
+  filterLogs,
+  getFirstLogDate,
+} from "@lib/dayjs";
+
 export type Log = [
   string,
   {
@@ -43,6 +50,10 @@ export const CalendarPopper = ({ userId }: { userId: string }) => {
   const previousMonthExists = !(
     JSON.stringify(monthInView) === JSON.stringify(firstMonth)
   );
+
+  const monthYear = [new Date().getMonth() + 1, new Date().getFullYear()];
+  const dayJsMonthYear = [dayjs().month() + 1, dayjs().year()];
+  testToast(monthYear, dayJsMonthYear);
 
   return (
     <ClickAwayListener onClickAway={() => setAnchorEl(null)}>

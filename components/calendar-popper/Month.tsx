@@ -1,10 +1,10 @@
 import type { Dispatch, SetStateAction } from "react";
+import { dayjs, MonthYear, createMonthLogs, getMonthName } from "@lib/dayjs";
 import { Grid, Typography, Button } from "@mui/material";
 import ArrowBackRoundedIcon from "@mui/icons-material/ArrowBackRounded";
 import ArrowForwardRoundedIcon from "@mui/icons-material/ArrowForwardRounded";
 import { DayTile } from "./DayTile";
-import { MonthYear, Log } from "components";
-import { createMonthLogs, getMonthName } from "./utils";
+import type { Log } from "components";
 
 interface MonthProps {
   logs: Log[];
@@ -29,7 +29,7 @@ export const Month = ({
   const monthLogs = createMonthLogs(logs, hasPrevious, monthInView);
 
   const [firstDate] = monthLogs[0];
-  const gridStart = new Date(firstDate).getDay();
+  const gridStart = dayjs(firstDate).day();
 
   const decrementMonth = () => {
     if (month === 1) {

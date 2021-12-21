@@ -3,6 +3,7 @@ import Link from "next/link";
 import { useAuth, getUserId } from "@lib/firebase/auth";
 import { Typography, ButtonBase } from "@mui/material";
 import { Ring, Log } from "components";
+import { dayjs } from "@lib/dayjs";
 
 interface DayTileProps {
   log: Log;
@@ -18,7 +19,8 @@ export const DayTile = ({ log, setAnchorEl }: DayTileProps) => {
 
   const [dateString, { actual, goal }] = log;
   const isDayOff = !actual && !goal;
-  const day = new Date(dateString).getDate();
+  const day = dayjs(dateString).date();
+
   return (
     <Link
       href={{
