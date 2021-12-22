@@ -1,46 +1,34 @@
 import { db } from "@lib/firebase";
+import { doc, collection, QuerySnapshot } from "firebase/firestore";
 import { useDocument, useCollection } from "react-firebase-hooks/firestore";
-import { doc, collection } from "firebase/firestore";
-import type { Log, RepoEvent } from "components";
 
-// TODO: Double check return types of useDocument and useCollection hooks
-// I know these hooks ☝️ update automatically, will mine inherit this functionality?
-// How do I want to handle the "if !result return null" cases? Do I want to log to Sentry?
-// This also relates to every component where I'm using them – will be able to refactor there as well
-// Actually, should probably use the error state from react-firebase-hooks and then use Sentry
 export const useUserDoc = (userId: string) => {
   const [userDoc] = useDocument(doc(db, "users", userId));
+  // TODO: Toss an error? This would be a critical bug
   if (!userDoc || !userDoc.exists) return null;
   return userDoc.data();
 };
 
-// Create hook that snags events for that given day
-// Would need to add a dateString property to these events to accomplish this
+export const useCollections = (userId: string) => {
+  const { eventsRef, logsRef, webhooksRef } = createRefs(userId);
+  const [eventsSnap] = useCollection(eventsRef);
+  const [logsSnap] = useCollection(logsRef);
+  const [webhooksSnap] = useCollection(webhooksRef);
 
-export const useEventsCollection = (userId: string) => {
-  const [eventsSnapshot] = useCollection(
-    collection(db, "users", userId, "events")
-  );
-  if (!eventsSnapshot) return null;
-  const { docs } = eventsSnapshot;
-  const events = docs.map((doc) => doc.data() as RepoEvent);
-  return events;
+  const snaps = [eventsSnap, logsSnap, webhooksSnap];
+  return getDataFromSnaps(snaps);
 };
 
-export const useLogsCollection = (userId: string): Log[] | null => {
-  const [logsSnapshot] = useCollection(collection(db, "users", userId, "logs"));
-  if (!logsSnapshot) return null;
-  return logsSnapshot.docs.map((doc: any) => [doc.id, doc.data()]) as Log[];
+const createRefs = (userId: string) => {
+  return {
+    eventsRef: collection(db, "users", userId, "events"),
+    logsRef: collection(db, "users", userId, "logs"),
+    webhooksRef: collection(db, "users", userId, "webhooks"),
+  };
 };
 
-// TODO: This does more than just use the webhooks collection – rename this
-export const useWebhooksCollection = (userId: string) => {
-  const webhooksRef = collection(db, "users", userId, "webhooks");
-  const [webhooksSnapshot] = useCollection(webhooksRef);
-  if (!webhooksSnapshot || !webhooksSnapshot.docs.length) return null;
-  return webhooksSnapshot.docs.map((doc) => {
-    const { url } = doc.data();
-    const repoSubstring = new RegExp(`(?<=${userId}/).*(?=/hooks)`);
-    return url.match(repoSubstring);
+const getDataFromSnaps = (snaps: Array<QuerySnapshot | undefined>) =>
+  snaps.map((snap) => {
+    if (!snap || !snap.docs.length) return null;
+    return snap.docs.map((doc) => doc.data());
   });
-};

@@ -1,5 +1,5 @@
 import { useState, MouseEvent } from "react";
-import { useLogsCollection } from "@lib/firebase/firestore";
+import { useCollections } from "@lib/firebase/firestore";
 import { createMonthYear, MonthYear } from "@lib/dayjs";
 import {
   Box,
@@ -33,14 +33,13 @@ export const CalendarPopper = ({ userId }: { userId: string }) => {
 
   const [monthInView, setMonthInView] = useState<MonthYear>(createMonthYear());
 
-  const logs = useLogsCollection(userId);
-  if (!logs) {
-    return null;
-  }
-  const logsInView = filterLogs(logs, monthInView);
+  const [, logs] = useCollections(userId);
+  if (!logs) return null;
+
+  const logsInView = filterLogs(logs as Log[], monthInView);
 
   // TODO: Test this a bunch
-  const firstMonth = createMonthYear(getFirstLogDate(logs));
+  const firstMonth = createMonthYear(getFirstLogDate(logs as Log[]));
   const previousMonthExists = !(
     JSON.stringify(monthInView) === JSON.stringify(firstMonth)
   );

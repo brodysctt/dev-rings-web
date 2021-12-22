@@ -1,27 +1,22 @@
 import Link from "next/link";
 import Image from "next/image";
-import {
-  useUserDoc,
-  useEventsCollection,
-  useWebhooksCollection,
-} from "@lib/firebase/firestore";
+import { useUserDoc, useCollections } from "@lib/firebase/firestore";
 import { dayjs } from "@lib/dayjs";
 import { setGoalToast, newTimezoneToast } from "@lib/react-toastify";
 import { Box, Typography, Button } from "@mui/material";
 import type { SxProps } from "@mui/system";
-import { ProgressRing } from "components";
+import { ProgressRing, RepoEvent } from "components";
 import { EventsPopper } from "./events-popper";
 import { getDayEvents } from "./utils";
 
 export const TodayDevRing = ({ userId }: { userId: string }) => {
   const userData = useUserDoc(userId);
-  const events = useEventsCollection(userId);
-  const repos = useWebhooksCollection(userId);
+  const [events, , webhooks] = useCollections(userId);
 
   if (!userData || !events) return null;
 
   // TODO: Add a TrackRepo component here
-  if (!repos)
+  if (!webhooks)
     return (
       <Link href="/repos" passHref>
         <Button>{`You aren't tracking any repos! Head to the repos page to add more`}</Button>
@@ -31,14 +26,17 @@ export const TodayDevRing = ({ userId }: { userId: string }) => {
   const { dailyGoal: goal, hasSetGoal, timezone } = userData;
 
   // TODO: Test this a bunch! Can't have any timezone mishaps
-  const dayEvents = getDayEvents(events, dayjs().format("YYYY-MM-DD"));
+  const dayEvents = getDayEvents(
+    events as RepoEvent[],
+    dayjs().format("YYYY-MM-DD")
+  );
   const hasDayEvents = dayEvents.length > 0;
 
   const newTimezone = dayjs().utcOffset() !== dayjs().tz(timezone).utcOffset();
   if (newTimezone) newTimezoneToast(userId, timezone);
 
   // TODO: Make the name-dropped repo a link to github, and the "or other" piece a link to manage repos page
-  if (!hasDayEvents) return <NoEventsHero repos={repos} />;
+  if (!hasDayEvents) return <NoEventsHero repos={getRepos(webhooks, userId)} />;
 
   if (!hasSetGoal) setGoalToast();
 
@@ -71,6 +69,12 @@ const NoEventsHero = ({ repos }: { repos: any[] }) => (
     />
   </Box>
 );
+
+const getRepos = (webhooks: any, userId: string) =>
+  webhooks.map((webhook: any) => {
+    const re = new RegExp(`(?<=${userId}/).*(?=/hooks)`);
+    return webhook.url.match(re);
+  });
 
 const containerSx = {
   display: "flex",
