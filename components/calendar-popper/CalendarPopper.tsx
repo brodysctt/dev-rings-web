@@ -1,5 +1,5 @@
 import { useState, MouseEvent } from "react";
-import { useCollections } from "@lib/firebase/firestore";
+import { useLogs } from "@lib/firebase/firestore";
 import { createMonthYear, MonthYear } from "@lib/dayjs";
 import {
   Box,
@@ -22,18 +22,14 @@ export type Log = [
   }
 ];
 
-/*
- * Still using userId prop cuz then I don't have to return null if user from useAuth is null,
- * which breaks the app cuz we "render more hooks than previous render"
- */
-export const CalendarPopper = ({ userId }: { userId: string }) => {
+export const CalendarPopper = () => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
   const id = open ? "calendar-popper" : undefined;
 
   const [monthInView, setMonthInView] = useState<MonthYear>(createMonthYear());
 
-  const [, logs] = useCollections({ userId, options: { prependDocId: true } });
+  const logs = useLogs();
   if (!logs) return null;
 
   const logsInView = filterLogs(logs as Log[], monthInView);

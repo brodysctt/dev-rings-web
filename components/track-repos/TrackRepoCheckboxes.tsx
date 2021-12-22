@@ -7,6 +7,7 @@ export const TrackRepoCheckboxes = () => {
   const [publicRepos, setPublicRepos] = useState<string[] | null>(null);
   const userId = useAuth();
 
+  // TODO: Refactor with custom hook
   useEffect(() => {
     (async () => {
       if (userId) {

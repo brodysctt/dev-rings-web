@@ -1,9 +1,9 @@
 import type { NextPage } from "next";
 import { useAuth } from "@lib/firebase/auth";
 import { Box } from "@mui/material";
-import { TodayDevRing } from "components";
+import { Today } from "components";
 
-const Today: NextPage = () => {
+const Index: NextPage = () => {
   const userId = useAuth();
   if (!userId) return null;
   return (
@@ -16,9 +16,9 @@ const Today: NextPage = () => {
         width: "100%",
       }}
     >
-      <TodayDevRing userId={userId} />
+      <Today />
     </Box>
   );
 };
 
-export default Today;
+export default Index;

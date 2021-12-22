@@ -1,6 +1,6 @@
 import Link from "next/link";
 import Image from "next/image";
-import { useUserDoc, useCollections, RepoEvent } from "@lib/firebase/firestore";
+import { useUserDoc, useCollection, RepoEvent } from "@lib/firebase/firestore";
 import { dayjs } from "@lib/dayjs";
 import { setGoalToast, newTimezoneToast } from "@lib/react-toastify";
 import { Box, Typography, Button } from "@mui/material";
@@ -8,11 +8,10 @@ import type { SxProps } from "@mui/system";
 import { ProgressRing } from "components";
 import { EventsPopper } from "./events-popper";
 
-export const TodayDevRing = ({ userId }: { userId: string }) => {
-  const userData = useUserDoc(userId);
-  const [events, , webhooks] = useCollections({ userId });
-
-  console.log(!events);
+export const Today = () => {
+  const userData = useUserDoc();
+  const events = useCollection("events");
+  const webhooks = useCollection("webhooks");
 
   if (!userData || !events) return null;
 
@@ -24,7 +23,7 @@ export const TodayDevRing = ({ userId }: { userId: string }) => {
       </Link>
     );
 
-  const { dailyGoal: goal, hasSetGoal, timezone } = userData;
+  const [userId, { dailyGoal: goal, hasSetGoal, timezone }] = userData;
 
   // TODO: Test this a bunch! Can't have any timezone mishaps
   const dayEvents = getDayEvents(

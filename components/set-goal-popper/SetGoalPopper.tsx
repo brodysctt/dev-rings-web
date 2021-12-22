@@ -13,14 +13,14 @@ import { SetGoalInput } from "./SetGoalInput";
 
 // TODO: Pass popper state down to input, close popper on goal submit
 
-export const SetGoalPopper = ({ userId }: { userId: string }) => {
+export const SetGoalPopper = () => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
   const id = open ? "calendar-popper" : undefined;
 
-  const userData = useUserDoc(userId);
+  const userData = useUserDoc();
   if (!userData) return null;
-  const { dailyGoal, hasSetGoal } = userData;
+  const [, { dailyGoal, hasSetGoal }] = userData;
 
   return (
     <ClickAwayListener onClickAway={() => setAnchorEl(null)}>
