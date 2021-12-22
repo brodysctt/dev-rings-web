@@ -9,7 +9,7 @@ import {
   Tooltip,
 } from "@mui/material";
 import PopupState, { bindToggle, bindPopper } from "material-ui-popup-state";
-import type { RepoEvent } from "components";
+import type { RepoEvent } from "@lib/firebase/firestore";
 import { getTimeAsString } from "utils";
 import { EventIcon } from "./EventIcon";
 

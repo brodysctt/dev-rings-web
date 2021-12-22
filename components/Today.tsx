@@ -1,13 +1,12 @@
 import Link from "next/link";
 import Image from "next/image";
-import { useUserDoc, useCollections } from "@lib/firebase/firestore";
+import { useUserDoc, useCollections, RepoEvent } from "@lib/firebase/firestore";
 import { dayjs } from "@lib/dayjs";
 import { setGoalToast, newTimezoneToast } from "@lib/react-toastify";
 import { Box, Typography, Button } from "@mui/material";
 import type { SxProps } from "@mui/system";
-import { ProgressRing, RepoEvent } from "components";
+import { ProgressRing } from "components";
 import { EventsPopper } from "./events-popper";
-import { getDayEvents } from "./utils";
 
 export const TodayDevRing = ({ userId }: { userId: string }) => {
   const userData = useUserDoc(userId);
@@ -52,6 +51,18 @@ export const TodayDevRing = ({ userId }: { userId: string }) => {
       <EventsPopper events={dayEvents} />
     </Box>
   );
+};
+
+// TODO: Test these functions a bunch – can't have any tz/date mishaps
+export const getDayEvents = (events: RepoEvent[], dateString: string) => {
+  const dateStringEvents = events.map((event) => [
+    dayjs(event.createdAt.toDate()).format("YYYY-MM-DD"),
+    event,
+  ]);
+
+  return dateStringEvents
+    .filter((event) => event[0] === dateString)
+    .map((event) => event[1]) as RepoEvent[];
 };
 
 const NoEventsHero = ({ repos }: { repos: any[] }) => (

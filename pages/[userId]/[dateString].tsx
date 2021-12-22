@@ -1,20 +1,52 @@
 import type { GetServerSideProps } from "next";
+import { useState, useEffect } from "react";
 import { useAuth } from "@lib/firebase/auth";
 import { verifyToken, fetchLogDoc } from "@lib/firebase-admin";
 import { Box, Typography } from "@mui/material";
 import type { SxProps } from "@mui/system";
-import { DevRing, TodayDevRing, ProgressRing, Log } from "components";
+import {
+  EventsPopper,
+  TodayDevRing,
+  ProgressRing,
+  Log,
+  getDayEvents,
+} from "components";
 import Cookies from "cookies";
+import { db, RepoEvent } from "@lib/firebase/firestore";
+import { collection, getDocs } from "firebase/firestore";
 
-const DevRings = ({ log }: { log: Log }) => {
+const DevRing = ({ log }: { log: Log }) => {
   const userId = useAuth();
-  if (!userId) return null;
+  const [events, setEvents] = useState<RepoEvent[] | null>(null);
+
+  useEffect(() => {
+    (async () => {
+      if (userId) {
+        const eventsSnap = await getDocs(
+          collection(db, "users", userId, "events")
+        );
+
+        if (eventsSnap && eventsSnap.docs.length) {
+          const events = eventsSnap.docs.map((doc) =>
+            doc.data()
+          ) as RepoEvent[];
+          setEvents(events);
+        }
+      }
+    })();
+  });
+
+  // Do I want this if there are no events?
+  if (!userId || !events) return null;
 
   const [dateString, { actual, goal }] = log;
-  // TODO: consider refactoring with dayjs
+
+  // TODO: Refactoring with dayjs
   const date = new Date(dateString);
-  // TODO: Test this , consider refactoring with dayjs
+  // TODO: Test this + refactor with dayjs
   const isToday = date === new Date();
+
+  const dayEvents = getDayEvents(events as RepoEvent[], dateString);
 
   if (isToday)
     return (
@@ -30,9 +62,10 @@ const DevRings = ({ log }: { log: Log }) => {
   return (
     <Box sx={containerSx}>
       <Typography sx={{ mb: 3, color: "#a2a2a2" }}>{dateString}</Typography>
-      <DevRing userId={userId} dateString={dateString}>
+      <Box sx={devRingSx}>
         <ProgressRing percent={percent} />
-      </DevRing>
+        <EventsPopper events={dayEvents} />
+      </Box>
     </Box>
   );
 };
@@ -46,7 +79,14 @@ const containerSx = {
   width: "100%",
 } as SxProps;
 
-export default DevRings;
+const devRingSx = {
+  display: "flex",
+  flexDirection: "column",
+  justifyContent: "center",
+  alignItems: "center",
+} as SxProps;
+
+export default DevRing;
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   try {
