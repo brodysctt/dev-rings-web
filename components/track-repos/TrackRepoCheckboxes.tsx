@@ -1,26 +1,25 @@
 import { useState, useEffect } from "react";
-import { fetchPublicRepos, trackRepo, trackRepoToast } from "./utils";
+import { useAuth } from "@lib/firebase/auth";
 import { Box, FormGroup, FormControlLabel, Checkbox } from "@mui/material";
+import { fetchPublicRepos, trackRepo, trackRepoToast } from "./utils";
 
-export const TrackRepoCheckboxes = ({ userId }: { userId: string }) => {
+export const TrackRepoCheckboxes = () => {
   const [publicRepos, setPublicRepos] = useState<string[] | null>(null);
+  const userId = useAuth();
 
-  // TODO: You able to explain what's good with this isMounted pattern dawg?
   useEffect(() => {
-    let isMounted = true;
     (async () => {
-      const publicRepos = await fetchPublicRepos(userId);
-      if (isMounted && Array.isArray(publicRepos)) {
-        setPublicRepos(publicRepos);
+      if (userId) {
+        const publicRepos = await fetchPublicRepos(userId);
+        if (Array.isArray(publicRepos)) {
+          setPublicRepos(publicRepos);
+        }
       }
     })();
-    return () => {
-      isMounted = false;
-    };
   });
 
   // TODO: Handle case where user has no public repos
-  if (!publicRepos) return null;
+  if (!userId || !publicRepos) return null;
 
   return (
     <>

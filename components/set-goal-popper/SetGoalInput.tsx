@@ -1,16 +1,20 @@
 import { Dispatch, SetStateAction } from "react";
 import { OutlinedInput } from "@mui/material";
 import { useForm, SubmitHandler } from "react-hook-form";
+import { useAuth } from "@lib/firebase/auth";
 import { updateDailyGoal } from "@lib/firebase/firestore";
 import { toast } from "react-toastify";
 
 interface SetGoalInputProps {
-  userId: string;
   setAnchorEl: Dispatch<SetStateAction<null | HTMLElement>>;
 }
 
-export const SetGoalInput = ({ userId, setAnchorEl }: SetGoalInputProps) => {
+export const SetGoalInput = ({ setAnchorEl }: SetGoalInputProps) => {
   const { register, handleSubmit } = useForm<{ goal: number }>();
+
+  const userId = useAuth();
+  if (!userId) return null;
+
   const onSubmit: SubmitHandler<{ goal: string }> = async ({ goal }) => {
     const isOnlyNumbers = /^[1-9]*$/.test(goal);
     if (!isOnlyNumbers) {

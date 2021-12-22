@@ -45,7 +45,7 @@ export const SetGoalPopper = ({ userId }: { userId: string }) => {
                 alignItems: "center",
               }}
             >
-              <SetGoalInput userId={userId} setAnchorEl={setAnchorEl} />
+              <SetGoalInput setAnchorEl={setAnchorEl} />
               <Typography
                 color="primary.main"
                 sx={{ mt: 1, fontSize: "12px" }}

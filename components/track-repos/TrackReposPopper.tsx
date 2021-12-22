@@ -41,7 +41,7 @@ export const TrackReposPopper = () => {
         <Popper id={id} open={open} anchorEl={anchorEl}>
           <Paper elevation={0} sx={{ borderRadius: 10 }}>
             <Box sx={containerSx}>
-              <TrackRepoCheckboxes userId={userId} />
+              <TrackRepoCheckboxes />
             </Box>
           </Paper>
         </Popper>

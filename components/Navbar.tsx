@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { useAuth } from "@lib/firebase/auth";
 import { Box, Button } from "@mui/material";
+import type { SxProps } from "@mui/system";
 import { TrackRepoInput, CalendarPopper, Sidebar } from "components";
 import { SetGoalPopper } from "./set-goal-popper";
 
@@ -8,15 +9,7 @@ export const Navbar = () => {
   const userId = useAuth();
   if (!userId) return null;
   return (
-    <Box
-      sx={{
-        display: "flex",
-        justifyContent: "space-around",
-        height: 60,
-        width: "100%",
-        mt: 3,
-      }}
-    >
+    <Box sx={containerSx}>
       <Box sx={{ display: "flex" }}>
         <Link href="/" passHref>
           <Button variant="contained" sx={{ ml: 2 }}>
@@ -25,9 +18,17 @@ export const Navbar = () => {
         </Link>
         <CalendarPopper userId={userId} />
         <SetGoalPopper userId={userId} />
-        <TrackRepoInput userId={userId} />
+        <TrackRepoInput />
       </Box>
-      <Sidebar userId={userId} />
+      <Sidebar />
     </Box>
   );
 };
+
+const containerSx = {
+  display: "flex",
+  justifyContent: "space-around",
+  height: 60,
+  width: "100%",
+  mt: 3,
+} as SxProps;
