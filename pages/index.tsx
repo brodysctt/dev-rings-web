@@ -1,12 +1,11 @@
 import type { NextPage } from "next";
-import { useAuth, getUserId } from "@lib/firebase/auth";
+import { useAuth } from "@lib/firebase/auth";
 import { Box } from "@mui/material";
 import { TodayDevRing } from "components";
 
 const Today: NextPage = () => {
-  const { user } = useAuth();
-  if (!user) return null;
-  const userId = getUserId(user);
+  const userId = useAuth();
+  if (!userId) return null;
   return (
     <Box
       sx={{

@@ -1,4 +1,8 @@
 import { useContext } from "react";
-import { AuthContext } from "@lib/firebase/auth";
+import { AuthContext, getUserId } from "@lib/firebase/auth";
 
-export const useAuth = () => useContext(AuthContext);
+export const useAuth = (): string | null => {
+  const { user } = useContext(AuthContext);
+  if (!user) return null;
+  return getUserId(user);
+};

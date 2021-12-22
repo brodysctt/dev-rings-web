@@ -26,7 +26,7 @@ export const AuthProvider = ({ children }: any) => {
     });
   });
 
-  // Why do I want to force refresh the token every 10 minutes?
+  // TODO: Why do I want to force refresh the token every 10 minutes?
   useEffect(() => {
     const handleRefresh = setInterval(async () => {
       const user = auth.currentUser;

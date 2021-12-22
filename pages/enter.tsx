@@ -6,12 +6,12 @@ import { useAuth, githubSignIn } from "@lib/firebase/auth";
 import { ProgressRing } from "components";
 
 const Enter = () => {
-  const { user } = useAuth();
+  const userId = useAuth();
   const router = useRouter();
-  if (user) router.push("/");
+  if (userId) router.push("/");
   return (
     <Box sx={containerSx}>
-      <ProgressRing percent={1} />
+      <ProgressRing percent={100} />
       <Typography variant="h4" sx={{ mt: 3, mb: 5, color: "primary.main" }}>
         {`Gain momentum in your coding journey`}
       </Typography>

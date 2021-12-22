@@ -1,13 +1,12 @@
 import Link from "next/link";
-import { useAuth, getUserId } from "@lib/firebase/auth";
+import { useAuth } from "@lib/firebase/auth";
 import { Box, Button } from "@mui/material";
 import { TrackRepoInput, CalendarPopper, Sidebar } from "components";
 import { SetGoalPopper } from "./set-goal-popper";
 
 export const Navbar = () => {
-  const { user } = useAuth();
-  if (!user) return null;
-  const userId = getUserId(user);
+  const userId = useAuth();
+  if (!userId) return null;
   return (
     <Box
       sx={{
@@ -28,7 +27,7 @@ export const Navbar = () => {
         <SetGoalPopper userId={userId} />
         <TrackRepoInput userId={userId} />
       </Box>
-      <Sidebar userId={userId as string} />
+      <Sidebar userId={userId} />
     </Box>
   );
 };

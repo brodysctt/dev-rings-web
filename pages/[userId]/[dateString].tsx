@@ -1,5 +1,5 @@
 import type { GetServerSideProps } from "next";
-import { useAuth, getUserId } from "@lib/firebase/auth";
+import { useAuth } from "@lib/firebase/auth";
 import { verifyToken, fetchLogDoc } from "@lib/firebase-admin";
 import { Box, Typography } from "@mui/material";
 import type { SxProps } from "@mui/system";
@@ -7,9 +7,8 @@ import { DevRing, TodayDevRing, ProgressRing, Log } from "components";
 import Cookies from "cookies";
 
 const DevRings = ({ log }: { log: Log }) => {
-  const { user } = useAuth();
-  if (!user) return null;
-  const userId = getUserId(user);
+  const userId = useAuth();
+  if (!userId) return null;
 
   const [dateString, { actual, goal }] = log;
   // TODO: consider refactoring with dayjs

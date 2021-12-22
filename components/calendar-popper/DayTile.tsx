@@ -1,6 +1,6 @@
 import { useState, Dispatch, SetStateAction } from "react";
 import Link from "next/link";
-import { useAuth, getUserId } from "@lib/firebase/auth";
+import { useAuth } from "@lib/firebase/auth";
 import { Typography, ButtonBase } from "@mui/material";
 import { ProgressRing, Log } from "components";
 import { dayjs } from "@lib/dayjs";
@@ -11,11 +11,10 @@ interface DayTileProps {
 }
 
 export const DayTile = ({ log, setAnchorEl }: DayTileProps) => {
-  const { user } = useAuth();
+  const userId = useAuth();
   const [hover, setHover] = useState(false);
 
-  if (!user) return null;
-  const userId = getUserId(user);
+  if (!userId) return null;
 
   const [dateString, { actual, goal }] = log;
   const isDayOff = !actual && !goal;

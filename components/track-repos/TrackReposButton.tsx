@@ -1,13 +1,12 @@
-import { useAuth, getUserId } from "@lib/firebase/auth";
+import { useAuth } from "@lib/firebase/auth";
 import { toast } from "react-toastify";
 import { fetchPublicRepos, trackRepo, trackRepoToast } from "./utils";
 import { Button } from "@mui/material";
 import GitHubIcon from "@mui/icons-material/GitHub";
 
 export const TrackReposButton = () => {
-  const { user } = useAuth();
-  if (!user) return null;
-  const userId = getUserId(user);
+  const userId = useAuth();
+  if (!userId) return null;
   return (
     <>
       <Button
