@@ -10,28 +10,7 @@ export const useCollection = (name: CollectionName) => {
   useEffect(() => {
     (async () => {
       if (userId) {
-        const data = await fetchData({ userId, name });
-        if (!data) return;
-        setData(data);
-      }
-    })();
-  });
-
-  return data;
-};
-
-export const useLogs = () => {
-  const userId = useAuth();
-  const [data, setData] = useState<DocumentData[] | null>(null);
-
-  useEffect(() => {
-    (async () => {
-      if (userId) {
-        const data = await fetchData({
-          userId,
-          name: "logs",
-          options: { prependDocId: true },
-        });
+        const data = await fetchData(userId, name);
         if (!data) return;
         setData(data);
       }

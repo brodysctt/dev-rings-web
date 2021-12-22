@@ -1,4 +1,4 @@
-import type { Log } from "components";
+import type { Log } from "@lib/firebase/firestore";
 import { dayjs, MonthYear } from "@lib/dayjs";
 
 export const createMonthLogs = (

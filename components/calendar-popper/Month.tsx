@@ -1,10 +1,10 @@
 import type { Dispatch, SetStateAction } from "react";
+import type { Log } from "@lib/firebase/firestore";
 import { dayjs, MonthYear, createMonthLogs, getMonthName } from "@lib/dayjs";
 import { Grid, Typography, Button } from "@mui/material";
 import ArrowBackRoundedIcon from "@mui/icons-material/ArrowBackRounded";
 import ArrowForwardRoundedIcon from "@mui/icons-material/ArrowForwardRounded";
 import { DayTile } from "./DayTile";
-import type { Log } from "components";
 
 interface MonthProps {
   logs: Log[];

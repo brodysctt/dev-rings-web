@@ -1,8 +1,9 @@
 import { useState, Dispatch, SetStateAction } from "react";
 import Link from "next/link";
 import { useAuth } from "@lib/firebase/auth";
+import type { Log } from "@lib/firebase/firestore";
 import { Typography, ButtonBase } from "@mui/material";
-import { ProgressRing, Log } from "components";
+import { ProgressRing } from "components";
 import { dayjs } from "@lib/dayjs";
 
 interface DayTileProps {
@@ -19,7 +20,8 @@ export const DayTile = ({ log, setAnchorEl }: DayTileProps) => {
   const [dateString, { actual, goal }] = log;
   const isDayOff = !actual && !goal;
   const day = dayjs(dateString).date();
-  const percent = isDayOff ? 0 : (actual / goal) * 100;
+  const hitGoal = actual >= goal;
+  const percent = isDayOff ? 0 : hitGoal ? 100 : (actual / goal) * 100;
 
   return (
     <Link

@@ -1,5 +1,5 @@
 import { useState, MouseEvent } from "react";
-import { useLogs } from "@lib/firebase/firestore";
+import { useCollection, Log } from "@lib/firebase/firestore";
 import { createMonthYear, MonthYear } from "@lib/dayjs";
 import {
   Box,
@@ -14,14 +14,6 @@ import CalendarTodayRoundedIcon from "@mui/icons-material/CalendarTodayRounded";
 import { Month } from "./Month";
 import { filterLogs, getFirstLogDate } from "./utils";
 
-export type Log = [
-  string,
-  {
-    actual: number;
-    goal: number;
-  }
-];
-
 export const CalendarPopper = () => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
@@ -29,7 +21,7 @@ export const CalendarPopper = () => {
 
   const [monthInView, setMonthInView] = useState<MonthYear>(createMonthYear());
 
-  const logs = useLogs();
+  const logs = useCollection("logs");
   if (!logs) return null;
 
   const logsInView = filterLogs(logs as Log[], monthInView);
