@@ -33,7 +33,7 @@ export const CalendarPopper = ({ userId }: { userId: string }) => {
 
   const [monthInView, setMonthInView] = useState<MonthYear>(createMonthYear());
 
-  const [, logs] = useCollections(userId);
+  const [, logs] = useCollections({ userId, options: { prependDocId: true } });
   if (!logs) return null;
 
   const logsInView = filterLogs(logs as Log[], monthInView);

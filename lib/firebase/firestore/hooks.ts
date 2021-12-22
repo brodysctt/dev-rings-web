@@ -9,14 +9,24 @@ export const useUserDoc = (userId: string) => {
   return userDoc.data();
 };
 
-export const useCollections = (userId: string) => {
+interface UseCollections {
+  userId: string;
+  options?: {
+    prependDocId: boolean;
+  };
+}
+
+export const useCollections = ({
+  userId,
+  options = { prependDocId: false },
+}: UseCollections) => {
   const { eventsRef, logsRef, webhooksRef } = createRefs(userId);
   const [eventsSnap] = useCollection(eventsRef);
   const [logsSnap] = useCollection(logsRef);
   const [webhooksSnap] = useCollection(webhooksRef);
 
   const snaps = [eventsSnap, logsSnap, webhooksSnap];
-  return getDataFromSnaps(snaps);
+  return getDataFromSnaps(snaps, options.prependDocId);
 };
 
 const createRefs = (userId: string) => {
@@ -27,8 +37,17 @@ const createRefs = (userId: string) => {
   };
 };
 
-const getDataFromSnaps = (snaps: Array<QuerySnapshot | undefined>) =>
-  snaps.map((snap) => {
-    if (!snap || !snap.docs.length) return null;
-    return snap.docs.map((doc) => doc.data());
-  });
+type Snap = QuerySnapshot | undefined;
+
+const getDataFromSnaps = (snaps: Snap[], prependDocId = false) =>
+  prependDocId
+    ? snaps.map((snap) => {
+        if (!exists(snap)) return null;
+        return snap?.docs.map((doc) => [doc.id, doc.data()]);
+      })
+    : snaps.map((snap) => {
+        if (!exists(snap)) return null;
+        return snap?.docs.map((doc) => doc.data());
+      });
+
+const exists = (snap: Snap) => snap && snap.docs.length;

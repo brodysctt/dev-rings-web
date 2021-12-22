@@ -19,7 +19,7 @@ export const DevRing: FC<{ userId: string; dateString: string }> = ({
   dateString,
   children,
 }) => {
-  const [events] = useCollections(userId);
+  const [events] = useCollections({ userId });
   if (!events) return null;
   const dayEvents = getDayEvents(events as RepoEvent[], dateString);
 

@@ -11,7 +11,9 @@ import { getDayEvents } from "./utils";
 
 export const TodayDevRing = ({ userId }: { userId: string }) => {
   const userData = useUserDoc(userId);
-  const [events, , webhooks] = useCollections(userId);
+  const [events, , webhooks] = useCollections({ userId });
+
+  console.log(!events);
 
   if (!userData || !events) return null;
 
