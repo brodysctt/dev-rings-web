@@ -1,9 +1,14 @@
 import { CircularProgress } from "@mui/material";
 
-export const ProgressRing = ({ percent }: { percent: number }) => (
+interface ProgressRingProps {
+  percent: number;
+  mini?: boolean;
+}
+
+export const ProgressRing = ({ percent, mini = false }: ProgressRingProps) => (
   <CircularProgress
     variant="determinate"
-    size={200}
+    size={mini ? 30 : 200}
     thickness={8}
     value={percent}
     sx={{ mb: 2 }}
