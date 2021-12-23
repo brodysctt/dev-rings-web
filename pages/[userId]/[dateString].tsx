@@ -3,40 +3,21 @@ import { useCollection, Log, RepoEvent } from "@lib/firebase/firestore";
 import { verifyToken, fetchLogDoc } from "@lib/firebase-admin";
 import { Box, Typography } from "@mui/material";
 import type { SxProps } from "@mui/system";
-import { EventsPopper, Today, ProgressRing, getDayEvents } from "components";
+import { EventsPopper, ProgressRing } from "components";
+import { calcProgress, getDayEvents } from "helpers";
 import Cookies from "cookies";
 
 const DevRing: NextPage<{ log: Log }> = ({ log }) => {
-  const events = useCollection("events");
-  // Do I want this if there are no events?
-  if (!events) return null;
-
+  const events = useCollection("events") as RepoEvent[] | null;
   const [dateString, { actual, goal }] = log;
-
-  // TODO: Refactoring with dayjs
-  const date = new Date(dateString);
-  // TODO: Test this + refactor with dayjs
-  const isToday = date === new Date();
-
-  const dayEvents = getDayEvents(events as RepoEvent[], dateString);
-
-  if (isToday)
-    return (
-      <Box sx={containerSx}>
-        <Typography sx={{ mb: 3, color: "#a2a2a2" }}>{dateString}</Typography>
-        <Today />
-      </Box>
-    );
-
-  const hitGoal = actual - goal >= 0;
-  const percent = hitGoal ? 100 : (actual / goal) * 100;
+  const dayEvents = getDayEvents(events, dateString);
 
   return (
     <Box sx={containerSx}>
       <Typography sx={{ mb: 3, color: "#a2a2a2" }}>{dateString}</Typography>
       <Box sx={devRingSx}>
-        <ProgressRing percent={percent} />
-        <EventsPopper events={dayEvents} />
+        <ProgressRing percent={calcProgress(actual, goal)} />
+        {dayEvents && <EventsPopper events={dayEvents} />}
       </Box>
     </Box>
   );
