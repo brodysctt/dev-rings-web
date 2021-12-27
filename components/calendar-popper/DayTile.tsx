@@ -1,19 +1,15 @@
-import { useState, Dispatch, SetStateAction } from "react";
 import Link from "next/link";
+import { useState } from "react";
 import { useAuth } from "@lib/firebase/auth";
 import type { Log } from "@lib/firebase/firestore";
+import { dayjs } from "@lib/dayjs";
 import { Typography, ButtonBase } from "@mui/material";
 import { ProgressRing } from "components";
-import { dayjs } from "@lib/dayjs";
 
-interface DayTileProps {
-  log: Log;
-}
-
-export const DayTile = ({ log }: DayTileProps) => {
-  const userId = useAuth();
+export const DayTile = ({ log }: { log: Log }) => {
   const [hover, setHover] = useState(false);
 
+  const userId = useAuth();
   if (!userId) return null;
 
   const [dateString, { actual, goal }] = log;
@@ -33,7 +29,7 @@ export const DayTile = ({ log }: DayTileProps) => {
       <ButtonBase
         onMouseEnter={() => setHover(true)}
         onMouseLeave={() => setHover(false)}
-        // How to handle onClick?
+        // TODO: How do I let popper know to close onClick?
         // onClick={() => setAnchorEl(null)}
         disabled={isDayOff}
         sx={{

@@ -13,7 +13,7 @@ import CalendarTodayRoundedIcon from "@mui/icons-material/CalendarTodayRounded";
 import ArrowBackRoundedIcon from "@mui/icons-material/ArrowBackRounded";
 import ArrowForwardRoundedIcon from "@mui/icons-material/ArrowForwardRounded";
 import { PopperWrapper, DayTile } from "components";
-import { filterLogs, getFirstLogDate } from "./utils";
+import { filterLogs, getFirstLogDate, setMonth } from "./helpers";
 
 export const CalendarPopper = () => {
   const [monthInView, setMonthInView] = useState<MonthYear>(createMonthYear());
@@ -28,9 +28,6 @@ export const CalendarPopper = () => {
   const previousMonthExists = !(
     JSON.stringify(monthInView) === JSON.stringify(firstMonth)
   );
-
-  const [month, year] = monthInView;
-  const monthName = getMonthName(month);
 
   const monthLogs = createMonthLogs(
     logsInView,
@@ -55,32 +52,18 @@ export const CalendarPopper = () => {
           <Grid container justifyContent="center" sx={{ mb: 2 }}>
             <Button
               variant="text"
-              onClick={() => {
-                // decrement month
-                if (month === 1) {
-                  setMonthInView([12, year - 1]);
-                  return;
-                }
-                setMonthInView([month - 1, year]);
-              }}
+              onClick={() => setMonth("previous", monthInView, setMonthInView)}
               disabled={!previousMonthExists}
               startIcon={<ArrowBackRoundedIcon />}
             />
             <Grid item xs={8}>
               <Typography variant="h6" textAlign="center">
-                {monthName}
+                {getMonthName(monthInView)}
               </Typography>
             </Grid>
             <Button
               variant="text"
-              onClick={() => {
-                // increment month
-                if (month === 12) {
-                  setMonthInView([1, year + 1]);
-                  return;
-                }
-                setMonthInView([month + 1, year]);
-              }}
+              onClick={() => setMonth("next", monthInView, setMonthInView)}
               disabled={false} //TODO: Update once I delete demo date --> monthInView !== currentMonth
               endIcon={<ArrowForwardRoundedIcon />}
             />
