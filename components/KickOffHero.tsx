@@ -1,4 +1,3 @@
-import Image from "next/image";
 import { Box, Typography } from "@mui/material";
 import type { SxProps } from "@mui/system";
 
@@ -12,8 +11,8 @@ export const KickOffHero = ({ repos }: { repos: string[] }) => (
           : ""
       } to kick off today's progress 🚀`}
     </Typography>
-    <Typography>hi</Typography>
-    <Image
+    {/* TODO: Understand why this doesn't render if I use the next/image */}
+    <img
       src="https://media.giphy.com/media/Yx5ns1mSPBle0/giphy.gif"
       alt=""
       height={250}
@@ -24,6 +23,7 @@ export const KickOffHero = ({ repos }: { repos: string[] }) => (
 
 const containerSx = {
   display: "flex",
+  flexDirection: "column",
   justifyContent: "center",
   alignItems: "center",
   height: "80vh",
