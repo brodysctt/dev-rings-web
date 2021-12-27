@@ -8,6 +8,8 @@ interface Props {
   icon: JSX.Element;
 }
 
+// TODO: Listen for Firestore update to User doc – close on update
+
 export const PopperWrapper: FC<Props> = ({
   id,
   buttonVariant,

@@ -8,10 +8,9 @@ import { dayjs } from "@lib/dayjs";
 
 interface DayTileProps {
   log: Log;
-  setAnchorEl: Dispatch<SetStateAction<null | HTMLElement>>;
 }
 
-export const DayTile = ({ log, setAnchorEl }: DayTileProps) => {
+export const DayTile = ({ log }: DayTileProps) => {
   const userId = useAuth();
   const [hover, setHover] = useState(false);
 
@@ -34,7 +33,8 @@ export const DayTile = ({ log, setAnchorEl }: DayTileProps) => {
       <ButtonBase
         onMouseEnter={() => setHover(true)}
         onMouseLeave={() => setHover(false)}
-        onClick={() => setAnchorEl(null)}
+        // How to handle onClick?
+        // onClick={() => setAnchorEl(null)}
         disabled={isDayOff}
         sx={{
           display: "flex",

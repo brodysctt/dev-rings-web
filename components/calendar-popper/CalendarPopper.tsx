@@ -1,24 +1,21 @@
-import { useState, MouseEvent } from "react";
+import { useState } from "react";
 import { useCollection, Log } from "@lib/firebase/firestore";
-import { createMonthYear, MonthYear } from "@lib/dayjs";
 import {
-  Box,
-  Typography,
-  Button,
-  Popper,
-  Paper,
-  ClickAwayListener,
-} from "@mui/material";
+  dayjs,
+  createMonthYear,
+  createMonthLogs,
+  getMonthName,
+  MonthYear,
+} from "@lib/dayjs";
+import { Grid, Box, Typography, Button } from "@mui/material";
 import type { SxProps } from "@mui/system";
 import CalendarTodayRoundedIcon from "@mui/icons-material/CalendarTodayRounded";
-import { Month } from "./Month";
+import ArrowBackRoundedIcon from "@mui/icons-material/ArrowBackRounded";
+import ArrowForwardRoundedIcon from "@mui/icons-material/ArrowForwardRounded";
+import { PopperWrapper, DayTile } from "components";
 import { filterLogs, getFirstLogDate } from "./utils";
 
 export const CalendarPopper = () => {
-  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-  const open = Boolean(anchorEl);
-  const id = open ? "calendar-popper" : undefined;
-
   const [monthInView, setMonthInView] = useState<MonthYear>(createMonthYear());
 
   const logs = useCollection("logs");
@@ -32,38 +29,72 @@ export const CalendarPopper = () => {
     JSON.stringify(monthInView) === JSON.stringify(firstMonth)
   );
 
+  const [month, year] = monthInView;
+  const monthName = getMonthName(month);
+
+  const monthLogs = createMonthLogs(
+    logsInView,
+    previousMonthExists,
+    monthInView
+  );
+
+  const [firstDate] = monthLogs[0];
+  const gridStart = dayjs(firstDate).day();
+
   return (
-    <ClickAwayListener onClickAway={() => setAnchorEl(null)}>
-      <Box>
-        <Button
-          aria-describedby={id}
-          variant="text"
-          onClick={(event: MouseEvent<HTMLElement>) => {
-            setAnchorEl(anchorEl ? null : event.currentTarget);
-          }}
-          sx={{ height: 60, ml: 1 }}
-        >
-          <CalendarTodayRoundedIcon />
-        </Button>
-        <Popper id={id} open={open} anchorEl={anchorEl}>
-          <Paper elevation={0} sx={{ pt: 2, borderRadius: 10 }}>
-            <Box sx={containerSx}>
-              <Typography sx={{ fontSize: 12, color: "primary.main" }}>
-                {monthInView[1]}
+    <PopperWrapper
+      id="calendar"
+      buttonVariant="text"
+      icon={<CalendarTodayRoundedIcon />}
+    >
+      <Box sx={containerSx}>
+        <Typography sx={{ fontSize: 12, color: "primary.main" }}>
+          {monthInView[1]}
+        </Typography>
+        <>
+          <Grid container justifyContent="center" sx={{ mb: 2 }}>
+            <Button
+              variant="text"
+              onClick={() => {
+                // decrement month
+                if (month === 1) {
+                  setMonthInView([12, year - 1]);
+                  return;
+                }
+                setMonthInView([month - 1, year]);
+              }}
+              disabled={!previousMonthExists}
+              startIcon={<ArrowBackRoundedIcon />}
+            />
+            <Grid item xs={8}>
+              <Typography variant="h6" textAlign="center">
+                {monthName}
               </Typography>
-              <Month
-                logs={logsInView}
-                hasPrevious={previousMonthExists}
-                hasNext={true} //TODO: Update once I delete demo date --> monthInView !== currentMonth
-                monthInView={monthInView}
-                setMonthInView={setMonthInView}
-                setAnchorEl={setAnchorEl}
-              />
-            </Box>
-          </Paper>
-        </Popper>
+            </Grid>
+            <Button
+              variant="text"
+              onClick={() => {
+                // increment month
+                if (month === 12) {
+                  setMonthInView([1, year + 1]);
+                  return;
+                }
+                setMonthInView([month + 1, year]);
+              }}
+              disabled={false} //TODO: Update once I delete demo date --> monthInView !== currentMonth
+              endIcon={<ArrowForwardRoundedIcon />}
+            />
+          </Grid>
+          <Grid container columns={7} gap={"3px"}>
+            {<Grid item xs={gridStart} sx={{ mr: "-3px" }} />}
+            {monthLogs.map((log, i) => (
+              // Previously had setAnchorEl prop
+              <DayTile key={i} log={log} />
+            ))}
+          </Grid>
+        </>
       </Box>
-    </ClickAwayListener>
+    </PopperWrapper>
   );
 };
 
