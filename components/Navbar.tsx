@@ -1,8 +1,12 @@
 import Link from "next/link";
 import { Box, Button } from "@mui/material";
 import type { SxProps } from "@mui/system";
-import { TrackRepoInput, CalendarPopper, Sidebar } from "components";
-import { SetGoalPopper } from "./set-goal-popper";
+import {
+  TrackRepoInput,
+  CalendarPopper,
+  Sidebar,
+  SetGoalPopper,
+} from "components";
 
 export const Navbar = () => (
   <Box sx={containerSx}>
