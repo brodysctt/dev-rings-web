@@ -1,9 +1,9 @@
-import { Typography, OutlinedInput } from "@mui/material";
+import { Box, Typography, OutlinedInput } from "@mui/material";
+import type { SxProps } from "@mui/system";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { updateDailyGoal, useUserDoc } from "@lib/firebase/firestore";
 import { toast } from "react-toastify";
-import { PopperWrapper } from "components";
-import EmojiEventsIcon from "@mui/icons-material/EmojiEvents";
+import { PopperWrapper, GoalIcon } from "components";
 
 export const SetGoalPopper = () => {
   const { register, handleSubmit } = useForm<{ goal: number }>();
@@ -28,30 +28,36 @@ export const SetGoalPopper = () => {
       position: "top-center",
     });
   };
+  const buttonVariant = !hasSetGoal ? "outlined" : "text";
   return (
-    <PopperWrapper
-      id="set-goal"
-      buttonVariant={!hasSetGoal ? "outlined" : "text"}
-      icon={<EmojiEventsIcon />}
-    >
-      <OutlinedInput
-        {...register("goal")}
-        type="text"
-        autoFocus={true}
-        onFocus={(e) => (e.target.placeholder = "")}
-        sx={{ height: 60, width: 40, mt: 1 }}
-        inputProps={{ sx: { textAlign: "center" } }}
-        onKeyPress={(kp) => {
-          if (kp.key === "Enter") {
-            handleSubmit(onSubmit)();
-            kp.preventDefault();
-          }
-        }}
-      />
-      <Typography
-        color="primary.main"
-        sx={{ mt: 1, fontSize: "12px" }}
-      >{`Current goal is ${dailyGoal}`}</Typography>
+    <PopperWrapper id="goal" icon={<GoalIcon />} {...{ buttonVariant }}>
+      <Box sx={containerSx}>
+        <OutlinedInput
+          {...register("goal")}
+          type="text"
+          autoFocus={true}
+          onFocus={(e) => (e.target.placeholder = "")}
+          sx={{ height: 60, width: 40, mt: 1 }}
+          inputProps={{ sx: { textAlign: "center" } }}
+          onKeyPress={(kp) => {
+            if (kp.key === "Enter") {
+              handleSubmit(onSubmit)();
+              kp.preventDefault();
+            }
+          }}
+        />
+        <Typography
+          color="primary.main"
+          sx={{ mt: 1, fontSize: "12px" }}
+        >{`Current goal is ${dailyGoal}`}</Typography>
+      </Box>
     </PopperWrapper>
   );
 };
+
+const containerSx = {
+  display: "flex",
+  flexDirection: "column",
+  justifyContent: "center",
+  alignItems: "center",
+} as SxProps;

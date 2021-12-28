@@ -12,12 +12,12 @@ export const KickOffHero = ({ repos }: { repos: string[] }) => (
       } to kick off today's progress 🚀`}
     </Typography>
     {/* TODO: Understand why this doesn't render if I use the next/image */}
-    <img
+    {/* <img
       src="https://media.giphy.com/media/Yx5ns1mSPBle0/giphy.gif"
       alt=""
       height={250}
       width={400}
-    />
+    /> */}
   </Box>
 );
 

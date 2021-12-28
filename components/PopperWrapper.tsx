@@ -1,6 +1,5 @@
 import { useState, MouseEvent, FC } from "react";
 import { Box, Button, Popper, Paper, ClickAwayListener } from "@mui/material";
-import type { SxProps } from "@mui/system";
 
 interface Props {
   id: string;
@@ -33,18 +32,9 @@ export const PopperWrapper: FC<Props> = ({
           {icon}
         </Button>
         <Popper id={open ? id : undefined} open={open} anchorEl={anchorEl}>
-          <Paper elevation={0}>
-            <Box sx={containerSx}>{children}</Box>
-          </Paper>
+          <Paper elevation={0}>{children}</Paper>
         </Popper>
       </Box>
     </ClickAwayListener>
   );
 };
-
-const containerSx = {
-  display: "flex",
-  flexDirection: "column",
-  justifyContent: "center",
-  alignItems: "center",
-} as SxProps;
