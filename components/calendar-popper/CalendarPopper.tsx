@@ -1,71 +1,44 @@
 import { useState } from "react";
 import { useCollection, Log } from "@lib/firebase/firestore";
-import {
-  dayjs,
-  createMonthYear,
-  createMonthLogs,
-  getMonthName,
-  MonthYear,
-} from "@lib/dayjs";
-import { Grid, Box, Typography, Button } from "@mui/material";
+import { dayjs, createMonthLogs, getMonthName, getMonthYear } from "@lib/dayjs";
+import type { MonthYear } from "@lib/dayjs";
+import { Grid, Box, Typography } from "@mui/material";
 import type { SxProps } from "@mui/system";
-import CalendarTodayRoundedIcon from "@mui/icons-material/CalendarTodayRounded";
-import ArrowBackRoundedIcon from "@mui/icons-material/ArrowBackRounded";
-import ArrowForwardRoundedIcon from "@mui/icons-material/ArrowForwardRounded";
-import { PopperWrapper, DayTile } from "components";
-import { filterLogs, getFirstLogDate, setMonth } from "./helpers";
+import { PopperWrapper, DayTile, CalendarIcon } from "components";
+import { ArrowButton } from "./ArrowButton";
+import { filterLogs, hasPreviousMonth } from "./helpers";
 
 export const CalendarPopper = () => {
-  const [monthInView, setMonthInView] = useState<MonthYear>(createMonthYear());
+  const [monthInView, setMonthInView] = useState<MonthYear>(getMonthYear());
 
   const logs = useCollection("logs");
   if (!logs) return null;
 
+  // TODO: Test all of these values a bunch
   const logsInView = filterLogs(logs as Log[], monthInView);
-
-  // TODO: Test this a bunch
-  const firstMonth = createMonthYear(getFirstLogDate(logs as Log[]));
-  const previousMonthExists = !(
-    JSON.stringify(monthInView) === JSON.stringify(firstMonth)
-  );
-
-  const monthLogs = createMonthLogs(
-    logsInView,
-    previousMonthExists,
-    monthInView
-  );
-
-  const [firstDate] = monthLogs[0];
-  const gridStart = dayjs(firstDate).day();
+  const hasPrevious = hasPreviousMonth(monthInView, logs as Log[]);
+  const monthLogs = createMonthLogs(logsInView, hasPrevious, monthInView);
+  const gridStart = dayjs(monthLogs[0][0]).day();
 
   return (
-    <PopperWrapper
-      id="calendar"
-      buttonVariant="text"
-      icon={<CalendarTodayRoundedIcon />}
-    >
+    <PopperWrapper id="calendar" buttonVariant="text" icon={<CalendarIcon />}>
       <Box sx={containerSx}>
         <Typography sx={{ fontSize: 12, color: "primary.main" }}>
           {monthInView[1]}
         </Typography>
         <>
           <Grid container justifyContent="center" sx={{ mb: 2 }}>
-            <Button
-              variant="text"
-              onClick={() => setMonth("previous", monthInView, setMonthInView)}
-              disabled={!previousMonthExists}
-              startIcon={<ArrowBackRoundedIcon />}
+            <ArrowButton
+              {...{ type: "previous", monthInView, setMonthInView }}
+              disabled={!hasPrevious}
             />
             <Grid item xs={8}>
               <Typography variant="h6" textAlign="center">
                 {getMonthName(monthInView)}
               </Typography>
             </Grid>
-            <Button
-              variant="text"
-              onClick={() => setMonth("next", monthInView, setMonthInView)}
-              disabled={false} //TODO: Update once I delete demo date --> monthInView !== currentMonth
-              endIcon={<ArrowForwardRoundedIcon />}
+            <ArrowButton
+              {...{ monthInView, setMonthInView, disabled: false }} // TODO: Update once I delete demo date --> monthInView !== currentMonth
             />
           </Grid>
           <Grid container columns={7} gap={"3px"}>

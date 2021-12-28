@@ -1,6 +1,7 @@
 export * from "./calendar-popper";
 export * from "./events-popper";
 export * from "./track-repos";
+export * from "./icons";
 export * from "./KickOffHero";
 export * from "./Navbar";
 export * from "./PopperWrapper";
