@@ -9,7 +9,11 @@ export const EventsPopper = ({ events }: { events: RepoEvent[] }) => {
   return (
     <PopperWrapper
       id="events"
-      icon={<EventIcon variant="contained" />}
+      icon={
+        <Box sx={iconContainerSx}>
+          <EventIcon variant="contained" />
+        </Box>
+      }
       buttonVariant="text"
     >
       <Box
@@ -45,11 +49,11 @@ export const EventsPopper = ({ events }: { events: RepoEvent[] }) => {
   );
 };
 
-// const iconContainerSx = {
-//   display: "flex",
-//   justifyContent: "center",
-//   alignItems: "center",
-//   bgcolor: "primary.main",
-//   borderRadius: 2,
-//   height: 25,
-// };
+const iconContainerSx = {
+  display: "flex",
+  justifyContent: "center",
+  alignItems: "center",
+  bgcolor: "primary.main",
+  borderRadius: 2,
+  height: 25,
+};

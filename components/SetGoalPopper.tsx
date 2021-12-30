@@ -30,7 +30,7 @@ export const SetGoalPopper = () => {
   };
   const buttonVariant = !hasSetGoal ? "outlined" : "text";
   return (
-    <PopperWrapper id="goal" icon={<GoalIcon />} {...{ buttonVariant }}>
+    <PopperWrapper id="set-goal" icon={<GoalIcon />} {...{ buttonVariant }}>
       <Box sx={containerSx}>
         <OutlinedInput
           {...register("goal")}
