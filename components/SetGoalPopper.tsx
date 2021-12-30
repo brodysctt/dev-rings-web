@@ -3,7 +3,7 @@ import type { SxProps } from "@mui/system";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { updateDailyGoal, useUserDoc } from "@lib/firebase/firestore";
 import { toast } from "react-toastify";
-import { PopperWrapper, GoalIcon } from "components";
+import { PopperWrapper, GoalSvg } from "components";
 
 export const SetGoalPopper = () => {
   const { register, handleSubmit } = useForm<{ goal: number }>();
@@ -31,7 +31,7 @@ export const SetGoalPopper = () => {
   };
   const buttonVariant = !hasSetGoal ? "outlined" : "text";
   return (
-    <PopperWrapper id="set-goal" icon={<GoalIcon />} {...{ buttonVariant }}>
+    <PopperWrapper id="set-goal" icon={<GoalSvg />} {...{ buttonVariant }}>
       <Box sx={containerSx}>
         <OutlinedInput
           {...register("goal")}

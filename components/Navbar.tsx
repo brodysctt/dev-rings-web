@@ -1,11 +1,10 @@
 import Link from "next/link";
 import { useAuth } from "@lib/firebase/auth";
-import { Box, Button } from "@mui/material";
-import type { SxProps } from "@mui/system";
+import { Grid, Box, Button } from "@mui/material";
 import {
   TrackRepoInput,
   CalendarPopper,
-  Sidebar,
+  SidebarDial,
   SetGoalPopper,
 } from "components";
 
@@ -13,26 +12,24 @@ export const Navbar = () => {
   const userId = useAuth();
   if (!userId) return null;
   return (
-    <Box sx={containerSx}>
-      <Box sx={{ display: "flex" }}>
-        <Link href="/" passHref>
-          <Button variant="contained" sx={{ ml: 2, mr: 2 }}>
-            view today
-          </Button>
-        </Link>
-        <CalendarPopper />
-        <SetGoalPopper />
-        <TrackRepoInput />
-      </Box>
-      <Sidebar />
-    </Box>
+    <Grid container sx={{ height: 60, pl: 20, mt: 4 }}>
+      <Grid item xs={8}>
+        <Box sx={{ display: "flex" }}>
+          <Link href="/" passHref>
+            <Button variant="contained" sx={{ ml: 2, mr: 2 }}>
+              view today
+            </Button>
+          </Link>
+          <CalendarPopper />
+          <SetGoalPopper />
+          <TrackRepoInput />
+        </Box>
+      </Grid>
+      <Grid item xs={4} sx={{ pr: 20 }}>
+        <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
+          <SidebarDial />
+        </Box>
+      </Grid>
+    </Grid>
   );
 };
-
-const containerSx = {
-  display: "flex",
-  justifyContent: "space-around",
-  height: 60,
-  width: "100%",
-  mt: 3,
-} as SxProps;

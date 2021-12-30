@@ -109,6 +109,7 @@ const buttonSx = {
   alignItems: "center",
   height: "8vh",
   width: 300,
+  mb: 2,
 } as SxProps;
 
 const popperSx = {

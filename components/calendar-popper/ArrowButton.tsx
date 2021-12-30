@@ -1,7 +1,7 @@
 import type { Dispatch, SetStateAction } from "react";
 import type { MonthYear } from "@lib/dayjs";
 import { Button } from "@mui/material";
-import { ArrowBack, ArrowNext } from "components/icons";
+import { ArrowBackSvg, ArrowNextSvg } from "components/icons";
 
 interface Props {
   type?: "previous" | "next";
@@ -39,7 +39,7 @@ export const ArrowButton = ({
     <Button
       variant="text"
       onClick={isNext ? incrementMonth : decrementMonth}
-      startIcon={isNext ? <ArrowNext /> : <ArrowBack />}
+      startIcon={isNext ? <ArrowNextSvg /> : <ArrowBackSvg />}
       disabled={disabled}
     />
   );

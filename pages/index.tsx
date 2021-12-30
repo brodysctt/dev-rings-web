@@ -54,7 +54,7 @@ const containerSx = {
   display: "flex",
   justifyContent: "center",
   alignItems: "center",
-  height: "80vh",
+  height: "70vh",
   width: "100%",
 } as SxProps;
 
