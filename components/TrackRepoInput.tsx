@@ -10,7 +10,7 @@ import {
   InputAdornment,
 } from "@mui/material";
 import GitHubIcon from "@mui/icons-material/GitHub";
-import { trackRepo, trackRepoToast } from "./utils";
+import { trackRepo, trackRepoToast } from "helpers/track-repos";
 
 export const TrackRepoInput = () => {
   const [userNeedsHelp, setUserNeedsHelp] = useState(false);
