@@ -17,7 +17,7 @@ export const TrackRepoCheckboxes = () => {
         }
       }
     })();
-  });
+  }, [userId]);
 
   // TODO: Handle case where user has no public repos
   if (!userId || !publicRepos) return null;
