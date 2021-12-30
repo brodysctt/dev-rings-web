@@ -24,6 +24,7 @@ export const SetGoalPopper = () => {
     const dailyGoal = Number(goal);
     await updateDailyGoal(userId, dailyGoal);
     // TODO: Figure out how to close popper on submit
+    // ☝️ Listen for update to goal change
     toast.success(`Goal is now ${dailyGoal} 🏔️`, {
       position: "top-center",
     });
@@ -37,7 +38,7 @@ export const SetGoalPopper = () => {
           type="text"
           autoFocus={true}
           onFocus={(e) => (e.target.placeholder = "")}
-          sx={{ height: 60, width: 40, mt: 1 }}
+          sx={{ height: 60, width: 60, mt: 1 }}
           inputProps={{ sx: { textAlign: "center" } }}
           onKeyPress={(kp) => {
             if (kp.key === "Enter") {

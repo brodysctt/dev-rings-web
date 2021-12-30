@@ -1,10 +1,12 @@
 import { useState, MouseEvent, FC } from "react";
 import { Box, Button, Popper, Paper, ClickAwayListener } from "@mui/material";
+import type { SxProps } from "@mui/system";
 
 interface Props {
   id: string;
   buttonVariant: "contained" | "outlined" | "text";
   icon: JSX.Element;
+  paperSx?: SxProps;
 }
 
 // TODO: Listen for Firestore update to User doc (and close on update)
@@ -13,6 +15,7 @@ export const PopperWrapper: FC<Props> = ({
   buttonVariant,
   children,
   icon,
+  paperSx,
 }) => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   // TODO: Figure out how to close popper on submit within children
@@ -32,7 +35,9 @@ export const PopperWrapper: FC<Props> = ({
           {icon}
         </Button>
         <Popper id={open ? id : undefined} open={open} anchorEl={anchorEl}>
-          <Paper elevation={0}>{children}</Paper>
+          <Paper elevation={0} sx={paperSx}>
+            {children}
+          </Paper>
         </Popper>
       </Box>
     </ClickAwayListener>

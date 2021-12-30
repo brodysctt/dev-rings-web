@@ -20,7 +20,12 @@ export const CalendarPopper = () => {
   const gridStart = dayjs(monthLogs[0][0]).day();
 
   return (
-    <PopperWrapper id="calendar" buttonVariant="text" icon={<CalendarIcon />}>
+    <PopperWrapper
+      id="calendar"
+      buttonVariant="text"
+      paperSx={{ pt: 1 }}
+      icon={<CalendarIcon />}
+    >
       <Box sx={containerSx}>
         <Typography sx={{ fontSize: 12, color: "primary.main" }}>
           {monthInView[1]}
@@ -43,7 +48,6 @@ export const CalendarPopper = () => {
           <Grid container columns={7} gap={"3px"}>
             {<Grid item xs={gridStart} sx={{ mr: "-3px" }} />}
             {monthLogs.map((log, i) => (
-              // Previously had setAnchorEl prop
               <DayTile key={i} log={log} />
             ))}
           </Grid>

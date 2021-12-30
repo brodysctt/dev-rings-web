@@ -16,7 +16,7 @@ export const Navbar = () => {
     <Box sx={containerSx}>
       <Box sx={{ display: "flex" }}>
         <Link href="/" passHref>
-          <Button variant="contained" sx={{ ml: 2 }}>
+          <Button variant="contained" sx={{ ml: 2, mr: 2 }}>
             view today
           </Button>
         </Link>
