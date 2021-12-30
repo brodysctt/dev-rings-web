@@ -1,81 +1,55 @@
-import { useState, MouseEvent } from "react";
-import {
-  Box,
-  Typography,
-  Button,
-  Popper,
-  Paper,
-  ClickAwayListener,
-} from "@mui/material";
+import { useState } from "react";
+import { useCollection, Log } from "@lib/firebase/firestore";
+import { dayjs, createMonthLogs, getMonthName, getMonthYear } from "@lib/dayjs";
+import type { MonthYear } from "@lib/dayjs";
+import { Grid, Box, Typography } from "@mui/material";
 import type { SxProps } from "@mui/system";
-import CalendarTodayRoundedIcon from "@mui/icons-material/CalendarTodayRounded";
-import { useLogsCollection } from "@lib/firebase/firestore";
-import { Month } from "./Month";
-import { filterLogs, getFirstLogDate, createMonthYear } from "./utils";
+import { ArrowButton, DayTile, PopperWrapper, CalendarIcon } from "components";
+import { filterLogs, hasPreviousMonth } from "./helpers";
 
-export type MonthYear = [number, number];
-export type Log = [
-  string,
-  {
-    actual: number;
-    goal: number;
-  }
-];
+export const CalendarPopper = () => {
+  const [monthInView, setMonthInView] = useState<MonthYear>(getMonthYear());
 
-/*
- * Still using userId prop cuz then I don't have to return null if user from useAuth is null,
- * which breaks the app cuz we "render more hooks than previous render"
- */
-export const CalendarPopper = ({ userId }: { userId: string }) => {
-  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-  const open = Boolean(anchorEl);
-  const id = open ? "calendar-popper" : undefined;
+  const logs = useCollection("logs");
+  if (!logs) return null;
 
-  const [monthInView, setMonthInView] = useState<MonthYear>(createMonthYear());
-
-  const logs = useLogsCollection(userId);
-  if (!logs) {
-    return null;
-  }
-  const logsInView = filterLogs(logs, monthInView);
-
-  const firstMonth = createMonthYear(getFirstLogDate(logs));
-  const previousMonthExists = !(
-    JSON.stringify(monthInView) === JSON.stringify(firstMonth)
-  );
+  // TODO: Test all of these values a bunch
+  const logsInView = filterLogs(logs as Log[], monthInView);
+  const hasPrevious = hasPreviousMonth(monthInView, logs as Log[]);
+  const monthLogs = createMonthLogs(logsInView, hasPrevious, monthInView);
+  const gridStart = dayjs(monthLogs[0][0]).day();
 
   return (
-    <ClickAwayListener onClickAway={() => setAnchorEl(null)}>
-      <Box>
-        <Button
-          aria-describedby={id}
-          variant="text"
-          onClick={(event: MouseEvent<HTMLElement>) => {
-            setAnchorEl(anchorEl ? null : event.currentTarget);
-          }}
-          sx={{ height: 60, ml: 1 }}
-        >
-          <CalendarTodayRoundedIcon />
-        </Button>
-        <Popper id={id} open={open} anchorEl={anchorEl}>
-          <Paper elevation={0} sx={{ pt: 2, borderRadius: 10 }}>
-            <Box sx={containerSx}>
-              <Typography sx={{ fontSize: 12, color: "primary.main" }}>
-                {monthInView[1]}
+    <PopperWrapper id="calendar" buttonVariant="text" icon={<CalendarIcon />}>
+      <Box sx={containerSx}>
+        <Typography sx={{ fontSize: 12, color: "primary.main" }}>
+          {monthInView[1]}
+        </Typography>
+        <>
+          <Grid container justifyContent="center" sx={{ mb: 2 }}>
+            <ArrowButton
+              {...{ type: "previous", monthInView, setMonthInView }}
+              disabled={!hasPrevious}
+            />
+            <Grid item xs={8}>
+              <Typography variant="h6" textAlign="center">
+                {getMonthName(monthInView)}
               </Typography>
-              <Month
-                logs={logsInView}
-                hasPrevious={previousMonthExists}
-                hasNext={true} //TODO: Update once I delete demo date --> monthInView !== currentMonth
-                monthInView={monthInView}
-                setMonthInView={setMonthInView}
-                setAnchorEl={setAnchorEl}
-              />
-            </Box>
-          </Paper>
-        </Popper>
+            </Grid>
+            <ArrowButton
+              {...{ monthInView, setMonthInView, disabled: false }} // TODO: Update once I delete demo date --> monthInView !== currentMonth
+            />
+          </Grid>
+          <Grid container columns={7} gap={"3px"}>
+            {<Grid item xs={gridStart} sx={{ mr: "-3px" }} />}
+            {monthLogs.map((log, i) => (
+              // Previously had setAnchorEl prop
+              <DayTile key={i} log={log} />
+            ))}
+          </Grid>
+        </>
       </Box>
-    </ClickAwayListener>
+    </PopperWrapper>
   );
 };
 

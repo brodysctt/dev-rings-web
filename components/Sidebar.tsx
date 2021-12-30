@@ -1,5 +1,6 @@
-import { useState, KeyboardEvent, MouseEvent } from "react";
 import Link from "next/link";
+import { useState, KeyboardEvent, MouseEvent } from "react";
+import { useAuth, signOutUser } from "@lib/firebase/auth";
 import {
   Box,
   Button,
@@ -11,10 +12,12 @@ import {
 } from "@mui/material";
 import GitHubIcon from "@mui/icons-material/GitHub";
 import MenuIcon from "@mui/icons-material/Menu";
-import { signOutUser } from "@lib/firebase/auth";
 
-export const Sidebar = ({ userId }: { userId: string }) => {
+export const Sidebar = () => {
   const [open, setOpen] = useState(false);
+
+  const userId = useAuth();
+  if (!userId) return null;
 
   const toggleDrawer =
     (open: boolean) => (event: KeyboardEvent | MouseEvent) => {

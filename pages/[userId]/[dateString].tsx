@@ -1,57 +1,45 @@
-import type { GetServerSideProps } from "next";
-import { useAuth, getUserId } from "@lib/firebase/auth";
+import type { NextPage, GetServerSideProps } from "next";
+import { useCollection, Log, RepoEvent } from "@lib/firebase/firestore";
 import { verifyToken, fetchLogDoc } from "@lib/firebase-admin";
 import { Box, Typography } from "@mui/material";
-import { DevRing, TodayDevRing, Log } from "components";
+import type { SxProps } from "@mui/system";
+import { EventsPopper, ProgressRing } from "components";
+import { calcProgress, getDayEvents } from "helpers";
 import Cookies from "cookies";
 
-const DevRings = ({ log }: { log: Log }) => {
-  const { user } = useAuth();
-  if (!user) return null;
-  const userId = getUserId(user);
-
-  const [dateString] = log;
-  const date = new Date(dateString);
-  // TODO: Test this
-  const isToday = date === new Date();
-
-  if (isToday)
-    return (
-      <Box
-        sx={{
-          display: "flex",
-          flexDirection: "column",
-          justifyContent: "center",
-          alignItems: "center",
-          height: "80vh",
-          width: "100%",
-        }}
-      >
-        {/* TODO: Add color to theme */}
-        <Typography sx={{ mb: 3, color: "#a2a2a2" }}>{dateString}</Typography>
-        <TodayDevRing userId={userId} />
-      </Box>
-    );
+const DevRing: NextPage<{ log: Log }> = ({ log }) => {
+  const events = useCollection("events") as RepoEvent[] | null;
+  const [dateString, { actual, goal }] = log;
+  const dayEvents = getDayEvents(events, dateString);
 
   return (
-    <Box
-      sx={{
-        display: "flex",
-        flexDirection: "column",
-        justifyContent: "center",
-        alignItems: "center",
-        height: "80vh",
-        width: "100%",
-      }}
-    >
-      {/* TODO: Add color to theme */}
+    <Box sx={containerSx}>
       <Typography sx={{ mb: 3, color: "#a2a2a2" }}>{dateString}</Typography>
-      <DevRing userId={userId} log={log} />
+      <Box sx={devRingSx}>
+        <ProgressRing percent={calcProgress(actual, goal)} />
+        {dayEvents && <EventsPopper events={dayEvents} />}
+      </Box>
     </Box>
   );
 };
 
-export default DevRings;
+const containerSx = {
+  display: "flex",
+  flexDirection: "column",
+  justifyContent: "center",
+  alignItems: "center",
+  height: "80vh",
+  width: "100%",
+} as SxProps;
+
+const devRingSx = {
+  display: "flex",
+  flexDirection: "column",
+  justifyContent: "center",
+  alignItems: "center",
+} as SxProps;
+
+export default DevRing;
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   try {
