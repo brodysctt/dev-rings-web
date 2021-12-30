@@ -15,7 +15,7 @@ export const useCollection = (name: CollectionName) => {
         setData(data);
       }
     })();
-  });
+  }, [userId]);
 
   return data;
 };
@@ -32,6 +32,6 @@ export const useUserDoc = () => {
         }
       }
     })();
-  });
+  }, [userId]);
   return data;
 };
