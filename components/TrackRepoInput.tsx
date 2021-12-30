@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { toast } from "react-toastify";
-import { trackRepo, trackRepoToast } from "./utils";
+import { useAuth } from "@lib/firebase/auth";
 import {
   Box,
   FormControl,
@@ -10,10 +10,14 @@ import {
   InputAdornment,
 } from "@mui/material";
 import GitHubIcon from "@mui/icons-material/GitHub";
+import { trackRepo, trackRepoToast } from "helpers/track-repos";
 
-export const TrackRepoInput = ({ userId }: { userId: string }) => {
+export const TrackRepoInput = () => {
   const [userNeedsHelp, setUserNeedsHelp] = useState(false);
   const { register, watch, handleSubmit } = useForm<{ repoUrl: string }>();
+
+  const userId = useAuth();
+  if (!userId) return null;
 
   const onSubmit: SubmitHandler<{ repoUrl: string }> = async ({ repoUrl }) => {
     console.log(`url looking deeece. Creating webhook for ${repoUrl}...`);

@@ -1,25 +1,22 @@
-import { useState, Dispatch, SetStateAction } from "react";
 import Link from "next/link";
-import { useAuth, getUserId } from "@lib/firebase/auth";
-import { Typography, ButtonBase } from "@mui/material";
-import { Ring, Log } from "components";
+import { useState } from "react";
+import { useAuth } from "@lib/firebase/auth";
+import type { Log } from "@lib/firebase/firestore";
 import { dayjs } from "@lib/dayjs";
+import { Typography, ButtonBase } from "@mui/material";
+import { ProgressRing } from "components";
 
-interface DayTileProps {
-  log: Log;
-  setAnchorEl: Dispatch<SetStateAction<null | HTMLElement>>;
-}
-
-export const DayTile = ({ log, setAnchorEl }: DayTileProps) => {
-  const { user } = useAuth();
+export const DayTile = ({ log }: { log: Log }) => {
   const [hover, setHover] = useState(false);
 
-  if (!user) return null;
-  const userId = getUserId(user);
+  const userId = useAuth();
+  if (!userId) return null;
 
   const [dateString, { actual, goal }] = log;
   const isDayOff = !actual && !goal;
   const day = dayjs(dateString).date();
+  const hitGoal = actual >= goal;
+  const percent = isDayOff ? 0 : hitGoal ? 100 : (actual / goal) * 100;
 
   return (
     <Link
@@ -32,7 +29,8 @@ export const DayTile = ({ log, setAnchorEl }: DayTileProps) => {
       <ButtonBase
         onMouseEnter={() => setHover(true)}
         onMouseLeave={() => setHover(false)}
-        onClick={() => setAnchorEl(null)}
+        // TODO: How do I let popper know to close onClick?
+        // onClick={() => setAnchorEl(null)}
         disabled={isDayOff}
         sx={{
           display: "flex",
@@ -50,11 +48,7 @@ export const DayTile = ({ log, setAnchorEl }: DayTileProps) => {
         <Typography sx={{ fontSize: 10, alignSelf: "flex-end", mr: "4px" }}>
           {day}
         </Typography>
-        <Ring
-          progress={isDayOff ? 0 : actual}
-          goal={isDayOff ? 1 : goal}
-          size="mini"
-        />
+        <ProgressRing percent={percent} mini />
       </ButtonBase>
     </Link>
   );

@@ -28,7 +28,7 @@ export const setTimezoneToast = () =>
     }
   );
 
-export const newTimezoneToast = (userId: string, currentTimezone: string) =>
+export const newTzToast = (userId: string, currentTimezone: string) =>
   toast(
     <Box sx={containerSx}>
       <Typography
