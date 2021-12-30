@@ -8,8 +8,8 @@ interface ProgressRingProps {
 export const ProgressRing = ({ percent, mini = false }: ProgressRingProps) => (
   <CircularProgress
     variant="determinate"
-    size={mini ? 30 : 200}
-    thickness={8}
+    size={mini ? 30 : 300}
+    thickness={6}
     value={percent}
     sx={{ mb: 2 }}
   />
