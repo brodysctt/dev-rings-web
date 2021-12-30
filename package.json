@@ -23,11 +23,9 @@
     "react": "17.0.2",
     "react-dom": "17.0.2",
     "react-hook-form": "7.19.5",
-    "react-toastify": "8.1.0",
-    "cors": "2.8.5"
+    "react-toastify": "8.1.0"
   },
   "devDependencies": {
-    "@types/cors": "2.8.12",
     "@types/cookies": "0.7.7",
     "@types/js-cookie": "3.0.1",
     "@types/react": "17.0.20",
