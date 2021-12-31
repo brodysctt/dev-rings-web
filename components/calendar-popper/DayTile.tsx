@@ -48,7 +48,7 @@ export const DayTile = ({ log }: { log: Log }) => {
         <Typography sx={{ fontSize: 10, alignSelf: "flex-end", mr: "4px" }}>
           {day}
         </Typography>
-        <ProgressRing percent={percent} mini />
+        <ProgressRing percent={percent} size={30} />
       </ButtonBase>
     </Link>
   );

@@ -1,9 +1,10 @@
 import Link from "next/link";
 import { useAuth } from "@lib/firebase/auth";
-import { Grid, Box, Button } from "@mui/material";
+import { Grid, Box, Button, Tooltip } from "@mui/material";
 import {
   TrackRepoInput,
   CalendarPopper,
+  ProgressRing,
   SidebarDial,
   SetGoalPopper,
 } from "components";
@@ -14,11 +15,13 @@ export const Navbar = () => {
   return (
     <Grid container sx={{ height: 60, pl: 20, mt: 4 }}>
       <Grid item xs={8}>
-        <Box sx={{ display: "flex" }}>
+        <Box sx={{ display: "flex", alignItems: "center" }}>
           <Link href="/" passHref>
-            <Button variant="contained" sx={{ ml: 2, mr: 2 }}>
-              view today
-            </Button>
+            <Tooltip title="View today's progress">
+              <Button variant="text" sx={{ p: 2 }}>
+                <ProgressRing percent={100} size={26} mb={false} />
+              </Button>
+            </Tooltip>
           </Link>
           <CalendarPopper />
           <SetGoalPopper />
