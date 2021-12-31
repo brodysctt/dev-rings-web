@@ -1,21 +1,30 @@
 import { useState, useEffect } from "react";
 import { useAuth } from "@lib/firebase/auth";
-import { db, fetchData, CollectionName } from "@lib/firebase/firestore";
-import { doc, getDoc, DocumentData } from "firebase/firestore";
+import { db } from "@lib/firebase/firestore";
+import type { CollectionName, Log, RepoEvent, Webhook } from "./types";
+import { collection, doc, onSnapshot, DocumentData } from "firebase/firestore";
 
 export const useCollection = (name: CollectionName) => {
   const userId = useAuth();
   const [data, setData] = useState<DocumentData[] | null>(null);
 
   useEffect(() => {
-    (async () => {
-      if (userId) {
-        const data = await fetchData(userId, name);
-        if (!data) return;
-        setData(data);
-      }
-    })();
-  }, [userId]);
+    if (userId) {
+      const unsub = onSnapshot(
+        collection(db, "users", userId, name),
+        (snap) => {
+          if (!snap || !snap.docs.length) return null;
+          const isLogs = name === "logs";
+          const updatedData = isLogs
+            ? snap.docs.map((doc) => [doc.id, doc.data()] as Log)
+            : snap.docs.map((doc) => doc.data() as RepoEvent | Webhook);
+          // TODO: Does setData need to be a dependency?
+          setData(updatedData);
+        }
+      );
+      return unsub;
+    }
+  }, [userId, data]);
 
   return data;
 };
@@ -24,14 +33,16 @@ export const useUserDoc = () => {
   const userId = useAuth();
   const [data, setData] = useState<[string, DocumentData] | null>(null);
   useEffect(() => {
-    (async () => {
-      if (userId) {
-        const userDoc = await getDoc(doc(db, "users", userId));
-        if (userDoc.exists()) {
-          setData([userId, userDoc.data()]);
-        }
-      }
-    })();
+    if (userId) {
+      const unsub = onSnapshot(doc(db, "users", userId), {
+        next: (userDoc) => {
+          if (userDoc.exists()) {
+            setData([userId, userDoc.data()]);
+          }
+        },
+      });
+      return unsub;
+    }
   }, [userId]);
   return data;
 };
