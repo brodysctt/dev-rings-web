@@ -1,11 +1,11 @@
 import { Box } from "@mui/material";
 
-interface EventIconProps {
+interface EventSvgProps {
   type?: string;
   variant: "outline" | "contained";
 }
 
-export const EventIcon = ({ type = "push", variant }: EventIconProps) => {
+export const EventSvg = ({ type = "push", variant }: EventSvgProps) => {
   const isCommit = type === "push";
   const isOutline = variant === "outline";
   const setColor = () => (isOutline ? "#556cd6" : "white");

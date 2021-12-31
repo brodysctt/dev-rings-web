@@ -1,8 +1,7 @@
 import { Box, Typography, Chip, Tooltip } from "@mui/material";
 import type { RepoEvent } from "@lib/firebase/firestore";
 import { getTimeAsString } from "utils";
-import { PopperWrapper } from "components";
-import { EventIcon } from "./EventIcon";
+import { PopperWrapper, EventSvg } from "components";
 
 export const EventsPopper = ({ events }: { events: RepoEvent[] }) => {
   const chronologicalEvents = [...events].reverse();
@@ -11,7 +10,7 @@ export const EventsPopper = ({ events }: { events: RepoEvent[] }) => {
       id="events"
       icon={
         <Box sx={iconContainerSx}>
-          <EventIcon variant="contained" />
+          <EventSvg variant="contained" />
         </Box>
       }
       buttonVariant="text"
@@ -32,7 +31,7 @@ export const EventsPopper = ({ events }: { events: RepoEvent[] }) => {
           return (
             <Tooltip key={i} title={`${time} | ${repo}`}>
               <Chip
-                icon={<EventIcon type={eventType} variant="outline" />}
+                icon={<EventSvg type={eventType} variant="outline" />}
                 label={
                   <Typography textAlign="left" sx={{ p: 0 }}>
                     {message}

@@ -33,7 +33,6 @@ const Index: NextPage = () => {
 
   const isNewTz = checkTz(timezone);
   if (isNewTz) newTzToast(userId, timezone);
-  // TODO: Make the name-dropped repo a link to github, and the "or other" piece a link to manage repos page
   if (!dayEvents) return <KickOffHero repos={getRepos(webhooks, userId)} />;
   if (!hasSetGoal) setGoalToast();
 
@@ -54,7 +53,7 @@ const containerSx = {
   display: "flex",
   justifyContent: "center",
   alignItems: "center",
-  height: "80vh",
+  height: "70vh",
   width: "100%",
 } as SxProps;
 

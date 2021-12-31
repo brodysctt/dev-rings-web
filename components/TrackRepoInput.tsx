@@ -5,11 +5,11 @@ import { useAuth } from "@lib/firebase/auth";
 import {
   Box,
   FormControl,
-  InputLabel,
   Input,
   InputAdornment,
+  Tooltip,
 } from "@mui/material";
-import GitHubIcon from "@mui/icons-material/GitHub";
+import { GitHubSvg } from "components";
 import { trackRepo, trackRepoToast } from "helpers/track-repos";
 
 export const TrackRepoInput = () => {
@@ -61,26 +61,25 @@ export const TrackRepoInput = () => {
         justifyContent: "center",
         alignItems: "start",
         width: 400,
-        marginLeft: "50px",
+        ml: 3,
       }}
     >
-      <FormControl variant="standard">
-        <InputLabel htmlFor="repoUrl">
-          Paste a GitHub repo URL here to start tracking it ⚡
-        </InputLabel>
-        <Input
-          {...register("repoUrl")}
-          id="repoUrl"
-          type="text"
-          placeholder={"https://github.com/you/your-awesome-repo.git"}
-          startAdornment={
-            <InputAdornment position="start">
-              <GitHubIcon />
-            </InputAdornment>
-          }
-          sx={{ width: "370px" }}
-        />
-      </FormControl>
+      <Tooltip title="Paste your GitHub repo here to start tracking it">
+        <FormControl variant="standard">
+          <Input
+            {...register("repoUrl")}
+            id="repoUrl"
+            type="text"
+            placeholder={"https://github.com/you/your-awesome-repo.git"}
+            startAdornment={
+              <InputAdornment position="start">
+                <GitHubSvg />
+              </InputAdornment>
+            }
+            sx={{ width: "370px" }}
+          />
+        </FormControl>
+      </Tooltip>
     </Box>
   );
 };

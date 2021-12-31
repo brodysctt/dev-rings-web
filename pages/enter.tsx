@@ -13,7 +13,7 @@ const Enter = () => {
     <Box sx={containerSx}>
       <ProgressRing percent={100} />
       <Typography variant="h4" sx={{ mt: 3, mb: 5, color: "primary.main" }}>
-        {`Gain momentum in your coding journey`}
+        {`Build momentum on your coding journey`}
       </Typography>
       <SignInButton />
     </Box>

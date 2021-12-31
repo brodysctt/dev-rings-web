@@ -3,7 +3,7 @@ import type { SxProps } from "@mui/system";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { updateDailyGoal, useUserDoc } from "@lib/firebase/firestore";
 import { toast } from "react-toastify";
-import { PopperWrapper, GoalIcon } from "components";
+import { PopperWrapper, GoalSvg } from "components";
 
 export const SetGoalPopper = () => {
   const { register, handleSubmit } = useForm<{ goal: number }>();
@@ -24,20 +24,21 @@ export const SetGoalPopper = () => {
     const dailyGoal = Number(goal);
     await updateDailyGoal(userId, dailyGoal);
     // TODO: Figure out how to close popper on submit
+    // ☝️ Listen for update to goal change
     toast.success(`Goal is now ${dailyGoal} 🏔️`, {
       position: "top-center",
     });
   };
   const buttonVariant = !hasSetGoal ? "outlined" : "text";
   return (
-    <PopperWrapper id="set-goal" icon={<GoalIcon />} {...{ buttonVariant }}>
+    <PopperWrapper id="set-goal" icon={<GoalSvg />} {...{ buttonVariant }}>
       <Box sx={containerSx}>
         <OutlinedInput
           {...register("goal")}
           type="text"
           autoFocus={true}
           onFocus={(e) => (e.target.placeholder = "")}
-          sx={{ height: 60, width: 40, mt: 1 }}
+          sx={{ height: 60, width: 60, mt: 1 }}
           inputProps={{ sx: { textAlign: "center" } }}
           onKeyPress={(kp) => {
             if (kp.key === "Enter") {
