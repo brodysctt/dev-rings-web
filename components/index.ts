@@ -7,4 +7,5 @@ export * from "./PopperWrapper";
 export * from "./ProgressRing";
 export * from "./SetGoalPopper";
 export * from "./SidebarDial";
+export * from "./TrackEmAllButton";
 export * from "./TrackRepoInput";
