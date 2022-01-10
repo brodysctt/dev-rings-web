@@ -13,23 +13,24 @@ export const Navbar = () => {
   const userId = useAuth();
   const userData = useUserDoc();
   if (!userId || !userData) return null;
-  // TODO: Update this for isOnboarding property
-  const [, { hasSetGoal }] = userData;
+  const [, { isOnboarding }] = userData;
   return (
     <Grid container sx={{ height: 60, pl: 20, mt: 4 }}>
       <Grid item xs={8}>
         <Box sx={{ display: "flex", alignItems: "center" }}>
-          {hasSetGoal && (
-            <Link href="/" passHref>
-              <Tooltip title="View today's progress">
-                <Button variant="text" sx={{ p: 2 }}>
-                  <ProgressRing percent={100} size={26} mb={false} />
-                </Button>
-              </Tooltip>
-            </Link>
+          {!isOnboarding && (
+            <>
+              <Link href="/" passHref>
+                <Tooltip title="View today's progress">
+                  <Button variant="text" sx={{ p: 2 }}>
+                    <ProgressRing percent={100} size={26} mb={false} />
+                  </Button>
+                </Tooltip>
+              </Link>
+              <CalendarPopper />
+              <SetGoalPopper />
+            </>
           )}
-          <CalendarPopper />
-          <SetGoalPopper />
         </Box>
       </Grid>
       <Grid item xs={4} sx={{ pr: 20 }}>

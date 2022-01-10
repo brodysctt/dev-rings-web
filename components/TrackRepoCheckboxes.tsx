@@ -1,4 +1,4 @@
-import { useState, useEffect, Dispatch, SetStateAction } from "react";
+import { useState, useEffect } from "react";
 import {
   Box,
   Typography,
@@ -13,11 +13,11 @@ import type { Webhook } from "@lib/firebase/firestore";
 import { getRepos, fetchPublicRepos, trackRepo, trackRepoToast } from "helpers";
 
 interface Props {
-  onCheck?: () => void;
+  onSuccess?: () => void;
 }
 
 // TODO: Implement middleware so it's impossible to land on this without being authenticated
-export const TrackRepoCheckboxes = ({ onCheck }: Props) => {
+export const TrackRepoCheckboxes = ({ onSuccess }: Props) => {
   const userId = useAuth();
   const webhooks = useCollection("webhooks") as Webhook[] | null;
   const [publicRepos, setPublicRepos] = useState<string[] | null>(null);
@@ -61,7 +61,7 @@ export const TrackRepoCheckboxes = ({ onCheck }: Props) => {
                       return;
                     }
                     trackRepoToast.success();
-                    if (onCheck) onCheck();
+                    if (onSuccess) onSuccess();
                     return;
                   }}
                 />

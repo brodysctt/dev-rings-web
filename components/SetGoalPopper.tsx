@@ -5,14 +5,16 @@ import { updateDailyGoal, useUserDoc } from "@lib/firebase/firestore";
 import { toast } from "react-toastify";
 import { PopperWrapper, GoalSvg } from "components";
 
-export const SetGoalPopper = () => {
+interface Props {
+  onSuccess?: () => void;
+}
+
+export const SetGoalPopper = ({ onSuccess }: Props) => {
   const { register, handleSubmit } = useForm<{ goal: number }>();
 
   const userData = useUserDoc();
   if (!userData) return null;
-
-  const [userId, { dailyGoal, hasSetGoal }] = userData;
-  if (!hasSetGoal) return null;
+  const [userId, { dailyGoal }] = userData;
 
   const onSubmit: SubmitHandler<{ goal: string }> = async ({ goal }) => {
     const isOnlyNumbers = /^[1-9]*$/.test(goal);
@@ -29,6 +31,7 @@ export const SetGoalPopper = () => {
     toast.success(`Goal is now ${dailyGoal} 🏔️`, {
       position: "top-center",
     });
+    if (onSuccess) onSuccess();
   };
 
   return (

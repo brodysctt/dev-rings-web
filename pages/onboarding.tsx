@@ -11,32 +11,44 @@ import {
   StepLabel,
 } from "@mui/material";
 import type { SxProps } from "@mui/system";
-import { TrackRepoCheckboxes } from "components";
+import { TrackRepoCheckboxes, SetGoalPopper } from "components";
 
 const Onboarding: NextPage = () => {
   const [activeStep, setActiveStep] = useState(0);
   const webhooks = useCollection("webhooks") as Webhook[] | null;
   const userData = useUserDoc();
 
+  if (!userData) return null;
+  const [, { dailyGoal }] = userData;
+
+  const incrementStep = () => setActiveStep(activeStep + 1);
+
   const steps = [
     {
       label: "Select repos to track",
       isComplete: Boolean(webhooks),
       child: (
-        <Box sx={step1Sx}>
+        <Box sx={stepSx}>
           <Typography variant="h6">{`Dev Rings tracks your code contributions via webhooks`}</Typography>
-          <TrackRepoCheckboxes onCheck={() => setActiveStep(activeStep + 1)} />
-          {/* TODO: Would be sassy to show this after 10 seconds 👌 */}
-          <Typography
-            sx={{ fontSize: 12, mt: 1 }}
-          >{`Don't worry, you can always change this later on 👍`}</Typography>
+          <TrackRepoCheckboxes onSuccess={incrementStep} />
         </Box>
       ),
     },
     {
       label: "Set a daily contributions goal",
-      isComplete: userData && userData[1]?.dailygoal,
-      child: <Typography>Set a daily contributions goal</Typography>,
+      isComplete: Boolean(dailyGoal),
+      child: (
+        <Box sx={{ ...stepSx, mb: 20 }}>
+          <Typography
+            align="center"
+            sx={{ mb: 2, whiteSpace: "pre-line" }}
+          >{`To track progress, you must first set a goal 🎯
+          So, how many contributions will you make towards your projects in a given day?
+          Click the trophy to set your daily goal. (This can be updated later on as well)
+         `}</Typography>
+          <SetGoalPopper onSuccess={incrementStep} />
+        </Box>
+      ),
     },
     {
       label: "Confirm timezone",
@@ -94,7 +106,7 @@ const Onboarding: NextPage = () => {
   );
 };
 
-const step1Sx = {
+const stepSx = {
   display: "flex",
   flexDirection: "column",
   alignItems: "center",
