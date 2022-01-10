@@ -9,4 +9,5 @@ export * from "./ProgressRing";
 export * from "./SetGoalPopper";
 export * from "./SidebarDial";
 export * from "./TrackEmAllButton";
+export * from "./TrackRepoCheckboxes";
 export * from "./TrackRepoInput";

@@ -1,120 +1,76 @@
-import * as React from "react";
-import Box from "@mui/material/Box";
-import Stepper from "@mui/material/Stepper";
-import Step from "@mui/material/Step";
-import StepLabel from "@mui/material/StepLabel";
-import Button from "@mui/material/Button";
-import Typography from "@mui/material/Typography";
+import { useState } from "react";
+import Link from "next/link";
+import {
+  Box,
+  Typography,
+  Button,
+  Stepper,
+  Step,
+  StepLabel,
+} from "@mui/material";
+import { TrackRepoCheckboxes } from "components";
 
-const steps = [
-  "Select campaign settings",
-  "Create an ad group",
-  "Create an ad",
-];
-
-export default function HorizontalLinearStepper() {
-  const [activeStep, setActiveStep] = React.useState(0);
-  const [skipped, setSkipped] = React.useState(new Set<number>());
-
-  const isStepOptional = (step: number) => {
-    return step === 1;
-  };
-
-  const isStepSkipped = (step: number) => {
-    return skipped.has(step);
-  };
-
-  const handleNext = () => {
-    let newSkipped = skipped;
-    if (isStepSkipped(activeStep)) {
-      newSkipped = new Set(newSkipped.values());
-      newSkipped.delete(activeStep);
-    }
-
-    setActiveStep((prevActiveStep) => prevActiveStep + 1);
-    setSkipped(newSkipped);
-  };
-
-  const handleBack = () => {
-    setActiveStep((prevActiveStep) => prevActiveStep - 1);
-  };
-
-  const handleSkip = () => {
-    if (!isStepOptional(activeStep)) {
-      // You probably want to guard against something like this,
-      // it should never occur unless someone's actively trying to break something.
-      throw new Error("You can't skip a step that isn't optional.");
-    }
-
-    setActiveStep((prevActiveStep) => prevActiveStep + 1);
-    setSkipped((prevSkipped) => {
-      const newSkipped = new Set(prevSkipped.values());
-      newSkipped.add(activeStep);
-      return newSkipped;
-    });
-  };
-
-  const handleReset = () => {
-    setActiveStep(0);
-  };
+export const OnboardingStepper = () => {
+  const [activeStep, setActiveStep] = useState(0);
 
   return (
-    <Box sx={{ width: "100%" }}>
+    <Box sx={{ width: "70%" }}>
       <Stepper activeStep={activeStep}>
-        {steps.map((label, index) => {
-          const stepProps: { completed?: boolean } = {};
-          const labelProps: {
-            optional?: React.ReactNode;
-          } = {};
-          if (isStepOptional(index)) {
-            labelProps.optional = (
-              <Typography variant="caption">Optional</Typography>
-            );
-          }
-          if (isStepSkipped(index)) {
-            stepProps.completed = false;
-          }
-          return (
-            <Step key={label} {...stepProps}>
-              <StepLabel {...labelProps}>{label}</StepLabel>
-            </Step>
-          );
-        })}
+        <Step key="Select repos to track">
+          <StepLabel>{"Select repos to track"}</StepLabel>
+        </Step>
+        <Step key="Set a daily contributions goal">
+          <StepLabel>{"Set a daily contributions goal"}</StepLabel>
+        </Step>
+        <Step key="Confirm timezone">
+          <StepLabel>{"Confirm timezone"}</StepLabel>
+        </Step>
       </Stepper>
-      {activeStep === steps.length ? (
-        <React.Fragment>
+      {activeStep === 2 ? (
+        <>
           <Typography sx={{ mt: 2, mb: 1 }}>
-            All steps completed - you&apos;re finished
+            {`Woo! You're ready to start building momentum with Dev Rings 🚀`}
+            <Link href="/" passHref>
+              <Button>Take me to today's ring</Button>
+            </Link>
           </Typography>
-          <Box sx={{ display: "flex", flexDirection: "row", pt: 2 }}>
-            <Box sx={{ flex: "1 1 auto" }} />
-            <Button onClick={handleReset}>Reset</Button>
-          </Box>
-        </React.Fragment>
+        </>
+      ) : activeStep === 0 ? (
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            mt: 10,
+          }}
+        >
+          <Typography variant="h6">{`Dev Rings tracks your code contributions via webhooks`}</Typography>
+          <TrackRepoCheckboxes onCheck={() => setActiveStep(activeStep + 1)} />
+          {/* TODO: Would be sassy to show this after 10 seconds 👌 */}
+          <Typography
+            sx={{ fontSize: 12, mt: 1 }}
+          >{`Don't worry, you can always change this later on 👍`}</Typography>
+        </Box>
       ) : (
-        <React.Fragment>
-          <Typography sx={{ mt: 2, mb: 1 }}>Step {activeStep + 1}</Typography>
-          <Box sx={{ display: "flex", flexDirection: "row", pt: 2 }}>
-            <Button
-              color="inherit"
-              disabled={activeStep === 0}
-              onClick={handleBack}
-              sx={{ mr: 1 }}
-            >
-              Back
-            </Button>
-            <Box sx={{ flex: "1 1 auto" }} />
-            {isStepOptional(activeStep) && (
-              <Button color="inherit" onClick={handleSkip} sx={{ mr: 1 }}>
-                Skip
-              </Button>
-            )}
-            <Button onClick={handleNext}>
-              {activeStep === steps.length - 1 ? "Finish" : "Next"}
-            </Button>
-          </Box>
-        </React.Fragment>
+        <Typography>hi</Typography>
       )}
     </Box>
   );
-}
+};
+
+// const steps = [
+//   {
+//     title: "Select repos to track",
+//     child: (
+
+//     ),
+//   },
+//   {
+//     title: "Set a daily contributions goal",
+//     child: <Typography>hi</Typography>,
+//   },
+//   {
+//     title: "Confirm timezone",
+//     child: <Typography>hi</Typography>,
+//   },
+// ];

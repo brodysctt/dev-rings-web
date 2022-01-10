@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { useAuth } from "@lib/firebase/auth";
 import { useUserDoc } from "@lib/firebase/firestore";
 import { Grid, Box, Button, Tooltip } from "@mui/material";
 import {
@@ -9,8 +10,10 @@ import {
 } from "components";
 
 export const Navbar = () => {
+  const userId = useAuth();
   const userData = useUserDoc();
-  if (!userData) return null;
+  if (!userId || !userData) return null;
+  // TODO: Update this for isOnboarding property
   const [, { hasSetGoal }] = userData;
   return (
     <Grid container sx={{ height: 60, pl: 20, mt: 4 }}>

@@ -1,13 +1,10 @@
-import { Box, Typography } from "@mui/material";
+import { Box } from "@mui/material";
 import type { SxProps } from "@mui/system";
-import { ProgressRing } from "components";
+import { OnboardingStepper } from "components";
 
 const Onboarding = () => (
   <Box sx={containerSx}>
-    <ProgressRing percent={100} />
-    <Typography variant="h4" sx={{ mt: 3, mb: 5, color: "primary.main" }}>
-      {`Time to get set up`}
-    </Typography>
+    <OnboardingStepper />
   </Box>
 );
 
@@ -17,7 +14,7 @@ const containerSx = {
   justifyContent: "center",
   alignItems: "center",
   width: 1,
-  height: "100vh",
+  height: "70vh",
 } as SxProps;
 
 export default Onboarding;

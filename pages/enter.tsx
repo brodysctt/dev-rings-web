@@ -27,6 +27,7 @@ const Enter = () => {
     return null;
   }
   router.push("/");
+  return null;
 };
 
 const containerSx = {

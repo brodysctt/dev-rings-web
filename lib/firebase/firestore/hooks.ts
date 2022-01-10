@@ -9,15 +9,17 @@ import { toast } from "react-toastify";
 export const useCollection = (name: CollectionName) => {
   const router = useRouter();
   const userId = useAuth();
+  const userData = useUserDoc();
   const [data, setData] = useState<DocumentData[] | null>(null);
 
   useEffect(() => {
-    if (!userId) return;
+    if (!userId || !userData) return;
+    const [, { isOnboarding }] = userData;
     const unsubscribe = onSnapshot(
       collection(db, "users", userId, name),
       (snap) => {
         if (!snap || !snap.docs.length) {
-          if (name === "webhooks") {
+          if (name === "webhooks" && !isOnboarding) {
             router.push("/repos");
             toast.info("Track a repo to get started", {
               position: "top-center",
@@ -34,7 +36,7 @@ export const useCollection = (name: CollectionName) => {
       }
     );
     return () => unsubscribe();
-  }, [userId]);
+  }, [userId, userData]);
   // TODO: Need to be 100000% on this dependency array
 
   return data;
@@ -49,6 +51,7 @@ export const useUserDoc = () => {
         next: (userDoc) => {
           if (userDoc.exists()) {
             setData([userId, userDoc.data()]);
+            return;
           }
         },
       });
