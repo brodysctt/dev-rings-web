@@ -1,28 +1,32 @@
-import Link from "next/link";
+import { useRouter } from "next/router";
+import { useEffect } from "react";
 import type { NextPage } from "next";
 import { useUserDoc, useCollection } from "@lib/firebase/firestore";
 import type { RepoEvent, Webhook } from "@lib/firebase/firestore";
 import { newTzToast, setGoalToast } from "@lib/react-toastify";
 import { dayjs } from "@lib/dayjs";
-import { Box, Button } from "@mui/material";
+import { Box } from "@mui/material";
 import type { SxProps } from "@mui/system";
 import { KickOffHero, ProgressRing, EventsPopper } from "components";
 import { calcProgress, checkTz, getDayEvents, getRepos } from "helpers";
+import { toast } from "react-toastify";
 
 const Index: NextPage = () => {
+  const router = useRouter();
   const userData = useUserDoc();
   const events = useCollection("events") as RepoEvent[] | null;
   const webhooks = useCollection("webhooks") as Webhook[] | null;
 
-  // TODO: Add a TrackRepo component here
-  if (!webhooks)
-    return (
-      <Link href="/repos" passHref>
-        <Button>{`You aren't tracking any repos! Head to the repos page to add more`}</Button>
-      </Link>
-    );
+  useEffect(() => {
+    if (!webhooks) {
+      router.push("/repos");
+      toast.info("Track a repo to get started", {
+        position: "top-center",
+      });
+    }
+  }, []);
 
-  if (!userData) return null;
+  if (!userData || !webhooks) return null;
   const [userId, { dailyGoal: goal, hasSetGoal, timezone }] = userData;
 
   // TODO: Write unit tests for this
