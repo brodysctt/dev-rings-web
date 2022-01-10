@@ -10,29 +10,28 @@ import {
 import type { SxProps } from "@mui/system";
 import { TrackEmAllButton } from "components";
 import { useAuth } from "@lib/firebase/auth";
-import {
-  fetchPublicRepos,
-  trackRepo,
-  trackRepoToast,
-} from "helpers/track-repos";
+import { useCollection } from "@lib/firebase/firestore";
+import type { Webhook } from "@lib/firebase/firestore";
+import { getRepos, fetchPublicRepos, trackRepo, trackRepoToast } from "helpers";
 
 // TODO: Implement middleware so it's impossible to land on this without being authenticated
 const Repos: NextPage = () => {
   const userId = useAuth();
+  const webhooks = useCollection("webhooks") as Webhook[] | null;
   const [publicRepos, setPublicRepos] = useState<string[] | null>(null);
+  const [trackedRepos, setTrackedRepos] = useState<Array<string | null>>([]);
 
-  // TODO: Refactor with custom hook
-  // TODO: Also, refactor with snapshot so it updates automagically
   useEffect(() => {
     (async () => {
       if (userId) {
-        const publicRepos = await fetchPublicRepos(userId);
-        if (Array.isArray(publicRepos)) {
-          setPublicRepos(publicRepos);
+        const repos = await fetchPublicRepos(userId);
+        if (Array.isArray(repos)) {
+          setPublicRepos(repos);
         }
+        setTrackedRepos(webhooks ? getRepos(webhooks, userId) : []);
       }
     })();
-  }, [userId]);
+  }, [userId, webhooks]);
 
   // TODO: Handle case where user has no public repos
   if (!userId || !publicRepos) return null;
@@ -50,6 +49,7 @@ const Repos: NextPage = () => {
               label={repo}
               control={
                 <Checkbox
+                  checked={trackedRepos.includes(repo)}
                   onChange={async () => {
                     console.log(`create webhook for ${repo}`);
                     const response = await trackRepo(userId, repo);
