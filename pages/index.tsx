@@ -1,5 +1,3 @@
-import { useRouter } from "next/router";
-import { useEffect } from "react";
 import type { NextPage } from "next";
 import { useUserDoc, useCollection } from "@lib/firebase/firestore";
 import type { RepoEvent, Webhook } from "@lib/firebase/firestore";
@@ -9,22 +7,11 @@ import { Box } from "@mui/material";
 import type { SxProps } from "@mui/system";
 import { KickOffHero, ProgressRing, EventsPopper } from "components";
 import { calcProgress, checkTz, getDayEvents, getRepos } from "helpers";
-import { toast } from "react-toastify";
 
 const Index: NextPage = () => {
-  const router = useRouter();
   const userData = useUserDoc();
   const events = useCollection("events") as RepoEvent[] | null;
   const webhooks = useCollection("webhooks") as Webhook[] | null;
-
-  useEffect(() => {
-    if (!webhooks) {
-      router.push("/repos");
-      toast.info("Track a repo to get started", {
-        position: "top-center",
-      });
-    }
-  }, []);
 
   if (!userData || !webhooks) return null;
   const [userId, { dailyGoal: goal, hasSetGoal, timezone }] = userData;
@@ -51,8 +38,6 @@ const Index: NextPage = () => {
   );
 };
 
-export default Index;
-
 const containerSx = {
   display: "flex",
   justifyContent: "center",
@@ -67,3 +52,5 @@ const devRingSx = {
   justifyContent: "center",
   alignItems: "center",
 } as SxProps;
+
+export default Index;
