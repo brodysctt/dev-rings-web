@@ -6,7 +6,6 @@ import {
   setDoc,
   updateDoc,
 } from "firebase/firestore";
-import { dayjs } from "@lib/dayjs";
 import { toast } from "react-toastify";
 
 export const db = getFirestore(firebaseApp);
@@ -58,7 +57,13 @@ export const updateDailyGoal = async (userId: string, dailyGoal: number) => {
   console.log("Sucessfully submitted goal 🎉");
 };
 
-export const updateTimezone = async (userId: string, timezone: string) => {
+export const updateOnboardingStatus = async (userId: string) => {
+  await updateDoc(doc(db, "users", userId), {
+    isOnboarding: false,
+  });
+};
+
+export const updateTz = async (userId: string, timezone: string) => {
   await updateDoc(doc(db, "users", userId), {
     timezone,
   });

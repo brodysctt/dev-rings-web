@@ -1,7 +1,14 @@
 import { useState } from "react";
 import Link from "next/link";
 import type { NextPage } from "next";
-import { useCollection, useUserDoc, Webhook } from "@lib/firebase/firestore";
+import {
+  useCollection,
+  useUserDoc,
+  updateOnboardingStatus,
+  updateTz,
+} from "@lib/firebase/firestore";
+import type { Webhook } from "@lib/firebase/firestore";
+import { dayjs } from "@lib/dayjs";
 import {
   Box,
   Typography,
@@ -19,7 +26,7 @@ const Onboarding: NextPage = () => {
   const userData = useUserDoc();
 
   if (!userData) return null;
-  const [, { dailyGoal }] = userData;
+  const [userId, { dailyGoal }] = userData;
 
   const incrementStep = () => setActiveStep(activeStep + 1);
 
@@ -53,7 +60,41 @@ const Onboarding: NextPage = () => {
     {
       label: "Confirm timezone",
       isComplete: false, // TODO: Make it so timezone is only stored on this action, then use same logic as goal
-      child: <Typography>Confirm timezone</Typography>,
+      child: (
+        <Box sx={containerSx}>
+          <Typography
+            align="center"
+            color="primary.main"
+            sx={{ whiteSpace: "pre-wrap" }}
+          >
+            {`Your current timezone is ${dayjs.tz.guess()} 🌍
+Is this the best timezone for tracking daily goals?`}
+          </Typography>
+          <Button
+            variant="contained"
+            sx={{ mt: 2 }}
+            onClick={() => {
+              updateTz(userId, dayjs.tz.guess());
+              incrementStep();
+            }}
+          >{`Confirm`}</Button>
+        </Box>
+      ),
+    },
+    {
+      label: "Code",
+      isComplete: false, // TODO: Make it so timezone is only stored on this action, then use same logic as goal
+      child: (
+        <Box sx={containerSx}>
+          <Typography
+            align="center"
+            color="primary.main"
+            sx={{ whiteSpace: "pre-wrap" }}
+          >
+            {`You're all set to track your first contribution! Push a change to repo to see your progress 🚀`}
+          </Typography>
+        </Box>
+      ),
     },
   ];
 
@@ -70,38 +111,47 @@ const Onboarding: NextPage = () => {
       {activeStep < steps.length ? (
         steps[activeStep].child
       ) : (
-        <>
+        <Box sx={{ display: "flex", flexDirection: "column", mt: 10 }}>
           <Typography sx={{ mt: 2, mb: 1 }}>
             {`Woo! You're ready to start building momentum with Dev Rings 🚀`}
-            <Link href="/" passHref>
-              <Button>Take me to today's ring</Button>
-            </Link>
           </Typography>
-        </>
+          {/* TODO: Upgrade this so that after 5 seconds it just navigates to the index route */}
+          <Link href="/" passHref>
+            <Button onClick={() => updateOnboardingStatus(userId)}>
+              Take me to today's ring
+            </Button>
+          </Link>
+        </Box>
       )}
-      <Box
-        sx={{
-          display: "flex",
-          justifyContent: "space-between",
-          width: "60%",
-          pt: 2,
-        }}
-      >
-        <Button
-          color="inherit"
-          disabled={activeStep === 0}
-          onClick={() => setActiveStep((prevActiveStep) => prevActiveStep - 1)}
-          sx={{ mr: 1 }}
+      {activeStep < steps.length && (
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "space-between",
+            width: "60%",
+            pt: 2,
+          }}
         >
-          Back
-        </Button>
-        <Button
-          disabled={!steps[activeStep].isComplete}
-          onClick={() => setActiveStep((prevActiveStep) => prevActiveStep + 1)}
-        >
-          {activeStep === steps.length - 1 ? "Finish" : "Next"}
-        </Button>
-      </Box>
+          <Button
+            color="inherit"
+            disabled={activeStep === 0}
+            onClick={() =>
+              setActiveStep((prevActiveStep) => prevActiveStep - 1)
+            }
+            sx={{ mr: 1 }}
+          >
+            Back
+          </Button>
+          <Button
+            disabled={!steps[activeStep].isComplete}
+            onClick={() =>
+              setActiveStep((prevActiveStep) => prevActiveStep + 1)
+            }
+          >
+            Next
+          </Button>
+        </Box>
+      )}
     </Box>
   );
 };
