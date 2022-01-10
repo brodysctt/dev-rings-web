@@ -15,6 +15,7 @@ export const Navbar = () => {
     <Grid container sx={{ height: 60, pl: 20, mt: 4 }}>
       <Grid item xs={8}>
         <Box sx={{ display: "flex", alignItems: "center" }}>
+          {/* TODO: If user hasn't onboarded, don't allow click to index */}
           <Link href="/" passHref>
             <Tooltip title="View today's progress">
               <Button variant="text" sx={{ p: 2 }}>

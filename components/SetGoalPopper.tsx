@@ -12,6 +12,7 @@ export const SetGoalPopper = () => {
   if (!userData) return null;
 
   const [userId, { dailyGoal, hasSetGoal }] = userData;
+  if (!hasSetGoal) return null;
 
   const onSubmit: SubmitHandler<{ goal: string }> = async ({ goal }) => {
     const isOnlyNumbers = /^[1-9]*$/.test(goal);
@@ -30,10 +31,8 @@ export const SetGoalPopper = () => {
     });
   };
 
-  const buttonVariant = !hasSetGoal ? "outlined" : "text";
-
   return (
-    <PopperWrapper id="set-goal" icon={<GoalSvg />} {...{ buttonVariant }}>
+    <PopperWrapper id="set-goal" icon={<GoalSvg />}>
       <Box sx={containerSx}>
         <OutlinedInput
           {...register("goal")}

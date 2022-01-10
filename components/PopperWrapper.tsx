@@ -4,19 +4,12 @@ import type { SxProps } from "@mui/system";
 
 interface Props {
   id: string;
-  buttonVariant: "contained" | "outlined" | "text";
   icon: JSX.Element;
   paperSx?: SxProps;
 }
 
 // TODO: Listen for Firestore update to User doc (and close on update)
-export const PopperWrapper: FC<Props> = ({
-  id,
-  buttonVariant,
-  children,
-  icon,
-  paperSx,
-}) => {
+export const PopperWrapper: FC<Props> = ({ id, children, icon, paperSx }) => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   // TODO: Figure out how to close popper on submit within children
   const open = Boolean(anchorEl);
@@ -26,7 +19,7 @@ export const PopperWrapper: FC<Props> = ({
       <Box>
         <Button
           aria-describedby={open ? id : undefined}
-          variant={buttonVariant}
+          variant="text"
           onClick={(event: MouseEvent<HTMLElement>) => {
             setAnchorEl(anchorEl ? null : event.currentTarget);
           }}

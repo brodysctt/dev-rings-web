@@ -20,12 +20,7 @@ export const CalendarPopper = () => {
   const gridStart = dayjs(monthLogs[0][0]).day();
 
   return (
-    <PopperWrapper
-      id="calendar"
-      buttonVariant="text"
-      paperSx={{ pt: 1 }}
-      icon={<CalendarSvg />}
-    >
+    <PopperWrapper id="calendar" paperSx={{ pt: 1 }} icon={<CalendarSvg />}>
       <Box sx={containerSx}>
         <Typography sx={{ fontSize: 12, color: "primary.main" }}>
           {monthInView[1]}

@@ -13,7 +13,6 @@ export const EventsPopper = ({ events }: { events: RepoEvent[] }) => {
           <EventSvg variant="contained" />
         </Box>
       }
-      buttonVariant="text"
     >
       <Box
         sx={{
