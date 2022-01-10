@@ -38,7 +38,7 @@ const Repos: NextPage = () => {
 
   return (
     <Box sx={containerSx}>
-      <Typography variant="h5">{`Check a repo below to start tracking it 
+      <Typography variant="h6">{`Check a repo below to start tracking it 
       ✔️`}</Typography>
       <FormGroup>
         <Box sx={checkboxesSx}>
@@ -63,7 +63,13 @@ const Repos: NextPage = () => {
           ))}
         </Box>
       </FormGroup>
-      <Box sx={{ display: "flex", alignItems: "center", mt: 3 }}>
+      <Box
+        sx={{
+          display: "flex",
+          alignItems: "center",
+          mt: 5,
+        }}
+      >
         <TrackEmAllButton />
         <TrackRepoInput />
       </Box>

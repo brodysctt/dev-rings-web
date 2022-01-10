@@ -29,7 +29,9 @@ export const SetGoalPopper = () => {
       position: "top-center",
     });
   };
+
   const buttonVariant = !hasSetGoal ? "outlined" : "text";
+
   return (
     <PopperWrapper id="set-goal" icon={<GoalSvg />} {...{ buttonVariant }}>
       <Box sx={containerSx}>
@@ -44,6 +46,7 @@ export const SetGoalPopper = () => {
             if (kp.key === "Enter") {
               handleSubmit(onSubmit)();
               kp.preventDefault();
+              // TODO: What does this do ☝️
             }
           }}
         />

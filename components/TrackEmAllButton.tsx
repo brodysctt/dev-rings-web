@@ -30,7 +30,6 @@ const buttonSx = {
   justifyContent: "space-around",
   alignItems: "center",
   p: 1,
-  ml: 2,
 } as SxProps;
 
 const createWebhooks = async (userId: string) => {
