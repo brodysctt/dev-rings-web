@@ -8,7 +8,7 @@ import {
   Checkbox,
 } from "@mui/material";
 import type { SxProps } from "@mui/system";
-import { TrackEmAllButton } from "components";
+import { TrackEmAllButton, TrackRepoInput } from "components";
 import { useAuth } from "@lib/firebase/auth";
 import { useCollection } from "@lib/firebase/firestore";
 import type { Webhook } from "@lib/firebase/firestore";
@@ -64,8 +64,8 @@ const Repos: NextPage = () => {
         </Box>
       </FormGroup>
       <Box sx={{ display: "flex", alignItems: "center", mt: 3 }}>
-        <Typography>{`Also, feel free to track 'em all 👉`}</Typography>
         <TrackEmAllButton />
+        <TrackRepoInput />
       </Box>
     </Box>
   );

@@ -2,7 +2,6 @@ import Link from "next/link";
 import { useAuth } from "@lib/firebase/auth";
 import { Grid, Box, Button, Tooltip } from "@mui/material";
 import {
-  TrackRepoInput,
   CalendarPopper,
   ProgressRing,
   SidebarDial,
@@ -25,7 +24,6 @@ export const Navbar = () => {
           </Link>
           <CalendarPopper />
           <SetGoalPopper />
-          <TrackRepoInput />
         </Box>
       </Grid>
       <Grid item xs={4} sx={{ pr: 20 }}>

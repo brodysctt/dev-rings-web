@@ -64,7 +64,7 @@ export const TrackRepoInput = () => {
         ml: 3,
       }}
     >
-      <Tooltip title="Paste your GitHub repo here to start tracking it">
+      <Tooltip title="Paste a private GitHub repo here to start tracking it">
         <FormControl variant="standard">
           <Input
             {...register("repoUrl")}
