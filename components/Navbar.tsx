@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { useAuth } from "@lib/firebase/auth";
+import { useUserDoc } from "@lib/firebase/firestore";
 import { Grid, Box, Button, Tooltip } from "@mui/material";
 import {
   CalendarPopper,
@@ -9,20 +9,22 @@ import {
 } from "components";
 
 export const Navbar = () => {
-  const userId = useAuth();
-  if (!userId) return null;
+  const userData = useUserDoc();
+  if (!userData) return null;
+  const [, { hasSetGoal }] = userData;
   return (
     <Grid container sx={{ height: 60, pl: 20, mt: 4 }}>
       <Grid item xs={8}>
         <Box sx={{ display: "flex", alignItems: "center" }}>
-          {/* TODO: If user hasn't onboarded, don't allow click to index */}
-          <Link href="/" passHref>
-            <Tooltip title="View today's progress">
-              <Button variant="text" sx={{ p: 2 }}>
-                <ProgressRing percent={100} size={26} mb={false} />
-              </Button>
-            </Tooltip>
-          </Link>
+          {hasSetGoal && (
+            <Link href="/" passHref>
+              <Tooltip title="View today's progress">
+                <Button variant="text" sx={{ p: 2 }}>
+                  <ProgressRing percent={100} size={26} mb={false} />
+                </Button>
+              </Tooltip>
+            </Link>
+          )}
           <CalendarPopper />
           <SetGoalPopper />
         </Box>

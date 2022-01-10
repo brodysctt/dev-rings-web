@@ -1,7 +1,7 @@
 import type { NextPage } from "next";
 import { useUserDoc, useCollection } from "@lib/firebase/firestore";
 import type { RepoEvent, Webhook } from "@lib/firebase/firestore";
-import { newTzToast, setGoalToast } from "@lib/react-toastify";
+import { newTzToast } from "@lib/react-toastify";
 import { dayjs } from "@lib/dayjs";
 import { Box } from "@mui/material";
 import type { SxProps } from "@mui/system";
@@ -14,7 +14,7 @@ const Index: NextPage = () => {
   const webhooks = useCollection("webhooks") as Webhook[] | null;
 
   if (!userData || !webhooks) return null;
-  const [userId, { dailyGoal: goal, hasSetGoal, timezone }] = userData;
+  const [userId, { dailyGoal: goal, timezone }] = userData;
 
   // TODO: Write unit tests for this
   const dayEvents = getDayEvents(
@@ -25,7 +25,6 @@ const Index: NextPage = () => {
   const isNewTz = checkTz(timezone);
   if (isNewTz) newTzToast(userId, timezone);
   if (!dayEvents) return <KickOffHero repos={getRepos(webhooks, userId)} />;
-  if (!hasSetGoal) setGoalToast();
 
   const actual = dayEvents.length;
   return (

@@ -4,6 +4,7 @@ import type { SxProps } from "@mui/system";
 import { dayjs } from "@lib/dayjs";
 import { updateTimezone } from "@lib/firebase/firestore";
 
+// TODO: Removed this from githubSignIn, need to add to OnboardingStepper
 export const setTimezoneToast = () =>
   toast(
     <Box sx={containerSx}>
