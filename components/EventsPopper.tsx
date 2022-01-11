@@ -1,19 +1,18 @@
 import { Box, Typography, Chip, Tooltip } from "@mui/material";
 import type { RepoEvent } from "@lib/firebase/firestore";
 import { getTimeAsString } from "utils";
-import { PopperWrapper, EventSvg } from "components";
+import { PopIt, EventSvg } from "components";
 
 export const EventsPopper = ({ events }: { events: RepoEvent[] }) => {
   const chronologicalEvents = [...events].reverse();
   return (
-    <PopperWrapper
+    <PopIt
       id="events"
       icon={
         <Box sx={iconContainerSx}>
           <EventSvg variant="contained" />
         </Box>
       }
-      buttonVariant="text"
     >
       <Box
         sx={{
@@ -44,7 +43,7 @@ export const EventsPopper = ({ events }: { events: RepoEvent[] }) => {
           );
         })}
       </Box>
-    </PopperWrapper>
+    </PopIt>
   );
 };
 

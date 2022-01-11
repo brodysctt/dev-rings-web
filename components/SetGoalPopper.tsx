@@ -1,17 +1,20 @@
 import { Box, Typography, OutlinedInput } from "@mui/material";
 import type { SxProps } from "@mui/system";
 import { useForm, SubmitHandler } from "react-hook-form";
-import { updateDailyGoal, useUserDoc } from "@lib/firebase/firestore";
+import { setDailyGoal, useUserDoc } from "@lib/firebase/firestore";
 import { toast } from "react-toastify";
-import { PopperWrapper, GoalSvg } from "components";
+import { PopIt, GoalSvg } from "components";
 
-export const SetGoalPopper = () => {
+interface Props {
+  onSuccess?: () => void;
+}
+
+export const SetGoalPopper = ({ onSuccess }: Props) => {
   const { register, handleSubmit } = useForm<{ goal: number }>();
 
   const userData = useUserDoc();
   if (!userData) return null;
-
-  const [userId, { dailyGoal, hasSetGoal }] = userData;
+  const [userId, { dailyGoal }] = userData;
 
   const onSubmit: SubmitHandler<{ goal: string }> = async ({ goal }) => {
     const isOnlyNumbers = /^[1-9]*$/.test(goal);
@@ -22,16 +25,17 @@ export const SetGoalPopper = () => {
       return;
     }
     const dailyGoal = Number(goal);
-    await updateDailyGoal(userId, dailyGoal);
+    await setDailyGoal(userId, dailyGoal);
     // TODO: Figure out how to close popper on submit
     // ☝️ Listen for update to goal change
     toast.success(`Goal is now ${dailyGoal} 🏔️`, {
       position: "top-center",
     });
+    if (onSuccess) onSuccess();
   };
-  const buttonVariant = !hasSetGoal ? "outlined" : "text";
+
   return (
-    <PopperWrapper id="set-goal" icon={<GoalSvg />} {...{ buttonVariant }}>
+    <PopIt id="set-goal" icon={<GoalSvg />}>
       <Box sx={containerSx}>
         <OutlinedInput
           {...register("goal")}
@@ -44,6 +48,7 @@ export const SetGoalPopper = () => {
             if (kp.key === "Enter") {
               handleSubmit(onSubmit)();
               kp.preventDefault();
+              // TODO: What does this do ☝️
             }
           }}
         />
@@ -52,7 +57,7 @@ export const SetGoalPopper = () => {
           sx={{ mt: 1, fontSize: "12px" }}
         >{`Current goal is ${dailyGoal}`}</Typography>
       </Box>
-    </PopperWrapper>
+    </PopIt>
   );
 };
 

@@ -2,8 +2,10 @@ import { toast } from "react-toastify";
 import { Box, Typography, Button } from "@mui/material";
 import type { SxProps } from "@mui/system";
 import { dayjs } from "@lib/dayjs";
-import { updateTimezone } from "@lib/firebase/firestore";
+import { setTimezone } from "@lib/firebase/firestore";
 
+// TODO: Removed this from githubSignIn, need to add to OnboardingStepper
+// TODO: Delete this once its implemented in stepper
 export const setTimezoneToast = () =>
   toast(
     <Box sx={containerSx}>
@@ -42,7 +44,7 @@ export const newTzToast = (userId: string, currentTimezone: string) =>
         <Button
           variant="contained"
           color="secondary"
-          onClick={() => updateTimezone(userId, dayjs.tz.guess())}
+          onClick={() => setTimezone(userId, dayjs.tz.guess())}
         >{`change`}</Button>
         <Button
           variant="contained"

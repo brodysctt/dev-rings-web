@@ -2,22 +2,32 @@ import { useRouter } from "next/router";
 import GitHubIcon from "@mui/icons-material/GitHub";
 import { Box, Typography, Button } from "@mui/material";
 import type { SxProps } from "@mui/system";
-import { useAuth, githubSignIn } from "@lib/firebase/auth";
+import { githubSignIn } from "@lib/firebase/auth";
+import { useUserDoc } from "@lib/firebase/firestore";
 import { ProgressRing } from "components";
 
 const Enter = () => {
-  const userId = useAuth();
   const router = useRouter();
-  if (userId) router.push("/");
-  return (
-    <Box sx={containerSx}>
-      <ProgressRing percent={100} />
-      <Typography variant="h4" sx={{ mt: 3, mb: 5, color: "primary.main" }}>
-        {`Build momentum on your coding journey`}
-      </Typography>
-      <SignInButton />
-    </Box>
-  );
+  const userData = useUserDoc();
+
+  if (!userData)
+    return (
+      <Box sx={containerSx}>
+        <ProgressRing percent={100} />
+        <Typography variant="h4" sx={{ mt: 3, mb: 5, color: "primary.main" }}>
+          {`Build momentum on your coding journey`}
+        </Typography>
+        <SignInButton />
+      </Box>
+    );
+
+  const [, { isOnboarding }] = userData;
+  if (isOnboarding) {
+    router.push("/onboarding");
+    return null;
+  }
+  router.push("/");
+  return null;
 };
 
 const containerSx = {

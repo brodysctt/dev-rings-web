@@ -1,12 +1,11 @@
-import Link from "next/link";
 import type { NextPage } from "next";
 import { useUserDoc, useCollection } from "@lib/firebase/firestore";
 import type { RepoEvent, Webhook } from "@lib/firebase/firestore";
-import { newTzToast, setGoalToast } from "@lib/react-toastify";
+import { newTzToast } from "@lib/react-toastify";
 import { dayjs } from "@lib/dayjs";
-import { Box, Button } from "@mui/material";
+import { Box } from "@mui/material";
 import type { SxProps } from "@mui/system";
-import { KickOffHero, ProgressRing, EventsPopper } from "components";
+import { GetStarted, ProgressRing, EventsPopper } from "components";
 import { calcProgress, checkTz, getDayEvents, getRepos } from "helpers";
 
 const Index: NextPage = () => {
@@ -14,16 +13,8 @@ const Index: NextPage = () => {
   const events = useCollection("events") as RepoEvent[] | null;
   const webhooks = useCollection("webhooks") as Webhook[] | null;
 
-  // TODO: Add a TrackRepo component here
-  if (!webhooks)
-    return (
-      <Link href="/repos" passHref>
-        <Button>{`You aren't tracking any repos! Head to the repos page to add more`}</Button>
-      </Link>
-    );
-
-  if (!userData) return null;
-  const [userId, { dailyGoal: goal, hasSetGoal, timezone }] = userData;
+  if (!userData || !webhooks) return null;
+  const [userId, { dailyGoal: goal, timezone }] = userData;
 
   // TODO: Write unit tests for this
   const dayEvents = getDayEvents(
@@ -33,8 +24,7 @@ const Index: NextPage = () => {
 
   const isNewTz = checkTz(timezone);
   if (isNewTz) newTzToast(userId, timezone);
-  if (!dayEvents) return <KickOffHero repos={getRepos(webhooks, userId)} />;
-  if (!hasSetGoal) setGoalToast();
+  if (!dayEvents) return <GetStarted repos={getRepos(webhooks, userId)} />;
 
   const actual = dayEvents.length;
   return (
@@ -46,8 +36,6 @@ const Index: NextPage = () => {
     </Box>
   );
 };
-
-export default Index;
 
 const containerSx = {
   display: "flex",
@@ -63,3 +51,5 @@ const devRingSx = {
   justifyContent: "center",
   alignItems: "center",
 } as SxProps;
+
+export default Index;
