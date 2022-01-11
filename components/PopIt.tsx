@@ -9,6 +9,8 @@ interface Props {
 }
 
 // TODO: Listen for Firestore update to User doc (and close on update)
+// TODO: Add pop on hover functionality – would be nice for calendar and set goal
+// TODO: Add popped functionality, i.e. can render pre-popped – clutch for onboarding
 export const PopIt: FC<Props> = ({ id, children, icon, paperSx }) => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   // TODO: Figure out how to close popper on submit within children

@@ -1,10 +1,14 @@
 import type { FC } from "react";
-import { useCollection, useUserDoc, setTimezone } from "@lib/firebase";
+import {
+  useCollection,
+  useUserDoc,
+  setTimezone,
+} from "@lib/firebase/firestore";
 import type { Webhook } from "@lib/firebase/firestore";
 import { dayjs } from "@lib/dayjs";
 import { Box, Typography, Button } from "@mui/material";
 import type { SxProps } from "@mui/system";
-import { KickOffHero, SetGoalPopper, TrackRepoCheckboxes } from "components";
+import { GetStarted, SetGoalPopper, TrackRepoCheckboxes } from "components";
 import { getRepos } from "helpers";
 
 interface Props {
@@ -33,7 +37,7 @@ export const OnboardingStep: FC<Props> = ({
 
   if (activeStep === 1)
     return (
-      <Box sx={{ ...stepSx, mb: 20 }}>
+      <Box sx={stepSx}>
         <Typography
           align="center"
           sx={{ mb: 2, whiteSpace: "pre-line" }}
@@ -74,14 +78,7 @@ Is this the best timezone for tracking daily goals?`}
   if (activeStep === 3)
     return (
       <Box sx={stepSx}>
-        <Typography
-          align="center"
-          color="primary.main"
-          sx={{ mb: 4, whiteSpace: "pre-wrap" }}
-        >
-          {`You're all set to track your first contribution!`}
-        </Typography>
-        {webhooks && <KickOffHero repos={getRepos(webhooks, userId)} />}
+        {webhooks && <GetStarted repos={getRepos(webhooks, userId)} />}
       </Box>
     );
 
@@ -91,6 +88,7 @@ Is this the best timezone for tracking daily goals?`}
 const stepSx = {
   display: "flex",
   flexDirection: "column",
+  justifyContent: "center",
   alignItems: "center",
-  mt: 10,
+  height: "50vh",
 } as SxProps;

@@ -1,7 +1,11 @@
 import { useState } from "react";
 import Link from "next/link";
 import type { NextPage } from "next";
-import { useCollection, useUserDoc, setOnboardingStatus } from "@lib/firebase";
+import {
+  useCollection,
+  useUserDoc,
+  setOnboardingStatus,
+} from "@lib/firebase/firestore";
 import type { RepoEvent, Webhook } from "@lib/firebase/firestore";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
@@ -49,7 +53,7 @@ const Onboarding: NextPage = () => {
           {/* TODO: Upgrade this so that after 5 seconds it just navigates to the index route */}
           <Link href="/" passHref>
             <Button onClick={() => setOnboardingStatus(userId)}>
-              Take me to today's ring
+              {`Take me to today's ring`}
             </Button>
           </Link>
         </Box>
@@ -74,7 +78,7 @@ const containerSx = {
   justifyContent: "center",
   alignItems: "center",
   width: 1,
-  height: "70vh",
+  height: "90vh",
 } as SxProps;
 
 const buttonsSx = {

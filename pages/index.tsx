@@ -5,7 +5,7 @@ import { newTzToast } from "@lib/react-toastify";
 import { dayjs } from "@lib/dayjs";
 import { Box } from "@mui/material";
 import type { SxProps } from "@mui/system";
-import { KickOffHero, ProgressRing, EventsPopper } from "components";
+import { GetStarted, ProgressRing, EventsPopper } from "components";
 import { calcProgress, checkTz, getDayEvents, getRepos } from "helpers";
 
 const Index: NextPage = () => {
@@ -24,7 +24,7 @@ const Index: NextPage = () => {
 
   const isNewTz = checkTz(timezone);
   if (isNewTz) newTzToast(userId, timezone);
-  if (!dayEvents) return <KickOffHero repos={getRepos(webhooks, userId)} />;
+  if (!dayEvents) return <GetStarted repos={getRepos(webhooks, userId)} />;
 
   const actual = dayEvents.length;
   return (
