@@ -88,7 +88,7 @@ Is this the best timezone for tracking daily goals?`}
     },
     {
       label: "Code",
-      isComplete: false,
+      isComplete: false, // TODO: Update this to be events collection
       child: (
         <Box sx={stepSx}>
           <Typography

@@ -3,7 +3,7 @@ import type { SxProps } from "@mui/system";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { updateDailyGoal, useUserDoc } from "@lib/firebase/firestore";
 import { toast } from "react-toastify";
-import { PopperWrapper, GoalSvg } from "components";
+import { PopIt, GoalSvg } from "components";
 
 interface Props {
   onSuccess?: () => void;
@@ -35,7 +35,7 @@ export const SetGoalPopper = ({ onSuccess }: Props) => {
   };
 
   return (
-    <PopperWrapper id="set-goal" icon={<GoalSvg />}>
+    <PopIt id="set-goal" icon={<GoalSvg />}>
       <Box sx={containerSx}>
         <OutlinedInput
           {...register("goal")}
@@ -57,7 +57,7 @@ export const SetGoalPopper = ({ onSuccess }: Props) => {
           sx={{ mt: 1, fontSize: "12px" }}
         >{`Current goal is ${dailyGoal}`}</Typography>
       </Box>
-    </PopperWrapper>
+    </PopIt>
   );
 };
 

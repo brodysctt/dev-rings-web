@@ -9,7 +9,7 @@ interface Props {
 }
 
 // TODO: Listen for Firestore update to User doc (and close on update)
-export const PopperWrapper: FC<Props> = ({ id, children, icon, paperSx }) => {
+export const PopIt: FC<Props> = ({ id, children, icon, paperSx }) => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   // TODO: Figure out how to close popper on submit within children
   const open = Boolean(anchorEl);
