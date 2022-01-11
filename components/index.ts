@@ -3,7 +3,7 @@ export * from "./icons";
 export * from "./EventsPopper";
 export * from "./KickOffHero";
 export * from "./Navbar";
-export * from "./PopperWrapper";
+export * from "./PopIt";
 export * from "./ProgressRing";
 export * from "./SetGoalPopper";
 export * from "./SidebarDial";
