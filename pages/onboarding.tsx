@@ -18,7 +18,8 @@ import {
   StepLabel,
 } from "@mui/material";
 import type { SxProps } from "@mui/system";
-import { TrackRepoCheckboxes, SetGoalPopper } from "components";
+import { KickOffHero, SetGoalPopper, TrackRepoCheckboxes } from "components";
+import { getRepos } from "helpers";
 
 const Onboarding: NextPage = () => {
   const [activeStep, setActiveStep] = useState(0);
@@ -26,7 +27,7 @@ const Onboarding: NextPage = () => {
   const userData = useUserDoc();
 
   if (!userData) return null;
-  const [userId, { dailyGoal }] = userData;
+  const [userId, { dailyGoal, timezone }] = userData;
 
   const incrementStep = () => setActiveStep(activeStep + 1);
 
@@ -59,40 +60,45 @@ const Onboarding: NextPage = () => {
     },
     {
       label: "Confirm timezone",
-      isComplete: false, // TODO: Make it so timezone is only stored on this action, then use same logic as goal
+      isComplete: Boolean(timezone),
       child: (
-        <Box sx={containerSx}>
+        <Box sx={stepSx}>
           <Typography
             align="center"
             color="primary.main"
             sx={{ whiteSpace: "pre-wrap" }}
           >
-            {`Your current timezone is ${dayjs.tz.guess()} 🌍
+            {timezone
+              ? `Your timezone has been set to ${timezone}`
+              : `Your current timezone is ${dayjs.tz.guess()} 🌍
 Is this the best timezone for tracking daily goals?`}
           </Typography>
-          <Button
-            variant="contained"
-            sx={{ mt: 2 }}
-            onClick={() => {
-              updateTz(userId, dayjs.tz.guess());
-              incrementStep();
-            }}
-          >{`Confirm`}</Button>
+          {!timezone && (
+            <Button
+              variant="contained"
+              sx={{ mt: 2 }}
+              onClick={() => {
+                updateTz(userId, dayjs.tz.guess());
+                incrementStep();
+              }}
+            >{`Confirm`}</Button>
+          )}
         </Box>
       ),
     },
     {
       label: "Code",
-      isComplete: false, // TODO: Make it so timezone is only stored on this action, then use same logic as goal
+      isComplete: false,
       child: (
-        <Box sx={containerSx}>
+        <Box sx={stepSx}>
           <Typography
             align="center"
             color="primary.main"
-            sx={{ whiteSpace: "pre-wrap" }}
+            sx={{ mb: 4, whiteSpace: "pre-wrap" }}
           >
-            {`You're all set to track your first contribution! Push a change to repo to see your progress 🚀`}
+            {`You're all set to track your first contribution!`}
           </Typography>
+          {webhooks && <KickOffHero repos={getRepos(webhooks, userId)} />}
         </Box>
       ),
     },

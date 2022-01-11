@@ -67,5 +67,7 @@ export const updateTz = async (userId: string, timezone: string) => {
   await updateDoc(doc(db, "users", userId), {
     timezone,
   });
-  toast.success("Successfully updated timezone");
+  toast.success("Successfully updated timezone", {
+    position: "top-center",
+  });
 };
