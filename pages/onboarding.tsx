@@ -42,7 +42,6 @@ const Onboarding: NextPage = () => {
           </Step>
         ))}
       </Stepper>
-      {/* TODO: Confirm this logic for rendering final component */}
       {activeStep < steps.length ? (
         <OnboardingStep activeStep={activeStep} onSuccess={incrementStep} />
       ) : (
@@ -50,7 +49,8 @@ const Onboarding: NextPage = () => {
           <Typography sx={{ mt: 2, mb: 1 }}>
             {`Woo! You're ready to start building momentum with Dev Rings 🚀`}
           </Typography>
-          {/* TODO: Upgrade this so that after 5 seconds it just navigates to the index route */}
+          {/* TODO: Show the ring incrementing for the change that was just pushed */}
+          {/* And then, after 5 seconds, navigate to the index route automagically */}
           <Link href="/" passHref>
             <Button onClick={() => setOnboardingStatus(userId)}>
               {`Take me to today's ring`}

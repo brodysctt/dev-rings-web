@@ -75,10 +75,16 @@ Is this the best timezone for tracking daily goals?`}
       </Box>
     );
 
+  // TODO: Render animation on this step, then show the actual increment w/ confetti on the completed state
   if (activeStep === 3)
     return (
       <Box sx={stepSx}>
-        {webhooks && <GetStarted repos={getRepos(webhooks, userId)} />}
+        {webhooks && (
+          <GetStarted
+            repos={getRepos(webhooks, userId)}
+            onSuccess={onSuccess}
+          />
+        )}
       </Box>
     );
 
