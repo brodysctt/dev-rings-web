@@ -3,8 +3,7 @@ import { useCollection, useUserDoc } from "@lib/firebase/firestore";
 import type { RepoEvent } from "@lib/firebase/firestore";
 import { Box, Typography } from "@mui/material";
 import type { SxProps } from "@mui/system";
-import { ProgressRing } from "components";
-import { calcProgress } from "helpers";
+import { AnimatedRing } from "components";
 
 interface Props {
   repos: string[];
@@ -23,24 +22,19 @@ export const GetStarted = ({ repos, onSuccess }: Props) => {
   const events = useCollection("events") as RepoEvent[] | null;
   const userData = useUserDoc();
   if (!userData) return null;
-  const [, { dailyGoal, isOnboarding }] = userData;
+  const [, { isOnboarding }] = userData;
 
   if (isOnboarding && Boolean(events) && onSuccess) onSuccess();
 
   return (
     <Box sx={containerSx}>
-      <Typography variant="h6" sx={{ mb: 6, color: "primary.main" }}>
+      <Typography variant="h6" sx={{ color: "primary.main" }}>
         {isOnboarding
           ? `You're all set to start tracking progress! Make a change to ${repos[0]} to get started 💍`
           : `Push changes to ✨ ${repos[randomIndex]} ✨ to kick off today's progress 🚀`}
       </Typography>
       {/* TODO: Would be amazing to rip an animation of incrementally completing the ring */}
-      {isOnboarding && (
-        <ProgressRing
-          percent={events ? calcProgress(events.length, dailyGoal) : 1}
-          size={isOnboarding && 200}
-        />
-      )}
+      {isOnboarding && <AnimatedRing />}
     </Box>
   );
 };

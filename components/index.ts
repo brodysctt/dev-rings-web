@@ -1,5 +1,6 @@
 export * from "./calendar-popper";
 export * from "./icons";
+export * from "./AnimatedRing";
 export * from "./EventsPopper";
 export * from "./GetStarted";
 export * from "./Navbar";
