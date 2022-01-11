@@ -10,6 +10,7 @@ interface Props {
   disabled: boolean;
 }
 
+// TODO: Consider refactoring this
 export const ArrowButton = ({
   type = "next",
   monthInView,

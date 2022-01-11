@@ -49,7 +49,7 @@ export const setGitHubToken = async (userId: string, token: string) => {
   });
 };
 
-export const updateDailyGoal = async (userId: string, dailyGoal: number) => {
+export const setDailyGoal = async (userId: string, dailyGoal: number) => {
   console.log("Submitting goal...");
   await updateDoc(doc(db, "users", userId), {
     dailyGoal,
@@ -57,13 +57,13 @@ export const updateDailyGoal = async (userId: string, dailyGoal: number) => {
   console.log("Sucessfully submitted goal 🎉");
 };
 
-export const updateOnboardingStatus = async (userId: string) => {
+export const setOnboardingStatus = async (userId: string) => {
   await updateDoc(doc(db, "users", userId), {
     isOnboarding: false,
   });
 };
 
-export const updateTz = async (userId: string, timezone: string) => {
+export const setTimezone = async (userId: string, timezone: string) => {
   await updateDoc(doc(db, "users", userId), {
     timezone,
   });

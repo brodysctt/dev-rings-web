@@ -1,7 +1,7 @@
 import { Box, Typography, OutlinedInput } from "@mui/material";
 import type { SxProps } from "@mui/system";
 import { useForm, SubmitHandler } from "react-hook-form";
-import { updateDailyGoal, useUserDoc } from "@lib/firebase/firestore";
+import { setDailyGoal, useUserDoc } from "@lib/firebase/firestore";
 import { toast } from "react-toastify";
 import { PopIt, GoalSvg } from "components";
 
@@ -25,7 +25,7 @@ export const SetGoalPopper = ({ onSuccess }: Props) => {
       return;
     }
     const dailyGoal = Number(goal);
-    await updateDailyGoal(userId, dailyGoal);
+    await setDailyGoal(userId, dailyGoal);
     // TODO: Figure out how to close popper on submit
     // ☝️ Listen for update to goal change
     toast.success(`Goal is now ${dailyGoal} 🏔️`, {
