@@ -1,5 +1,6 @@
 import { toast } from "react-toastify";
 
+// TODO: Gotta centralize all toasts bruh
 export const trackRepoToast = {
   success: () => toast.success("Webhook successfully created"),
   info: () => toast.info(`just copy & paste the github link bruh 😅`),
