@@ -1,5 +1,6 @@
 export * from "./calendar-popper";
 export * from "./icons";
+export * from "./track-repos";
 export * from "./AnimatedRing";
 export * from "./EventsPopper";
 export * from "./GetStarted";
@@ -9,6 +10,3 @@ export * from "./PopIt";
 export * from "./ProgressRing";
 export * from "./SetGoalPopper";
 export * from "./SidebarDial";
-export * from "./TrackEmAllButton";
-export * from "./TrackRepoCheckboxes";
-export * from "./TrackRepoInput";

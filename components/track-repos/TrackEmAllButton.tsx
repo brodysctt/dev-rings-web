@@ -3,7 +3,8 @@ import type { SxProps } from "@mui/system";
 import { GitHubSvg } from "components";
 import { toast } from "react-toastify";
 import { useAuth } from "@lib/firebase/auth";
-import { fetchPublicRepos, trackRepo } from "helpers/track-repos";
+import { fetchPublicRepos } from "./fetchPublicRepos";
+import { trackRepo } from "./trackRepo";
 
 export const TrackEmAllButton = () => {
   const userId = useAuth();

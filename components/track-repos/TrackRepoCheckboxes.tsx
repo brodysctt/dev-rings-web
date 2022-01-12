@@ -10,7 +10,8 @@ import type { SxProps } from "@mui/system";
 import { useAuth } from "@lib/firebase/auth";
 import { getRepos, useCollection, Webhook } from "@lib/firebase/firestore";
 import { toast } from "react-toastify";
-import { fetchPublicRepos, trackRepo } from "helpers";
+import { fetchPublicRepos } from "./fetchPublicRepos";
+import { trackRepo } from "./trackRepo";
 
 interface Props {
   onSuccess?: () => void;
