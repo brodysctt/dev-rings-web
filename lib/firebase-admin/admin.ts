@@ -11,7 +11,10 @@ if (!apps.length) {
         clientEmail:
           process.env.NEXT_PUBLIC_FIREBASE_SERVICE_ACCOUNT_CLIENT_EMAIL,
         privateKey:
-          process.env.NEXT_PUBLIC_FIREBASE_SERVICE_ACCOUNT_PRIVATE_KEY,
+          process.env.NEXT_PUBLIC_FIREBASE_SERVICE_ACCOUNT_PRIVATE_KEY!.replace(
+            /\\n/g,
+            "\n"
+          ),
       }),
       databaseURL: `https://${process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID}.firebaseio.com`,
     },
