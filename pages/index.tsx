@@ -1,12 +1,11 @@
 import type { NextPage } from "next";
-import { useUserDoc, useCollection } from "@lib/firebase/firestore";
+import { getRepos, useUserDoc, useCollection } from "@lib/firebase/firestore";
 import type { RepoEvent, Webhook } from "@lib/firebase/firestore";
 import { newTzToast } from "@lib/react-toastify";
-import { dayjs } from "@lib/dayjs";
+import { dayjs, checkTimezone, getDayEvents } from "@lib/dayjs";
 import { Box } from "@mui/material";
 import type { SxProps } from "@mui/system";
 import { GetStarted, ProgressRing, EventsPopper } from "components";
-import { calcProgress, checkTz, getDayEvents, getRepos } from "helpers";
 
 const Index: NextPage = () => {
   const userData = useUserDoc();
@@ -22,7 +21,7 @@ const Index: NextPage = () => {
     dayjs().format("YYYY-MM-DD")
   );
 
-  const isNewTz = checkTz(timezone);
+  const isNewTz = checkTimezone(timezone);
   if (isNewTz) newTzToast(userId, timezone);
   if (!dayEvents) return <GetStarted repos={getRepos(webhooks, userId)} />;
 
@@ -30,7 +29,7 @@ const Index: NextPage = () => {
   return (
     <Box sx={containerSx}>
       <Box sx={devRingSx}>
-        <ProgressRing percent={calcProgress(actual, goal)} />
+        <ProgressRing values={[actual, goal]} />
         <EventsPopper events={dayEvents} />
       </Box>
     </Box>

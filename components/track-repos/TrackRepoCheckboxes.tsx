@@ -8,9 +8,10 @@ import {
 } from "@mui/material";
 import type { SxProps } from "@mui/system";
 import { useAuth } from "@lib/firebase/auth";
-import { useCollection } from "@lib/firebase/firestore";
-import type { Webhook } from "@lib/firebase/firestore";
-import { getRepos, fetchPublicRepos, trackRepo, trackRepoToast } from "helpers";
+import { getRepos, useCollection, Webhook } from "@lib/firebase/firestore";
+import { toast } from "react-toastify";
+import { fetchPublicRepos } from "./fetchPublicRepos";
+import { trackRepo } from "./trackRepo";
 
 interface Props {
   onSuccess?: () => void;
@@ -57,10 +58,17 @@ export const TrackRepoCheckboxes = ({ onSuccess }: Props) => {
                     console.log(`create webhook for ${repo}`);
                     const response = await trackRepo(userId, repo);
                     if (response !== 200) {
-                      trackRepoToast.warn();
+                      toast.warn(
+                        "Webhook did not get created – are you already tracking it? 👀",
+                        {
+                          position: "top-center",
+                        }
+                      );
                       return;
                     }
-                    trackRepoToast.success();
+                    toast.success("Webhook successfully created", {
+                      position: "top-center",
+                    });
                     if (onSuccess) onSuccess();
                     return;
                   }}

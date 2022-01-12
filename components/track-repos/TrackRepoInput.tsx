@@ -3,7 +3,7 @@ import { toast } from "react-toastify";
 import { useAuth } from "@lib/firebase/auth";
 import { Box, FormControl, Input, Tooltip } from "@mui/material";
 import type { SxProps } from "@mui/system";
-import { trackRepo, trackRepoToast } from "helpers/track-repos";
+import { trackRepo } from "./trackRepo";
 
 export const TrackRepoInput = () => {
   const { register, handleSubmit } = useForm<{ repoUrl: string }>();
@@ -33,17 +33,21 @@ export const TrackRepoInput = () => {
     const result = re.exec(repoUrl);
     if (!result) {
       // TODO: When would this occur? Need to make this more specific
-      trackRepoToast.error();
+      toast.error("Yoinks, something went wrong 😟", {
+        position: "top-center",
+      });
       return;
     }
     const repo = result[0];
     const status = await trackRepo(userId, repo);
     if (status !== 200) {
       // TODO: Log to Sentry
-      trackRepoToast.error();
+      toast.error("Yoinks, something went wrong 😟", {
+        position: "top-center",
+      });
       return;
     }
-    toast.success("Webhook successfully created 🎉");
+    toast.success("Webhook successfully created");
   };
 
   return (

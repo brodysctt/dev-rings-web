@@ -16,7 +16,7 @@ export const DayTile = ({ log }: { log: Log }) => {
   const isDayOff = !actual && !goal;
   const day = dayjs(dateString).date();
   const hitGoal = actual >= goal;
-  const percent = isDayOff ? 0 : hitGoal ? 100 : (actual / goal) * 100;
+  const values: Values = isDayOff ? [0, 1] : hitGoal ? [1, 1] : [actual, goal];
 
   return (
     <Link
@@ -48,8 +48,10 @@ export const DayTile = ({ log }: { log: Log }) => {
         <Typography sx={{ fontSize: 10, alignSelf: "flex-end", mr: "4px" }}>
           {day}
         </Typography>
-        <ProgressRing percent={percent} size={30} />
+        <ProgressRing values={values} size={30} />
       </ButtonBase>
     </Link>
   );
 };
+
+type Values = [number, number];

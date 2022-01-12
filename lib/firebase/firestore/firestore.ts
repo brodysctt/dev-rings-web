@@ -57,7 +57,7 @@ export const setDailyGoal = async (userId: string, dailyGoal: number) => {
   console.log("Sucessfully submitted goal 🎉");
 };
 
-export const setOnboardingStatus = async (userId: string) => {
+export const setIsOnboarding = async (userId: string) => {
   await updateDoc(doc(db, "users", userId), {
     isOnboarding: false,
   });

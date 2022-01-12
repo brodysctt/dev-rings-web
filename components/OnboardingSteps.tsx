@@ -1,15 +1,15 @@
 import type { FC } from "react";
 import {
+  getRepos,
   useCollection,
   useUserDoc,
   setTimezone,
+  Webhook,
 } from "@lib/firebase/firestore";
-import type { Webhook } from "@lib/firebase/firestore";
 import { dayjs } from "@lib/dayjs";
 import { Box, Typography, Button } from "@mui/material";
 import type { SxProps } from "@mui/system";
 import { GetStarted, SetGoalPopper, TrackRepoCheckboxes } from "components";
-import { getRepos } from "helpers";
 
 interface Props {
   activeStep: number;
@@ -17,7 +17,7 @@ interface Props {
 }
 
 // TODO: Listen for Firestore update to User doc (and close on update)
-export const OnboardingStep: FC<Props> = ({
+export const OnboardingSteps: FC<Props> = ({
   activeStep,
   onSuccess,
   children,
@@ -41,9 +41,8 @@ export const OnboardingStep: FC<Props> = ({
         <Typography
           align="center"
           sx={{ mb: 2, whiteSpace: "pre-line" }}
-        >{`To track progress, you must first set a goal 🎯
-      So, how many contributions will you make towards your projects in a given day?
-      Click the trophy to set your daily goal. (This can be updated later on as well)
+        >{`To track progress, you must first set a goal 🏆
+      How many commits will you aim for in a day?
      `}</Typography>
         <SetGoalPopper onSuccess={onSuccess} />
       </Box>

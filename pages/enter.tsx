@@ -13,7 +13,7 @@ const Enter = () => {
   if (!userData)
     return (
       <Box sx={containerSx}>
-        <ProgressRing percent={100} />
+        <ProgressRing values={[1, 1]} />
         <Typography variant="h4" sx={{ mt: 3, mb: 5, color: "primary.main" }}>
           {`Build momentum on your coding journey`}
         </Typography>

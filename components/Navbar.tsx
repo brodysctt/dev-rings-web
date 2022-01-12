@@ -23,7 +23,7 @@ export const Navbar = () => {
               <Link href="/" passHref>
                 <Tooltip title="View today's progress">
                   <Button variant="text" sx={{ p: 2 }}>
-                    <ProgressRing percent={100} size={26} mb={false} />
+                    <ProgressRing values={[1, 1]} size={26} mb={false} />
                   </Button>
                 </Tooltip>
               </Link>

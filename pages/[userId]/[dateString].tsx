@@ -1,10 +1,10 @@
 import type { NextPage, GetServerSideProps } from "next";
 import { useCollection, Log, RepoEvent } from "@lib/firebase/firestore";
 import { verifyToken, fetchLogDoc } from "@lib/firebase-admin";
+import { getDayEvents } from "@lib/dayjs";
 import { Box, Typography } from "@mui/material";
 import type { SxProps } from "@mui/system";
 import { EventsPopper, ProgressRing } from "components";
-import { calcProgress, getDayEvents } from "helpers";
 import Cookies from "cookies";
 
 const DevRing: NextPage<{ log: Log }> = ({ log }) => {
@@ -16,7 +16,7 @@ const DevRing: NextPage<{ log: Log }> = ({ log }) => {
     <Box sx={containerSx}>
       <Typography sx={{ mb: 3, color: "#a2a2a2" }}>{dateString}</Typography>
       <Box sx={devRingSx}>
-        <ProgressRing percent={calcProgress(actual, goal)} />
+        <ProgressRing values={[actual, goal]} />
         {dayEvents && <EventsPopper events={dayEvents} />}
       </Box>
     </Box>
