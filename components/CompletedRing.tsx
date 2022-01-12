@@ -7,11 +7,9 @@ interface Props {
 
 export const CompletedRing = ({ isMini = false }: Props) => {
   const size = isMini ? 40 : 300;
-  const ringStrokeWidth = isMini ? 4 : 20;
-  const checkStrokeWidth = isMini ? 3 : 15;
-  const checkStart = isMini ? [17.3, 20.6] : [130, 155];
-  const checkVertex = isMini ? [19.3, 22.6] : [145, 170];
-  const checkEnd = isMini ? [24, 18] : [180, 135];
+  const checkStart = [size * 0.433, size * 0.516];
+  const checkVertex = [size * 0.483, size * 0.566];
+  const checkEnd = [size * 0.6, size * 0.45];
 
   return (
     <Box
@@ -30,11 +28,11 @@ export const CompletedRing = ({ isMini = false }: Props) => {
         animate="visible"
       >
         <motion.circle
-          cx={size / 2}
-          cy={size / 2}
-          r={size / 3}
+          cx={size * 0.5}
+          cy={size * 0.5}
+          r={size * 0.33}
           stroke="#556cd6"
-          strokeWidth={ringStrokeWidth}
+          strokeWidth={isMini ? 4 : 20}
           strokeLinecap="round"
           fill="transparent"
           style={{ rotate: 270 }}
@@ -47,7 +45,7 @@ export const CompletedRing = ({ isMini = false }: Props) => {
           x2={checkVertex[0]}
           y2={checkVertex[1]}
           stroke={CHECKMARK_COLOUR}
-          strokeWidth={checkStrokeWidth}
+          strokeWidth={isMini ? 3 : 15}
           strokeLinecap="round"
           custom={3}
           variants={draw}
@@ -58,7 +56,7 @@ export const CompletedRing = ({ isMini = false }: Props) => {
           x2={checkEnd[0]}
           y2={checkEnd[1]}
           stroke={CHECKMARK_COLOUR}
-          strokeWidth={checkStrokeWidth}
+          strokeWidth={isMini ? 3 : 15}
           strokeLinecap="round"
           custom={4.2}
           variants={draw}
@@ -68,6 +66,7 @@ export const CompletedRing = ({ isMini = false }: Props) => {
   );
 };
 
+// TODO: Add to theme
 const CHECKMARK_COLOUR = "#66CC00";
 
 const draw = {

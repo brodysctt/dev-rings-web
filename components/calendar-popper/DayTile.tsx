@@ -8,17 +8,12 @@ import { CompletedRing, ProgressRing } from "components";
 
 export const DayTile = ({ log }: { log: Log }) => {
   const [hover, setHover] = useState(false);
-
   const userId = useAuth();
   if (!userId) return null;
 
   const [dateString, { actual, goal }] = log;
   const isDayOff = !actual && !goal;
-  const day = dayjs(dateString).date();
-  const hitGoal = actual >= goal;
-  // TODO: Gonna display completed ring for hit goal, so can remove this ternary then
-  const values: Values = isDayOff ? [0, 1] : hitGoal ? [1, 1] : [actual, goal];
-
+  const hitGoal = !isDayOff && actual >= goal;
   return (
     <Link
       href={{
@@ -47,16 +42,14 @@ export const DayTile = ({ log }: { log: Log }) => {
         }}
       >
         <Typography sx={{ fontSize: 10, alignSelf: "flex-end", mr: "4px" }}>
-          {day}
+          {dayjs(dateString).date()}
         </Typography>
         {hitGoal ? (
           <CompletedRing isMini />
         ) : (
-          <ProgressRing values={values} size={30} />
+          <ProgressRing values={isDayOff ? [0, 1] : [actual, goal]} size={30} />
         )}
       </ButtonBase>
     </Link>
   );
 };
-
-type Values = [number, number];
