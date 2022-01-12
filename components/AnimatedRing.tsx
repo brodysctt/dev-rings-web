@@ -28,9 +28,34 @@ export const AnimatedRing = () => (
         variants={draw}
         custom={1}
       />
+      <motion.line
+        x1="130"
+        y1="155"
+        x2={VERTEX[0]}
+        y2={VERTEX[1]}
+        stroke={CHECKMARK_COLOUR}
+        strokeWidth={15}
+        strokeLinecap="round"
+        custom={3}
+        variants={draw}
+      />
+      <motion.line
+        x1={VERTEX[0]}
+        y1={VERTEX[1]}
+        x2="180"
+        y2="135"
+        stroke={CHECKMARK_COLOUR}
+        strokeWidth={15}
+        strokeLinecap="round"
+        custom={4.2}
+        variants={draw}
+      />
     </motion.svg>
   </Box>
 );
+
+const CHECKMARK_COLOUR = "#66CC00";
+const VERTEX = [145, 170];
 
 const draw = {
   hidden: { pathLength: 0, opacity: 0 },

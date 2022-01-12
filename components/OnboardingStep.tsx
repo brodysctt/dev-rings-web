@@ -41,9 +41,8 @@ export const OnboardingStep: FC<Props> = ({
         <Typography
           align="center"
           sx={{ mb: 2, whiteSpace: "pre-line" }}
-        >{`To track progress, you must first set a goal 🎯
-      So, how many contributions will you make towards your projects in a given day?
-      Click the trophy to set your daily goal. (This can be updated later on as well)
+        >{`To track progress, you must first set a goal 🏆
+      How many commits will you aim for in a day?
      `}</Typography>
         <SetGoalPopper onSuccess={onSuccess} />
       </Box>

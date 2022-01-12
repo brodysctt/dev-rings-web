@@ -52,10 +52,12 @@ export const SetGoalPopper = ({ onSuccess }: Props) => {
             }
           }}
         />
-        <Typography
-          color="primary.main"
-          sx={{ mt: 1, fontSize: "12px" }}
-        >{`Current goal is ${dailyGoal}`}</Typography>
+        {dailyGoal && (
+          <Typography
+            color="primary.main"
+            sx={{ mt: 1, fontSize: "12px" }}
+          >{`Current goal is ${dailyGoal}`}</Typography>
+        )}
       </Box>
     </PopIt>
   );

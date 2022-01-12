@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import Image from "next/image";
 import { useCollection, useUserDoc } from "@lib/firebase/firestore";
 import type { RepoEvent } from "@lib/firebase/firestore";
 import { Box, Typography } from "@mui/material";
@@ -10,8 +11,6 @@ interface Props {
   onSuccess?: () => void;
 }
 
-// TODO: "Push changes to one of your tracked repos to kick off today's progress"
-// ^ Tooltip over "one of your tracked repos" that shows the first 10 or whatever
 export const GetStarted = ({ repos, onSuccess }: Props) => {
   const [randomIndex, setRandomIndex] = useState<number>(0);
 
@@ -28,13 +27,20 @@ export const GetStarted = ({ repos, onSuccess }: Props) => {
 
   return (
     <Box sx={containerSx}>
-      <Typography variant="h6" sx={{ color: "primary.main" }}>
-        {isOnboarding
-          ? `You're all set to start tracking progress! Make a change to ${repos[0]} to get started 💍`
-          : `Push changes to ✨ ${repos[randomIndex]} ✨ to kick off today's progress 🚀`}
-      </Typography>
-      {/* TODO: Would be amazing to rip an animation of incrementally completing the ring */}
-      {isOnboarding && <AnimatedRing />}
+      <Box sx={{ display: "flex" }}>
+        <Typography
+          align="center"
+          variant="h6"
+          sx={{ color: "primary.main", mr: 1 }}
+        >
+          {isOnboarding
+            ? `You're all set! Push changes to ${repos[0]} to see your first Dev
+          Ring`
+            : `Push changes to ${repos[randomIndex]} to kick off today's progress`}
+        </Typography>
+        <Image src="/blobhighfive.png" width={30} height={30} />
+      </Box>
+      <AnimatedRing />
     </Box>
   );
 };
