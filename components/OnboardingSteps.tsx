@@ -1,15 +1,15 @@
 import type { FC } from "react";
 import {
+  getRepos,
   useCollection,
   useUserDoc,
   setTimezone,
+  Webhook,
 } from "@lib/firebase/firestore";
-import type { Webhook } from "@lib/firebase/firestore";
 import { dayjs } from "@lib/dayjs";
 import { Box, Typography, Button } from "@mui/material";
 import type { SxProps } from "@mui/system";
 import { GetStarted, SetGoalPopper, TrackRepoCheckboxes } from "components";
-import { getRepos } from "helpers";
 
 interface Props {
   activeStep: number;
