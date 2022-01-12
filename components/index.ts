@@ -4,7 +4,7 @@ export * from "./AnimatedRing";
 export * from "./EventsPopper";
 export * from "./GetStarted";
 export * from "./Navbar";
-export * from "./OnboardingStep";
+export * from "./OnboardingSteps";
 export * from "./PopIt";
 export * from "./ProgressRing";
 export * from "./SetGoalPopper";

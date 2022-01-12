@@ -17,7 +17,7 @@ interface Props {
 }
 
 // TODO: Listen for Firestore update to User doc (and close on update)
-export const OnboardingStep: FC<Props> = ({
+export const OnboardingSteps: FC<Props> = ({
   activeStep,
   onSuccess,
   children,

@@ -14,7 +14,7 @@ import Stepper from "@mui/material/Stepper";
 import Step from "@mui/material/Step";
 import StepLabel from "@mui/material/StepLabel";
 import type { SxProps } from "@mui/system";
-import { OnboardingStep } from "components";
+import { OnboardingSteps } from "components";
 
 const Onboarding: NextPage = () => {
   const [activeStep, setActiveStep] = useState(0);
@@ -43,7 +43,7 @@ const Onboarding: NextPage = () => {
         ))}
       </Stepper>
       {activeStep < steps.length ? (
-        <OnboardingStep activeStep={activeStep} onSuccess={incrementStep} />
+        <OnboardingSteps activeStep={activeStep} onSuccess={incrementStep} />
       ) : (
         <Box sx={{ display: "flex", flexDirection: "column", mt: 10 }}>
           <Typography sx={{ mt: 2, mb: 1 }}>
