@@ -6,7 +6,7 @@ import { dayjs, checkTimezone, getDayEvents } from "@lib/dayjs";
 import { Box } from "@mui/material";
 import type { SxProps } from "@mui/system";
 import { GetStarted, ProgressRing, EventsPopper } from "components";
-import { calcProgress, getRepos } from "helpers";
+import { getRepos } from "helpers";
 
 const Index: NextPage = () => {
   const userData = useUserDoc();
@@ -30,7 +30,7 @@ const Index: NextPage = () => {
   return (
     <Box sx={containerSx}>
       <Box sx={devRingSx}>
-        <ProgressRing percent={calcProgress(actual, goal)} />
+        <ProgressRing values={[actual, goal]} />
         <EventsPopper events={dayEvents} />
       </Box>
     </Box>

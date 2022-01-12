@@ -1,8 +1,5 @@
 import type { Webhook } from "@lib/firebase/firestore";
 
-export const calcProgress = (actual: number, goal: number) =>
-  actual >= goal ? 100 : (actual / goal) * 100;
-
 export const getRepos = (webhooks: Webhook[], userId: string) =>
   // @ts-ignore
   webhooks.map((webhook) => {
