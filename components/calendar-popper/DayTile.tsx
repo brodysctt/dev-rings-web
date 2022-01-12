@@ -4,7 +4,7 @@ import { useAuth } from "@lib/firebase/auth";
 import type { Log } from "@lib/firebase/firestore";
 import { dayjs } from "@lib/dayjs";
 import { Typography, ButtonBase } from "@mui/material";
-import { ProgressRing } from "components";
+import { CompletedRing, ProgressRing } from "components";
 
 export const DayTile = ({ log }: { log: Log }) => {
   const [hover, setHover] = useState(false);
@@ -16,6 +16,7 @@ export const DayTile = ({ log }: { log: Log }) => {
   const isDayOff = !actual && !goal;
   const day = dayjs(dateString).date();
   const hitGoal = actual >= goal;
+  // TODO: Gonna display completed ring for hit goal, so can remove this ternary then
   const values: Values = isDayOff ? [0, 1] : hitGoal ? [1, 1] : [actual, goal];
 
   return (
@@ -48,7 +49,11 @@ export const DayTile = ({ log }: { log: Log }) => {
         <Typography sx={{ fontSize: 10, alignSelf: "flex-end", mr: "4px" }}>
           {day}
         </Typography>
-        <ProgressRing values={values} size={30} />
+        {hitGoal ? (
+          <CompletedRing isMini />
+        ) : (
+          <ProgressRing values={values} size={30} />
+        )}
       </ButtonBase>
     </Link>
   );

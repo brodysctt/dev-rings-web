@@ -6,12 +6,12 @@ interface Props {
 }
 
 export const CompletedRing = ({ isMini = false }: Props) => {
-  const size = isMini ? 20 : 300;
+  const size = isMini ? 40 : 300;
   const ringStrokeWidth = isMini ? 4 : 20;
-  const checkStrokeWidth = isMini ? 4 : 15;
-  const checkStart = [130, 155];
-  const checkVertex = isMini ? [115, 150] : [145, 170];
-  const checkEnd = [180, 135];
+  const checkStrokeWidth = isMini ? 3 : 15;
+  const checkStart = isMini ? [17.3, 20.6] : [130, 155];
+  const checkVertex = isMini ? [19.3, 22.6] : [145, 170];
+  const checkEnd = isMini ? [24, 18] : [180, 135];
 
   return (
     <Box
@@ -19,6 +19,7 @@ export const CompletedRing = ({ isMini = false }: Props) => {
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
+        mt: -0.7,
       }}
     >
       <motion.svg
@@ -29,9 +30,9 @@ export const CompletedRing = ({ isMini = false }: Props) => {
         animate="visible"
       >
         <motion.circle
-          cx={size / 2} // check its 150
-          cy={size / 2} // check its 150
-          r={size / 3} // check its 100
+          cx={size / 2}
+          cy={size / 2}
+          r={size / 3}
           stroke="#556cd6"
           strokeWidth={ringStrokeWidth}
           strokeLinecap="round"
