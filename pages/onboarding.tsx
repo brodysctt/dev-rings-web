@@ -1,10 +1,11 @@
 import { useState } from "react";
-import Link from "next/link";
+import { useRouter } from "next/router";
 import type { NextPage } from "next";
+import useWindowSize from "react-use/lib/useWindowSize";
 import {
   useCollection,
   useUserDoc,
-  setOnboardingStatus,
+  setIsOnboarding,
 } from "@lib/firebase/firestore";
 import type { RepoEvent, Webhook } from "@lib/firebase/firestore";
 import Box from "@mui/material/Box";
@@ -14,9 +15,13 @@ import Stepper from "@mui/material/Stepper";
 import Step from "@mui/material/Step";
 import StepLabel from "@mui/material/StepLabel";
 import type { SxProps } from "@mui/system";
+import Confetti from "react-confetti";
+import { toast } from "react-toastify";
 import { OnboardingSteps } from "components";
 
 const Onboarding: NextPage = () => {
+  const router = useRouter();
+  const { width, height } = useWindowSize();
   const [activeStep, setActiveStep] = useState(0);
   const events = useCollection("events") as RepoEvent[] | null;
   const webhooks = useCollection("webhooks") as Webhook[] | null;
@@ -49,13 +54,19 @@ const Onboarding: NextPage = () => {
           <Typography sx={{ mt: 2, mb: 1 }}>
             {`Woo! You're ready to start building momentum with Dev Rings 🚀`}
           </Typography>
-          {/* TODO: Show the ring incrementing for the change that was just pushed */}
-          {/* And then, after 5 seconds, navigate to the index route automagically */}
-          <Link href="/" passHref>
-            <Button onClick={() => setOnboardingStatus(userId)}>
-              {`Take me to today's ring`}
-            </Button>
-          </Link>
+          <Confetti
+            width={width}
+            height={height}
+            numberOfPieces={1000}
+            recycle={false}
+            onConfettiComplete={() => {
+              toast.success(`Onboarding complete`, {
+                position: "top-center",
+              });
+              setIsOnboarding(userId);
+              setTimeout(() => router.push("/"), 1000);
+            }}
+          />
         </Box>
       )}
       {activeStep < steps.length && (
