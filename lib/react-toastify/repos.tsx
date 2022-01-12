@@ -1,7 +1,7 @@
 import { toast } from "react-toastify";
 
 export const trackRepoToast = {
-  success: () => toast.success("Webhook successfully created 🎉"),
+  success: () => toast.success("Webhook successfully created"),
   info: () => toast.info(`just copy & paste the github link bruh 😅`),
   warn: () =>
     toast.warn("Webhook did not get created – are you already tracking it? 👀"),

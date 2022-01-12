@@ -3,11 +3,7 @@ import type { SxProps } from "@mui/system";
 import { GitHubSvg } from "components";
 import { toast } from "react-toastify";
 import { useAuth } from "@lib/firebase/auth";
-import {
-  fetchPublicRepos,
-  trackRepo,
-  trackRepoToast,
-} from "helpers/track-repos";
+import { fetchPublicRepos, trackRepo } from "helpers/track-repos";
 
 export const TrackEmAllButton = () => {
   const userId = useAuth();
@@ -35,7 +31,9 @@ const buttonSx = {
 const createWebhooks = async (userId: string) => {
   const repos = await fetchPublicRepos(userId);
   if (!Array.isArray(repos)) {
-    trackRepoToast.error();
+    toast.error("Yoinks, something went wrong 😟", {
+      position: "top-center",
+    });
     return;
   }
   console.log(`here be the repos from the button: ${repos}}`);
@@ -48,6 +46,12 @@ const createWebhooks = async (userId: string) => {
   console.log(`about to create ${repos.length} webhooks. let's get it 🪝`);
   for (const repo of repos) {
     const response = await trackRepo(userId, repo);
-    response === 200 ? trackRepoToast.success() : trackRepoToast.error();
+    response === 200
+      ? toast.success("Webhook successfully created", {
+          position: "top-center",
+        })
+      : toast.error("Yoinks, something went wrong 😟", {
+          position: "top-center",
+        });
   }
 };
