@@ -1,10 +1,11 @@
 import type { NextPage, GetServerSideProps } from "next";
 import { useCollection, Log, RepoEvent } from "@lib/firebase/firestore";
 import { verifyToken, fetchLogDoc } from "@lib/firebase-admin";
+import { getDayEvents } from "@lib/dayjs";
 import { Box, Typography } from "@mui/material";
 import type { SxProps } from "@mui/system";
 import { EventsPopper, ProgressRing } from "components";
-import { calcProgress, getDayEvents } from "helpers";
+import { calcProgress } from "helpers";
 import Cookies from "cookies";
 
 const DevRing: NextPage<{ log: Log }> = ({ log }) => {

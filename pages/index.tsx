@@ -2,11 +2,11 @@ import type { NextPage } from "next";
 import { useUserDoc, useCollection } from "@lib/firebase/firestore";
 import type { RepoEvent, Webhook } from "@lib/firebase/firestore";
 import { newTzToast } from "@lib/react-toastify";
-import { dayjs } from "@lib/dayjs";
+import { dayjs, getDayEvents } from "@lib/dayjs";
 import { Box } from "@mui/material";
 import type { SxProps } from "@mui/system";
 import { GetStarted, ProgressRing, EventsPopper } from "components";
-import { calcProgress, checkTz, getDayEvents, getRepos } from "helpers";
+import { calcProgress, checkTz, getRepos } from "helpers";
 
 const Index: NextPage = () => {
   const userData = useUserDoc();
