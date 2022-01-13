@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { useRouter } from "next/router";
 import useWindowSize from "react-use/lib/useWindowSize";
 import { useAuth } from "@lib/firebase/auth";
@@ -8,7 +9,15 @@ export const OnboardingConfetti = () => {
   const router = useRouter();
   const userId = useAuth();
   const { width, height } = useWindowSize();
-  if (!userId) return null;
+
+  useEffect(
+    () => () => {
+      if (!userId) return;
+      setIsOnboarding(userId);
+    },
+    [userId]
+  );
+
   return (
     <Confetti
       width={width}
@@ -16,9 +25,7 @@ export const OnboardingConfetti = () => {
       numberOfPieces={1000}
       recycle={false}
       onConfettiComplete={() => {
-        console.log("figure out how to fix this 🔧");
         setTimeout(() => {
-          setIsOnboarding(userId);
           router.push("/");
         }, 1000);
       }}
