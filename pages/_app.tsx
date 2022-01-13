@@ -24,7 +24,7 @@ export default function MyApp(props: MyAppProps) {
         <AuthProvider>
           <Navbar />
           <Component {...pageProps} />
-          <ToastContainer hideProgressBar />
+          <ToastContainer position="top-center" hideProgressBar />
         </AuthProvider>
       </ThemeProvider>
     </CacheProvider>

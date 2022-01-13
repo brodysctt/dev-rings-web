@@ -19,18 +19,14 @@ export const SetGoalPopper = ({ onSuccess }: Props) => {
   const onSubmit: SubmitHandler<{ goal: string }> = async ({ goal }) => {
     const isOnlyNumbers = /^[1-9]*$/.test(goal);
     if (!isOnlyNumbers) {
-      toast.error("Goal must be a number 1 or greater 🎯", {
-        position: "top-center",
-      });
+      toast.error("Goal must be a number 1 or greater 🎯");
       return;
     }
     const dailyGoal = Number(goal);
     await setDailyGoal(userId, dailyGoal);
     // TODO: Figure out how to close popper on submit
     // ☝️ Listen for update to goal change
-    toast.success(`Goal is now ${dailyGoal} 🏔️`, {
-      position: "top-center",
-    });
+    toast.success(`Goal is now ${dailyGoal} 🏔️`);
     if (onSuccess) onSuccess();
   };
 

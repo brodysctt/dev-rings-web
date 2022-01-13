@@ -46,7 +46,6 @@ export const newTimezoneToast = (userId: string, currentTimezone: string) =>
       >{`change to ${dayjs.tz.guess()}`}</Button>
     </Box>,
     {
-      position: "top-center",
       autoClose: false,
       hideProgressBar: true,
     }

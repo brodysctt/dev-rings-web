@@ -21,9 +21,7 @@ export const useCollection = (name: CollectionName) => {
         if (!snap || !snap.docs.length) {
           if (name === "webhooks" && !isOnboarding) {
             router.push("/repos");
-            toast.info("Track a repo to get started", {
-              position: "top-center",
-            });
+            toast.info("Track a repo to get started");
           }
           return null;
         }

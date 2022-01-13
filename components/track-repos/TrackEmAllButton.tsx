@@ -32,18 +32,13 @@ const buttonSx = {
 const createWebhooks = async (userId: string) => {
   const repos = await fetchPublicRepos(userId);
   if (!Array.isArray(repos)) {
-    toast.error("Yoinks, something went wrong 😟", {
-      position: "top-center",
-    });
+    toast.error("Yoinks, something went wrong 😟");
     return;
   }
   console.log(`here be the repos from the button: ${repos}}`);
   if (repos.length < 1) {
     toast.warn(
-      "You don't have any public repos! Either create one or try adding a private repo instead 👍",
-      {
-        position: "top-center",
-      }
+      "You don't have any public repos! Either create one or try adding a private repo instead 👍"
     );
     return;
   }
@@ -51,11 +46,7 @@ const createWebhooks = async (userId: string) => {
   for (const repo of repos) {
     const response = await trackRepo(userId, repo);
     response === 200
-      ? toast.success("Webhook successfully created", {
-          position: "top-center",
-        })
-      : toast.error("Yoinks, something went wrong 😟", {
-          position: "top-center",
-        });
+      ? toast.success("Webhook successfully created")
+      : toast.error("Yoinks, something went wrong 😟");
   }
 };

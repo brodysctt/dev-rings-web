@@ -59,16 +59,11 @@ export const TrackRepoCheckboxes = ({ onSuccess }: Props) => {
                     const response = await trackRepo(userId, repo);
                     if (response !== 200) {
                       toast.warn(
-                        "Webhook did not get created – are you already tracking it? 👀",
-                        {
-                          position: "top-center",
-                        }
+                        "Webhook did not get created – are you already tracking it? 👀"
                       );
                       return;
                     }
-                    toast.success("Webhook successfully created", {
-                      position: "top-center",
-                    });
+                    toast.success("Webhook successfully created");
                     if (onSuccess) onSuccess();
                     return;
                   }}

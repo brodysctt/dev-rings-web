@@ -44,9 +44,7 @@ export const setGitHubToken = async (userId: string, token: string) => {
     token,
     isOnboarding: true,
   });
-  toast.success("Successfully created account 🎉", {
-    position: "top-center",
-  });
+  toast.success("Successfully created account 🎉");
 };
 
 export const setDailyGoal = async (userId: string, dailyGoal: number) => {
@@ -61,16 +59,12 @@ export const setIsOnboarding = async (userId: string) => {
   await updateDoc(doc(db, "users", userId), {
     isOnboarding: false,
   });
-  toast.success("Onboarding complete", {
-    position: "top-center",
-  });
+  toast.success("Onboarding complete");
 };
 
 export const setTimezone = async (userId: string, timezone: string) => {
   await updateDoc(doc(db, "users", userId), {
     timezone,
   });
-  toast.success("Successfully updated timezone", {
-    position: "top-center",
-  });
+  toast.success("Successfully updated timezone");
 };
