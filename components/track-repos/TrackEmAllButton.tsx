@@ -40,7 +40,10 @@ const createWebhooks = async (userId: string) => {
   console.log(`here be the repos from the button: ${repos}}`);
   if (repos.length < 1) {
     toast.warn(
-      "yo homeboi, you don't have any public repos! Either create one or try adding a private repo instead 👍"
+      "You don't have any public repos! Either create one or try adding a private repo instead 👍",
+      {
+        position: "top-center",
+      }
     );
     return;
   }

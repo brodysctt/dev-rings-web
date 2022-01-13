@@ -47,7 +47,10 @@ export const TrackRepoInput = () => {
       });
       return;
     }
-    toast.success("Webhook successfully created");
+    toast.success("Webhook successfully created"),
+      {
+        position: "top-center",
+      };
   };
 
   return (

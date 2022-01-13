@@ -16,7 +16,6 @@ import Step from "@mui/material/Step";
 import StepLabel from "@mui/material/StepLabel";
 import type { SxProps } from "@mui/system";
 import Confetti from "react-confetti";
-import { toast } from "react-toastify";
 import { OnboardingSteps } from "components";
 
 const Onboarding: NextPage = () => {
@@ -36,6 +35,39 @@ const Onboarding: NextPage = () => {
     ["Code", Boolean(events)],
   ];
 
+  const onboardingComplete = activeStep === steps.length;
+
+  if (onboardingComplete)
+    return (
+      <Box sx={containerSx}>
+        <Stepper activeStep={activeStep} sx={{ width: "60%" }}>
+          {steps.map(([label]) => (
+            <Step key={label}>
+              <StepLabel>{label}</StepLabel>
+            </Step>
+          ))}
+        </Stepper>
+        <Box sx={{ display: "flex", flexDirection: "column", mt: 10 }}>
+          <Typography sx={{ mt: 2, mb: 1 }}>
+            {`Woo! You're ready to start building momentum with Dev Rings 🚀`}
+          </Typography>
+          <Confetti
+            width={width}
+            height={height}
+            numberOfPieces={1000}
+            recycle={false}
+            onConfettiComplete={() => {
+              console.log("figure out how to fix this 🔧");
+              setTimeout(() => {
+                setIsOnboarding(userId);
+                router.push("/");
+              }, 1000);
+            }}
+          />
+        </Box>
+      </Box>
+    );
+
   const incrementStep = () => setActiveStep(activeStep + 1);
   const decrementStep = () => setActiveStep(activeStep - 1);
   return (
@@ -47,38 +79,15 @@ const Onboarding: NextPage = () => {
           </Step>
         ))}
       </Stepper>
-      {activeStep < steps.length ? (
-        <OnboardingSteps activeStep={activeStep} onSuccess={incrementStep} />
-      ) : (
-        <Box sx={{ display: "flex", flexDirection: "column", mt: 10 }}>
-          <Typography sx={{ mt: 2, mb: 1 }}>
-            {`Woo! You're ready to start building momentum with Dev Rings 🚀`}
-          </Typography>
-          <Confetti
-            width={width}
-            height={height}
-            numberOfPieces={1000}
-            recycle={false}
-            onConfettiComplete={() => {
-              toast.success(`Onboarding complete`, {
-                position: "top-center",
-              });
-              setIsOnboarding(userId);
-              setTimeout(() => router.push("/"), 1000);
-            }}
-          />
-        </Box>
-      )}
-      {activeStep < steps.length && (
-        <Box sx={buttonsSx}>
-          <Button disabled={activeStep === 0} onClick={decrementStep}>
-            Back
-          </Button>
-          <Button disabled={!steps[activeStep][1]} onClick={incrementStep}>
-            Next
-          </Button>
-        </Box>
-      )}
+      <OnboardingSteps activeStep={activeStep} onSuccess={incrementStep} />
+      <Box sx={buttonsSx}>
+        <Button disabled={activeStep === 0} onClick={decrementStep}>
+          Back
+        </Button>
+        <Button disabled={!steps[activeStep][1]} onClick={incrementStep}>
+          Next
+        </Button>
+      </Box>
     </Box>
   );
 };
