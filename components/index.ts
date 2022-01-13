@@ -5,6 +5,7 @@ export * from "./CompletedRing";
 export * from "./EventsPopper";
 export * from "./GetStarted";
 export * from "./Navbar";
+export * from "./OnboardingConfetti";
 export * from "./OnboardingSteps";
 export * from "./PopIt";
 export * from "./ProgressRing";

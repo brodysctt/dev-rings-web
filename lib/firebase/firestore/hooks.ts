@@ -36,7 +36,7 @@ export const useCollection = (name: CollectionName) => {
       }
     );
     return () => unsubscribe();
-  }, [userId, userData]);
+  }, [userId, userData, name, router]);
   // TODO: Need to be 100000% on this dependency array
 
   return data;

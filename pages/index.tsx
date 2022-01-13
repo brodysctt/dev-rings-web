@@ -23,7 +23,13 @@ const Index: NextPage = () => {
 
   const isNewTz = checkTimezone(timezone);
   if (isNewTz) newTzToast(userId, timezone);
-  if (!dayEvents) return <GetStarted repos={getRepos(webhooks, userId)} />;
+
+  if (!dayEvents)
+    return (
+      <Box sx={containerSx}>
+        <GetStarted repos={getRepos(webhooks, userId)} />
+      </Box>
+    );
 
   const actual = dayEvents.length;
   return (

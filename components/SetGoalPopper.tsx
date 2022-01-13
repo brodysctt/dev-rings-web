@@ -20,7 +20,7 @@ export const SetGoalPopper = ({ onSuccess }: Props) => {
     const isOnlyNumbers = /^[1-9]*$/.test(goal);
     if (!isOnlyNumbers) {
       toast.error("Goal must be a number 1 or greater 🎯", {
-        position: "top-left",
+        position: "top-center",
       });
       return;
     }

@@ -61,6 +61,9 @@ export const setIsOnboarding = async (userId: string) => {
   await updateDoc(doc(db, "users", userId), {
     isOnboarding: false,
   });
+  toast.success("Onboarding complete", {
+    position: "top-center",
+  });
 };
 
 export const setTimezone = async (userId: string, timezone: string) => {
