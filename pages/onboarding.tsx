@@ -1,12 +1,6 @@
 import { useState } from "react";
-import { useRouter } from "next/router";
 import type { NextPage } from "next";
-import useWindowSize from "react-use/lib/useWindowSize";
-import {
-  useCollection,
-  useUserDoc,
-  setIsOnboarding,
-} from "@lib/firebase/firestore";
+import { useCollection, useUserDoc } from "@lib/firebase/firestore";
 import type { RepoEvent, Webhook } from "@lib/firebase/firestore";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
@@ -15,18 +9,15 @@ import Stepper from "@mui/material/Stepper";
 import Step from "@mui/material/Step";
 import StepLabel from "@mui/material/StepLabel";
 import type { SxProps } from "@mui/system";
-import Confetti from "react-confetti";
-import { OnboardingSteps } from "components";
+import { OnboardingConfetti, OnboardingSteps } from "components";
 
 const Onboarding: NextPage = () => {
-  const router = useRouter();
-  const { width, height } = useWindowSize();
   const [activeStep, setActiveStep] = useState(0);
   const events = useCollection("events") as RepoEvent[] | null;
   const webhooks = useCollection("webhooks") as Webhook[] | null;
   const userData = useUserDoc();
   if (!userData) return null;
-  const [userId, { dailyGoal, timezone }] = userData;
+  const [, { dailyGoal, timezone }] = userData;
 
   const steps: Array<[string, boolean]> = [
     ["Select repos to track", Boolean(webhooks)],
@@ -35,50 +26,34 @@ const Onboarding: NextPage = () => {
     ["Code", Boolean(events)],
   ];
 
-  const onboardingComplete = activeStep === steps.length;
-
-  if (onboardingComplete)
-    return (
-      <Box sx={containerSx}>
-        <Stepper activeStep={activeStep} sx={{ width: "60%" }}>
-          {steps.map(([label]) => (
-            <Step key={label}>
-              <StepLabel>{label}</StepLabel>
-            </Step>
-          ))}
-        </Stepper>
-        <Box sx={{ display: "flex", flexDirection: "column", mt: 10 }}>
-          <Typography sx={{ mt: 2, mb: 1 }}>
-            {`Woo! You're ready to start building momentum with Dev Rings 🚀`}
-          </Typography>
-          <Confetti
-            width={width}
-            height={height}
-            numberOfPieces={1000}
-            recycle={false}
-            onConfettiComplete={() => {
-              console.log("figure out how to fix this 🔧");
-              setTimeout(() => {
-                setIsOnboarding(userId);
-                router.push("/");
-              }, 1000);
-            }}
-          />
-        </Box>
-      </Box>
-    );
+  const StepsToComplete = () => (
+    <Stepper activeStep={activeStep} sx={{ width: "60%" }}>
+      {steps.map(([label]) => (
+        <Step key={label}>
+          <StepLabel>{label}</StepLabel>
+        </Step>
+      ))}
+    </Stepper>
+  );
 
   const incrementStep = () => setActiveStep(activeStep + 1);
   const decrementStep = () => setActiveStep(activeStep - 1);
+
+  const onboardingComplete = activeStep === steps.length;
+  if (onboardingComplete)
+    return (
+      <Box sx={containerSx}>
+        <StepsToComplete />
+        <Typography sx={{ mt: 2, mb: 1 }}>
+          {`Woo! You're ready to start building momentum with Dev Rings 🚀`}
+        </Typography>
+        <OnboardingConfetti />
+      </Box>
+    );
+
   return (
     <Box sx={containerSx}>
-      <Stepper activeStep={activeStep} sx={{ width: "60%" }}>
-        {steps.map(([label]) => (
-          <Step key={label}>
-            <StepLabel>{label}</StepLabel>
-          </Step>
-        ))}
-      </Stepper>
+      <StepsToComplete />
       <OnboardingSteps activeStep={activeStep} onSuccess={incrementStep} />
       <Box sx={buttonsSx}>
         <Button disabled={activeStep === 0} onClick={decrementStep}>
