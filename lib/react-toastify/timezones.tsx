@@ -1,3 +1,4 @@
+import Image from "next/image";
 import { toast } from "react-toastify";
 import { Box, Typography, Button } from "@mui/material";
 import type { SxProps } from "@mui/system";
@@ -20,7 +21,7 @@ export const setTimezoneToast = () =>
     </Box>,
     {
       position: "bottom-left",
-      autoClose: false,
+      autoClose: 5000,
       hideProgressBar: true,
       closeOnClick: true,
       draggable: true,
@@ -30,37 +31,24 @@ export const setTimezoneToast = () =>
     }
   );
 
-export const newTzToast = (userId: string, currentTimezone: string) =>
+export const newTimezoneToast = (userId: string, currentTimezone: string) =>
   toast(
     <Box sx={containerSx}>
-      <Typography
-        align="center"
-        color="primary.main"
-        sx={{ mb: 2, whiteSpace: "pre-wrap" }}
-      >
-        {`New timezone detected – would you like to change your timezone to ${dayjs.tz.guess()}?`}
-      </Typography>
-      <Box>
-        <Button
-          variant="contained"
-          color="secondary"
-          onClick={() => setTimezone(userId, dayjs.tz.guess())}
-        >{`change`}</Button>
-        <Button
-          variant="contained"
-          sx={{ ml: 2 }}
-        >{`Keep ${currentTimezone}`}</Button>
+      <Box sx={{ display: "flex", alignItems: "center", mb: 2 }}>
+        <Typography color="primary.main" sx={{ mr: 0.5 }}>
+          {`New timezone detected`}
+        </Typography>
+        <Image src="/blobdetective.png" width={20} height={20} />
       </Box>
+      <Button
+        variant="contained"
+        onClick={() => setTimezone(userId, dayjs.tz.guess())}
+      >{`change to ${dayjs.tz.guess()}`}</Button>
     </Box>,
     {
-      position: "bottom-left",
+      position: "top-center",
       autoClose: false,
       hideProgressBar: true,
-      closeOnClick: true,
-      draggable: true,
-      style: {
-        width: 450,
-      },
     }
   );
 

@@ -1,8 +1,9 @@
+import { useEffect } from "react";
 import type { NextPage } from "next";
 import { getRepos, useUserDoc, useCollection } from "@lib/firebase/firestore";
 import type { RepoEvent, Webhook } from "@lib/firebase/firestore";
-import { newTzToast } from "@lib/react-toastify";
-import { dayjs, checkTimezone, getDayEvents } from "@lib/dayjs";
+import { newTimezoneToast } from "@lib/react-toastify";
+import { dayjs, compareTimezones, getDayEvents } from "@lib/dayjs";
 import { Box } from "@mui/material";
 import type { SxProps } from "@mui/system";
 import { GetStarted, ProgressRing, EventsPopper } from "components";
@@ -12,17 +13,22 @@ const Index: NextPage = () => {
   const events = useCollection("events") as RepoEvent[] | null;
   const webhooks = useCollection("webhooks") as Webhook[] | null;
 
+  // TODO: Consider writing a custom hook and firing this in _app.tsx
+  useEffect(() => {
+    if (!userData) return;
+    const [userId, { timezone: tz }] = userData;
+    const isNewTimezone = compareTimezones(tz);
+    if (isNewTimezone) newTimezoneToast(userId, tz);
+  }, [userData]);
+
   if (!userData || !webhooks) return null;
-  const [userId, { dailyGoal: goal, timezone }] = userData;
+  const [userId, { dailyGoal: goal }] = userData;
 
   // TODO: Write unit tests for this
   const dayEvents = getDayEvents(
     events as RepoEvent[],
     dayjs().format("YYYY-MM-DD")
   );
-
-  const isNewTz = checkTimezone(timezone);
-  if (isNewTz) newTzToast(userId, timezone);
 
   if (!dayEvents)
     return (

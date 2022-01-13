@@ -2,7 +2,7 @@ import type { Dayjs } from "dayjs";
 import { dayjs } from "@lib/dayjs";
 import type { RepoEvent } from "@lib/firebase/firestore";
 
-export const checkTimezone = (tz: string) =>
+export const compareTimezones = (tz: string) =>
   dayjs().utcOffset() !== dayjs().tz(tz).utcOffset();
 
 export const getDayEvents = (
