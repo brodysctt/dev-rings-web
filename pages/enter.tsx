@@ -1,14 +1,17 @@
+import { useEffect } from "react";
 import { useRouter } from "next/router";
 import GitHubIcon from "@mui/icons-material/GitHub";
 import { Box, Typography, Button } from "@mui/material";
 import type { SxProps } from "@mui/system";
 import { githubSignIn } from "@lib/firebase/auth";
-import { useUserDoc } from "@lib/firebase/firestore";
+import { useCollection, useUserDoc, Webhook } from "@lib/firebase/firestore";
+import { toast } from "react-toastify";
 import { ProgressRing } from "components";
 
 const Enter = () => {
   const router = useRouter();
   const userData = useUserDoc();
+  const webhooks = useCollection("webhooks") as Webhook[] | null;
 
   if (!userData)
     return (
@@ -26,6 +29,9 @@ const Enter = () => {
     router.push("/onboarding");
     return null;
   }
+
+  if (!webhooks) return <NoReposAlert />;
+
   router.push("/");
   return null;
 };
@@ -58,3 +64,12 @@ const SignInButton = () => (
     <Typography fontSize={14}> Sign in with GitHub </Typography>
   </Button>
 );
+
+const NoReposAlert = () => {
+  const router = useRouter();
+  useEffect(() => {
+    router.push("/repos");
+    toast.info("Track a repo to get started");
+  }, []);
+  return null;
+};

@@ -1,42 +1,29 @@
-import { useRouter } from "next/router";
 import { useState, useEffect } from "react";
 import { useAuth } from "@lib/firebase/auth";
 import { db } from "@lib/firebase/firestore";
 import type { CollectionName, Log, RepoEvent, Webhook } from "./types";
 import { collection, doc, onSnapshot, DocumentData } from "firebase/firestore";
-import { toast } from "react-toastify";
 
 export const useCollection = (name: CollectionName) => {
-  const router = useRouter();
   const userId = useAuth();
-  const userData = useUserDoc();
   const [data, setData] = useState<DocumentData[] | null>(null);
+  const isLogs = name === "logs";
 
   useEffect(() => {
-    if (!userId || !userData) return;
-    const [, { isOnboarding }] = userData;
+    if (!userId) return;
     const unsubscribe = onSnapshot(
       collection(db, "users", userId, name),
       (snap) => {
-        if (!snap || !snap.docs.length) {
-          if (name === "webhooks" && !isOnboarding) {
-            router.push("/repos");
-            toast.info("Track a repo to get started");
-          }
-          return null;
-        }
-        const isLogs = name === "logs";
+        if (!snap || !snap.docs.length) return null;
         const updatedData = isLogs
           ? snap.docs.map((doc) => [doc.id, doc.data()] as Log)
           : snap.docs.map((doc) => doc.data() as RepoEvent | Webhook);
-        // TODO: Does setData need to be a dependency?
         setData(updatedData);
       }
     );
     return () => unsubscribe();
-  }, [userId, userData, name, router]);
-  // TODO: Need to be 100000% on this dependency array
-
+  }, [userId]);
+  // TODO: Need to be 100% on this dependency array. setData? isLogs? Explain the whys
   return data;
 };
 
