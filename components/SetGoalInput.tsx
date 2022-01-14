@@ -22,7 +22,7 @@ export const SetGoalInput = ({ onSuccess }: Props) => {
       return;
     }
     await setDailyGoal(userId, Number(goal));
-    toast.success(`Goal is now ${dailyGoal} 🏔️`);
+    toast.success(`Goal is now ${goal} 🏔️`);
     if (onSuccess) onSuccess();
   };
   return (
