@@ -10,7 +10,7 @@ import {
 import type { SxProps } from "@mui/system";
 
 interface Props {
-  id: string; // also Tooltip title
+  id: string;
   icon: JSX.Element;
   paperSx?: SxProps;
 }
@@ -21,19 +21,7 @@ export const PopIt: FC<Props> = ({ id, children, icon, paperSx }) => {
   return (
     <ClickAwayListener onClickAway={() => setAnchorEl(null)}>
       <Box>
-        <Tooltip
-          title={id}
-          disableHoverListener={open}
-          sx={
-            open
-              ? {
-                  popper: {
-                    display: "none",
-                  },
-                }
-              : {}
-          }
-        >
+        <Tooltip title={id} PopperProps={open ? { open: !open } : {}}>
           <Button
             aria-describedby={open ? id : undefined}
             variant="text"
@@ -46,7 +34,10 @@ export const PopIt: FC<Props> = ({ id, children, icon, paperSx }) => {
           </Button>
         </Tooltip>
         <Popper id={open ? id : undefined} open={open} anchorEl={anchorEl}>
-          <Paper elevation={0} sx={paperSx}>
+          <Paper
+            elevation={0}
+            sx={{ ...paperSx, position: "relative", zIndex: 99 }}
+          >
             {children}
           </Paper>
         </Popper>
