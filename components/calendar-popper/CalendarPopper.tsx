@@ -1,39 +1,37 @@
 import { useState } from "react";
 import { useCollection, Log } from "@lib/firebase/firestore";
-import { dayjs, createMonthLogs, getMonthName, getMonthYear } from "@lib/dayjs";
+import { dayjs, formatLogsForCalendar, getMonthYear } from "@lib/dayjs";
 import type { MonthYear } from "@lib/dayjs";
 import { Grid, Box, Typography } from "@mui/material";
 import type { SxProps } from "@mui/system";
 import { ArrowButton, DayTile, PopIt, CalendarSvg } from "components";
-import { filterLogs, hasPreviousMonth } from "./helpers";
+import { filterLogs, isFirstMonth } from "./helpers";
 
 export const CalendarPopper = () => {
   const [monthInView, setMonthInView] = useState<MonthYear>(getMonthYear());
-
   const logs = useCollection("logs");
   if (!logs) return null;
 
-  // TODO: Test all of these values a bunch
   const logsInView = filterLogs(logs as Log[], monthInView);
-  const hasPrevious = hasPreviousMonth(monthInView, logs as Log[]);
-  const monthLogs = createMonthLogs(logsInView, hasPrevious, monthInView);
-  const gridStart = dayjs(monthLogs[0][0]).day();
+  const monthLogs = formatLogsForCalendar(logsInView, monthInView);
 
+  const [month, year] = monthInView;
+  const gridStart = dayjs(`${year}-${month}-01`).day();
   return (
     <PopIt id="calendar" paperSx={{ pt: 1 }} icon={<CalendarSvg />}>
       <Box sx={containerSx}>
         <Typography sx={{ fontSize: 12, color: "primary.main" }}>
-          {monthInView[1]}
+          {year}
         </Typography>
         <>
           <Grid container justifyContent="center" sx={{ mb: 2 }}>
             <ArrowButton
               {...{ type: "previous", monthInView, setMonthInView }}
-              disabled={!hasPrevious}
+              disabled={isFirstMonth(logs as Log[], monthInView)}
             />
             <Grid item xs={8}>
               <Typography variant="h6" textAlign="center">
-                {getMonthName(monthInView)}
+                {dayjs.months()[month - 1]}
               </Typography>
             </Grid>
             <ArrowButton

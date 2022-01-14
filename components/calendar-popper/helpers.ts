@@ -11,7 +11,7 @@ export const filterLogs = (logs: Log[], monthInView: MonthYear) => {
   });
 };
 
-export const hasPreviousMonth = (monthInView: MonthYear, logs: Log[]) => {
+export const isFirstMonth = (logs: Log[], monthInView: MonthYear) => {
   const firstLogDate = dayjs.min(logs.map(([dateString]) => dayjs(dateString)));
   const firstMonth = getMonthYear(firstLogDate);
   return !(JSON.stringify(monthInView) === JSON.stringify(firstMonth));

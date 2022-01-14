@@ -1,25 +1,19 @@
 import type { Log } from "@lib/firebase/firestore";
 import { dayjs, MonthYear } from "@lib/dayjs";
 
-export const createMonthLogs = (
-  logs: Log[],
-  hasPrevious: boolean,
-  monthInView: MonthYear
-) => {
-  const dayLogs: ZeroIndexDayLog[] = logs.map((log) => {
-    const [dateString, rest] = log;
-    return [dayjs(dateString).date() - 1, rest];
-  });
-  const [[firstDay]] = dayLogs;
+export const formatLogsForCalendar = (logs: Log[], monthInView: MonthYear) => {
+  const dayLogs: DayLog[] = logs.map(([dateString, rest]) => [
+    dayjs(dateString).date() - 1,
+    rest,
+  ]);
   const [[lastDay]] = dayLogs.slice(-1);
 
   let i = 0;
   let dayOffIndices: number[] = [];
   for (const dayLog of dayLogs) {
-    const dayCount = !hasPrevious ? i + firstDay : i;
-    const daysOff: number = dayLog[0] - dayCount;
+    const daysOff: number = dayLog[0] - i;
     if (daysOff > 0) {
-      [...Array(daysOff)].forEach((d, k) => dayOffIndices.push(dayCount + k));
+      [...Array(daysOff)].forEach((d, k) => dayOffIndices.push(i + k));
       i = i + daysOff;
     }
     i++;
@@ -43,7 +37,7 @@ export const createMonthLogs = (
   ]) as Log[];
 };
 
-type ZeroIndexDayLog = [
+type DayLog = [
   number, // zero-indexed day of month
   {
     actual: number;
