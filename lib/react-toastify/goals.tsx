@@ -15,7 +15,6 @@ Now click the 🏆 to update your daily goal`}
       </Typography>
     </Box>,
     {
-      position: "top-center",
       autoClose: false,
       hideProgressBar: true,
       closeOnClick: true,

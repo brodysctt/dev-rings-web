@@ -17,15 +17,11 @@ export const TrackRepoInput = () => {
     const isRepoOwner = repoUrl.includes(userId);
 
     if (!isGitHubUrl) {
-      toast.error(`This is not a GitHub repo link`, {
-        position: "top-center",
-      });
+      toast.error(`This is not a GitHub repo link`);
       return;
     }
     if (!isRepoOwner) {
-      toast.error(`You don't own this repo`, {
-        position: "top-center",
-      });
+      toast.error(`You don't own this repo`);
       return;
     }
 
@@ -33,24 +29,17 @@ export const TrackRepoInput = () => {
     const result = re.exec(repoUrl);
     if (!result) {
       // TODO: When would this occur? Need to make this more specific
-      toast.error("Yoinks, something went wrong 😟", {
-        position: "top-center",
-      });
+      toast.error("Yoinks, something went wrong 😟");
       return;
     }
     const repo = result[0];
     const status = await trackRepo(userId, repo);
     if (status !== 200) {
       // TODO: Log to Sentry
-      toast.error("Yoinks, something went wrong 😟", {
-        position: "top-center",
-      });
+      toast.error("Yoinks, something went wrong 😟");
       return;
     }
-    toast.success("Webhook successfully created"),
-      {
-        position: "top-center",
-      };
+    toast.success("Webhook successfully created");
   };
 
   return (

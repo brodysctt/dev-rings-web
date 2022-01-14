@@ -1,18 +1,19 @@
 import type { NextPage } from "next";
 import { getRepos, useUserDoc, useCollection } from "@lib/firebase/firestore";
 import type { RepoEvent, Webhook } from "@lib/firebase/firestore";
-import { newTzToast } from "@lib/react-toastify";
-import { dayjs, checkTimezone, getDayEvents } from "@lib/dayjs";
+import { dayjs, getDayEvents } from "@lib/dayjs";
 import { Box } from "@mui/material";
 import type { SxProps } from "@mui/system";
 import { GetStarted, ProgressRing, EventsPopper } from "components";
+import { NewTimezoneAlert, NoReposAlert } from "@lib/react-toastify";
 
 const Index: NextPage = () => {
   const userData = useUserDoc();
   const events = useCollection("events") as RepoEvent[] | null;
   const webhooks = useCollection("webhooks") as Webhook[] | null;
 
-  if (!userData || !webhooks) return null;
+  if (!webhooks) return <NoReposAlert />;
+  if (!userData) return null;
   const [userId, { dailyGoal: goal, timezone }] = userData;
 
   // TODO: Write unit tests for this
@@ -21,13 +22,11 @@ const Index: NextPage = () => {
     dayjs().format("YYYY-MM-DD")
   );
 
-  const isNewTz = checkTimezone(timezone);
-  if (isNewTz) newTzToast(userId, timezone);
-
   if (!dayEvents)
     return (
       <Box sx={containerSx}>
         <GetStarted repos={getRepos(webhooks, userId)} />
+        <NewTimezoneAlert tz={timezone} />
       </Box>
     );
 
@@ -38,6 +37,7 @@ const Index: NextPage = () => {
         <ProgressRing values={[actual, goal]} />
         <EventsPopper events={dayEvents} />
       </Box>
+      <NewTimezoneAlert tz={timezone} />
     </Box>
   );
 };
