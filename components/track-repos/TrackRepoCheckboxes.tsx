@@ -31,7 +31,11 @@ export const TrackRepoCheckboxes = ({ onSuccess }: Props) => {
         if (Array.isArray(repos)) {
           setPublicRepos(repos);
         }
-        setTrackedRepos(webhooks ? getRepos(webhooks, userId) : []);
+        if (!webhooks) {
+          toast.info("Track a repo to get started");
+          return;
+        }
+        setTrackedRepos(getRepos(webhooks, userId));
       }
     })();
   }, [userId, webhooks]);

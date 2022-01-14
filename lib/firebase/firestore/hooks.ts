@@ -1,10 +1,12 @@
 import { useState, useEffect } from "react";
+import { useRouter } from "next/router";
 import { useAuth } from "@lib/firebase/auth";
 import { db } from "@lib/firebase/firestore";
 import type { CollectionName, Log, RepoEvent, Webhook } from "./types";
 import { collection, doc, onSnapshot, DocumentData } from "firebase/firestore";
 
 export const useCollection = (name: CollectionName) => {
+  const router = useRouter();
   const userId = useAuth();
   const [data, setData] = useState<DocumentData[] | null>(null);
   const isLogs = name === "logs";
@@ -14,7 +16,11 @@ export const useCollection = (name: CollectionName) => {
     const unsubscribe = onSnapshot(
       collection(db, "users", userId, name),
       (snap) => {
-        if (!snap || !snap.docs.length) return null;
+        const noData = !snap || !snap.docs.length;
+        if (noData) {
+          if (name === "webhooks") router.push("/repos");
+          return null;
+        }
         const updatedData = isLogs
           ? snap.docs.map((doc) => [doc.id, doc.data()] as Log)
           : snap.docs.map((doc) => doc.data() as RepoEvent | Webhook);

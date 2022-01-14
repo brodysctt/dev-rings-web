@@ -3,14 +3,12 @@ import GitHubIcon from "@mui/icons-material/GitHub";
 import { Box, Typography, Button } from "@mui/material";
 import type { SxProps } from "@mui/system";
 import { githubSignIn } from "@lib/firebase/auth";
-import { useCollection, useUserDoc, Webhook } from "@lib/firebase/firestore";
+import { useUserDoc } from "@lib/firebase/firestore";
 import { ProgressRing } from "components";
-import { NoReposAlert } from "@lib/react-toastify";
 
 const Enter = () => {
   const router = useRouter();
   const userData = useUserDoc();
-  const webhooks = useCollection("webhooks") as Webhook[] | null;
 
   if (!userData)
     return (
@@ -28,9 +26,6 @@ const Enter = () => {
     router.push("/onboarding");
     return null;
   }
-
-  if (!webhooks) return <NoReposAlert />;
-
   router.push("/");
   return null;
 };
