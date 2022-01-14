@@ -6,7 +6,7 @@ interface Props {
 }
 
 export const CompletedRing = ({ isMini = false }: Props) => {
-  const size = isMini ? 40 : 300;
+  const size = isMini ? 40 : 400;
   const checkStart = [size * 0.433, size * 0.516];
   const checkVertex = [size * 0.483, size * 0.566];
   const checkEnd = [size * 0.6, size * 0.45];

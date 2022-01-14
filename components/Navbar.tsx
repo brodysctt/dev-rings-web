@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { useAuth } from "@lib/firebase/auth";
 import { useUserDoc } from "@lib/firebase/firestore";
-import { Grid, Box, Button, Tooltip } from "@mui/material";
+import { Grid, Box, Button, Tooltip, CircularProgress } from "@mui/material";
 import {
   CalendarPopper,
   ProgressRing,
@@ -23,7 +23,12 @@ export const Navbar = () => {
               <Link href="/" passHref>
                 <Tooltip title="View today's progress">
                   <Button variant="text" sx={{ p: 2 }}>
-                    <ProgressRing values={[1, 1]} size={26} mb={false} />
+                    <CircularProgress
+                      variant="determinate"
+                      size={26}
+                      thickness={6}
+                      value={100}
+                    />
                   </Button>
                 </Tooltip>
               </Link>
