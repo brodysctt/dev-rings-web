@@ -1,28 +1,19 @@
-import { useEffect } from "react";
 import type { NextPage } from "next";
 import { getRepos, useUserDoc, useCollection } from "@lib/firebase/firestore";
 import type { RepoEvent, Webhook } from "@lib/firebase/firestore";
-import { newTimezoneToast } from "@lib/react-toastify";
-import { dayjs, compareTimezones, getDayEvents } from "@lib/dayjs";
+import { dayjs, getDayEvents } from "@lib/dayjs";
 import { Box } from "@mui/material";
 import type { SxProps } from "@mui/system";
 import { GetStarted, ProgressRing, EventsPopper } from "components";
+import { NewTimezoneAlert } from "@lib/react-toastify";
 
 const Index: NextPage = () => {
   const userData = useUserDoc();
   const events = useCollection("events") as RepoEvent[] | null;
   const webhooks = useCollection("webhooks") as Webhook[] | null;
 
-  // TODO: Consider writing a custom hook and firing this in _app.tsx
-  useEffect(() => {
-    if (!userData) return;
-    const [userId, { timezone: tz }] = userData;
-    const isNewTimezone = compareTimezones(tz);
-    if (isNewTimezone) newTimezoneToast(userId, tz);
-  }, [userData]);
-
   if (!userData || !webhooks) return null;
-  const [userId, { dailyGoal: goal }] = userData;
+  const [userId, { dailyGoal: goal, timezone }] = userData;
 
   // TODO: Write unit tests for this
   const dayEvents = getDayEvents(
@@ -34,6 +25,7 @@ const Index: NextPage = () => {
     return (
       <Box sx={containerSx}>
         <GetStarted repos={getRepos(webhooks, userId)} />
+        <NewTimezoneAlert tz={timezone} />
       </Box>
     );
 
@@ -44,6 +36,7 @@ const Index: NextPage = () => {
         <ProgressRing values={[actual, goal]} />
         <EventsPopper events={dayEvents} />
       </Box>
+      <NewTimezoneAlert tz={timezone} />
     </Box>
   );
 };

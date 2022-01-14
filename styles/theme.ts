@@ -8,7 +8,7 @@ export const theme = createTheme({
       main: "#556cd6",
     },
     secondary: {
-      main: "#D655AD",
+      main: "#D6556C", // "#D655AD",
     },
     error: {
       main: red.A400,

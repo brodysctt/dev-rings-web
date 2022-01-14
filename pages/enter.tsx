@@ -45,8 +45,6 @@ const containerSx = {
   height: "100vh",
 } as SxProps;
 
-export default Enter;
-
 const SignInButton = () => (
   <Button
     variant="contained"
@@ -73,3 +71,5 @@ const NoReposAlert = () => {
   }, []);
   return null;
 };
+
+export default Enter;
