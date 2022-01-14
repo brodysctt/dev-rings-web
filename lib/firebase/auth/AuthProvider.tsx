@@ -12,19 +12,21 @@ export const AuthProvider = ({ children }: any) => {
   const [user, setUser] = useState<User | null>(null);
   const router = useRouter();
 
-  useEffect(() => {
-    return auth.onIdTokenChanged(async (user) => {
-      if (!user) {
-        setUser(null);
-        Cookies.set("token", "");
-        router.push("/enter");
-        return;
-      }
-      const token = await user.getIdToken();
-      setUser(user);
-      Cookies.set("token", token);
-    });
-  }, [user, router]);
+  useEffect(
+    () =>
+      auth.onIdTokenChanged(async (user) => {
+        if (!user) {
+          setUser(null);
+          Cookies.set("token", "");
+          router.push("/enter");
+          return;
+        }
+        const token = await user.getIdToken();
+        setUser(user);
+        Cookies.set("token", token);
+      }),
+    [router]
+  );
 
   // TODO: Why do I want to force refresh the token every 10 minutes?
   useEffect(() => {
