@@ -9,14 +9,13 @@ import {
 import { dayjs } from "@lib/dayjs";
 import { Box, Typography, Button } from "@mui/material";
 import type { SxProps } from "@mui/system";
-import { GetStarted, SetGoalPopper, TrackRepoCheckboxes } from "components";
+import { GetStarted, SetGoalInput, TrackRepoCheckboxes } from "components";
 
 interface Props {
   activeStep: number;
   onSuccess: () => void;
 }
 
-// TODO: Listen for Firestore update to User doc (and close on update)
 export const OnboardingSteps: FC<Props> = ({
   activeStep,
   onSuccess,
@@ -44,7 +43,7 @@ export const OnboardingSteps: FC<Props> = ({
         >{`To track progress, you must first set a goal 🏆
       How many commits will you aim for in a day?
      `}</Typography>
-        <SetGoalPopper onSuccess={onSuccess} />
+        <SetGoalInput onSuccess={onSuccess} />
       </Box>
     );
 
@@ -74,7 +73,6 @@ Is this the best timezone for tracking daily goals?`}
       </Box>
     );
 
-  // TODO: Render animation on this step, then show the actual increment w/ confetti on the completed state
   if (activeStep === 3)
     return (
       <Box sx={stepSx}>

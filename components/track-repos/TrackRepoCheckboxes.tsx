@@ -8,7 +8,12 @@ import {
 } from "@mui/material";
 import type { SxProps } from "@mui/system";
 import { useAuth } from "@lib/firebase/auth";
-import { getRepos, useCollection, Webhook } from "@lib/firebase/firestore";
+import {
+  getRepos,
+  useCollection,
+  useUserDoc,
+  Webhook,
+} from "@lib/firebase/firestore";
 import { toast } from "react-toastify";
 import { fetchPublicRepos } from "./fetchPublicRepos";
 import { trackRepo } from "./trackRepo";
@@ -20,22 +25,25 @@ interface Props {
 // TODO: Implement middleware so it's impossible to land on this without being authenticated
 export const TrackRepoCheckboxes = ({ onSuccess }: Props) => {
   const userId = useAuth();
+  const userData = useUserDoc();
   const webhooks = useCollection("webhooks") as Webhook[] | null;
   const [publicRepos, setPublicRepos] = useState<string[] | null>(null);
   const [trackedRepos, setTrackedRepos] = useState<Array<string | null>>([]);
 
+  // TODO: Clean this up lol
   useEffect(() => {
     (async () => {
-      if (userId) {
+      if (userId && userData) {
+        const [, { isOnboarding }] = userData;
         const repos = await fetchPublicRepos(userId);
         if (Array.isArray(repos)) {
           setPublicRepos(repos);
         }
-        if (!webhooks) {
+        if (!webhooks && !isOnboarding) {
           toast.info("Track a repo to get started");
           return;
         }
-        setTrackedRepos(getRepos(webhooks, userId));
+        webhooks && setTrackedRepos(getRepos(webhooks, userId));
       }
     })();
   }, [userId, webhooks]);
