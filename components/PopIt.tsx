@@ -33,7 +33,12 @@ export const PopIt: FC<Props> = ({ id, children, icon, paperSx }) => {
             {icon}
           </Button>
         </Tooltip>
-        <Popper id={open ? id : undefined} open={open} anchorEl={anchorEl}>
+        <Popper
+          id={open ? id : undefined}
+          open={open}
+          anchorEl={anchorEl}
+          onClick={() => setAnchorEl(null)}
+        >
           <Paper
             elevation={0}
             sx={{ ...paperSx, position: "relative", zIndex: 99 }}
