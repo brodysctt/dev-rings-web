@@ -26,7 +26,7 @@ export const SetGoalInput = ({ onSuccess }: Props) => {
     if (onSuccess) onSuccess();
   };
   return (
-    <Tooltip title={`${isOnboarding ? "Set" : "Update"} your daily goal`}>
+    <Tooltip title={`${isOnboarding ? "Set" : "Update"} daily goal`}>
       <Box sx={containerSx}>
         <Button disableRipple variant="text" sx={{ height: 60 }}>
           <InputBase
