@@ -1,7 +1,7 @@
 import type { Log } from "@lib/firebase/firestore";
 import { dayjs, MonthYear } from "@lib/dayjs";
 
-export const formatLogsForCalendar = (logs: Log[], monthInView: MonthYear) => {
+export const formatLogs = (logs: Log[], monthInView: MonthYear) => {
   const dayLogs: DayLog[] = logs.map(([dateString, rest]) => [
     dayjs(dateString).date() - 1,
     rest,

@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useCollection, Log } from "@lib/firebase/firestore";
-import { dayjs, formatLogsForCalendar, getMonthYear } from "@lib/dayjs";
+import { dayjs, formatLogs, getMonthYear } from "@lib/dayjs";
 import type { MonthYear } from "@lib/dayjs";
 import { Grid, Box, Typography } from "@mui/material";
 import type { SxProps } from "@mui/system";
@@ -13,7 +13,7 @@ export const CalendarPopper = () => {
   if (!logs) return null;
 
   const logsInView = filterLogs(logs as Log[], monthInView);
-  const monthLogs = formatLogsForCalendar(logsInView, monthInView);
+  const formattedLogs = formatLogs(logsInView, monthInView);
 
   const [month, year] = monthInView;
   const gridStart = dayjs(`${year}-${month}-01`).day();
@@ -40,7 +40,7 @@ export const CalendarPopper = () => {
           </Grid>
           <Grid container columns={7} gap={"3px"}>
             {<Grid item xs={gridStart} sx={{ mr: "-3px" }} />}
-            {monthLogs.map((log, i) => (
+            {formattedLogs.map((log, i) => (
               <DayTile key={i} log={log} />
             ))}
           </Grid>
