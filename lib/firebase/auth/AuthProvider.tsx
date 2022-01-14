@@ -25,17 +25,8 @@ export const AuthProvider = ({ children }: any) => {
         setUser(user);
         Cookies.set("token", token);
       }),
-    [router]
+    []
   );
-
-  // TODO: Why do I want to force refresh the token every 10 minutes?
-  useEffect(() => {
-    const handleRefresh = setInterval(async () => {
-      const user = auth.currentUser;
-      if (user) await user.getIdToken(true);
-    }, 10 * 60 * 1000);
-    return () => clearInterval(handleRefresh);
-  });
 
   return (
     <AuthContext.Provider value={{ user }}>{children}</AuthContext.Provider>
