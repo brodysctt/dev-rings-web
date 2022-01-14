@@ -1,12 +1,11 @@
-import { useEffect } from "react";
 import { useRouter } from "next/router";
 import GitHubIcon from "@mui/icons-material/GitHub";
 import { Box, Typography, Button } from "@mui/material";
 import type { SxProps } from "@mui/system";
 import { githubSignIn } from "@lib/firebase/auth";
 import { useCollection, useUserDoc, Webhook } from "@lib/firebase/firestore";
-import { toast } from "react-toastify";
 import { ProgressRing } from "components";
+import { NoReposAlert } from "@lib/react-toastify";
 
 const Enter = () => {
   const router = useRouter();
@@ -62,14 +61,5 @@ const SignInButton = () => (
     <Typography fontSize={14}> Sign in with GitHub </Typography>
   </Button>
 );
-
-const NoReposAlert = () => {
-  const router = useRouter();
-  useEffect(() => {
-    router.push("/repos");
-    toast.info("Track a repo to get started");
-  }, []);
-  return null;
-};
 
 export default Enter;

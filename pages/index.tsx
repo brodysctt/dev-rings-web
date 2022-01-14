@@ -5,14 +5,15 @@ import { dayjs, getDayEvents } from "@lib/dayjs";
 import { Box } from "@mui/material";
 import type { SxProps } from "@mui/system";
 import { GetStarted, ProgressRing, EventsPopper } from "components";
-import { NewTimezoneAlert } from "@lib/react-toastify";
+import { NewTimezoneAlert, NoReposAlert } from "@lib/react-toastify";
 
 const Index: NextPage = () => {
   const userData = useUserDoc();
   const events = useCollection("events") as RepoEvent[] | null;
   const webhooks = useCollection("webhooks") as Webhook[] | null;
 
-  if (!userData || !webhooks) return null;
+  if (!webhooks) return <NoReposAlert />;
+  if (!userData) return null;
   const [userId, { dailyGoal: goal, timezone }] = userData;
 
   // TODO: Write unit tests for this
