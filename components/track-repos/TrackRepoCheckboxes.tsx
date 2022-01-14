@@ -30,18 +30,20 @@ export const TrackRepoCheckboxes = ({ onSuccess }: Props) => {
   const [publicRepos, setPublicRepos] = useState<string[] | null>(null);
   const [trackedRepos, setTrackedRepos] = useState<Array<string | null>>([]);
 
+  // TODO: Clean this up lol
   useEffect(() => {
     (async () => {
-      if (userId) {
+      if (userId && userData) {
+        const [, { isOnboarding }] = userData;
         const repos = await fetchPublicRepos(userId);
         if (Array.isArray(repos)) {
           setPublicRepos(repos);
         }
-        if (!webhooks) {
+        if (!webhooks && !isOnboarding) {
           toast.info("Track a repo to get started");
           return;
         }
-        setTrackedRepos(getRepos(webhooks, userId));
+        webhooks && setTrackedRepos(getRepos(webhooks, userId));
       }
     })();
   }, [userId, webhooks]);
