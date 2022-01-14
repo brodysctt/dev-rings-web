@@ -8,17 +8,19 @@ import { collection, doc, onSnapshot, DocumentData } from "firebase/firestore";
 export const useCollection = (name: CollectionName) => {
   const router = useRouter();
   const userId = useAuth();
+  const userData = useUserDoc();
   const [data, setData] = useState<DocumentData[] | null>(null);
   const isLogs = name === "logs";
 
   useEffect(() => {
-    if (!userId) return;
+    if (!userId || !userData) return;
+    const [, { isOnboarding }] = userData;
     const unsubscribe = onSnapshot(
       collection(db, "users", userId, name),
       (snap) => {
         const noData = !snap || !snap.docs.length;
         if (noData) {
-          if (name === "webhooks") router.push("/repos");
+          if (!isOnboarding && name === "webhooks") router.push("/repos");
           return null;
         }
         const updatedData = isLogs
@@ -28,7 +30,7 @@ export const useCollection = (name: CollectionName) => {
       }
     );
     return () => unsubscribe();
-  }, [userId]);
+  }, [userId, userData]);
   // TODO: Need to be 100% on this dependency array. setData? isLogs? Explain the whys
   return data;
 };

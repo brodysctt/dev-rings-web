@@ -9,7 +9,7 @@ import {
 import { dayjs } from "@lib/dayjs";
 import { Box, Typography, Button } from "@mui/material";
 import type { SxProps } from "@mui/system";
-import { GetStarted, SetGoalPopper, TrackRepoCheckboxes } from "components";
+import { GetStarted, SetGoalInput, TrackRepoCheckboxes } from "components";
 
 interface Props {
   activeStep: number;
@@ -44,7 +44,7 @@ export const OnboardingSteps: FC<Props> = ({
         >{`To track progress, you must first set a goal 🏆
       How many commits will you aim for in a day?
      `}</Typography>
-        <SetGoalPopper onSuccess={onSuccess} />
+        <SetGoalInput onSuccess={onSuccess} />
       </Box>
     );
 
