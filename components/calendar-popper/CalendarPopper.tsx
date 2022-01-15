@@ -18,7 +18,12 @@ export const CalendarPopper = () => {
   const [month, year] = monthInView;
   const gridStart = dayjs(`${year}-${month}-01`).day();
   return (
-    <PopIt id="View calendar" paperSx={{ pt: 1 }} icon={<CalendarSvg />}>
+    <PopIt
+      id="View calendar"
+      closeOnClick
+      paperSx={{ pt: 1 }}
+      icon={<CalendarSvg />}
+    >
       <Box sx={containerSx}>
         <Typography sx={{ fontSize: 12, color: "primary.main" }}>
           {year}

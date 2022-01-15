@@ -13,9 +13,16 @@ interface Props {
   id: string;
   icon: JSX.Element;
   paperSx?: SxProps;
+  closeOnClick?: boolean;
 }
 
-export const PopIt: FC<Props> = ({ id, children, icon, paperSx }) => {
+export const PopIt: FC<Props> = ({
+  id,
+  children,
+  closeOnClick = false,
+  icon,
+  paperSx,
+}) => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
   return (
@@ -37,7 +44,7 @@ export const PopIt: FC<Props> = ({ id, children, icon, paperSx }) => {
           id={open ? id : undefined}
           open={open}
           anchorEl={anchorEl}
-          onClick={() => setAnchorEl(null)}
+          onClick={closeOnClick ? () => setAnchorEl(null) : () => {}}
           modifiers={[
             {
               name: "flip",
