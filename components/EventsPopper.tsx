@@ -51,10 +51,10 @@ const EventsTimeline = ({ events }: { events: RepoEvent[] }) => {
 
   return (
     <Timeline position="alternate">
-      {events.map((event) => {
+      {events.map((event, i) => {
         const { createdAt, eventType, repo, message, url } = event;
         return (
-          <TimelineItem>
+          <TimelineItem key={i}>
             <TimelineOppositeContent
               sx={{ m: "auto 0" }}
               align="right"

@@ -1,5 +1,6 @@
 import { motion } from "framer-motion";
 import { Box } from "@mui/material";
+import { theme } from "styles";
 
 interface Props {
   isMini?: boolean;
@@ -31,7 +32,7 @@ export const CompletedRing = ({ isMini = false }: Props) => {
           cx={size * 0.5}
           cy={size * 0.5}
           r={size * 0.33}
-          stroke="#556cd6"
+          stroke={theme.palette.primary.main}
           strokeWidth={isMini ? 4 : 20}
           strokeLinecap="round"
           fill="transparent"
@@ -66,8 +67,7 @@ export const CompletedRing = ({ isMini = false }: Props) => {
   );
 };
 
-// TODO: Add to theme
-const CHECKMARK_COLOUR = "#66CC00";
+const CHECKMARK_COLOUR = theme.palette.success.main;
 
 const draw = {
   hidden: { pathLength: 0, opacity: 0 },
