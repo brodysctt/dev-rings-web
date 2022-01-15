@@ -39,10 +39,7 @@ export const PopIt: FC<Props> = ({ id, children, icon, paperSx }) => {
           anchorEl={anchorEl}
           onClick={() => setAnchorEl(null)}
         >
-          <Paper
-            elevation={0}
-            sx={{ ...paperSx, position: "relative", zIndex: 99 }}
-          >
+          <Paper elevation={0} sx={paperSx}>
             {children}
           </Paper>
         </Popper>

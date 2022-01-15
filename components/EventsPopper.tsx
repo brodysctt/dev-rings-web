@@ -1,7 +1,15 @@
-import { Box, Typography, Chip, Tooltip } from "@mui/material";
+import { dayjs } from "@lib/dayjs";
 import type { RepoEvent } from "@lib/firebase/firestore";
-import { getTimeAsString } from "utils";
 import { PopIt, EventSvg } from "components";
+import Box from "@mui/material/Box";
+import Typography from "@mui/material/Typography";
+import Timeline from "@mui/lab/Timeline";
+import TimelineItem from "@mui/lab/TimelineItem";
+import TimelineSeparator from "@mui/lab/TimelineSeparator";
+import TimelineConnector from "@mui/lab/TimelineConnector";
+import TimelineContent from "@mui/lab/TimelineContent";
+import TimelineOppositeContent from "@mui/lab/TimelineOppositeContent";
+import TimelineDot from "@mui/lab/TimelineDot";
 
 export const EventsPopper = ({ events }: { events: RepoEvent[] }) => {
   const chronologicalEvents = [...events].reverse();
@@ -14,35 +22,42 @@ export const EventsPopper = ({ events }: { events: RepoEvent[] }) => {
         </Box>
       }
     >
-      <Box
-        sx={{
-          display: "flex",
-          justifyContent: "center",
-          flexWrap: "wrap",
-          width: 800,
-          p: 2,
-        }}
-      >
-        {chronologicalEvents.map((event, i) => {
+      <Timeline position="alternate">
+        {chronologicalEvents.slice(0, 3).map((event) => {
           const { createdAt, eventType, repo, message, url } = event;
-          // TODO: Can use toLocaleTimeString() method here instead
-          const time = getTimeAsString(createdAt);
           return (
-            <Tooltip key={i} title={`${time} | ${repo}`}>
-              <Chip
-                icon={<EventSvg type={eventType} variant="outline" />}
-                label={
-                  <Typography textAlign="left" sx={{ p: 0 }}>
-                    {message}
-                  </Typography>
-                }
+            <TimelineItem>
+              <TimelineOppositeContent
+                sx={{ m: "auto 0" }}
+                align="right"
+                variant="body2"
+                color="text.secondary"
+              >
+                {dayjs(createdAt.toDate()).format("LT")}
+              </TimelineOppositeContent>
+              <TimelineSeparator>
+                <TimelineConnector />
+                <TimelineDot color="primary">
+                  <EventSvg
+                    type={eventType === "push" ? "push" : "pull_request"}
+                    variant="contained"
+                  />
+                </TimelineDot>
+                <TimelineConnector />
+              </TimelineSeparator>
+              <TimelineContent
                 onClick={() => window.open(url)}
-                sx={{ pl: 1, mr: 1, mb: 1 }}
-              />
-            </Tooltip>
+                sx={{ py: "12px", px: 2, cursor: "pointer" }}
+              >
+                <Typography variant="h6" component="span">
+                  {repo}
+                </Typography>
+                <Typography>{message}</Typography>
+              </TimelineContent>
+            </TimelineItem>
           );
         })}
-      </Box>
+      </Timeline>
     </PopIt>
   );
 };
