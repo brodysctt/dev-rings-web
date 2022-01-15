@@ -13,7 +13,10 @@ import TimelineOppositeContent from "@mui/lab/TimelineOppositeContent";
 import TimelineDot from "@mui/lab/TimelineDot";
 
 export const EventsPopper = ({ events }: { events: RepoEvent[] }) => {
-  const chronologicalEvents = [...events].reverse();
+  const chronologicalEvents = events
+    .map((event) => [event.createdAt.toMillis(), event])
+    .sort()
+    .map(([, event]) => event as RepoEvent);
   return (
     <PopIt
       id="View events"
@@ -23,7 +26,7 @@ export const EventsPopper = ({ events }: { events: RepoEvent[] }) => {
         </Box>
       }
     >
-      <EventsTimeline events={chronologicalEvents.slice(0, 2)} />
+      <EventsTimeline events={chronologicalEvents} />
     </PopIt>
   );
 };
@@ -48,7 +51,7 @@ const EventsTimeline = ({ events }: { events: RepoEvent[] }) => {
 
   return (
     <Timeline position="alternate">
-      {events.slice(0, 2).map((event) => {
+      {events.map((event) => {
         const { createdAt, eventType, repo, message, url } = event;
         return (
           <TimelineItem>
