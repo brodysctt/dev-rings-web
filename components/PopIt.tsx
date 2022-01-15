@@ -1,5 +1,12 @@
 import { useState, MouseEvent, FC } from "react";
-import { Box, Button, Popper, Paper, ClickAwayListener } from "@mui/material";
+import {
+  Box,
+  Button,
+  Popper,
+  Paper,
+  ClickAwayListener,
+  Tooltip,
+} from "@mui/material";
 import type { SxProps } from "@mui/system";
 
 interface Props {
@@ -8,29 +15,34 @@ interface Props {
   paperSx?: SxProps;
 }
 
-// TODO: Listen for Firestore update to User doc (and close on update)
-// TODO: Add pop on hover functionality – would be nice for calendar and set goal
-// TODO: Add popped functionality, i.e. can render pre-popped – clutch for onboarding
 export const PopIt: FC<Props> = ({ id, children, icon, paperSx }) => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-  // TODO: Figure out how to close popper on submit within children
   const open = Boolean(anchorEl);
-
   return (
     <ClickAwayListener onClickAway={() => setAnchorEl(null)}>
       <Box>
-        <Button
-          aria-describedby={open ? id : undefined}
-          variant="text"
-          onClick={(event: MouseEvent<HTMLElement>) => {
-            setAnchorEl(anchorEl ? null : event.currentTarget);
-          }}
-          sx={{ height: 60 }}
+        <Tooltip title={id} PopperProps={open ? { open: !open } : {}}>
+          <Button
+            aria-describedby={open ? id : undefined}
+            variant="text"
+            onClick={(event: MouseEvent<HTMLElement>) => {
+              setAnchorEl(anchorEl ? null : event.currentTarget);
+            }}
+            sx={{ height: 60 }}
+          >
+            {icon}
+          </Button>
+        </Tooltip>
+        <Popper
+          id={open ? id : undefined}
+          open={open}
+          anchorEl={anchorEl}
+          onClick={() => setAnchorEl(null)}
         >
-          {icon}
-        </Button>
-        <Popper id={open ? id : undefined} open={open} anchorEl={anchorEl}>
-          <Paper elevation={0} sx={paperSx}>
+          <Paper
+            elevation={0}
+            sx={{ ...paperSx, position: "relative", zIndex: 99 }}
+          >
             {children}
           </Paper>
         </Popper>

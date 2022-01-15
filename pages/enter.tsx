@@ -2,15 +2,16 @@ import { useRouter } from "next/router";
 import GitHubIcon from "@mui/icons-material/GitHub";
 import { Box, Typography, Button } from "@mui/material";
 import type { SxProps } from "@mui/system";
-import { githubSignIn } from "@lib/firebase/auth";
+import { githubSignIn, useAuth } from "@lib/firebase/auth";
 import { useUserDoc } from "@lib/firebase/firestore";
 import { ProgressRing } from "components";
 
 const Enter = () => {
   const router = useRouter();
+  const userId = useAuth();
   const userData = useUserDoc();
 
-  if (!userData)
+  if (!userId || !userData)
     return (
       <Box sx={containerSx}>
         <ProgressRing values={[1, 1]} />

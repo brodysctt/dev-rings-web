@@ -7,7 +7,7 @@ export const EventsPopper = ({ events }: { events: RepoEvent[] }) => {
   const chronologicalEvents = [...events].reverse();
   return (
     <PopIt
-      id="events"
+      id="View events"
       icon={
         <Box sx={iconContainerSx}>
           <EventSvg variant="contained" />

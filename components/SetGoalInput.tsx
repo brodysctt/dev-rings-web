@@ -22,11 +22,11 @@ export const SetGoalInput = ({ onSuccess }: Props) => {
       return;
     }
     await setDailyGoal(userId, Number(goal));
-    toast.success(`Goal is now ${dailyGoal} 🏔️`);
+    toast.success(`Goal is now ${goal} 🏔️`);
     if (onSuccess) onSuccess();
   };
   return (
-    <Tooltip title={`${isOnboarding ? "Set" : "Update"} your daily goal`}>
+    <Tooltip title={`${isOnboarding ? "Set" : "Update"} daily goal`}>
       <Box sx={containerSx}>
         <Button disableRipple variant="text" sx={{ height: 60 }}>
           <InputBase
