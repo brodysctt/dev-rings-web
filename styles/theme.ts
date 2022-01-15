@@ -13,6 +13,9 @@ export const theme = createTheme({
     success: {
       main: "#55D67E",
     },
+    text: {
+      secondary: "#A2A2A2",
+    },
     error: {
       main: red.A400,
     },

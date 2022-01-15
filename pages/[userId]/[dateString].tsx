@@ -15,7 +15,7 @@ const DevRing: NextPage<{ log: Log }> = ({ log }) => {
 
   return (
     <Box sx={containerSx}>
-      <Typography sx={{ color: "#a2a2a2" }}>
+      <Typography color="text.secondary">
         {dayjs(dateString).format("LL")}
       </Typography>
       <Box sx={devRingSx}>

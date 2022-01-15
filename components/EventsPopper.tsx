@@ -77,10 +77,8 @@ const EventsTimeline = ({ events }: { events: RepoEvent[] }) => {
               onClick={() => window.open(url)}
               sx={{ py: "12px", px: 2, cursor: "pointer" }}
             >
-              <Typography variant="h6" component="span">
-                {repo}
-              </Typography>
-              <Typography>{message}</Typography>
+              <Typography color="primary">{repo}</Typography>
+              <Typography color="text.secondary">{message}</Typography>
             </TimelineContent>
           </TimelineItem>
         );
