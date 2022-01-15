@@ -38,6 +38,12 @@ export const PopIt: FC<Props> = ({ id, children, icon, paperSx }) => {
           open={open}
           anchorEl={anchorEl}
           onClick={() => setAnchorEl(null)}
+          modifiers={[
+            {
+              name: "flip",
+              enabled: false,
+            },
+          ]}
         >
           <Paper elevation={0} sx={paperSx}>
             {children}

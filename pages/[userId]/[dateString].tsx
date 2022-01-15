@@ -1,4 +1,5 @@
 import type { NextPage, GetServerSideProps } from "next";
+import { dayjs } from "@lib/dayjs";
 import { useCollection, Log, RepoEvent } from "@lib/firebase/firestore";
 import { verifyToken, fetchLogDoc } from "@lib/firebase-admin";
 import { getDayEvents } from "@lib/dayjs";
@@ -14,7 +15,9 @@ const DevRing: NextPage<{ log: Log }> = ({ log }) => {
 
   return (
     <Box sx={containerSx}>
-      <Typography sx={{ mb: 3, color: "#a2a2a2" }}>{dateString}</Typography>
+      <Typography sx={{ color: "#a2a2a2" }}>
+        {dayjs(dateString).format("LL")}
+      </Typography>
       <Box sx={devRingSx}>
         <ProgressRing values={[actual, goal]} />
         {dayEvents && <EventsPopper events={dayEvents} />}
