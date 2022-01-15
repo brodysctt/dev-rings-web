@@ -5,7 +5,7 @@ import { db, corsHandler } from "../config";
 
 const GITHUB_BASE_URL = "https://api.github.com";
 const WEBHOOK_EVENTS_URL =
-  "http://bd0f-2607-fea8-88a1-f900-a03b-d819-4d13-79bf.ngrok.io/dev-rings/us-central1/receiveWebhookEventHandler";
+  "http://7bef-172-103-147-5.ngrok.io/dev-rings/us-central1/receiveWebhookEventHandler";
 
 export const createWebhookHandler = https.onRequest(async (req, res) => {
   corsHandler(req, res, async () => {
@@ -50,7 +50,7 @@ const createWebhook = async (user: string, repo: string, token: string) => {
         url: WEBHOOK_EVENTS_URL,
         content_type: "json",
       },
-      events: ["push", "pull_request", "meta"],
+      events: ["push", "meta"],
     },
     {
       headers: {

@@ -1,2 +1,2 @@
-export * from "./EventSvg";
+export * from "./CommitSvg";
 export * from "./icons";

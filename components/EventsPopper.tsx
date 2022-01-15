@@ -1,7 +1,7 @@
 import { useEffect, useRef } from "react";
 import { dayjs } from "@lib/dayjs";
 import type { RepoEvent } from "@lib/firebase/firestore";
-import { PopIt, EventSvg } from "components";
+import { PopIt, CommitSvg } from "components";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Timeline from "@mui/lab/Timeline";
@@ -11,6 +11,7 @@ import TimelineConnector from "@mui/lab/TimelineConnector";
 import TimelineContent from "@mui/lab/TimelineContent";
 import TimelineOppositeContent from "@mui/lab/TimelineOppositeContent";
 import TimelineDot from "@mui/lab/TimelineDot";
+import type { SxProps } from "@mui/system";
 
 export const EventsPopper = ({ events }: { events: RepoEvent[] }) => {
   const chronologicalEvents = events
@@ -21,23 +22,14 @@ export const EventsPopper = ({ events }: { events: RepoEvent[] }) => {
     <PopIt
       id="View events"
       icon={
-        <Box sx={iconContainerSx}>
-          <EventSvg variant="contained" />
+        <Box sx={iconSx}>
+          <CommitSvg />
         </Box>
       }
     >
       <EventsTimeline events={chronologicalEvents} />
     </PopIt>
   );
-};
-
-const iconContainerSx = {
-  display: "flex",
-  justifyContent: "center",
-  alignItems: "center",
-  bgcolor: "primary.main",
-  borderRadius: 2,
-  height: 25,
 };
 
 const EventsTimeline = ({ events }: { events: RepoEvent[] }) => {
@@ -52,7 +44,7 @@ const EventsTimeline = ({ events }: { events: RepoEvent[] }) => {
   return (
     <Timeline position="alternate">
       {events.map((event, i) => {
-        const { createdAt, eventType, repo, message, url } = event;
+        const { createdAt, repo, message, url } = event;
         return (
           <TimelineItem key={i}>
             <TimelineOppositeContent
@@ -66,10 +58,7 @@ const EventsTimeline = ({ events }: { events: RepoEvent[] }) => {
             <TimelineSeparator>
               <TimelineConnector />
               <TimelineDot color="primary">
-                <EventSvg
-                  type={eventType === "push" ? "push" : "pull_request"}
-                  variant="contained"
-                />
+                <CommitSvg />
               </TimelineDot>
               <TimelineConnector />
             </TimelineSeparator>
@@ -87,3 +76,14 @@ const EventsTimeline = ({ events }: { events: RepoEvent[] }) => {
     </Timeline>
   );
 };
+
+const iconSx = {
+  display: "flex",
+  justifyContent: "center",
+  alignItems: "center",
+  bgcolor: "primary.main",
+  borderRadius: 50,
+  height: 25,
+  px: 0.8,
+  py: 2,
+} as SxProps;
