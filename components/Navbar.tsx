@@ -1,13 +1,9 @@
+import Image from "next/image";
 import Link from "next/link";
 import { useAuth } from "@lib/firebase/auth";
 import { useUserDoc } from "@lib/firebase/firestore";
 import { Grid, Box, Button, Tooltip, CircularProgress } from "@mui/material";
-import {
-  CalendarPopper,
-  ReposPopper,
-  SetGoalInput,
-  SidebarDial,
-} from "components";
+import { CalendarPopper, SetGoalInput, SidebarDial } from "components";
 
 export const Navbar = () => {
   const userId = useAuth();
@@ -22,7 +18,7 @@ export const Navbar = () => {
             <>
               <ViewTodayRing />
               <CalendarPopper />
-              <ReposPopper />
+              <ManageRepos />
               <SetGoalInput />
             </>
           )}
@@ -38,18 +34,26 @@ export const Navbar = () => {
 };
 
 const ViewTodayRing = () => (
-  <>
-    <Link href="/" passHref>
-      <Tooltip title="View today's progress">
-        <Button variant="text" sx={{ p: 2, height: 60 }}>
-          <CircularProgress
-            variant="determinate"
-            size={26}
-            thickness={6}
-            value={100}
-          />
-        </Button>
-      </Tooltip>
-    </Link>
-  </>
+  <Link href="/" passHref>
+    <Tooltip title="View today's progress">
+      <Button variant="text" sx={{ p: 2, height: 60 }}>
+        <CircularProgress
+          variant="determinate"
+          size={26}
+          thickness={6}
+          value={100}
+        />
+      </Button>
+    </Tooltip>
+  </Link>
+);
+
+const ManageRepos = () => (
+  <Link href="/repos" passHref>
+    <Tooltip title="Manage repos">
+      <Button variant="text" sx={{ p: 2, height: 60 }}>
+        <Image src="/repo-icon.png" width={32} height={32} />
+      </Button>
+    </Tooltip>
+  </Link>
 );

@@ -1,37 +1,11 @@
 import { useState } from "react";
-import Image from "next/image";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
-import type { SxProps } from "@mui/system";
-import {
-  PopIt,
-  TrackEmAllButton,
-  TrackRepoCheckboxes,
-  TrackRepoInput,
-} from "components";
+import { TrackEmAllButton, TrackRepoInput, TrackRepoCheckboxes } from ".";
 
-export const ReposPopper = () => {
-  return (
-    <PopIt
-      id="Manage repos"
-      icon={<Image src="/repo-icon.png" width={32} height={32} />}
-    >
-      <Box
-        sx={{
-          display: "flex",
-          alignItems: "center",
-          width: 600,
-        }}
-      >
-        <BasicTabs />
-      </Box>
-    </PopIt>
-  );
-};
-
-const BasicTabs = () => {
+export const TrackReposTabs = () => {
   const [value, setValue] = useState(0);
 
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
