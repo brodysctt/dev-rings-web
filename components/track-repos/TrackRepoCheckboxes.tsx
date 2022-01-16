@@ -53,9 +53,6 @@ export const TrackRepoCheckboxes = ({ onSuccess }: Props) => {
 
   return (
     <Box sx={containerSx}>
-      <Typography variant="h6">{`Check a repo below to create a webhook and start tracking it 
-      ✔️`}</Typography>
-
       <FormGroup>
         <Box sx={checkboxesSx}>
           {/* TODO: Handle case where user has a ton of repos*/}
