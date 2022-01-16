@@ -5,13 +5,14 @@ import { verifyToken, fetchLogDoc } from "@lib/firebase-admin";
 import { getDayEvents } from "@lib/dayjs";
 import { Box, Typography } from "@mui/material";
 import type { SxProps } from "@mui/system";
-import { EventsPopper, ProgressRing } from "components";
+import { CommitSvg, EventsTimeline, PopIt, ProgressRing } from "components";
 import Cookies from "cookies";
 
 const DevRing: NextPage<{ log: Log }> = ({ log }) => {
   const events = useCollection("events") as RepoEvent[] | null;
   const [dateString, { actual, goal }] = log;
   const dayEvents = getDayEvents(events, dateString);
+  if (!dayEvents) return null;
 
   return (
     <Box sx={containerSx}>
@@ -20,7 +21,9 @@ const DevRing: NextPage<{ log: Log }> = ({ log }) => {
       </Typography>
       <Box sx={devRingSx}>
         <ProgressRing values={[actual, goal]} />
-        {dayEvents && <EventsPopper events={dayEvents} />}
+        <PopIt id="View events" icon={<CommitSvg />}>
+          <EventsTimeline events={dayEvents} />
+        </PopIt>
       </Box>
     </Box>
   );

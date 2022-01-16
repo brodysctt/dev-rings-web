@@ -1,7 +1,8 @@
-import { useEffect, useRef } from "react";
+import { useState, useEffect, useRef } from "react";
 import { dayjs } from "@lib/dayjs";
 import type { RepoEvent } from "@lib/firebase/firestore";
-import { CommitSvg, PopIt, TimelineAccordion } from "components";
+import { CommitSvg } from "components";
+import { openUrl } from "utils";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Timeline from "@mui/lab/Timeline";
@@ -11,29 +12,12 @@ import TimelineConnector from "@mui/lab/TimelineConnector";
 import TimelineContent from "@mui/lab/TimelineContent";
 import TimelineOppositeContent from "@mui/lab/TimelineOppositeContent";
 import TimelineDot from "@mui/lab/TimelineDot";
-import type { SxProps } from "@mui/system";
-import { openUrl } from "utils";
+import Accordion from "@mui/material/Accordion";
+import AccordionSummary from "@mui/material/AccordionSummary";
+import AccordionDetails from "@mui/material/AccordionDetails";
+import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 
-export const EventsPopper = ({ events }: { events: RepoEvent[] }) => {
-  const chronologicalEvents = events
-    .map((event) => [event.createdAt.toMillis(), event])
-    .sort()
-    .map(([, event]) => event as RepoEvent);
-  return (
-    <PopIt
-      id="View events"
-      icon={
-        <Box sx={iconSx}>
-          <CommitSvg />
-        </Box>
-      }
-    >
-      <EventsTimeline events={chronologicalEvents} />
-    </PopIt>
-  );
-};
-
-const EventsTimeline = ({ events }: { events: RepoEvent[] }) => {
+export const EventsTimeline = ({ events }: { events: RepoEvent[] }) => {
   const ref = useRef<HTMLElement>(null);
   useEffect(() => {
     if (ref.current)
@@ -41,7 +25,6 @@ const EventsTimeline = ({ events }: { events: RepoEvent[] }) => {
         behavior: "smooth",
       });
   }, [ref]);
-
   return (
     <Timeline position="alternate">
       {events.map((event, i) => {
@@ -84,13 +67,52 @@ const EventsTimeline = ({ events }: { events: RepoEvent[] }) => {
   );
 };
 
-const iconSx = {
-  display: "flex",
-  justifyContent: "center",
-  alignItems: "center",
-  bgcolor: "primary.main",
-  borderRadius: 50,
-  height: 25,
-  px: 0.8,
-  py: 2,
-} as SxProps;
+interface Props {
+  repo: string;
+  message: string;
+  url: string;
+}
+
+const TimelineAccordion = ({ repo, message, url }: Props) => {
+  const [expanded, setExpanded] = useState(false);
+  const handleChange = () => setExpanded(!expanded);
+  return (
+    <Accordion
+      expanded={expanded}
+      elevation={0}
+      disableGutters
+      onChange={handleChange}
+    >
+      <AccordionSummary
+        expandIcon={
+          <ArrowForwardIosIcon
+            sx={{
+              fontSize: 12,
+              transform: expanded ? "rotate(-90deg)" : "",
+            }}
+          />
+        }
+        aria-controls="panel1a-content"
+        id="panel1a-header"
+        sx={{
+          flexDirection: "row-reverse",
+          px: 0,
+          mx: -0.5,
+        }}
+      >
+        <Typography color="primary" sx={{ ml: 0.5 }}>
+          {repo}
+        </Typography>
+      </AccordionSummary>
+      <AccordionDetails>
+        <Typography
+          color="text.secondary"
+          onClick={openUrl(url)}
+          sx={{ mt: -2 }}
+        >
+          {message}
+        </Typography>
+      </AccordionDetails>
+    </Accordion>
+  );
+};

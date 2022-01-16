@@ -8,10 +8,11 @@ import {
   Tooltip,
 } from "@mui/material";
 import type { SxProps } from "@mui/system";
+import { CommitSvg } from "components";
 
 interface Props {
   id: string;
-  icon: JSX.Element;
+  icon?: JSX.Element;
   paperSx?: SxProps;
   closeOnClick?: boolean;
 }
@@ -37,7 +38,13 @@ export const PopIt: FC<Props> = ({
             }}
             sx={{ height: 60 }}
           >
-            {icon}
+            {id === "View events" ? (
+              <Box sx={iconSx}>
+                <CommitSvg />
+              </Box>
+            ) : (
+              icon
+            )}
           </Button>
         </Tooltip>
         <Popper
@@ -59,4 +66,15 @@ export const PopIt: FC<Props> = ({
       </Box>
     </ClickAwayListener>
   );
+};
+
+const iconSx = {
+  display: "flex",
+  justifyContent: "center",
+  alignItems: "center",
+  bgcolor: "primary.main",
+  borderRadius: 50,
+  height: 25,
+  px: 0.8,
+  py: 2,
 };

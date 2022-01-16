@@ -2,6 +2,7 @@ import type { Dayjs } from "dayjs";
 import { dayjs } from "@lib/dayjs";
 import type { RepoEvent } from "@lib/firebase/firestore";
 
+// TODO: Any refactors that can be made here boss?
 export const getDayEvents = (
   events: RepoEvent[] | null,
   dateString: string
@@ -17,7 +18,11 @@ export const getDayEvents = (
     .map((event) => event[1]) as RepoEvent[];
 
   if (!dayEvents.length) return null;
-  return dayEvents;
+
+  return dayEvents
+    .map((event) => [event.createdAt.toMillis(), event])
+    .sort()
+    .map(([, event]) => event as RepoEvent);
 };
 
 export type MonthYear = [number, number];

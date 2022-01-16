@@ -4,7 +4,13 @@ import type { RepoEvent, Webhook } from "@lib/firebase/firestore";
 import { dayjs, getDayEvents } from "@lib/dayjs";
 import { Box } from "@mui/material";
 import type { SxProps } from "@mui/system";
-import { GetStarted, ProgressRing, EventsPopper } from "components";
+import {
+  CommitSvg,
+  EventsTimeline,
+  GetStarted,
+  PopIt,
+  ProgressRing,
+} from "components";
 import { NewTimezoneAlert } from "@lib/react-toastify";
 
 const Index: NextPage = () => {
@@ -34,7 +40,9 @@ const Index: NextPage = () => {
     <Box sx={containerSx}>
       <Box sx={devRingSx}>
         <ProgressRing values={[actual, goal]} />
-        <EventsPopper events={dayEvents} />
+        <PopIt id="View events" icon={<CommitSvg />}>
+          <EventsTimeline events={dayEvents} />
+        </PopIt>
       </Box>
       <NewTimezoneAlert tz={timezone} />
     </Box>
