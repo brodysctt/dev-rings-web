@@ -44,8 +44,9 @@ export const TrackRepoInput = () => {
   };
 
   return (
+    // TODO: Make line purple
     <Box sx={containerSx}>
-      <Tooltip title="Paste a private GitHub repo here to start tracking it">
+      <Tooltip title="Paste a GitHub URL here to start tracking it">
         <FormControl variant="standard">
           <Input
             {...register("repoUrl")}
@@ -74,7 +75,6 @@ const containerSx = {
   flexDirection: "column",
   justifyContent: "center",
   alignItems: "start",
-  width: 400,
   ml: 5,
   mt: 1,
 } as SxProps;
