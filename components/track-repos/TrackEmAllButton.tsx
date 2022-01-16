@@ -1,6 +1,6 @@
 import { Button, Tooltip } from "@mui/material";
 import type { SxProps } from "@mui/system";
-import { GitHubSvg } from "components";
+import GitHubSvg from "@mui/icons-material/GitHub";
 import { toast } from "react-toastify";
 import { useAuth } from "@lib/firebase/auth";
 import { fetchPublicRepos } from "./fetchPublicRepos";
