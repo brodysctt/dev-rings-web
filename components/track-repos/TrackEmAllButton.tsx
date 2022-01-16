@@ -1,4 +1,4 @@
-import { Button, Tooltip } from "@mui/material";
+import { Typography, Button, Tooltip } from "@mui/material";
 import type { SxProps } from "@mui/system";
 import GitHubSvg from "@mui/icons-material/GitHub";
 import { toast } from "react-toastify";
@@ -10,15 +10,16 @@ export const TrackEmAllButton = () => {
   const userId = useAuth();
   if (!userId) return null;
   return (
-    <Tooltip title="Track all public repos">
-      <Button
-        variant="contained"
-        onClick={async () => await createWebhooks(userId)}
-        sx={buttonSx}
-      >
-        <GitHubSvg />
-      </Button>
-    </Tooltip>
+    <Button
+      variant="contained"
+      onClick={async () => await createWebhooks(userId)}
+      sx={buttonSx}
+    >
+      <GitHubSvg />
+      <Typography
+        sx={{ fontSize: 12, ml: 1 }}
+      >{`Track all public repos`}</Typography>
+    </Button>
   );
 };
 
@@ -26,7 +27,7 @@ const buttonSx = {
   display: "flex",
   justifyContent: "space-around",
   alignItems: "center",
-  p: 1,
+  p: 1.5,
 } as SxProps;
 
 const createWebhooks = async (userId: string) => {

@@ -4,6 +4,7 @@ import { useAuth } from "@lib/firebase/auth";
 import { Box, FormControl, Input, Tooltip } from "@mui/material";
 import type { SxProps } from "@mui/system";
 import { trackRepo } from "./trackRepo";
+import GitHubSvg from "@mui/icons-material/GitHub";
 
 export const TrackRepoInput = () => {
   const { register, handleSubmit } = useForm<{ repoUrl: string }>();
@@ -51,6 +52,8 @@ export const TrackRepoInput = () => {
             id="repoUrl"
             type="text"
             placeholder={"https://github.com/you/your-awesome-repo.git"}
+            // TODO: Make GitHubSvg on theme
+            startAdornment={<GitHubSvg />}
             onKeyPress={(kp) => {
               if (kp.key === "Enter") {
                 handleSubmit(onSubmit)();
@@ -58,7 +61,7 @@ export const TrackRepoInput = () => {
                 // TODO: What does this do ☝️
               }
             }}
-            sx={{ width: 350 }}
+            sx={{ width: 450 }}
           />
         </FormControl>
       </Tooltip>
@@ -73,6 +76,7 @@ const containerSx = {
   alignItems: "start",
   width: 400,
   ml: 5,
+  mt: 1,
 } as SxProps;
 
 const githubUrl = new RegExp(`https://github.com/(.*)/(.*)[.]git`);

@@ -1,11 +1,5 @@
 import { useState, useEffect } from "react";
-import {
-  Box,
-  Typography,
-  FormGroup,
-  FormControlLabel,
-  Checkbox,
-} from "@mui/material";
+import { Box, FormGroup, FormControlLabel, Checkbox } from "@mui/material";
 import type { SxProps } from "@mui/system";
 import { useAuth } from "@lib/firebase/auth";
 import {
