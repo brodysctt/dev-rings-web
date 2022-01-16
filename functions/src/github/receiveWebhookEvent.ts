@@ -28,8 +28,8 @@ export const receiveWebhookEventHandler = https.onRequest(async (req, res) => {
         res.sendStatus(200);
         return;
       }
-      // @ts-ignore
-      const { dailyGoal: goal, timezone } = userDoc.data();
+      const { dailyGoal: goal, timezone } =
+        userDoc.data() as admin.firestore.DocumentData;
       const date = new Date();
       const createdAt = admin.firestore.Timestamp.fromDate(date);
       const dateString = dayjs(date).tz(timezone).format("YYYY-MM-DD");
@@ -41,7 +41,7 @@ export const receiveWebhookEventHandler = https.onRequest(async (req, res) => {
         } = data;
         if (!commits.length) {
           logger.log(
-            `User either created or deleted a branch (i.e. push event with 0 commits) – this event won't be stored 🙅‍♀️`
+              "Push event with 0 commits – this event won't be stored 🙅‍♀️"
           );
           res.sendStatus(200);
           return;
@@ -64,11 +64,11 @@ export const receiveWebhookEventHandler = https.onRequest(async (req, res) => {
 
         logger.log(`Updating ring for ${dateString}...`);
         await logsRef.doc(dateString).set(
-          {
-            actual: admin.firestore.FieldValue.increment(commits.length),
-            goal,
-          },
-          { merge: true }
+            {
+              actual: admin.firestore.FieldValue.increment(commits.length),
+              goal,
+            },
+            { merge: true }
         );
         logger.log(`Successfully updated ring for ${dateString} 🎉`);
 
@@ -77,13 +77,13 @@ export const receiveWebhookEventHandler = https.onRequest(async (req, res) => {
       }
 
       if (eventType === "meta") {
-        const { hook_id } = data;
-        const webhookId = hook_id.toString();
+        const { hook_id: hookId } = data;
+        const webhookId = hookId.toString();
         const webhooksRef = db
-          .collection("users")
-          .doc(userId)
-          .collection("webhooks");
-        logger.log(`This webhook was deleted. Deleting from db...`);
+            .collection("users")
+            .doc(userId)
+            .collection("webhooks");
+        logger.log("This webhook was deleted. Deleting from db...");
         await webhooksRef.doc(webhookId).delete();
         logger.log(`Successfully deleted webhook ${webhookId} 🥲`);
         res.sendStatus(200);
@@ -92,6 +92,7 @@ export const receiveWebhookEventHandler = https.onRequest(async (req, res) => {
       return;
     } catch (err) {
       res.status(400).send(err);
+      return;
     }
   });
 });
