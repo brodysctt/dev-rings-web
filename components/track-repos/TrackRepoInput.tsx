@@ -61,7 +61,7 @@ export const TrackRepoInput = () => {
                 // TODO: What does this do ☝️
               }
             }}
-            sx={{ width: 450, fontSize: 16 }}
+            sx={{ width: 370, fontSize: 16 }}
           />
         </FormControl>
       </Tooltip>
