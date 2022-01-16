@@ -27,20 +27,19 @@ export const TrackRepoCheckboxes = ({ onSuccess }: Props) => {
   // TODO: Clean this up lol
   useEffect(() => {
     (async () => {
-      if (userId && userData) {
-        const [, { isOnboarding }] = userData;
-        const repos = await fetchPublicRepos(userId);
-        if (Array.isArray(repos)) {
-          setPublicRepos(repos);
-        }
-        if (!webhooks && !isOnboarding) {
-          toast.info("Track a repo to get started");
-          return;
-        }
-        webhooks && setTrackedRepos(getRepos(webhooks, userId));
+      if (!userId || !userData) return null;
+      const [, { isOnboarding }] = userData;
+      const repos = await fetchPublicRepos(userId);
+      if (Array.isArray(repos)) {
+        setPublicRepos(repos);
       }
+      if (!webhooks && !isOnboarding) {
+        toast.info("Track a repo to get started");
+        return;
+      }
+      webhooks && setTrackedRepos(getRepos(webhooks, userId));
     })();
-  }, [userId, webhooks]);
+  }, [userId, userData, webhooks]);
 
   // TODO: Handle case where user has no public repos
   if (!userId || !publicRepos) return null;
