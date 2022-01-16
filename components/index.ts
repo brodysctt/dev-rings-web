@@ -1,6 +1,6 @@
 export * from "./calendar-popper";
-export * from "./icons";
 export * from "./track-repos";
+export * from "./CommitSvg";
 export * from "./CompletedRing";
 export * from "./EventsTimeline";
 export * from "./GetStarted";

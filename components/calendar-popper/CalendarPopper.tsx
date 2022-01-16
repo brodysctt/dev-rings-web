@@ -4,7 +4,8 @@ import { dayjs, formatLogs, getMonthYear } from "@lib/dayjs";
 import type { MonthYear } from "@lib/dayjs";
 import { Grid, Box, Typography } from "@mui/material";
 import type { SxProps } from "@mui/system";
-import { ArrowButton, DayTile, PopIt, CalendarSvg } from "components";
+import CalendarSvg from "@mui/icons-material/CalendarTodayRounded";
+import { ArrowButton, DayTile, PopIt } from "components";
 import { filterLogs, isFirstMonth } from "./helpers";
 
 export const CalendarPopper = () => {
