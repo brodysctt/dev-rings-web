@@ -1,4 +1,4 @@
-import { Typography, Button, Tooltip } from "@mui/material";
+import { Typography, Button } from "@mui/material";
 import type { SxProps } from "@mui/system";
 import GitHubSvg from "@mui/icons-material/GitHub";
 import { toast } from "react-toastify";
