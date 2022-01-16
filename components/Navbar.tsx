@@ -33,6 +33,7 @@ export const Navbar = () => {
   );
 };
 
+// TODO: Make a lil component for these 👇
 const ViewTodayRing = () => (
   <Link href="/" passHref>
     <Tooltip title="View today's progress">
@@ -49,7 +50,7 @@ const ViewTodayRing = () => (
 );
 
 const ManageRepos = () => (
-  <Link href="/repos" passHref>
+  <Link href="/manage-repos" passHref>
     <Tooltip title="Manage repos">
       <Button variant="text" sx={{ p: 2, height: 60 }}>
         <Image src="/repo-icon.png" width={32} height={32} />

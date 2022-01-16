@@ -46,6 +46,7 @@ export const TrackRepoInput = () => {
   return (
     // TODO: Make line purple
     <Box sx={containerSx}>
+      <GitHubSvg color="primary" fontSize="large" sx={{ mr: 1 }} />
       <Tooltip title="Paste a GitHub URL here to start tracking it">
         <FormControl variant="standard">
           <Input
@@ -53,8 +54,6 @@ export const TrackRepoInput = () => {
             id="repoUrl"
             type="text"
             placeholder={"https://github.com/you/your-awesome-repo.git"}
-            // TODO: Make GitHubSvg on theme
-            startAdornment={<GitHubSvg />}
             onKeyPress={(kp) => {
               if (kp.key === "Enter") {
                 handleSubmit(onSubmit)();
@@ -62,7 +61,7 @@ export const TrackRepoInput = () => {
                 // TODO: What does this do ☝️
               }
             }}
-            sx={{ width: 450 }}
+            sx={{ width: 450, fontSize: 16 }}
           />
         </FormControl>
       </Tooltip>
@@ -72,9 +71,8 @@ export const TrackRepoInput = () => {
 
 const containerSx = {
   display: "flex",
-  flexDirection: "column",
   justifyContent: "center",
-  alignItems: "start",
+  alignItems: "center",
   ml: 5,
   mt: 1,
 } as SxProps;
