@@ -3,6 +3,7 @@ import { useAuth, signOutUser } from "@lib/firebase/auth";
 import { useUserDoc } from "@lib/firebase/firestore";
 import { Box, SpeedDial, SpeedDialAction } from "@mui/material";
 import { AddSvg, ChatSvg, GitHubSvg, MenuSvg, LogoutSvg } from "components";
+import { openUrl } from "utils";
 
 export const SidebarDial = () => {
   const userId = useAuth();
@@ -26,12 +27,12 @@ export const SidebarDial = () => {
       {
         icon: <GitHubSvg />,
         name: "Take me to GitHub",
-        onClick: () => window.open(`${GITHUB_BASE_URL}${userId}`),
+        onClick: openUrl(`${GITHUB_BASE_URL}${userId}`),
       },
       {
         icon: <ChatSvg />,
         name: "Leave feedback",
-        onClick: () => window.open(ISSUES_URL),
+        onClick: openUrl(ISSUES_URL),
       },
       { icon: <LogoutSvg />, name: "Sign out", onClick: signOutUser },
     ]

@@ -1,7 +1,7 @@
 import { useEffect, useRef } from "react";
 import { dayjs } from "@lib/dayjs";
 import type { RepoEvent } from "@lib/firebase/firestore";
-import { PopIt, CommitSvg } from "components";
+import { CommitSvg, PopIt, TimelineAccordion } from "components";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Timeline from "@mui/lab/Timeline";
@@ -12,6 +12,7 @@ import TimelineContent from "@mui/lab/TimelineContent";
 import TimelineOppositeContent from "@mui/lab/TimelineOppositeContent";
 import TimelineDot from "@mui/lab/TimelineDot";
 import type { SxProps } from "@mui/system";
+import { openUrl } from "utils";
 
 export const EventsPopper = ({ events }: { events: RepoEvent[] }) => {
   const chronologicalEvents = events
@@ -62,12 +63,18 @@ const EventsTimeline = ({ events }: { events: RepoEvent[] }) => {
               </TimelineDot>
               <TimelineConnector />
             </TimelineSeparator>
-            <TimelineContent
-              onClick={() => window.open(url)}
-              sx={{ py: "12px", px: 2, cursor: "pointer" }}
-            >
-              <Typography color="primary">{repo}</Typography>
-              <Typography color="text.secondary">{message}</Typography>
+            {/* TODO: Move this to the node, animate it so it gets a lil bigger when you hover */}
+            <TimelineContent sx={{ py: "12px", px: 2, cursor: "pointer" }}>
+              {message.length < 100 ? (
+                <>
+                  <Typography color="primary">{repo}</Typography>
+                  <Typography color="text.secondary" onClick={openUrl(url)}>
+                    {message}
+                  </Typography>
+                </>
+              ) : (
+                <TimelineAccordion {...{ repo, message, url }} />
+              )}
             </TimelineContent>
           </TimelineItem>
         );
