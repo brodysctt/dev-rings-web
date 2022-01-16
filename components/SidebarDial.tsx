@@ -1,8 +1,13 @@
 import { useRouter } from "next/router";
 import { useAuth, signOutUser } from "@lib/firebase/auth";
 import { useUserDoc } from "@lib/firebase/firestore";
+import { openUrl } from "utils";
 import { Box, SpeedDial, SpeedDialAction } from "@mui/material";
-import { AddSvg, ChatSvg, GitHubSvg, MenuSvg, LogoutSvg } from "components";
+import AddSvg from "@mui/icons-material/AddCircleOutline";
+import ChatSvg from "@mui/icons-material/Chat";
+import GitHubSvg from "@mui/icons-material/GitHub";
+import LogoutSvg from "@mui/icons-material/Logout";
+import MenuSvg from "@mui/icons-material/Menu";
 
 export const SidebarDial = () => {
   const userId = useAuth();
@@ -26,12 +31,12 @@ export const SidebarDial = () => {
       {
         icon: <GitHubSvg />,
         name: "Take me to GitHub",
-        onClick: () => window.open(`${GITHUB_BASE_URL}${userId}`),
+        onClick: openUrl(`${GITHUB_BASE_URL}${userId}`),
       },
       {
         icon: <ChatSvg />,
         name: "Leave feedback",
-        onClick: () => window.open(ISSUES_URL),
+        onClick: openUrl(ISSUES_URL),
       },
       { icon: <LogoutSvg />, name: "Sign out", onClick: signOutUser },
     ]

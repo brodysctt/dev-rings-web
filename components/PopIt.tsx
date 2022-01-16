@@ -8,14 +8,22 @@ import {
   Tooltip,
 } from "@mui/material";
 import type { SxProps } from "@mui/system";
+import { CommitSvg } from "components";
 
 interface Props {
   id: string;
-  icon: JSX.Element;
+  icon?: JSX.Element;
   paperSx?: SxProps;
+  closeOnClick?: boolean;
 }
 
-export const PopIt: FC<Props> = ({ id, children, icon, paperSx }) => {
+export const PopIt: FC<Props> = ({
+  id,
+  children,
+  closeOnClick = false,
+  icon,
+  paperSx,
+}) => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
   return (
@@ -30,23 +38,43 @@ export const PopIt: FC<Props> = ({ id, children, icon, paperSx }) => {
             }}
             sx={{ height: 60 }}
           >
-            {icon}
+            {id === "View events" ? (
+              <Box sx={iconSx}>
+                <CommitSvg />
+              </Box>
+            ) : (
+              icon
+            )}
           </Button>
         </Tooltip>
         <Popper
           id={open ? id : undefined}
           open={open}
           anchorEl={anchorEl}
-          onClick={() => setAnchorEl(null)}
+          onClick={closeOnClick ? () => setAnchorEl(null) : () => {}}
+          modifiers={[
+            {
+              name: "flip",
+              enabled: false,
+            },
+          ]}
         >
-          <Paper
-            elevation={0}
-            sx={{ ...paperSx, position: "relative", zIndex: 99 }}
-          >
+          <Paper elevation={0} sx={paperSx}>
             {children}
           </Paper>
         </Popper>
       </Box>
     </ClickAwayListener>
   );
+};
+
+const iconSx = {
+  display: "flex",
+  justifyContent: "center",
+  alignItems: "center",
+  bgcolor: "primary.main",
+  borderRadius: 50,
+  height: 25,
+  px: 0.8,
+  py: 2,
 };

@@ -76,45 +76,6 @@ export const receiveWebhookEventHandler = https.onRequest(async (req, res) => {
         return;
       }
 
-      if (eventType === "pull_request") {
-        const { action } = data;
-        if (action !== "closed") {
-          logger.log(
-            `PR event for ${action} action – this event won't be stored 🙅‍♂️`
-          );
-          res.sendStatus(200);
-          return;
-        }
-        const {
-          pull_request: { id, title: message, html_url: url },
-          repository: { name: repo },
-        } = data;
-        const eventId = id.toString();
-
-        logger.log(`Storing ${eventType} event...`);
-        await eventsRef.doc(eventId).set({
-          createdAt,
-          dateString,
-          eventType,
-          repo,
-          message,
-          url,
-        });
-        logger.log(`Successfully stored event ${eventId} 🎉`);
-
-        logger.log(`Updating ring for ${dateString}...`);
-        await logsRef.doc(dateString).set(
-          {
-            actual: admin.firestore.FieldValue.increment(1),
-            goal,
-          },
-          { merge: true }
-        );
-        logger.log(`Successfully updated ring for ${dateString} 🎉`);
-        res.sendStatus(200);
-        return;
-      }
-
       if (eventType === "meta") {
         const { hook_id } = data;
         const webhookId = hook_id.toString();

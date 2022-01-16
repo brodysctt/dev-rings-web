@@ -4,7 +4,8 @@ import { dayjs, formatLogs, getMonthYear } from "@lib/dayjs";
 import type { MonthYear } from "@lib/dayjs";
 import { Grid, Box, Typography } from "@mui/material";
 import type { SxProps } from "@mui/system";
-import { ArrowButton, DayTile, PopIt, CalendarSvg } from "components";
+import CalendarSvg from "@mui/icons-material/CalendarTodayRounded";
+import { ArrowButton, DayTile, PopIt } from "components";
 import { filterLogs, isFirstMonth } from "./helpers";
 
 export const CalendarPopper = () => {
@@ -18,7 +19,12 @@ export const CalendarPopper = () => {
   const [month, year] = monthInView;
   const gridStart = dayjs(`${year}-${month}-01`).day();
   return (
-    <PopIt id="View calendar" paperSx={{ pt: 1 }} icon={<CalendarSvg />}>
+    <PopIt
+      id="View calendar"
+      closeOnClick
+      paperSx={{ pt: 1 }}
+      icon={<CalendarSvg />}
+    >
       <Box sx={containerSx}>
         <Typography sx={{ fontSize: 12, color: "primary.main" }}>
           {year}
