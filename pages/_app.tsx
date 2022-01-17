@@ -24,7 +24,8 @@ const App = (props: Props) => {
         <CssBaseline />
         <Head>
           <title>sup wastemans mcgee</title>
-          <link rel="icon" href="/blobwave.png" />
+          <link rel="shortcut icon" href="/images/favicon.png" />
+          <link rel="icon" href="/images/favicon.png" />
         </Head>
         <AuthProvider>
           <Navbar />
