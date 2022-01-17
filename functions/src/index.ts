@@ -1,1 +1,2 @@
-export { createWebhookHandler, receiveWebhookEventHandler } from "./github";
+export { createWebhookHandler } from "./webhooks";
+export { incomingEventHandler } from "./events";

@@ -33,6 +33,6 @@ export const trackRepo = async (
 };
 
 const CLOUD_FUNCTION_URL =
-  "http://localhost:5001/dev-rings/us-central1/createWebhookHandler";
+  "https://us-central1-dev-rings.cloudfunctions.net/createWebhookHandler";
 
 type ServerError = { status: number };

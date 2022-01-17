@@ -1,15 +1,15 @@
 import { https, logger } from "firebase-functions";
 import * as admin from "firebase-admin";
-import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
 import timezone from "dayjs/plugin/timezone";
-import { db, corsHandler } from "../config";
-
+import { db } from "./config";
+import { corsMiddleware } from "./middleware";
+import dayjs from "dayjs";
 dayjs.extend(utc);
 dayjs.extend(timezone);
 
-export const receiveWebhookEventHandler = https.onRequest(async (req, res) => {
-  corsHandler(req, res, async () => {
+export const incomingEventHandler = https.onRequest(async (req, res) => {
+  corsMiddleware(req, res, async () => {
     try {
       const eventType = req.header("X-GitHub-Event");
 
@@ -24,7 +24,7 @@ export const receiveWebhookEventHandler = https.onRequest(async (req, res) => {
 
       const userDoc = await userRef.get();
       if (!userDoc.exists) {
-        logger.log(`${userId} doesn't exist – this event won't be stored 🙅‍♂️`);
+        logger.log(`${userId} doesn't exist – this event won't be stored`);
         res.sendStatus(200);
         return;
       }
@@ -40,9 +40,7 @@ export const receiveWebhookEventHandler = https.onRequest(async (req, res) => {
           repository: { name: repo },
         } = data;
         if (!commits.length) {
-          logger.log(
-              "Push event with 0 commits – this event won't be stored 🙅‍♀️"
-          );
+          logger.log("Push event with 0 commits – this event won't be stored");
           res.sendStatus(200);
           return;
         }

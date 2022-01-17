@@ -1,14 +1,15 @@
 import { https, logger } from "firebase-functions";
 import * as admin from "firebase-admin";
 import axios from "axios";
-import { db, corsHandler } from "../config";
+import { db } from "./config";
+import { corsMiddleware } from "./middleware";
 
 const GITHUB_BASE_URL = "https://api.github.com";
 const WEBHOOK_EVENTS_URL =
-  "https://us-central1-dev-rings.cloudfunctions.net/receiveWebhookEventHandler";
+  "https://us-central1-dev-rings.cloudfunctions.net/incomingEventHandler";
 
 export const createWebhookHandler = https.onRequest(async (req, res) => {
-  corsHandler(req, res, async () => {
+  corsMiddleware(req, res, async () => {
     try {
       const { user, repo, token } = req.body;
       logger.log("Creating webhook...");
