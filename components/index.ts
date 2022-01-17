@@ -9,3 +9,4 @@ export * from "./OnboardingSteps";
 export * from "./PopIt";
 export * from "./ProgressRing";
 export * from "./SetGoalInput";
+export * from "./TextLink";

@@ -1,12 +1,14 @@
 import type { FC } from "react";
 import Image from "next/image";
 import Stack from "@mui/material/Stack";
-import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
-import Link from "@mui/material/Link";
-import type { SxProps } from "@mui/system";
-import { GetStarted, SetGoalInput, TrackRepoCheckboxes } from "components";
+import {
+  GetStarted,
+  SetGoalInput,
+  TextLink,
+  TrackRepoCheckboxes,
+} from "components";
 import { useAuth } from "@lib/firebase/auth";
 import { getRepos, useCollection, setTimezone } from "@lib/firebase/firestore";
 import type { Webhook } from "@lib/firebase/firestore";
@@ -20,7 +22,8 @@ interface Props {
 export const OnboardingSteps = ({ activeStep, onSuccess }: Props) => {
   const webhooks = useCollection("webhooks") as Webhook[] | null;
   const userId = useAuth();
-  if (!userId) return null;
+  if (!userId || (!webhooks && activeStep > 0)) return null;
+  const [repoName] = getRepos(webhooks as Webhook[], userId);
 
   const onboardingSteps = [
     {
@@ -36,19 +39,28 @@ export const OnboardingSteps = ({ activeStep, onSuccess }: Props) => {
       body: <TrackRepoCheckboxes onSuccess={onSuccess} />,
     },
     {
-      header: `Choose a repo you'd like to start tracking`,
-      blob: "/blobclipboard.png",
+      header: `To track progress, you must first set a goal`,
+      blob: "/ablobnod.gif",
       subheader: (
         <>
-          {`(This is done with `}
-          <TextLink href={GITHUB_WEBHOOKS_DOCS} text="a repository webhook" />
-          {` btw)`}
+          {`How many commits will you push `}
+          <TextLink
+            href={`https://github.com/${userId}/${repoName}`}
+            text={repoName}
+          />
+          {` in a given day?`}
         </>
       ),
       body: <SetGoalInput onSuccess={onSuccess} />,
     },
     {
-      header: `Choose a repo you'd like to start tracking`,
+      header: (
+        <>
+          {`According to `}
+          <TextLink href={`https://dayjs.gitee.io/en/`} text={`dayjs, `} />
+          {`you're located in ${dayjs.tz.guess()}`}
+        </>
+      ),
       blob: "/blobclipboard.png",
       subheader: (
         <>
@@ -80,7 +92,7 @@ export const OnboardingSteps = ({ activeStep, onSuccess }: Props) => {
   }
 
   return (
-    <Stack sx={stepSx}>
+    <Stack justifyContent="center" alignItems="center" height="50vh">
       {webhooks && (
         <GetStarted repos={getRepos(webhooks, userId)} onSuccess={onSuccess} />
       )}
@@ -94,14 +106,8 @@ interface IProps {
   subheader: string | JSX.Element;
 }
 
-const stepSx = {
-  justifyContent: "center",
-  alignItems: "center",
-  height: "50vh",
-} as SxProps;
-
 const OnboardingPanel: FC<IProps> = ({ header, blob, subheader, children }) => (
-  <Stack sx={stepSx}>
+  <Stack justifyContent="center" alignItems="center" height="50vh">
     <Stack direction="row">
       <Typography variant="h6" color="primary" sx={{ mr: 1 }}>
         {header}
@@ -111,12 +117,6 @@ const OnboardingPanel: FC<IProps> = ({ header, blob, subheader, children }) => (
     <Typography color="text.secondary">{subheader}</Typography>
     {children}
   </Stack>
-);
-
-const TextLink = ({ href, text }: { href: string; text: string }) => (
-  <Link href={href} target="_blank" rel="noopener" underline="none">
-    {text}
-  </Link>
 );
 
 const GITHUB_WEBHOOKS_DOCS =
