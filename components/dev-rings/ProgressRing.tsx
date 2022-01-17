@@ -14,7 +14,7 @@ export const ProgressRing = ({ isIcon = false, values, size = 300 }: Props) => {
     <CircularProgress
       variant="determinate"
       size={isIcon ? 26 : size}
-      thickness={isIcon ? 6 : 4} // Navbar was 6
+      thickness={isIcon ? 6 : 4}
       value={isIcon ? 100 : (actual / goal) * 100}
       sx={isIcon ? {} : { mb: 2 }}
     />
