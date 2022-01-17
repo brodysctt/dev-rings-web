@@ -23,8 +23,8 @@ const App = (props: Props) => {
       <ThemeProvider theme={theme}>
         <CssBaseline />
         <Head>
-          <title>Waste Rings</title>
-          <link rel="icon" href="/favicon.ico" />
+          <title>sup wastemans mcgee</title>
+          <link rel="icon" href="/blobwave.png" />
         </Head>
         <AuthProvider>
           <Navbar />
