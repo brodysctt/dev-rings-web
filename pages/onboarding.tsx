@@ -1,15 +1,22 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useRouter } from "next/router";
 import type { NextPage } from "next";
-import { useCollection, useUserDoc } from "@lib/firebase/firestore";
-import type { RepoEvent, Webhook } from "@lib/firebase/firestore";
-import Box from "@mui/material/Box";
+import useWindowSize from "react-use/lib/useWindowSize";
+import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import Stepper from "@mui/material/Stepper";
 import Step from "@mui/material/Step";
 import StepLabel from "@mui/material/StepLabel";
-import type { SxProps } from "@mui/system";
-import { OnboardingConfetti, OnboardingSteps } from "components";
+import Confetti from "react-confetti";
+import { OnboardingSteps } from "components";
+import { useAuth } from "@lib/firebase/auth";
+import {
+  setIsOnboarding,
+  useCollection,
+  useUserDoc,
+} from "@lib/firebase/firestore";
+import type { RepoEvent, Webhook } from "@lib/firebase/firestore";
 
 const Onboarding: NextPage = () => {
   const [activeStep, setActiveStep] = useState(0);
@@ -35,52 +42,67 @@ const Onboarding: NextPage = () => {
       ))}
     </Stepper>
   );
-
   const incrementStep = () => setActiveStep(activeStep + 1);
   const decrementStep = () => setActiveStep(activeStep - 1);
 
   const onboardingComplete = activeStep === steps.length;
-  if (onboardingComplete)
-    return (
-      <Box sx={containerSx}>
-        <StepsToComplete />
-        <Typography sx={{ mt: 2, mb: 1 }}>
-          {`Woo! You're ready to start building momentum with Dev Rings 🚀`}
-        </Typography>
-        <OnboardingConfetti />
-      </Box>
-    );
-
   return (
-    <Box sx={containerSx}>
+    <Stack justifyContent="center" alignItems="center" height="90vh">
       <StepsToComplete />
-      <OnboardingSteps activeStep={activeStep} onSuccess={incrementStep} />
-      <Box sx={buttonsSx}>
-        <Button disabled={activeStep === 0} onClick={decrementStep}>
-          Back
-        </Button>
-        <Button disabled={!steps[activeStep][1]} onClick={incrementStep}>
-          Next
-        </Button>
-      </Box>
-    </Box>
+      {onboardingComplete ? (
+        <>
+          <Typography sx={{ mt: 2, mb: 1 }}>
+            {`Woo! You're ready to start building momentum with Dev Rings 🚀`}
+          </Typography>
+          <OnboardingConfetti />
+        </>
+      ) : (
+        <>
+          <OnboardingSteps activeStep={activeStep} onSuccess={incrementStep} />
+          <Stack
+            direction="row"
+            justifyContent="space-between"
+            pt={2}
+            width="60%"
+          >
+            <Button disabled={activeStep === 0} onClick={decrementStep}>
+              {`Back`}
+            </Button>
+            <Button disabled={!steps[activeStep][1]} onClick={incrementStep}>
+              {`Next`}
+            </Button>
+          </Stack>
+        </>
+      )}
+    </Stack>
   );
 };
 
-const containerSx = {
-  display: "flex",
-  flexDirection: "column",
-  justifyContent: "center",
-  alignItems: "center",
-  width: 1,
-  height: "90vh",
-} as SxProps;
-
-const buttonsSx = {
-  display: "flex",
-  justifyContent: "space-between",
-  width: "60%",
-  pt: 2,
-} as SxProps;
-
 export default Onboarding;
+
+const OnboardingConfetti = () => {
+  const router = useRouter();
+  const userId = useAuth();
+  const { width, height } = useWindowSize();
+
+  useEffect(
+    () => () => {
+      if (!userId) return;
+      setIsOnboarding(userId);
+    },
+    [userId]
+  );
+  return (
+    <Confetti
+      width={width}
+      height={height}
+      numberOfPieces={1000}
+      recycle={false}
+      onConfettiComplete={() => {
+        setTimeout(() => {
+          router.push("/");
+        }, 1000);
+      }}
+    />
+  );
+};
