@@ -1,14 +1,15 @@
 import { https, logger } from "firebase-functions";
 import * as admin from "firebase-admin";
 import axios from "axios";
-import { db, corsHandler } from "../config";
+import { db } from "./config";
+import { corsMiddleware } from "./middleware";
 
 const GITHUB_BASE_URL = "https://api.github.com";
 const WEBHOOK_EVENTS_URL =
-  "http://bd0f-2607-fea8-88a1-f900-a03b-d819-4d13-79bf.ngrok.io/dev-rings/us-central1/receiveWebhookEventHandler";
+  "https://us-central1-dev-rings.cloudfunctions.net/incomingEventHandler";
 
 export const createWebhookHandler = https.onRequest(async (req, res) => {
-  corsHandler(req, res, async () => {
+  corsMiddleware(req, res, async () => {
     try {
       const { user, repo, token } = req.body;
       logger.log("Creating webhook...");
@@ -19,9 +20,9 @@ export const createWebhookHandler = https.onRequest(async (req, res) => {
       } = createWebhookResponse;
 
       const webhooksRef = db
-        .collection("users")
-        .doc(user)
-        .collection("webhooks");
+          .collection("users")
+          .doc(user)
+          .collection("webhooks");
 
       const webhookId = id.toString();
       logger.log("Storing webhook in Firestore...");
@@ -32,31 +33,32 @@ export const createWebhookHandler = https.onRequest(async (req, res) => {
       });
 
       logger.log(
-        "Webhook was successfully created & stored! Exiting function 🎉"
+          "Webhook was successfully created & stored! Exiting function 🎉"
       );
       await res.sendStatus(200);
       return;
     } catch (err) {
       res.status(400).send(err);
+      return;
     }
   });
 });
 
 const createWebhook = async (user: string, repo: string, token: string) => {
   return await axios.post(
-    `${GITHUB_BASE_URL}/repos/${user}/${repo}/hooks`,
-    {
-      config: {
-        url: WEBHOOK_EVENTS_URL,
-        content_type: "json",
+      `${GITHUB_BASE_URL}/repos/${user}/${repo}/hooks`,
+      {
+        config: {
+          url: WEBHOOK_EVENTS_URL,
+          content_type: "json",
+        },
+        events: ["push", "meta"],
       },
-      events: ["push", "pull_request", "meta"],
-    },
-    {
-      headers: {
-        authorization: `Bearer ${token}`,
-        "Content-Type": "application/json",
-      },
-    }
+      {
+        headers: {
+          "authorization": `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      }
   );
 };

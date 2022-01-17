@@ -14,19 +14,22 @@ export const DayTile = ({ log }: { log: Log }) => {
   const [dateString, { actual, goal }] = log;
   const isDayOff = !actual && !goal;
   const hitGoal = !isDayOff && actual >= goal;
+  const isToday = dateString === dayjs().format("YYYY-MM-DD");
   return (
     <Link
-      href={{
-        pathname: "/[userId]/[dateString]",
-        query: { userId, dateString },
-      }}
+      href={
+        isToday
+          ? "/"
+          : {
+              pathname: "/[userId]/[dateString]",
+              query: { userId, dateString },
+            }
+      }
       passHref
     >
       <ButtonBase
         onMouseEnter={() => setHover(true)}
         onMouseLeave={() => setHover(false)}
-        // TODO: How do I let popper know to close onClick?
-        // onClick={() => setAnchorEl(null)}
         disabled={isDayOff}
         sx={{
           display: "flex",
@@ -45,7 +48,7 @@ export const DayTile = ({ log }: { log: Log }) => {
           {dayjs(dateString).date()}
         </Typography>
         {hitGoal ? (
-          <CompletedRing isMini />
+          <CompletedRing size={40} isDayTile />
         ) : (
           <ProgressRing values={isDayOff ? [0, 1] : [actual, goal]} size={30} />
         )}

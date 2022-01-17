@@ -1,6 +1,6 @@
-import { Button, Tooltip } from "@mui/material";
+import { Typography, Button } from "@mui/material";
 import type { SxProps } from "@mui/system";
-import { GitHubSvg } from "components";
+import GitHubSvg from "@mui/icons-material/GitHub";
 import { toast } from "react-toastify";
 import { useAuth } from "@lib/firebase/auth";
 import { fetchPublicRepos } from "./fetchPublicRepos";
@@ -10,15 +10,16 @@ export const TrackEmAllButton = () => {
   const userId = useAuth();
   if (!userId) return null;
   return (
-    <Tooltip title="Track all public repos">
-      <Button
-        variant="contained"
-        onClick={async () => await createWebhooks(userId)}
-        sx={buttonSx}
-      >
-        <GitHubSvg />
-      </Button>
-    </Tooltip>
+    <Button
+      variant="contained"
+      onClick={async () => await createWebhooks(userId)}
+      sx={buttonSx}
+    >
+      <GitHubSvg />
+      <Typography
+        sx={{ fontSize: 12, ml: 1 }}
+      >{`Track all public repos`}</Typography>
+    </Button>
   );
 };
 
@@ -26,21 +27,19 @@ const buttonSx = {
   display: "flex",
   justifyContent: "space-around",
   alignItems: "center",
-  p: 1,
+  p: 1.5,
 } as SxProps;
 
 const createWebhooks = async (userId: string) => {
   const repos = await fetchPublicRepos(userId);
   if (!Array.isArray(repos)) {
-    toast.error("Yoinks, something went wrong 😟", {
-      position: "top-center",
-    });
+    toast.error("Yoinks, something went wrong 😟");
     return;
   }
   console.log(`here be the repos from the button: ${repos}}`);
   if (repos.length < 1) {
     toast.warn(
-      "yo homeboi, you don't have any public repos! Either create one or try adding a private repo instead 👍"
+      "You don't have any public repos! Either create one or try adding a private repo instead 👍"
     );
     return;
   }
@@ -48,11 +47,7 @@ const createWebhooks = async (userId: string) => {
   for (const repo of repos) {
     const response = await trackRepo(userId, repo);
     response === 200
-      ? toast.success("Webhook successfully created", {
-          position: "top-center",
-        })
-      : toast.error("Yoinks, something went wrong 😟", {
-          position: "top-center",
-        });
+      ? toast.success("Webhook successfully created")
+      : toast.error("Yoinks, something went wrong 😟");
   }
 };

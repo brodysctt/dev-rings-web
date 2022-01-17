@@ -1,35 +1,66 @@
 import { useState, MouseEvent, FC } from "react";
-import { Box, Button, Popper, Paper, ClickAwayListener } from "@mui/material";
+import {
+  Box,
+  Button,
+  Popper,
+  Paper,
+  ClickAwayListener,
+  Tooltip,
+} from "@mui/material";
 import type { SxProps } from "@mui/system";
+import { CommitSvg } from "components";
 
 interface Props {
   id: string;
-  icon: JSX.Element;
+  icon?: JSX.Element;
+  sx?: SxProps;
   paperSx?: SxProps;
+  closeOnClick?: boolean;
 }
 
-// TODO: Listen for Firestore update to User doc (and close on update)
-// TODO: Add pop on hover functionality – would be nice for calendar and set goal
-// TODO: Add popped functionality, i.e. can render pre-popped – clutch for onboarding
-export const PopIt: FC<Props> = ({ id, children, icon, paperSx }) => {
+export const PopIt: FC<Props> = ({
+  id,
+  children,
+  closeOnClick = false,
+  icon,
+  sx,
+  paperSx,
+}) => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-  // TODO: Figure out how to close popper on submit within children
   const open = Boolean(anchorEl);
-
   return (
     <ClickAwayListener onClickAway={() => setAnchorEl(null)}>
-      <Box>
-        <Button
-          aria-describedby={open ? id : undefined}
-          variant="text"
-          onClick={(event: MouseEvent<HTMLElement>) => {
-            setAnchorEl(anchorEl ? null : event.currentTarget);
-          }}
-          sx={{ height: 60 }}
+      <Box sx={sx}>
+        <Tooltip title={id} PopperProps={open ? { open: !open } : {}}>
+          <Button
+            aria-describedby={open ? id : undefined}
+            variant="text"
+            onClick={(event: MouseEvent<HTMLElement>) => {
+              setAnchorEl(anchorEl ? null : event.currentTarget);
+            }}
+            sx={{ height: 60 }}
+          >
+            {id === "View events" ? (
+              <Box sx={iconSx}>
+                <CommitSvg />
+              </Box>
+            ) : (
+              icon
+            )}
+          </Button>
+        </Tooltip>
+        <Popper
+          id={open ? id : undefined}
+          open={open}
+          anchorEl={anchorEl}
+          onClick={closeOnClick ? () => setAnchorEl(null) : () => {}}
+          modifiers={[
+            {
+              name: "flip",
+              enabled: false,
+            },
+          ]}
         >
-          {icon}
-        </Button>
-        <Popper id={open ? id : undefined} open={open} anchorEl={anchorEl}>
           <Paper elevation={0} sx={paperSx}>
             {children}
           </Paper>
@@ -37,4 +68,15 @@ export const PopIt: FC<Props> = ({ id, children, icon, paperSx }) => {
       </Box>
     </ClickAwayListener>
   );
+};
+
+const iconSx = {
+  display: "flex",
+  justifyContent: "center",
+  alignItems: "center",
+  bgcolor: "primary.main",
+  borderRadius: 50,
+  height: 25,
+  px: 0.8,
+  py: 2,
 };

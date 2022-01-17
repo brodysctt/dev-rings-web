@@ -1,11 +1,17 @@
 import type { NextPage } from "next";
 import { getRepos, useUserDoc, useCollection } from "@lib/firebase/firestore";
 import type { RepoEvent, Webhook } from "@lib/firebase/firestore";
-import { newTzToast } from "@lib/react-toastify";
-import { dayjs, checkTimezone, getDayEvents } from "@lib/dayjs";
-import { Box } from "@mui/material";
+import { dayjs, getDayEvents } from "@lib/dayjs";
+import { Box, Typography } from "@mui/material";
 import type { SxProps } from "@mui/system";
-import { GetStarted, ProgressRing, EventsPopper } from "components";
+import {
+  CommitSvg,
+  EventsTimeline,
+  GetStarted,
+  PopIt,
+  ProgressRing,
+} from "components";
+import { NewTimezoneAlert } from "@lib/react-toastify";
 
 const Index: NextPage = () => {
   const userData = useUserDoc();
@@ -21,17 +27,27 @@ const Index: NextPage = () => {
     dayjs().format("YYYY-MM-DD")
   );
 
-  const isNewTz = checkTimezone(timezone);
-  if (isNewTz) newTzToast(userId, timezone);
-  if (!dayEvents) return <GetStarted repos={getRepos(webhooks, userId)} />;
+  if (!dayEvents)
+    return (
+      <Box sx={containerSx}>
+        <GetStarted repos={getRepos(webhooks, userId)} />
+        <NewTimezoneAlert tz={timezone} />
+      </Box>
+    );
 
   const actual = dayEvents.length;
   return (
     <Box sx={containerSx}>
       <Box sx={devRingSx}>
+        <Typography color="text.secondary" sx={{ mb: 6 }}>
+          {dayjs().format("LL")}
+        </Typography>
         <ProgressRing values={[actual, goal]} />
-        <EventsPopper events={dayEvents} />
+        <PopIt id="View events" icon={<CommitSvg />} sx={{ mt: 4 }}>
+          <EventsTimeline events={dayEvents} />
+        </PopIt>
       </Box>
+      <NewTimezoneAlert tz={timezone} />
     </Box>
   );
 };
@@ -40,7 +56,7 @@ const containerSx = {
   display: "flex",
   justifyContent: "center",
   alignItems: "center",
-  height: "70vh",
+  height: "80vh",
   width: "100%",
 } as SxProps;
 

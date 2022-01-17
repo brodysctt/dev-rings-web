@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import Image from "next/image";
 import { useCollection, useUserDoc } from "@lib/firebase/firestore";
 import type { RepoEvent } from "@lib/firebase/firestore";
-import { Box, Typography } from "@mui/material";
+import { Stack, Box, Typography } from "@mui/material";
 import type { SxProps } from "@mui/system";
 import { CompletedRing } from "components";
 
@@ -27,20 +27,23 @@ export const GetStarted = ({ repos, onSuccess }: Props) => {
 
   return (
     <Box sx={containerSx}>
-      <Box sx={{ display: "flex" }}>
+      <Stack direction="row" alignItems="center" sx={{ mt: 10 }}>
         <Typography
           align="center"
           variant="h6"
           sx={{ color: "primary.main", mr: 1 }}
         >
           {isOnboarding
-            ? `You're all set! Push changes to ${repos[0]} to see your first Dev
+            ? // TODO: Make repo name a link
+              `You're all set! Push changes to ${repos[0]} to see your first Dev
           Ring`
             : `Push changes to ${repos[randomIndex]} to kick off today's progress`}
         </Typography>
-        <Image src="/blobhighfive.png" width={30} height={30} />
-      </Box>
-      <CompletedRing />
+        <Stack>
+          <Image src="/blobhighfive.png" width={30} height={30} />
+        </Stack>
+      </Stack>
+      <CompletedRing size={350} />
     </Box>
   );
 };

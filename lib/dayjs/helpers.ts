@@ -2,9 +2,7 @@ import type { Dayjs } from "dayjs";
 import { dayjs } from "@lib/dayjs";
 import type { RepoEvent } from "@lib/firebase/firestore";
 
-export const checkTimezone = (tz: string) =>
-  dayjs().utcOffset() !== dayjs().tz(tz).utcOffset();
-
+// TODO: Any refactors that can be made here boss?
 export const getDayEvents = (
   events: RepoEvent[] | null,
   dateString: string
@@ -20,13 +18,11 @@ export const getDayEvents = (
     .map((event) => event[1]) as RepoEvent[];
 
   if (!dayEvents.length) return null;
-  return dayEvents;
-};
 
-export const getMonthName = (monthInView: MonthYear) => {
-  const [month] = monthInView;
-  const months = dayjs.months();
-  return months[month - 1];
+  return dayEvents
+    .map((event) => [event.createdAt.toMillis(), event])
+    .sort()
+    .map(([, event]) => event as RepoEvent);
 };
 
 export type MonthYear = [number, number];
@@ -35,3 +31,6 @@ export const getMonthYear = (date?: Dayjs): MonthYear => [
   dayjs(date).month() + 1,
   dayjs(date).year(),
 ];
+
+export const isNewTimezone = (tz: string) =>
+  dayjs().utcOffset() !== dayjs().tz(tz).utcOffset();

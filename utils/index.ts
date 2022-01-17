@@ -1,1 +1,1 @@
-export * from "./getTimeAsString";
+export * from "./openUrl";

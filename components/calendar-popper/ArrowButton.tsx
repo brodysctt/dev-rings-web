@@ -1,7 +1,8 @@
 import type { Dispatch, SetStateAction } from "react";
 import type { MonthYear } from "@lib/dayjs";
 import { Button } from "@mui/material";
-import { ArrowBackSvg, ArrowNextSvg } from "components/icons";
+import ArrowBackSvg from "@mui/icons-material/ArrowBackRounded";
+import ArrowNextSvg from "@mui/icons-material/ArrowForwardRounded";
 
 interface Props {
   type?: "previous" | "next";

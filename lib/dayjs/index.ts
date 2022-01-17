@@ -1,3 +1,3 @@
-export * from "./createMonthLogs";
+export * from "./formatLogs";
 export * from "./dayjs";
 export * from "./helpers";
