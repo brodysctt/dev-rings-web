@@ -17,11 +17,7 @@ interface Props {
   onSuccess: () => void;
 }
 
-export const OnboardingSteps: FC<Props> = ({
-  activeStep,
-  onSuccess,
-  children,
-}) => {
+export const OnboardingSteps = ({ activeStep, onSuccess }: Props) => {
   const webhooks = useCollection("webhooks") as Webhook[] | null;
   const userId = useAuth();
   if (!userId) return null;
@@ -83,19 +79,13 @@ export const OnboardingSteps: FC<Props> = ({
     );
   }
 
-  if (activeStep === 3)
-    return (
-      <Stack sx={stepSx}>
-        {webhooks && (
-          <GetStarted
-            repos={getRepos(webhooks, userId)}
-            onSuccess={onSuccess}
-          />
-        )}
-      </Stack>
-    );
-
-  return <Box>{children}</Box>;
+  return (
+    <Stack sx={stepSx}>
+      {webhooks && (
+        <GetStarted repos={getRepos(webhooks, userId)} onSuccess={onSuccess} />
+      )}
+    </Stack>
+  );
 };
 
 interface IProps {
