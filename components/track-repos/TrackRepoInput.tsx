@@ -4,6 +4,7 @@ import { useAuth } from "@lib/firebase/auth";
 import { Box, FormControl, Input, Tooltip } from "@mui/material";
 import type { SxProps } from "@mui/system";
 import { trackRepo } from "./trackRepo";
+import GitHubSvg from "@mui/icons-material/GitHub";
 
 export const TrackRepoInput = () => {
   const { register, handleSubmit } = useForm<{ repoUrl: string }>();
@@ -43,8 +44,10 @@ export const TrackRepoInput = () => {
   };
 
   return (
+    // TODO: Make line purple
     <Box sx={containerSx}>
-      <Tooltip title="Paste a private GitHub repo here to start tracking it">
+      <GitHubSvg color="primary" fontSize="large" sx={{ mr: 1 }} />
+      <Tooltip title="Paste a GitHub URL here to start tracking it">
         <FormControl variant="standard">
           <Input
             {...register("repoUrl")}
@@ -58,7 +61,7 @@ export const TrackRepoInput = () => {
                 // TODO: What does this do ☝️
               }
             }}
-            sx={{ width: 350 }}
+            sx={{ width: 370, fontSize: 16 }}
           />
         </FormControl>
       </Tooltip>
@@ -68,11 +71,10 @@ export const TrackRepoInput = () => {
 
 const containerSx = {
   display: "flex",
-  flexDirection: "column",
   justifyContent: "center",
-  alignItems: "start",
-  width: 400,
+  alignItems: "center",
   ml: 5,
+  mt: 1,
 } as SxProps;
 
 const githubUrl = new RegExp(`https://github.com/(.*)/(.*)[.]git`);

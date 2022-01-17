@@ -1,11 +1,5 @@
 import { useState, useEffect } from "react";
-import {
-  Box,
-  Typography,
-  FormGroup,
-  FormControlLabel,
-  Checkbox,
-} from "@mui/material";
+import { Box, FormGroup, FormControlLabel, Checkbox } from "@mui/material";
 import type { SxProps } from "@mui/system";
 import { useAuth } from "@lib/firebase/auth";
 import {
@@ -33,29 +27,25 @@ export const TrackRepoCheckboxes = ({ onSuccess }: Props) => {
   // TODO: Clean this up lol
   useEffect(() => {
     (async () => {
-      if (userId && userData) {
-        const [, { isOnboarding }] = userData;
-        const repos = await fetchPublicRepos(userId);
-        if (Array.isArray(repos)) {
-          setPublicRepos(repos);
-        }
-        if (!webhooks && !isOnboarding) {
-          toast.info("Track a repo to get started");
-          return;
-        }
-        webhooks && setTrackedRepos(getRepos(webhooks, userId));
+      if (!userId || !userData) return null;
+      const [, { isOnboarding }] = userData;
+      const repos = await fetchPublicRepos(userId);
+      if (Array.isArray(repos)) {
+        setPublicRepos(repos);
       }
+      if (!webhooks && !isOnboarding) {
+        toast.info("Track a repo to get started");
+        return;
+      }
+      webhooks && setTrackedRepos(getRepos(webhooks, userId));
     })();
-  }, [userId, webhooks]);
+  }, [userId, userData, webhooks]);
 
   // TODO: Handle case where user has no public repos
   if (!userId || !publicRepos) return null;
 
   return (
     <Box sx={containerSx}>
-      <Typography variant="h6">{`Check a repo below to create a webhook and start tracking it 
-      ✔️`}</Typography>
-
       <FormGroup>
         <Box sx={checkboxesSx}>
           {/* TODO: Handle case where user has a ton of repos*/}
@@ -70,9 +60,7 @@ export const TrackRepoCheckboxes = ({ onSuccess }: Props) => {
                     console.log(`create webhook for ${repo}`);
                     const response = await trackRepo(userId, repo);
                     if (response !== 200) {
-                      toast.warn(
-                        "Webhook did not get created – are you already tracking it? 👀"
-                      );
+                      toast.error("Webhook did not get created");
                       return;
                     }
                     toast.success("Webhook successfully created");

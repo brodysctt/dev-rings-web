@@ -1,35 +1,33 @@
 import type { NextPage } from "next";
-import { Box } from "@mui/material";
 import type { SxProps } from "@mui/system";
+import Box from "@mui/material/Box";
+import Divider from "@mui/material/Divider";
 import {
   TrackEmAllButton,
   TrackRepoCheckboxes,
   TrackRepoInput,
 } from "components";
 
-const Repos: NextPage = () => (
+const ManageRepos: NextPage = () => (
   <Box sx={containerSx}>
-    <TrackRepoCheckboxes />
-    <Box
-      sx={{
-        display: "flex",
-        alignItems: "center",
-        mt: 5,
-      }}
-    >
+    <Box sx={{ display: "flex" }}>
       <TrackEmAllButton />
+      <Divider orientation="vertical" sx={{ ml: 5 }} />
       <TrackRepoInput />
     </Box>
+    <Divider sx={{ width: "50vw", my: 3 }} />
+    <TrackRepoCheckboxes />
   </Box>
 );
-
-export default Repos;
 
 const containerSx = {
   display: "flex",
   flexDirection: "column",
-  justifyContent: "center",
+  justifyContent: "start",
   alignItems: "center",
   width: 1,
-  height: "60vh",
+  height: "80vh",
+  mt: 20, // TODO: Do this better
 } as SxProps;
+
+export default ManageRepos;
