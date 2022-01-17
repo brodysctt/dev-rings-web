@@ -128,7 +128,9 @@ const OnboardingPanel: FC<IProps> = ({ header, blob, subheader, children }) => (
       </Typography>
       <Image src={blob} width={30} height={30} />
     </Stack>
-    <Typography color="text.secondary">{subheader}</Typography>
+    <Typography color="text.secondary" mb={2}>
+      {subheader}
+    </Typography>
     {children}
   </Stack>
 );
