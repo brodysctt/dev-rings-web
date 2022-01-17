@@ -22,7 +22,8 @@ interface Props {
 export const OnboardingSteps = ({ activeStep, onSuccess }: Props) => {
   const webhooks = useCollection("webhooks") as Webhook[] | null;
   const userId = useAuth();
-  if (!userId || (!webhooks && activeStep > 0)) return null;
+  if (!userId) return null;
+  if (!webhooks && activeStep > 0) return null;
   const [repoName] = getRepos(webhooks as Webhook[], userId);
 
   const onboardingSteps = [
