@@ -24,7 +24,7 @@ export const OnboardingSteps = ({ activeStep, onSuccess }: Props) => {
   const userId = useAuth();
   if (!userId) return null;
 
-  const onboardingSteps = [
+  const steps = [
     {
       header: `Choose a repo you'd like to start tracking`,
       blob: "/blobclipboard.png",
@@ -73,7 +73,7 @@ export const OnboardingSteps = ({ activeStep, onSuccess }: Props) => {
   ];
 
   if (activeStep === 0 || activeStep === 2) {
-    const { header, blob, subheader, body } = onboardingSteps[activeStep];
+    const { header, blob, subheader, body } = steps[activeStep];
     return (
       <OnboardingPanel header={header} blob={blob} subheader={subheader}>
         {body}
@@ -84,7 +84,7 @@ export const OnboardingSteps = ({ activeStep, onSuccess }: Props) => {
   if (activeStep === 1) {
     if (!webhooks) return null;
     const [repoName] = getRepos(webhooks as Webhook[], userId);
-    const { header, blob, body } = onboardingSteps[1];
+    const { header, blob, body } = steps[1];
     return (
       <OnboardingPanel
         header={header}
