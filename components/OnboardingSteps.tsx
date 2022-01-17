@@ -23,8 +23,6 @@ export const OnboardingSteps = ({ activeStep, onSuccess }: Props) => {
   const webhooks = useCollection("webhooks") as Webhook[] | null;
   const userId = useAuth();
   if (!userId) return null;
-  if (!webhooks && activeStep > 0) return null;
-  const [repoName] = getRepos(webhooks as Webhook[], userId);
 
   const onboardingSteps = [
     {
@@ -42,16 +40,7 @@ export const OnboardingSteps = ({ activeStep, onSuccess }: Props) => {
     {
       header: `To track progress, you must first set a goal`,
       blob: "/ablobnod.gif",
-      subheader: (
-        <>
-          {`How many commits will you push `}
-          <TextLink
-            href={`https://github.com/${userId}/${repoName}`}
-            text={repoName}
-          />
-          {` in a given day?`}
-        </>
-      ),
+      subheader: <></>, // requires data from step 1
       body: <SetGoalInput onSuccess={onSuccess} />,
     },
     {
@@ -83,10 +72,34 @@ export const OnboardingSteps = ({ activeStep, onSuccess }: Props) => {
     },
   ];
 
-  if (activeStep < 3) {
+  if (activeStep === 0 || activeStep === 2) {
     const { header, blob, subheader, body } = onboardingSteps[activeStep];
     return (
       <OnboardingPanel header={header} blob={blob} subheader={subheader}>
+        {body}
+      </OnboardingPanel>
+    );
+  }
+
+  if (activeStep === 1) {
+    if (!webhooks) return null;
+    const [repoName] = getRepos(webhooks as Webhook[], userId);
+    const { header, blob, body } = onboardingSteps[1];
+    return (
+      <OnboardingPanel
+        header={header}
+        blob={blob}
+        subheader={
+          <>
+            {`How many commits will you push `}
+            <TextLink
+              href={`https://github.com/${userId}/${repoName}`}
+              text={repoName}
+            />
+            {` in a given day?`}
+          </>
+        }
+      >
         {body}
       </OnboardingPanel>
     );
