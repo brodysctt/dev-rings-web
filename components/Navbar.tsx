@@ -5,7 +5,6 @@ import Grid from "@mui/material/Grid";
 import Stack from "@mui/material/Stack";
 import Button from "@mui/material/Button";
 import Tooltip from "@mui/material/Tooltip";
-import CircularProgress from "@mui/material/CircularProgress";
 import SpeedDial from "@mui/material/SpeedDial";
 import SpeedDialAction from "@mui/material/SpeedDialAction";
 import ChatSvg from "@mui/icons-material/Chat";
@@ -14,7 +13,7 @@ import LogoutSvg from "@mui/icons-material/Logout";
 import MenuSvg from "@mui/icons-material/Menu";
 import { useAuth, signOutUser } from "@lib/firebase/auth";
 import { useUserDoc } from "@lib/firebase/firestore";
-import { CalendarPopper, SetGoalInput } from "components";
+import { CalendarPopper, ProgressRing, SetGoalInput } from "components";
 import { openUrl } from "utils";
 
 export const Navbar = () => {
@@ -43,12 +42,7 @@ export const Navbar = () => {
           {!isOnboarding && (
             <>
               <NavbarItem href="/" tooltip="View today's progress">
-                <CircularProgress
-                  variant="determinate"
-                  size={26}
-                  thickness={6}
-                  value={100}
-                />
+                <ProgressRing isIcon values={[0, 1]} />
               </NavbarItem>
               <CalendarPopper />
               <NavbarItem href="/manage-repos" tooltip="Manage repos">
