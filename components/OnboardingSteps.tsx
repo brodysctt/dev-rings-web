@@ -1,4 +1,5 @@
 import type { FC } from "react";
+import Image from "next/image";
 import {
   getRepos,
   useCollection,
@@ -7,7 +8,7 @@ import {
   Webhook,
 } from "@lib/firebase/firestore";
 import { dayjs } from "@lib/dayjs";
-import { Box, Typography, Button } from "@mui/material";
+import { Stack, Box, Typography, Button, Link } from "@mui/material";
 import type { SxProps } from "@mui/system";
 import { GetStarted, SetGoalInput, TrackRepoCheckboxes } from "components";
 
@@ -29,7 +30,24 @@ export const OnboardingSteps: FC<Props> = ({
   if (activeStep === 0)
     return (
       <Box sx={stepSx}>
-        <Typography variant="h6">{`Dev Rings tracks your code contributions via webhooks`}</Typography>
+        <Stack direction="row">
+          <Typography variant="h6" color="primary" sx={{ mr: 1 }}>
+            {`Choose a repo you'd like to start tracking`}
+          </Typography>
+          <Image src="/blobclipboard.png" width={30} height={30} />
+        </Stack>
+        <Typography color="text.secondary" align="center" sx={{ mb: 2 }}>
+          {`(This is done with `}
+          <Link
+            href="https://docs.github.com/en/developers/webhooks-and-events/webhooks/about-webhooks"
+            target="_blank"
+            rel="noopener"
+            underline="none"
+          >
+            a repository webhook
+          </Link>
+          {` btw)`}
+        </Typography>
         <TrackRepoCheckboxes onSuccess={onSuccess} />
       </Box>
     );
