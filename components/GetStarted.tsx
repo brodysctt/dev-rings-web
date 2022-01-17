@@ -2,8 +2,8 @@ import { useState, useEffect } from "react";
 import Image from "next/image";
 import { useCollection, useUserDoc } from "@lib/firebase/firestore";
 import type { RepoEvent } from "@lib/firebase/firestore";
-import { Stack, Box, Typography } from "@mui/material";
-import type { SxProps } from "@mui/system";
+import Stack from "@mui/material/Stack";
+import Typography from "@mui/material/Typography";
 import { CompletedRing } from "components";
 
 interface Props {
@@ -26,7 +26,7 @@ export const GetStarted = ({ repos, onSuccess }: Props) => {
   if (isOnboarding && Boolean(events) && onSuccess) onSuccess();
 
   return (
-    <Box sx={containerSx}>
+    <Stack alignItems="center">
       <Stack direction="row" alignItems="center" sx={{ mt: 10 }}>
         <Typography
           align="center"
@@ -44,15 +44,8 @@ export const GetStarted = ({ repos, onSuccess }: Props) => {
         </Stack>
       </Stack>
       <CompletedRing size={350} />
-    </Box>
+    </Stack>
   );
 };
-
-const containerSx = {
-  display: "flex",
-  flexDirection: "column",
-  justifyContent: "center",
-  alignItems: "center",
-} as SxProps;
 
 const getRandomInt = (max: number) => Math.floor(Math.random() * max);

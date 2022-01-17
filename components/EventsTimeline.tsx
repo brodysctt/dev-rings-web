@@ -1,8 +1,4 @@
 import { useState, useEffect, useRef } from "react";
-import { dayjs } from "@lib/dayjs";
-import type { RepoEvent } from "@lib/firebase/firestore";
-import { CommitSvg } from "components";
-import { openUrl } from "utils";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Timeline from "@mui/lab/Timeline";
@@ -16,6 +12,10 @@ import Accordion from "@mui/material/Accordion";
 import AccordionSummary from "@mui/material/AccordionSummary";
 import AccordionDetails from "@mui/material/AccordionDetails";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
+import { dayjs } from "@lib/dayjs";
+import type { RepoEvent } from "@lib/firebase/firestore";
+import { CommitSvg } from "components";
+import { openUrl } from "utils";
 
 export const EventsTimeline = ({ events }: { events: RepoEvent[] }) => {
   const ref = useRef<HTMLElement>(null);
