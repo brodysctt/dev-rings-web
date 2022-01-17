@@ -1,3 +1,4 @@
+import Head from "next/head";
 import type { AppProps } from "next/app";
 import { ThemeProvider } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
@@ -21,6 +22,10 @@ const App = (props: Props) => {
     <CacheProvider value={emotionCache}>
       <ThemeProvider theme={theme}>
         <CssBaseline />
+        <Head>
+          <title>Waste Rings</title>
+          <link rel="icon" href="/favicon.ico" />
+        </Head>
         <AuthProvider>
           <Navbar />
           <Component {...pageProps} />
