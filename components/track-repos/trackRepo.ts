@@ -1,5 +1,8 @@
 import axios, { AxiosError } from "axios";
+import { toast } from "react-toastify";
 import { fetchGitHubToken } from "@lib/firebase/firestore";
+
+const CREATE_WEBHOOK_URL = process.env.NEXT_PUBLIC_FIREBASE_API_KEY;
 
 export const trackRepo = async (
   userId: string,
@@ -7,32 +10,20 @@ export const trackRepo = async (
 ): Promise<number | ServerError> => {
   try {
     const token = await fetchGitHubToken(userId);
-    console.log(`Creating webhook for ${repo}...`);
-    const { status } = await axios.post(`${CLOUD_FUNCTION_URL}`, {
+    const { status } = await axios.post(`${CREATE_WEBHOOK_URL}`, {
       user: userId,
       repo,
       token,
     });
-    console.dir(status);
-    console.log(`Webhook is a go 🟢`);
+    toast.success("Webhook successfully created");
     return status;
   } catch (error) {
-    if (axios.isAxiosError(error)) {
-      const serverError = error as AxiosError<ServerError>;
-      if (serverError && serverError.response) {
-        const { response: status } = serverError;
-        console.log(
-          `webhook didn't get created. it's possible a webhook already exists for this repo 👀`
-        );
-        console.dir(status);
-        return status;
-      }
-    }
-    return { status: 69 };
+    // TODO: Add Sentry
+    toast.error("Webhook did not get created");
+    if (!axios.isAxiosError(error)) return { status: 69 };
+    const serverError = error as AxiosError<ServerError>;
+    return serverError!.response!.status;
   }
 };
-
-const CLOUD_FUNCTION_URL =
-  "https://us-central1-dev-rings.cloudfunctions.net/createWebhookHandler";
 
 type ServerError = { status: number };
