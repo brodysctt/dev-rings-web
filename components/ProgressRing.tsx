@@ -13,7 +13,7 @@ export const ProgressRing = ({ values, size = 300 }: Props) => {
     <CircularProgress
       variant="determinate"
       size={size}
-      thickness={6}
+      thickness={4}
       value={(actual / goal) * 100}
       sx={{ mb: 2 }}
     />

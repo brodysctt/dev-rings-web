@@ -2,7 +2,7 @@ import type { NextPage } from "next";
 import { getRepos, useUserDoc, useCollection } from "@lib/firebase/firestore";
 import type { RepoEvent, Webhook } from "@lib/firebase/firestore";
 import { dayjs, getDayEvents } from "@lib/dayjs";
-import { Box } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 import type { SxProps } from "@mui/system";
 import {
   CommitSvg,
@@ -39,6 +39,9 @@ const Index: NextPage = () => {
   return (
     <Box sx={containerSx}>
       <Box sx={devRingSx}>
+        <Typography color="text.secondary" sx={{ mb: 6 }}>
+          {dayjs().format("LL")}
+        </Typography>
         <ProgressRing values={[actual, goal]} />
         <PopIt id="View events" icon={<CommitSvg />} sx={{ mt: 4 }}>
           <EventsTimeline events={dayEvents} />
