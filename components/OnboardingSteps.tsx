@@ -1,12 +1,8 @@
 import type { FC } from "react";
 import Image from "next/image";
-import {
-  getRepos,
-  useCollection,
-  useUserDoc,
-  setTimezone,
-  Webhook,
-} from "@lib/firebase/firestore";
+import { useAuth } from "@lib/firebase/auth";
+import { getRepos, useCollection, setTimezone } from "@lib/firebase/firestore";
+import type { Webhook } from "@lib/firebase/firestore";
 import { dayjs } from "@lib/dayjs";
 import { Stack, Box, Typography, Button, Link } from "@mui/material";
 import type { SxProps } from "@mui/system";
@@ -23,9 +19,8 @@ export const OnboardingSteps: FC<Props> = ({
   children,
 }) => {
   const webhooks = useCollection("webhooks") as Webhook[] | null;
-  const userData = useUserDoc();
-  if (!userData) return null;
-  const [userId, { timezone }] = userData;
+  const userId = useAuth();
+  if (!userId) return null;
 
   if (activeStep === 0)
     return (
