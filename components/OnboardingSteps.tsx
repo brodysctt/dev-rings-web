@@ -52,42 +52,61 @@ export const OnboardingSteps: FC<Props> = ({
       </Box>
     );
 
-  if (activeStep === 1)
+  if (activeStep === 1) {
+    if (!webhooks) return null;
+    const [repoName] = getRepos(webhooks, userId);
     return (
       <Box sx={stepSx}>
-        <Typography
-          align="center"
-          sx={{ mb: 2, whiteSpace: "pre-line" }}
-        >{`To track progress, you must first set a goal 🏆
-      How many commits will you aim for in a day?
-     `}</Typography>
+        <Stack direction="row">
+          <Typography variant="h6" color="primary" sx={{ mr: 1 }}>
+            {`To track progress, you must first set a goal`}
+          </Typography>
+          <Image src="/ablobnod.gif" width={30} height={30} />
+        </Stack>
+        <Typography color="text.secondary" align="center" sx={{ mb: 2 }}>
+          {`How many commits will you push `}
+          <Link
+            href={`https://github.com/${userId}/${repoName}`}
+            target="_blank"
+            rel="noopener"
+            underline="none"
+          >
+            {repoName}
+          </Link>
+          {` in a given day?`}
+        </Typography>
         <SetGoalInput onSuccess={onSuccess} />
       </Box>
     );
+  }
 
   if (activeStep === 2)
     return (
       <Box sx={stepSx}>
-        <Typography
-          align="center"
-          color="primary.main"
-          sx={{ whiteSpace: "pre-wrap" }}
-        >
-          {timezone
-            ? `Your timezone has been set to ${timezone}`
-            : `Your current timezone is ${dayjs.tz.guess()} 🌍
-Is this the best timezone for tracking daily goals?`}
-        </Typography>
-        {!timezone && (
-          <Button
-            variant="contained"
-            sx={{ mt: 2 }}
-            onClick={() => {
-              setTimezone(userId, dayjs.tz.guess());
-              onSuccess();
-            }}
-          >{`Confirm`}</Button>
-        )}
+        <Stack direction="row">
+          <Typography variant="h6" color="primary" sx={{ mr: 1 }}>
+            {`According to `}
+            <Link
+              href={`https://dayjs.gitee.io/en/`}
+              target="_blank"
+              rel="noopener"
+              underline="none"
+            >
+              {`dayjs, `}
+            </Link>
+            {`you're located in ${dayjs.tz.guess()}`}
+          </Typography>
+          <Image src="/ablobdundundun.gif" width={30} height={30} />
+        </Stack>
+        <Typography color="text.secondary">{`Is this the best timezone for tracking your daily goals?`}</Typography>
+        <Button
+          variant="contained"
+          sx={{ mt: 3 }}
+          onClick={() => {
+            setTimezone(userId, dayjs.tz.guess());
+            onSuccess();
+          }}
+        >{`Confirm`}</Button>
       </Box>
     );
 

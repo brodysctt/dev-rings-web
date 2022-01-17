@@ -45,7 +45,7 @@ export const DayTile = ({ log }: { log: Log }) => {
           {dayjs(dateString).date()}
         </Typography>
         {hitGoal ? (
-          <CompletedRing isMini />
+          <CompletedRing size={40} isDayTile />
         ) : (
           <ProgressRing values={isDayOff ? [0, 1] : [actual, goal]} size={30} />
         )}

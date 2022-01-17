@@ -13,6 +13,7 @@ import { CommitSvg } from "components";
 interface Props {
   id: string;
   icon?: JSX.Element;
+  sx?: SxProps;
   paperSx?: SxProps;
   closeOnClick?: boolean;
 }
@@ -22,13 +23,14 @@ export const PopIt: FC<Props> = ({
   children,
   closeOnClick = false,
   icon,
+  sx,
   paperSx,
 }) => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
   return (
     <ClickAwayListener onClickAway={() => setAnchorEl(null)}>
-      <Box>
+      <Box sx={sx}>
         <Tooltip title={id} PopperProps={open ? { open: !open } : {}}>
           <Button
             aria-describedby={open ? id : undefined}

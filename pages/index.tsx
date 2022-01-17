@@ -40,7 +40,7 @@ const Index: NextPage = () => {
     <Box sx={containerSx}>
       <Box sx={devRingSx}>
         <ProgressRing values={[actual, goal]} />
-        <PopIt id="View events" icon={<CommitSvg />}>
+        <PopIt id="View events" icon={<CommitSvg />} sx={{ mt: 4 }}>
           <EventsTimeline events={dayEvents} />
         </PopIt>
       </Box>
@@ -53,7 +53,7 @@ const containerSx = {
   display: "flex",
   justifyContent: "center",
   alignItems: "center",
-  height: "70vh",
+  height: "80vh",
   width: "100%",
 } as SxProps;
 

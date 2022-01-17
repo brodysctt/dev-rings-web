@@ -3,11 +3,12 @@ import { Box } from "@mui/material";
 import { theme } from "styles";
 
 interface Props {
-  isMini?: boolean;
+  size?: number;
+  isDayTile?: boolean;
 }
 
-export const CompletedRing = ({ isMini = false }: Props) => {
-  const size = isMini ? 40 : 400;
+export const CompletedRing = ({ size = 400, isDayTile = false }: Props) => {
+  // const size = isMini ? 40 : 400;
   const checkStart = [size * 0.433, size * 0.516];
   const checkVertex = [size * 0.483, size * 0.566];
   const checkEnd = [size * 0.6, size * 0.45];
@@ -33,7 +34,7 @@ export const CompletedRing = ({ isMini = false }: Props) => {
           cy={size * 0.5}
           r={size * 0.33}
           stroke={theme.palette.primary.main}
-          strokeWidth={isMini ? 4 : 20}
+          strokeWidth={isDayTile ? 4 : 20}
           strokeLinecap="round"
           fill="transparent"
           style={{ rotate: 270 }}
@@ -46,7 +47,7 @@ export const CompletedRing = ({ isMini = false }: Props) => {
           x2={checkVertex[0]}
           y2={checkVertex[1]}
           stroke={CHECKMARK_COLOUR}
-          strokeWidth={isMini ? 3 : 15}
+          strokeWidth={isDayTile ? 3 : 15}
           strokeLinecap="round"
           custom={3}
           variants={draw}
@@ -57,7 +58,7 @@ export const CompletedRing = ({ isMini = false }: Props) => {
           x2={checkEnd[0]}
           y2={checkEnd[1]}
           stroke={CHECKMARK_COLOUR}
-          strokeWidth={isMini ? 3 : 15}
+          strokeWidth={isDayTile ? 3 : 15}
           strokeLinecap="round"
           custom={4.2}
           variants={draw}
