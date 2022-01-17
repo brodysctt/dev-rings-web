@@ -1,6 +1,7 @@
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
-import { EventsTimeline, PopIt, ProgressRing } from "components";
+import { PopIt, ProgressRing } from "components";
+import { EventsTimeline } from "./EventsTimeline";
 import { dayjs } from "@lib/dayjs";
 import type { RepoEvent } from "@lib/firebase/firestore";
 
