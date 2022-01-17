@@ -3,7 +3,7 @@ import { useState } from "react";
 import { useAuth } from "@lib/firebase/auth";
 import type { Log } from "@lib/firebase/firestore";
 import { dayjs } from "@lib/dayjs";
-import { CompletedRing, ProgressRing } from "components";
+import { AnimatedRing, ProgressRing } from "components";
 import Typography from "@mui/material/Typography";
 import ButtonBase from "@mui/material/ButtonBase";
 import type { SxProps } from "@mui/system";
@@ -34,7 +34,7 @@ export const DayTile = ({ log }: { log: Log }) => {
           {dayjs(dateString).date()}
         </Typography>
         {hitGoal ? (
-          <CompletedRing size={40} isDayTile />
+          <AnimatedRing size={40} isDayTile />
         ) : (
           <ProgressRing values={isDayOff ? [0, 1] : [actual, goal]} size={30} />
         )}

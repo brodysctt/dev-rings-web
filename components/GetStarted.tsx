@@ -4,7 +4,7 @@ import { useCollection, useUserDoc } from "@lib/firebase/firestore";
 import type { RepoEvent } from "@lib/firebase/firestore";
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
-import { CompletedRing } from "components";
+import { AnimatedRing } from "components";
 
 interface Props {
   repos: string[];
@@ -43,7 +43,7 @@ export const GetStarted = ({ repos, onSuccess }: Props) => {
           <Image src="/blobhighfive.png" width={30} height={30} />
         </Stack>
       </Stack>
-      <CompletedRing size={350} />
+      <AnimatedRing size={350} />
     </Stack>
   );
 };

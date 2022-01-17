@@ -1,33 +1,13 @@
 import Stack from "@mui/material/Stack";
-import CircularProgress from "@mui/material/CircularProgress";
 import { motion } from "framer-motion";
 import { theme } from "styles";
+
 interface Props {
-  isIcon?: boolean;
-  size?: number;
-  values: [number, number]; // TODO: Make optional if isIcon
-}
-
-export const ProgressRing = ({ isIcon = false, values, size = 300 }: Props) => {
-  const [actual, goal] = values;
-  if (actual >= goal) return <CompletedRing size={size} />;
-  return (
-    <CircularProgress
-      variant="determinate"
-      size={isIcon ? 26 : size}
-      thickness={isIcon ? 6 : 4} // Navbar was 6
-      value={isIcon ? 100 : (actual / goal) * 100}
-      sx={isIcon ? {} : { mb: 2 }}
-    />
-  );
-};
-
-interface IProps {
   size?: number;
   isDayTile?: boolean;
 }
 
-const CompletedRing = ({ size = 400, isDayTile = false }: IProps) => {
+export const AnimatedRing = ({ size = 400, isDayTile = false }: Props) => {
   const checkStart = [size * 0.433, size * 0.516];
   const checkVertex = [size * 0.483, size * 0.566];
   const checkEnd = [size * 0.6, size * 0.45];

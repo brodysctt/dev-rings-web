@@ -1,13 +1,6 @@
 import type { NextPage } from "next";
 import Stack from "@mui/material/Stack";
-import Typography from "@mui/material/Typography";
-import {
-  CommitSvg,
-  EventsTimeline,
-  GetStarted,
-  PopIt,
-  ProgressRing,
-} from "components";
+import { DevRing, GetStarted } from "components";
 import { NewTimezoneAlert } from "@lib/react-toastify";
 import { getRepos, useUserDoc, useCollection } from "@lib/firebase/firestore";
 import type { RepoEvent, Webhook } from "@lib/firebase/firestore";
@@ -36,35 +29,11 @@ const Index: NextPage = () => {
 
   const actual = dayEvents.length;
   return (
-    <Stack justifyContent="center" alignItems="center" height="80vh">
-      <Stack alignItems="center">
-        <Typography color="text.secondary" sx={{ mb: 6 }}>
-          {dayjs().format("LL")}
-        </Typography>
-        <ProgressRing values={[actual, goal]} />
-        <PopIt
-          id="View events"
-          icon={
-            <Stack px={0.8} py={2} height={25} sx={iconSx}>
-              <CommitSvg />
-            </Stack>
-          }
-          sx={{ mt: 4 }}
-        >
-          <EventsTimeline events={dayEvents} />
-        </PopIt>
-      </Stack>
+    <>
+      <DevRing events={dayEvents} values={[actual, goal]} />
       <NewTimezoneAlert tz={timezone} />
-    </Stack>
+    </>
   );
-};
-
-const iconSx = {
-  justifyContent: "center",
-  bgcolor: "primary.main",
-  borderRadius: 50,
-  px: 0.8,
-  py: 2,
 };
 
 export default Index;
