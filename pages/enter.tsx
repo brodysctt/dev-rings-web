@@ -1,10 +1,11 @@
 import { useRouter } from "next/router";
+import Stack from "@mui/material/Stack";
+import Typography from "@mui/material/Typography";
+import Button from "@mui/material/Button";
 import GitHubIcon from "@mui/icons-material/GitHub";
-import { Box, Typography, Button } from "@mui/material";
-import type { SxProps } from "@mui/system";
+import { ProgressRing } from "components";
 import { githubSignIn, useAuth } from "@lib/firebase/auth";
 import { useUserDoc } from "@lib/firebase/firestore";
-import { ProgressRing } from "components";
 
 const Enter = () => {
   const router = useRouter();
@@ -13,13 +14,13 @@ const Enter = () => {
 
   if (!userId || !userData)
     return (
-      <Box sx={containerSx}>
+      <Stack height="100vh">
         <ProgressRing values={[1, 1]} />
         <Typography variant="h4" sx={{ mt: 3, mb: 5, color: "primary.main" }}>
           {`Build momentum on your coding journey`}
         </Typography>
         <SignInButton />
-      </Box>
+      </Stack>
     );
 
   const [, { isOnboarding }] = userData;
@@ -31,20 +32,14 @@ const Enter = () => {
   return null;
 };
 
-const containerSx = {
-  display: "flex",
-  flexDirection: "column",
-  justifyContent: "center",
-  alignItems: "center",
-  width: 1,
-  height: "100vh",
-} as SxProps;
+export default Enter;
 
 const SignInButton = () => (
   <Button
     variant="contained"
     onClick={githubSignIn}
     size="large"
+    // TODO: Make this responsive
     sx={{
       display: "flex",
       justifyContent: "space-between",
@@ -57,5 +52,3 @@ const SignInButton = () => (
     <Typography fontSize={14}> Sign in with GitHub </Typography>
   </Button>
 );
-
-export default Enter;
