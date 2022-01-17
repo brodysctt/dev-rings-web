@@ -1,15 +1,7 @@
-import { Box } from "@mui/material";
+import Stack from "@mui/material/Stack";
 
 export const CommitSvg = () => (
-  <Box
-    sx={{
-      display: "flex",
-      justifyContent: "center",
-      alignItems: "center",
-      height: 20,
-      width: 20,
-    }}
-  >
+  <Stack alignItems="center" sx={{ height: 20, width: 20 }}>
     <svg width="24" height="24" viewBox="0 0 24 24" fill="white">
       <path
         fillRule="evenodd"
@@ -18,5 +10,5 @@ export const CommitSvg = () => (
         fill="white"
       />
     </svg>
-  </Box>
+  </Stack>
 );
