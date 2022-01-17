@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import type { NextPage } from "next";
 import type { SxProps } from "@mui/system";
 import Box from "@mui/material/Box";
@@ -7,18 +8,24 @@ import {
   TrackRepoCheckboxes,
   TrackRepoInput,
 } from "components";
+import { trackReposToast } from "@lib/react-toastify";
 
-const ManageRepos: NextPage = () => (
-  <Box sx={containerSx}>
-    <Box sx={{ display: "flex" }}>
-      <TrackEmAllButton />
-      <Divider orientation="vertical" sx={{ ml: 5 }} />
-      <TrackRepoInput />
+const ManageRepos: NextPage = () => {
+  useEffect(() => {
+    trackReposToast();
+  }, []);
+  return (
+    <Box sx={containerSx}>
+      <Box sx={{ display: "flex" }}>
+        <TrackEmAllButton />
+        <Divider orientation="vertical" sx={{ ml: 5 }} />
+        <TrackRepoInput />
+      </Box>
+      <Divider sx={{ width: "50vw", my: 3 }} />
+      <TrackRepoCheckboxes />
     </Box>
-    <Divider sx={{ width: "50vw", my: 3 }} />
-    <TrackRepoCheckboxes />
-  </Box>
-);
+  );
+};
 
 const containerSx = {
   display: "flex",

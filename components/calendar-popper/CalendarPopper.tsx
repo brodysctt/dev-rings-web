@@ -41,7 +41,7 @@ export const CalendarPopper = () => {
               </Typography>
             </Grid>
             <ArrowButton
-              {...{ monthInView, setMonthInView, disabled: false }} // TODO: Update once I delete demo date --> monthInView !== currentMonth
+              {...{ monthInView, setMonthInView, disabled: false }} // TODO: Update to monthInView !== currentMonth
             />
           </Grid>
           <Grid container columns={7} gap={"3px"}>

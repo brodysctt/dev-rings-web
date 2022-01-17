@@ -1,13 +1,10 @@
 import type { FC } from "react";
-import {
-  getRepos,
-  useCollection,
-  useUserDoc,
-  setTimezone,
-  Webhook,
-} from "@lib/firebase/firestore";
+import Image from "next/image";
+import { useAuth } from "@lib/firebase/auth";
+import { getRepos, useCollection, setTimezone } from "@lib/firebase/firestore";
+import type { Webhook } from "@lib/firebase/firestore";
 import { dayjs } from "@lib/dayjs";
-import { Box, Typography, Button } from "@mui/material";
+import { Stack, Box, Typography, Button, Link } from "@mui/material";
 import type { SxProps } from "@mui/system";
 import { GetStarted, SetGoalInput, TrackRepoCheckboxes } from "components";
 
@@ -22,54 +19,89 @@ export const OnboardingSteps: FC<Props> = ({
   children,
 }) => {
   const webhooks = useCollection("webhooks") as Webhook[] | null;
-  const userData = useUserDoc();
-  if (!userData) return null;
-  const [userId, { timezone }] = userData;
+  const userId = useAuth();
+  if (!userId) return null;
 
   if (activeStep === 0)
     return (
       <Box sx={stepSx}>
-        <Typography variant="h6">{`Dev Rings tracks your code contributions via webhooks`}</Typography>
+        <Stack direction="row">
+          <Typography variant="h6" color="primary" sx={{ mr: 1 }}>
+            {`Choose a repo you'd like to start tracking`}
+          </Typography>
+          <Image src="/blobclipboard.png" width={30} height={30} />
+        </Stack>
+        <Typography color="text.secondary" align="center" sx={{ mb: 2 }}>
+          {`(This is done with `}
+          <Link
+            href="https://docs.github.com/en/developers/webhooks-and-events/webhooks/about-webhooks"
+            target="_blank"
+            rel="noopener"
+            underline="none"
+          >
+            a repository webhook
+          </Link>
+          {` btw)`}
+        </Typography>
         <TrackRepoCheckboxes onSuccess={onSuccess} />
       </Box>
     );
 
-  if (activeStep === 1)
+  if (activeStep === 1) {
+    if (!webhooks) return null;
+    const [repoName] = getRepos(webhooks, userId);
     return (
       <Box sx={stepSx}>
-        <Typography
-          align="center"
-          sx={{ mb: 2, whiteSpace: "pre-line" }}
-        >{`To track progress, you must first set a goal 🏆
-      How many commits will you aim for in a day?
-     `}</Typography>
+        <Stack direction="row">
+          <Typography variant="h6" color="primary" sx={{ mr: 1 }}>
+            {`To track progress, you must first set a goal`}
+          </Typography>
+          <Image src="/ablobnod.gif" width={30} height={30} />
+        </Stack>
+        <Typography color="text.secondary" align="center" sx={{ mb: 2 }}>
+          {`How many commits will you push `}
+          <Link
+            href={`https://github.com/${userId}/${repoName}`}
+            target="_blank"
+            rel="noopener"
+            underline="none"
+          >
+            {repoName}
+          </Link>
+          {` in a given day?`}
+        </Typography>
         <SetGoalInput onSuccess={onSuccess} />
       </Box>
     );
+  }
 
   if (activeStep === 2)
     return (
       <Box sx={stepSx}>
-        <Typography
-          align="center"
-          color="primary.main"
-          sx={{ whiteSpace: "pre-wrap" }}
-        >
-          {timezone
-            ? `Your timezone has been set to ${timezone}`
-            : `Your current timezone is ${dayjs.tz.guess()} 🌍
-Is this the best timezone for tracking daily goals?`}
-        </Typography>
-        {!timezone && (
-          <Button
-            variant="contained"
-            sx={{ mt: 2 }}
-            onClick={() => {
-              setTimezone(userId, dayjs.tz.guess());
-              onSuccess();
-            }}
-          >{`Confirm`}</Button>
-        )}
+        <Stack direction="row">
+          <Typography variant="h6" color="primary" sx={{ mr: 1 }}>
+            {`According to `}
+            <Link
+              href={`https://dayjs.gitee.io/en/`}
+              target="_blank"
+              rel="noopener"
+              underline="none"
+            >
+              {`dayjs, `}
+            </Link>
+            {`you're located in ${dayjs.tz.guess()}`}
+          </Typography>
+          <Image src="/ablobdundundun.gif" width={30} height={30} />
+        </Stack>
+        <Typography color="text.secondary">{`Is this the best timezone for tracking your daily goals?`}</Typography>
+        <Button
+          variant="contained"
+          sx={{ mt: 3 }}
+          onClick={() => {
+            setTimezone(userId, dayjs.tz.guess());
+            onSuccess();
+          }}
+        >{`Confirm`}</Button>
       </Box>
     );
 

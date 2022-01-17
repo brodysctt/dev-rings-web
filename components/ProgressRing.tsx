@@ -8,12 +8,12 @@ interface Props {
 
 export const ProgressRing = ({ values, size = 300 }: Props) => {
   const [actual, goal] = values;
-  if (actual >= goal) return <CompletedRing />;
+  if (actual >= goal) return <CompletedRing size={size} />;
   return (
     <CircularProgress
       variant="determinate"
       size={size}
-      thickness={6}
+      thickness={4}
       value={(actual / goal) * 100}
       sx={{ mb: 2 }}
     />

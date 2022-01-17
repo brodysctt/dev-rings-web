@@ -1,3 +1,4 @@
+import Head from "next/head";
 import type { AppProps } from "next/app";
 import { ThemeProvider } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
@@ -21,6 +22,13 @@ const App = (props: Props) => {
     <CacheProvider value={emotionCache}>
       <ThemeProvider theme={theme}>
         <CssBaseline />
+        <Head>
+          <title>sup wastemans mcgee</title>
+          <link
+            rel="shortcut icon"
+            href="https://github.com/bscott4/dev-rings-web/blob/a-few-lil-buggies/public/blobpeek.png"
+          />
+        </Head>
         <AuthProvider>
           <Navbar />
           <Component {...pageProps} />
