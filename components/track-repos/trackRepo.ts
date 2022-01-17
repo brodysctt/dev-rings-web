@@ -2,7 +2,7 @@ import axios, { AxiosError } from "axios";
 import { toast } from "react-toastify";
 import { fetchGitHubToken } from "@lib/firebase/firestore";
 
-const CREATE_WEBHOOK_URL = process.env.NEXT_PUBLIC_FIREBASE_API_KEY;
+const CREATE_WEBHOOK_URL = process.env.NEXT_PUBLIC_CREATE_WEBHOOK_URL;
 
 export const trackRepo = async (
   userId: string,
