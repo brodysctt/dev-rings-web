@@ -1,20 +1,22 @@
+import Stack from "@mui/material/Stack";
+import FormControl from "@mui/material/FormControl";
+import Input from "@mui/material/Input";
+import Tooltip from "@mui/material/Tooltip";
+import GitHubSvg from "@mui/icons-material/GitHub";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { toast } from "react-toastify";
 import { useAuth } from "@lib/firebase/auth";
-import { Box, FormControl, Input, Tooltip } from "@mui/material";
-import type { SxProps } from "@mui/system";
 import { trackRepo } from "./trackRepo";
-import GitHubSvg from "@mui/icons-material/GitHub";
 
 export const TrackRepoInput = () => {
   const { register, handleSubmit } = useForm<{ repoUrl: string }>();
-
   const userId = useAuth();
   if (!userId) return null;
 
   const onSubmit: SubmitHandler<{ repoUrl: string }> = async ({ repoUrl }) => {
     // TODO: Add validation for repos that are already being tracked
-    const isGitHubUrl = githubUrl.test(repoUrl);
+    const validUrl = new RegExp(`https://github.com/(.*)/(.*)[.]git`);
+    const isGitHubUrl = validUrl.test(repoUrl);
     const isRepoOwner = repoUrl.includes(userId);
 
     if (!isGitHubUrl) {
@@ -29,7 +31,7 @@ export const TrackRepoInput = () => {
     const re = new RegExp(`(?<=${userId}/).*(?=[.]git)`);
     const result = re.exec(repoUrl);
     if (!result) {
-      // TODO: When would this occur? Need to make this more specific
+      // TODO: Make this more specific
       toast.error("Yoinks, something went wrong 😟");
       return;
     }
@@ -44,8 +46,8 @@ export const TrackRepoInput = () => {
   };
 
   return (
-    // TODO: Make line purple
-    <Box sx={containerSx}>
+    // TODO: Make line on theme
+    <Stack direction="row" ml={5} mt={1}>
       <GitHubSvg color="primary" fontSize="large" sx={{ mr: 1 }} />
       <Tooltip title="Paste a GitHub URL here to start tracking it">
         <FormControl variant="standard">
@@ -58,23 +60,13 @@ export const TrackRepoInput = () => {
               if (kp.key === "Enter") {
                 handleSubmit(onSubmit)();
                 kp.preventDefault();
-                // TODO: What does this do ☝️
               }
             }}
+            // TODO: Make responsive
             sx={{ width: 370, fontSize: 16 }}
           />
         </FormControl>
       </Tooltip>
-    </Box>
+    </Stack>
   );
 };
-
-const containerSx = {
-  display: "flex",
-  justifyContent: "center",
-  alignItems: "center",
-  ml: 5,
-  mt: 1,
-} as SxProps;
-
-const githubUrl = new RegExp(`https://github.com/(.*)/(.*)[.]git`);

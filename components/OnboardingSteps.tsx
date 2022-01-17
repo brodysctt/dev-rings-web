@@ -1,99 +1,65 @@
 import type { FC } from "react";
 import Image from "next/image";
+import Stack from "@mui/material/Stack";
+import Typography from "@mui/material/Typography";
+import Button from "@mui/material/Button";
+import {
+  GetStarted,
+  SetGoalInput,
+  TextLink,
+  TrackRepoCheckboxes,
+} from "components";
 import { useAuth } from "@lib/firebase/auth";
 import { getRepos, useCollection, setTimezone } from "@lib/firebase/firestore";
 import type { Webhook } from "@lib/firebase/firestore";
 import { dayjs } from "@lib/dayjs";
-import { Stack, Box, Typography, Button, Link } from "@mui/material";
-import type { SxProps } from "@mui/system";
-import { GetStarted, SetGoalInput, TrackRepoCheckboxes } from "components";
 
 interface Props {
   activeStep: number;
   onSuccess: () => void;
 }
 
-export const OnboardingSteps: FC<Props> = ({
-  activeStep,
-  onSuccess,
-  children,
-}) => {
+export const OnboardingSteps = ({ activeStep, onSuccess }: Props) => {
   const webhooks = useCollection("webhooks") as Webhook[] | null;
   const userId = useAuth();
   if (!userId) return null;
 
-  if (activeStep === 0)
-    return (
-      <Box sx={stepSx}>
-        <Stack direction="row">
-          <Typography variant="h6" color="primary" sx={{ mr: 1 }}>
-            {`Choose a repo you'd like to start tracking`}
-          </Typography>
-          <Image src="/blobclipboard.png" width={30} height={30} />
-        </Stack>
-        <Typography color="text.secondary" align="center" sx={{ mb: 2 }}>
+  const steps = [
+    {
+      header: `Choose a repo you'd like to start tracking`,
+      blob: "/blobclipboard.png",
+      subheader: (
+        <>
           {`(This is done with `}
-          <Link
-            href="https://docs.github.com/en/developers/webhooks-and-events/webhooks/about-webhooks"
-            target="_blank"
-            rel="noopener"
-            underline="none"
-          >
-            a repository webhook
-          </Link>
+          <TextLink href={GITHUB_WEBHOOKS_DOCS} text="a repository webhook" />
           {` btw)`}
-        </Typography>
-        <TrackRepoCheckboxes onSuccess={onSuccess} />
-      </Box>
-    );
-
-  if (activeStep === 1) {
-    if (!webhooks) return null;
-    const [repoName] = getRepos(webhooks, userId);
-    return (
-      <Box sx={stepSx}>
-        <Stack direction="row">
-          <Typography variant="h6" color="primary" sx={{ mr: 1 }}>
-            {`To track progress, you must first set a goal`}
-          </Typography>
-          <Image src="/ablobnod.gif" width={30} height={30} />
-        </Stack>
-        <Typography color="text.secondary" align="center" sx={{ mb: 2 }}>
-          {`How many commits will you push `}
-          <Link
-            href={`https://github.com/${userId}/${repoName}`}
-            target="_blank"
-            rel="noopener"
-            underline="none"
-          >
-            {repoName}
-          </Link>
-          {` in a given day?`}
-        </Typography>
-        <SetGoalInput onSuccess={onSuccess} />
-      </Box>
-    );
-  }
-
-  if (activeStep === 2)
-    return (
-      <Box sx={stepSx}>
-        <Stack direction="row">
-          <Typography variant="h6" color="primary" sx={{ mr: 1 }}>
-            {`According to `}
-            <Link
-              href={`https://dayjs.gitee.io/en/`}
-              target="_blank"
-              rel="noopener"
-              underline="none"
-            >
-              {`dayjs, `}
-            </Link>
-            {`you're located in ${dayjs.tz.guess()}`}
-          </Typography>
-          <Image src="/ablobdundundun.gif" width={30} height={30} />
-        </Stack>
-        <Typography color="text.secondary">{`Is this the best timezone for tracking your daily goals?`}</Typography>
+        </>
+      ),
+      body: <TrackRepoCheckboxes onSuccess={onSuccess} />,
+    },
+    {
+      header: `To track progress, you must first set a goal`,
+      blob: "/ablobnod.gif",
+      subheader: <></>, // requires data from step 1
+      body: <SetGoalInput onSuccess={onSuccess} />,
+    },
+    {
+      header: (
+        <>
+          {`According to `}
+          <TextLink href={`https://dayjs.gitee.io/en/`} text={`dayjs, `} />
+          {`you're located in ${dayjs.tz.guess()}`}
+        </>
+      ),
+      blob: "/blobclipboard.png",
+      subheader: (
+        <>
+          {`(This is done with `}
+          <TextLink href={GITHUB_WEBHOOKS_DOCS} text="a repository webhook" />
+          {` btw)`}
+        </>
+      ),
+      body: (
         <Button
           variant="contained"
           sx={{ mt: 3 }}
@@ -102,28 +68,72 @@ export const OnboardingSteps: FC<Props> = ({
             onSuccess();
           }}
         >{`Confirm`}</Button>
-      </Box>
-    );
+      ),
+    },
+  ];
 
-  if (activeStep === 3)
+  if (activeStep === 0 || activeStep === 2) {
+    const { header, blob, subheader, body } = steps[activeStep];
     return (
-      <Box sx={stepSx}>
-        {webhooks && (
-          <GetStarted
-            repos={getRepos(webhooks, userId)}
-            onSuccess={onSuccess}
-          />
-        )}
-      </Box>
+      <OnboardingPanel header={header} blob={blob} subheader={subheader}>
+        {body}
+      </OnboardingPanel>
     );
+  }
 
-  return <Box>{children}</Box>;
+  if (activeStep === 1) {
+    if (!webhooks) return null;
+    const [repoName] = getRepos(webhooks as Webhook[], userId);
+    const { header, blob, body } = steps[1];
+    return (
+      <OnboardingPanel
+        header={header}
+        blob={blob}
+        subheader={
+          <>
+            {`How many commits will you push `}
+            <TextLink
+              href={`https://github.com/${userId}/${repoName}`}
+              text={repoName}
+            />
+            {` in a given day?`}
+          </>
+        }
+      >
+        {body}
+      </OnboardingPanel>
+    );
+  }
+
+  return (
+    <Stack justifyContent="center" alignItems="center" height="50vh">
+      {webhooks && (
+        <GetStarted repos={getRepos(webhooks, userId)} onSuccess={onSuccess} />
+      )}
+    </Stack>
+  );
 };
 
-const stepSx = {
-  display: "flex",
-  flexDirection: "column",
-  justifyContent: "center",
-  alignItems: "center",
-  height: "50vh",
-} as SxProps;
+interface IProps {
+  header: string | JSX.Element;
+  blob: string;
+  subheader: string | JSX.Element;
+}
+
+const OnboardingPanel: FC<IProps> = ({ header, blob, subheader, children }) => (
+  <Stack justifyContent="center" alignItems="center" height="50vh">
+    <Stack direction="row">
+      <Typography variant="h6" color="primary" sx={{ mr: 1 }}>
+        {header}
+      </Typography>
+      <Image src={blob} width={30} height={30} />
+    </Stack>
+    <Typography color="text.secondary" mb={2}>
+      {subheader}
+    </Typography>
+    {children}
+  </Stack>
+);
+
+const GITHUB_WEBHOOKS_DOCS =
+  "https://docs.github.com/en/developers/webhooks-and-events/webhooks/about-webhooks";

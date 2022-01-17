@@ -1,51 +1,25 @@
 import type { NextPage, GetServerSideProps } from "next";
-import { dayjs } from "@lib/dayjs";
+import { DevRing } from "components";
+import { getDayEvents } from "@lib/dayjs";
 import { useCollection, Log, RepoEvent } from "@lib/firebase/firestore";
 import { verifyToken, fetchLogDoc } from "@lib/firebase-admin";
-import { getDayEvents } from "@lib/dayjs";
-import { Box, Typography } from "@mui/material";
-import type { SxProps } from "@mui/system";
-import { CommitSvg, EventsTimeline, PopIt, ProgressRing } from "components";
 import Cookies from "cookies";
 
-const DevRing: NextPage<{ log: Log }> = ({ log }) => {
+const Day: NextPage<{ log: Log }> = ({ log }) => {
   const events = useCollection("events") as RepoEvent[] | null;
   const [dateString, { actual, goal }] = log;
   const dayEvents = getDayEvents(events, dateString);
   if (!dayEvents) return null;
-
   return (
-    <Box sx={containerSx}>
-      <Typography color="text.secondary">
-        {dayjs(dateString).format("LL")}
-      </Typography>
-      <Box sx={devRingSx}>
-        <ProgressRing values={[actual, goal]} />
-        <PopIt id="View events" icon={<CommitSvg />}>
-          <EventsTimeline events={dayEvents} />
-        </PopIt>
-      </Box>
-    </Box>
+    <DevRing
+      dateString={dateString}
+      events={dayEvents}
+      values={[actual, goal]}
+    />
   );
 };
 
-const containerSx = {
-  display: "flex",
-  flexDirection: "column",
-  justifyContent: "center",
-  alignItems: "center",
-  height: "80vh",
-  width: "100%",
-} as SxProps;
-
-const devRingSx = {
-  display: "flex",
-  flexDirection: "column",
-  justifyContent: "center",
-  alignItems: "center",
-} as SxProps;
-
-export default DevRing;
+export default Day;
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   try {

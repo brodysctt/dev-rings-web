@@ -1,5 +1,6 @@
-import { Box, Button, InputBase, Tooltip } from "@mui/material";
-import type { SxProps } from "@mui/system";
+import Button from "@mui/material/Button";
+import InputBase from "@mui/material/InputBase";
+import Tooltip from "@mui/material/Tooltip";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { setDailyGoal, useUserDoc } from "@lib/firebase/firestore";
 import { toast } from "react-toastify";
@@ -27,33 +28,24 @@ export const SetGoalInput = ({ onSuccess }: Props) => {
   };
   return (
     <Tooltip title={`${isOnboarding ? "Set" : "Update"} daily goal`}>
-      <Box sx={containerSx}>
-        <Button disableRipple variant="text" sx={{ height: 60 }}>
-          <InputBase
-            {...register("goal")}
-            placeholder={dailyGoal ? dailyGoal : 3}
-            sx={{
-              width: 32,
-              fontSize: 30,
-              color: "primary.main",
-              input: { textAlign: "center" },
-            }}
-            onKeyPress={(kp) => {
-              if (kp.key === "Enter") {
-                handleSubmit(onSubmit)();
-                kp.preventDefault();
-              }
-            }}
-          />
-        </Button>
-      </Box>
+      <Button disableRipple variant="text" sx={{ height: 60 }}>
+        <InputBase
+          {...register("goal")}
+          placeholder={dailyGoal ? dailyGoal : 3}
+          sx={{
+            width: 32,
+            fontSize: 30,
+            color: "primary.main",
+            input: { textAlign: "center" },
+          }}
+          onKeyPress={(kp) => {
+            if (kp.key === "Enter") {
+              handleSubmit(onSubmit)();
+              kp.preventDefault();
+            }
+          }}
+        />
+      </Button>
     </Tooltip>
   );
 };
-
-const containerSx = {
-  display: "flex",
-  flexDirection: "column",
-  justifyContent: "center",
-  alignItems: "center",
-} as SxProps;

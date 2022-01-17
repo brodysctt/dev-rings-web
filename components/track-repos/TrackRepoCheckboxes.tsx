@@ -1,9 +1,10 @@
 import { useState, useEffect } from "react";
-import { Box, FormGroup, FormControlLabel, Checkbox } from "@mui/material";
-import type { SxProps } from "@mui/system";
+import Stack from "@mui/material/Stack";
+import FormGroup from "@mui/material/FormGroup";
+import FormControlLabel from "@mui/material/FormControlLabel";
+import Checkbox from "@mui/material/Checkbox";
 import { useAuth } from "@lib/firebase/auth";
 import { getRepos, useCollection, Webhook } from "@lib/firebase/firestore";
-import { toast } from "react-toastify";
 import { fetchPublicRepos } from "./fetchPublicRepos";
 import { trackRepo } from "./trackRepo";
 
@@ -28,10 +29,11 @@ export const TrackRepoCheckboxes = ({ onSuccess }: Props) => {
 
   // TODO: Handle case where user has no public repos
   if (!userId || !publicRepos) return null;
+
   return (
-    <Box sx={containerSx}>
+    <Stack>
       <FormGroup>
-        <Box sx={checkboxesSx}>
+        <Stack direction="row" flexWrap="wrap" maxWidth="70vw">
           {/* TODO: Handle case where user has a ton of repos*/}
           {publicRepos.map((repo, i) => (
             <FormControlLabel
@@ -40,38 +42,17 @@ export const TrackRepoCheckboxes = ({ onSuccess }: Props) => {
               control={
                 <Checkbox
                   checked={trackedRepos.includes(repo)}
+                  // TODO: Update this to handle deletes
                   onChange={async () => {
-                    console.log(`create webhook for ${repo}`);
-                    const response = await trackRepo(userId, repo);
-                    if (response !== 200) {
-                      toast.error("Webhook did not get created");
-                      return;
-                    }
-                    toast.success("Webhook successfully created");
+                    await trackRepo(userId, repo);
                     if (onSuccess) onSuccess();
-                    return;
                   }}
                 />
               }
             />
           ))}
-        </Box>
+        </Stack>
       </FormGroup>
-    </Box>
+    </Stack>
   );
 };
-
-const containerSx = {
-  display: "flex",
-  flexDirection: "column",
-  justifyContent: "center",
-  alignItems: "center",
-  width: 1,
-} as SxProps;
-
-const checkboxesSx = {
-  display: "flex",
-  flexWrap: "wrap",
-  justifyContent: "center",
-  width: 700,
-} as SxProps;
