@@ -5,5 +5,5 @@ admin.initializeApp();
 export const db = admin.firestore();
 
 export const corsHandler = cors({
-  origin: "/dev-rings-web.*bscott4.vercel.app/",
+  origin: "/https://dev-rings-web.*bscott4.vercel.app/",
 });
