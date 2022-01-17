@@ -24,8 +24,10 @@ const App = (props: Props) => {
         <CssBaseline />
         <Head>
           <title>sup wastemans mcgee</title>
-          <link rel="shortcut icon" href="/images/favicon.png" />
-          <link rel="icon" href="/images/favicon.png" />
+          <link
+            rel="shortcut icon"
+            href="https://github.com/bscott4/dev-rings-web/blob/a-few-lil-buggies/public/blobpeek.png"
+          />
         </Head>
         <AuthProvider>
           <Navbar />
