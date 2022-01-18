@@ -7,7 +7,6 @@ import { AnimatedRing, ProgressRing } from "components";
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
 import ButtonBase from "@mui/material/ButtonBase";
-import type { SxProps } from "@mui/system";
 
 export const DayTile = ({ log }: { log: Log }) => {
   const [hover, setHover] = useState(false);

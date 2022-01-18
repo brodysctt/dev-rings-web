@@ -76,8 +76,8 @@ export const CalendarPopper = () => {
           <Grid container columns={7} xs={7} rowSpacing={0.5}>
             {<Grid item xs={gridStart} mr={-0.4} />}
             {formattedLogs.map((log, i) => (
-              <Grid item xs={1}>
-                <DayTile key={i} log={log} />
+              <Grid key={i} item xs={1}>
+                <DayTile log={log} />
               </Grid>
             ))}
           </Grid>
