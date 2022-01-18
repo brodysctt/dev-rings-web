@@ -1,12 +1,14 @@
-import axios, { AxiosError } from "axios";
+import axios from "axios";
+import { toast } from "react-toastify";
 import { fetchGitHubToken } from "@lib/firebase/firestore";
 
 export const fetchPublicRepos = async (
   userId: string
-): Promise<string[] | ServerError> => {
+): Promise<string[] | void> => {
   try {
     const token = await fetchGitHubToken(userId);
     if (!token) {
+      // TODO: Improve this w/ Sentry
       throw new Error("no token bruh");
     }
 
@@ -19,33 +21,18 @@ export const fetchPublicRepos = async (
 
     const { data } = await axiosClient.get(`/users/${userId}/repos`);
     if (data.length < 1) {
-      console.log("just a heads up bruh, there's no public repos");
+      // TODO: Create custom toast with TrackRepoInput
+      toast.warning(
+        "Looks like you don't have any public repos. Either create one or try adding a private repo instead"
+      );
+      return;
     }
-
-    // TODO: Add a Repo type here
-    const repos: string[] = data.map((repo: any) => {
-      const { name } = repo;
-      return name;
-    });
-
-    console.log(`here be the repos: ${repos}`);
-    return repos;
+    return data.map(({ name: repo }: any) => repo) as string[];
   } catch (error) {
-    if (axios.isAxiosError(error)) {
-      const serverError = error as AxiosError<ServerError>;
-      if (serverError && serverError.response) {
-        const { response: status } = serverError;
-        console.log(
-          `webhook didn't get created. it's possible a webhook already exists for this repo 👀`
-        );
-        console.dir(status);
-        return status;
-      }
-    }
-    return { status: 69 };
+    // TODO: Add Sentry
+    toast.error("Error fetching public repos");
+    return;
   }
 };
 
 const GITHUB_BASE_URL = "https://api.github.com";
-
-type ServerError = { status: number };

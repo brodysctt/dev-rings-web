@@ -22,14 +22,13 @@ export const TrackRepoCheckboxes = ({ onSuccess }: Props) => {
     (async () => {
       if (!userId) return;
       const repos = await fetchPublicRepos(userId);
-      if (Array.isArray(repos)) setPublicRepos(repos);
+      if (repos) setPublicRepos(repos);
       if (webhooks) setTrackedRepos(getRepos(webhooks, userId));
     })();
   }, [userId, webhooks]);
 
   // TODO: Handle case where user has no public repos
   if (!userId || !publicRepos) return null;
-
   return (
     <Stack>
       <FormGroup>

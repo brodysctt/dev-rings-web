@@ -36,13 +36,7 @@ export const TrackRepoInput = ({ sx }: { sx: SxProps }) => {
       return;
     }
     const repo = result[0];
-    const status = await trackRepo(userId, repo);
-    if (status !== 200) {
-      // TODO: Log to Sentry
-      toast.error("Yoinks, something went wrong 😟");
-      return;
-    }
-    toast.success("Webhook successfully created");
+    await trackRepo(userId, repo);
   };
 
   return (
