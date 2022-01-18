@@ -1,7 +1,6 @@
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import GitHubSvg from "@mui/icons-material/GitHub";
-import type { SxProps } from "@mui/system";
 import { toast } from "react-toastify";
 import { useAuth } from "@lib/firebase/auth";
 import { trackRepo } from "./trackRepo";
@@ -14,7 +13,7 @@ export const TrackEmAllButton = () => {
     <Button
       variant="contained"
       onClick={async () => await createWebhooks(userId)}
-      sx={buttonSx}
+      fullWidth
     >
       <GitHubSvg />
       <Typography
@@ -23,13 +22,6 @@ export const TrackEmAllButton = () => {
     </Button>
   );
 };
-
-const buttonSx = {
-  display: "flex",
-  justifyContent: "space-around",
-  alignItems: "center",
-  p: 1.5,
-} as SxProps;
 
 const createWebhooks = async (userId: string) => {
   const repos = await fetchPublicRepos(userId);
