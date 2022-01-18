@@ -1,7 +1,7 @@
 import type { FC } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import Grid from "@mui/material/Grid";
+import Container from "@mui/material/Container";
 import Stack from "@mui/material/Stack";
 import Button from "@mui/material/Button";
 import Tooltip from "@mui/material/Tooltip";
@@ -36,26 +36,27 @@ export const Navbar = () => {
     { icon: <LogoutSvg />, name: "Sign out", onClick: signOutUser },
   ];
   return (
-    <Grid container sx={{ height: 60, pl: 20, mt: 4 }}>
-      <Grid item xs={8}>
-        <Stack direction="row">
-          {!isOnboarding && (
-            <>
-              <NavbarItem href="/" tooltip="View today's progress">
-                <ProgressRing isIcon values={[0, 1]} />
-              </NavbarItem>
-              <CalendarPopper />
-              <NavbarItem href="/manage-repos" tooltip="Manage repos">
-                <Image src="/repo-icon.png" width={32} height={32} />
-              </NavbarItem>
-              <SetGoalInput />
-            </>
-          )}
-        </Stack>
-      </Grid>
-      <Grid item xs={4} sx={{ pr: 20 }}>
-        <Stack direction="row" justifyContent="flex-end">
-          <SpeedDial ariaLabel="speed-dial" icon={<MenuSvg />} direction="down">
+    <Container maxWidth="md">
+      <Stack direction="row" justifyContent="space-between" pt={3}>
+        {!isOnboarding && (
+          <Stack direction="row">
+            <NavbarItem href="/" tooltip="View today's progress">
+              <ProgressRing isIcon values={[0, 1]} />
+            </NavbarItem>
+            <CalendarPopper />
+            <NavbarItem href="/manage-repos" tooltip="Manage repos">
+              <Image src="/repo-icon.png" width={32} height={32} />
+            </NavbarItem>
+            <SetGoalInput />
+          </Stack>
+        )}
+        <Stack height={60} p={1} pr={2}>
+          <SpeedDial
+            ariaLabel="speed-dial"
+            icon={<MenuSvg />}
+            direction="down"
+            FabProps={{ size: "medium" }}
+          >
             {speedDialActions.map((action) => (
               <SpeedDialAction
                 key={action.name}
@@ -66,8 +67,8 @@ export const Navbar = () => {
             ))}
           </SpeedDial>
         </Stack>
-      </Grid>
-    </Grid>
+      </Stack>
+    </Container>
   );
 };
 

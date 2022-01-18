@@ -11,7 +11,16 @@ import Typography from "@mui/material/Typography";
 import CalendarSvg from "@mui/icons-material/CalendarTodayRounded";
 import BackSvg from "@mui/icons-material/ArrowBackRounded";
 import NextSvg from "@mui/icons-material/ArrowForwardRounded";
-import type { SxProps } from "@mui/system";
+import { styled } from "@mui/material/styles";
+
+const Container = styled("div")(({ theme }) => ({
+  [theme.breakpoints.down("sm")]: {
+    width: "100%",
+  },
+  [theme.breakpoints.up("sm")]: {
+    width: 480,
+  },
+}));
 
 export const CalendarPopper = () => {
   const [monthInView, setMonthInView] = useState<MonthYear>(getMonthYear());
@@ -47,38 +56,36 @@ export const CalendarPopper = () => {
       paperSx={{ pt: 1 }}
       icon={<CalendarSvg />}
     >
-      <Stack alignItems="center" p={2} pt={1} sx={containerSx}>
-        <Typography color="primary" sx={{ fontSize: 12 }}>
-          {year}
-        </Typography>
-        <>
-          <Grid container justifyContent="center" sx={{ mb: 2 }}>
+      <Container>
+        <Stack
+          alignItems="center"
+          p={1}
+          sx={{ border: "1px solid #DCDEE6", borderRadius: 6 }}
+        >
+          <Typography color="primary" sx={{ fontSize: 12 }}>
+            {year}
+          </Typography>
+          <Stack direction="row" width={1} mb={2}>
             <Button onClick={back} startIcon={<BackSvg />} disabled={isFirst} />
-            <Grid item xs={8}>
-              <Typography variant="h6" textAlign="center">
-                {dayjs.months()[month - 1]}
-              </Typography>
-            </Grid>
+            <Typography variant="h6" textAlign="center" width="90%">
+              {dayjs.months()[month - 1]}
+            </Typography>
             {/* TODO: Update disabled to monthInView !== currentMonth */}
             <Button onClick={next} startIcon={<NextSvg />} disabled={false} />
-          </Grid>
-          <Grid container columns={7} gap={"3px"}>
-            {<Grid item xs={gridStart} sx={{ mr: "-3px" }} />}
+          </Stack>
+          <Grid container columns={7} xs={7} rowSpacing={0.5}>
+            {<Grid item xs={gridStart} mr={-0.4} />}
             {formattedLogs.map((log, i) => (
-              <DayTile key={i} log={log} />
+              <Grid key={i} item xs={1}>
+                <DayTile log={log} />
+              </Grid>
             ))}
           </Grid>
-        </>
-      </Stack>
+        </Stack>
+      </Container>
     </PopIt>
   );
 };
-
-const containerSx = {
-  width: 480,
-  border: "1px solid #DCDEE6",
-  borderRadius: 10,
-} as SxProps;
 
 const filterLogs = (logs: Log[], monthInView: MonthYear) => {
   const [month, year] = monthInView;
