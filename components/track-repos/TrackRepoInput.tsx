@@ -6,7 +6,7 @@ import type { SxProps } from "@mui/system";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { toast } from "react-toastify";
 import { useAuth } from "@lib/firebase/auth";
-import { trackRepo } from "./functions";
+import { trackRepo } from "./trackRepo";
 
 export const TrackRepoInput = ({ sx }: { sx: SxProps }) => {
   const { register, handleSubmit } = useForm<{ repoUrl: string }>();

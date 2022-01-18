@@ -5,7 +5,8 @@ import FormControlLabel from "@mui/material/FormControlLabel";
 import Checkbox from "@mui/material/Checkbox";
 import { useAuth } from "@lib/firebase/auth";
 import { getRepos, useCollection, Webhook } from "@lib/firebase/firestore";
-import { fetchPublicRepos, trackRepo } from "./functions";
+import { fetchPublicRepos } from "./fetchPublicRepos";
+import { trackRepo } from "./trackRepo";
 
 interface Props {
   onSuccess?: () => void;

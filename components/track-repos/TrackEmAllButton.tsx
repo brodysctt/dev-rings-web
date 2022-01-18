@@ -2,7 +2,8 @@ import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import GitHubSvg from "@mui/icons-material/GitHub";
 import { useAuth } from "@lib/firebase/auth";
-import { fetchPublicRepos, trackRepo } from "./functions";
+import { fetchPublicRepos } from "./fetchPublicRepos";
+import { trackRepo } from "./trackRepo";
 
 // TODO: Disable/hide this button if user has no public repos
 export const TrackEmAllButton = () => {
