@@ -3,8 +3,7 @@ import Button from "@mui/material/Button";
 import GitHubSvg from "@mui/icons-material/GitHub";
 import { toast } from "react-toastify";
 import { useAuth } from "@lib/firebase/auth";
-import { trackRepo } from "./trackRepo";
-import { fetchPublicRepos } from "./fetchPublicRepos";
+import { fetchPublicRepos, trackRepo } from "./functions";
 
 export const TrackEmAllButton = () => {
   const userId = useAuth();
