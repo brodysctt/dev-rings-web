@@ -54,7 +54,7 @@ export const OnboardingSteps = ({ activeStep, onSuccess }: Props) => {
           {`you're located in ${dayjs.tz.guess()}`}
         </>
       ),
-      blob: "/blobclipboard.png",
+      blob: "/ablobdundundun.gif",
       subheader: "Is this the best timezone for tracking your daily goals?",
       body: (
         <Button
