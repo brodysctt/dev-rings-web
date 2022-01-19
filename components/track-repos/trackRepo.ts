@@ -15,6 +15,8 @@ export const trackRepo = async (
       repo,
       token,
     });
+
+    console.log("hi")
     toast.success("Webhook successfully created");
     return status;
   } catch (error) {
