@@ -3,16 +3,14 @@ import Image from "next/image";
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
-import {
-  GetStarted,
-  SetGoalInput,
-  TextLink,
-  TrackRepoCheckboxes,
-} from "components";
+import { SetGoalInput, TextLink, TrackRepoCheckboxes } from "components";
 import { useAuth } from "@lib/firebase/auth";
 import { getRepos, useCollection, setTimezone } from "@lib/firebase/firestore";
 import type { Webhook } from "@lib/firebase/firestore";
 import { dayjs } from "@lib/dayjs";
+import Lottie from "react-lottie-player";
+// @ts-ignore
+import lottieJson from "https://assets3.lottiefiles.com/packages/lf20_pwohahvd.json";
 
 interface Props {
   activeStep: number;
@@ -23,6 +21,11 @@ export const OnboardingSteps = ({ activeStep, onSuccess }: Props) => {
   const webhooks = useCollection("webhooks") as Webhook[] | null;
   const userId = useAuth();
   if (!userId) return null;
+
+  const submitTimezone = () => {
+    setTimezone(userId, dayjs.tz.guess());
+    onSuccess();
+  };
 
   const steps = [
     {
@@ -52,21 +55,12 @@ export const OnboardingSteps = ({ activeStep, onSuccess }: Props) => {
         </>
       ),
       blob: "/blobclipboard.png",
-      subheader: (
-        <>
-          {`(This is done with `}
-          <TextLink href={GITHUB_WEBHOOKS_DOCS} text="a repository webhook" />
-          {` btw)`}
-        </>
-      ),
+      subheader: "Is this the best timezone for tracking your daily goals?",
       body: (
         <Button
           variant="contained"
           sx={{ mt: 3 }}
-          onClick={() => {
-            setTimezone(userId, dayjs.tz.guess());
-            onSuccess();
-          }}
+          onClick={submitTimezone}
         >{`Confirm`}</Button>
       ),
     },
@@ -74,41 +68,35 @@ export const OnboardingSteps = ({ activeStep, onSuccess }: Props) => {
 
   if (activeStep === 0 || activeStep === 2) {
     const { header, blob, subheader, body } = steps[activeStep];
-    return (
-      <OnboardingPanel header={header} blob={blob} subheader={subheader}>
-        {body}
-      </OnboardingPanel>
-    );
+    return <Panel {...{ header, blob, subheader }}>{body}</Panel>;
   }
 
   if (activeStep === 1) {
     if (!webhooks) return null;
     const [repoName] = getRepos(webhooks as Webhook[], userId);
     const { header, blob, body } = steps[1];
-    return (
-      <OnboardingPanel
-        header={header}
-        blob={blob}
-        subheader={
-          <>
-            {`How many commits will you push `}
-            <TextLink
-              href={`https://github.com/${userId}/${repoName}`}
-              text={repoName}
-            />
-            {` in a given day?`}
-          </>
-        }
-      >
-        {body}
-      </OnboardingPanel>
+    const subheader = (
+      <>
+        {`How many commits will you push `}
+        <TextLink
+          href={`https://github.com/${userId}/${repoName}`}
+          text={repoName}
+        />
+        {` in a given day?`}
+      </>
     );
+    return <Panel {...{ header, blob, subheader }}>{body}</Panel>;
   }
 
   return (
     <Stack justifyContent="center" alignItems="center" height="50vh">
       {webhooks && (
-        <GetStarted repos={getRepos(webhooks, userId)} onSuccess={onSuccess} />
+        <Lottie
+          loop
+          animationData={lottieJson}
+          play
+          style={{ width: 600, height: 600 }}
+        />
       )}
     </Stack>
   );
@@ -120,7 +108,7 @@ interface IProps {
   subheader: string | JSX.Element;
 }
 
-const OnboardingPanel: FC<IProps> = ({ header, blob, subheader, children }) => (
+const Panel: FC<IProps> = ({ header, blob, subheader, children }) => (
   <Stack justifyContent="center" alignItems="center" height="50vh">
     <Stack direction="row">
       <Typography variant="h6" color="primary" sx={{ mr: 1 }}>

@@ -4,4 +4,7 @@ module.exports = {
   images: {
     domains: ["media.giphy.com"],
   },
+  experimental: {
+    urlImports: ["https://assets3.lottiefiles.com"],
+  },
 };

@@ -30,7 +30,7 @@ const Onboarding: NextPage = () => {
     ["Select repos to track", Boolean(webhooks)],
     ["Set a daily contributions goal", Boolean(dailyGoal)],
     ["Confirm timezone", Boolean(timezone)],
-    ["Code", Boolean(events)],
+    ["Submit", Boolean(events)],
   ];
 
   const StepsToComplete = () => (
