@@ -21,9 +21,6 @@ export const TrackRepoCheckboxes = () => {
   // TODO: Handle this properly
   if (!untrackedRepos) return null;
 
-  console.log("here be the checked state");
-  console.dir(checked);
-
   const handleCheckAll = (event: ChangeEvent<HTMLInputElement>) =>
     setChecked(
       event.target.checked
@@ -45,7 +42,10 @@ export const TrackRepoCheckboxes = () => {
         control={
           <Checkbox
             checked={checked.every((checked) => Boolean(checked))}
-            indeterminate={checked.some((checked) => Boolean(checked))}
+            indeterminate={
+              !checked.every((checked) => Boolean(checked)) &&
+              checked.some((checked) => Boolean(checked))
+            }
             onChange={handleCheckAll}
           />
         }
