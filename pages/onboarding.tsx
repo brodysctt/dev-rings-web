@@ -3,11 +3,20 @@ import { useRouter } from "next/router";
 import type { NextPage } from "next";
 import useWindowSize from "react-use/lib/useWindowSize";
 import Stack from "@mui/material/Stack";
+import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import Stepper from "@mui/material/Stepper";
 import Step from "@mui/material/Step";
 import StepLabel from "@mui/material/StepLabel";
+import Lottie from "react-lottie-player";
+// @ts-ignore
+import lottieJson from "https://assets3.lottiefiles.com/packages/lf20_pwohahvd.json";
+// @ts-ignore
+import lottieJson2 from "https://assets7.lottiefiles.com/packages/lf20_ndqyrqfd.json";
+// @ts-ignore
+import mountainJson from "https://assets8.lottiefiles.com/packages/lf20_ntrhqntu.json";
+import loadingDotsJson from "public/loading-dots.json";
 import Confetti from "react-confetti";
 import { OnboardingSteps } from "components";
 import { useAuth } from "@lib/firebase/auth";
@@ -45,19 +54,33 @@ const Onboarding: NextPage = () => {
   const incrementStep = () => setActiveStep(activeStep + 1);
   const decrementStep = () => setActiveStep(activeStep - 1);
 
+  //   <>
+  //          <Typography sx={{ mt: 2, mb: 1 }}>
+  //   {`Woo! You're ready to start building momentum with Dev Rings 🚀`}
+  //   </Typography>
+  //   <OnboardingConfetti />
+  // </>
+
   const onboardingComplete = activeStep === steps.length;
   return (
     <Stack justifyContent="center" alignItems="center" height="90vh">
-      <StepsToComplete />
       {onboardingComplete ? (
-        <>
-          <Typography sx={{ mt: 2, mb: 1 }}>
-            {`Woo! You're ready to start building momentum with Dev Rings 🚀`}
-          </Typography>
-          <OnboardingConfetti />
-        </>
+        <Stack justifyContent="center" alignItems="center">
+          <Typography
+            color="text.secondary"
+            mb={-2}
+            sx={{ position: "relative", zIndex: 99 }}
+          >{`Building your account`}</Typography>
+          <Box height={100} width={100} mb={-4}>
+            <Lottie loop animationData={loadingDotsJson} play speed={0.7} />
+          </Box>
+          <Box height={400} width={400}>
+            <Lottie loop animationData={mountainJson} play speed={0.7} />
+          </Box>
+        </Stack>
       ) : (
         <>
+          <StepsToComplete />
           <OnboardingSteps activeStep={activeStep} onSuccess={incrementStep} />
           <Stack
             direction="row"

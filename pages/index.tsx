@@ -12,17 +12,18 @@ const Index: NextPage = () => {
   const webhooks = useCollection("webhooks") as Webhook[] | null;
 
   if (!userData || !webhooks) return null;
-  const [userId, { dailyGoal: goal, timezone }] = userData;
+  const [, { dailyGoal: goal, timezone }] = userData;
 
   const dayEvents = getDayEvents(
     events as RepoEvent[],
     dayjs().format("YYYY-MM-DD")
   );
 
-  if (!dayEvents)
+  // TODO: Change back to !dayEvents
+  if (dayEvents)
     return (
       <Stack justifyContent="center" alignItems="center" height="80vh">
-        <GetStarted repos={getRepos(webhooks, userId)} />
+        <GetStarted />
         <NewTimezoneAlert tz={timezone} />
       </Stack>
     );
