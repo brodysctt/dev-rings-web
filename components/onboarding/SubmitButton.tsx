@@ -1,13 +1,13 @@
 import Button from "@mui/material/Button";
 import { useAuth } from "@lib/firebase/auth";
-import { trackRepo } from "./trackRepo";
+import { trackRepo } from "../track-repos/trackRepo";
 
 interface Props {
   repos: string[];
   toLoadingScreen: () => void;
 }
 
-export const TrackReposButton = ({ repos, toLoadingScreen }: Props) => {
+export const SubmitButton = ({ repos, toLoadingScreen }: Props) => {
   const userId = useAuth();
   if (!userId) return null;
 

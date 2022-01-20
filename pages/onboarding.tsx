@@ -1,8 +1,6 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import Image from "next/image";
-import { useRouter } from "next/router";
 import type { NextPage } from "next";
-import useWindowSize from "react-use/lib/useWindowSize";
 import Stack from "@mui/material/Stack";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
@@ -12,14 +10,8 @@ import Step from "@mui/material/Step";
 import StepLabel from "@mui/material/StepLabel";
 import Lottie from "react-lottie-player";
 import loadingDotsJson from "public/loading-dots.json";
-import Confetti from "react-confetti";
-import { OnboardingSteps, TrackReposButton } from "components";
-import { useAuth } from "@lib/firebase/auth";
-import {
-  setIsOnboarding,
-  useCollection,
-  useUserDoc,
-} from "@lib/firebase/firestore";
+import { OnboardingSteps, SubmitButton } from "components";
+import { useCollection, useUserDoc } from "@lib/firebase/firestore";
 import type { RepoEvent, Webhook } from "@lib/firebase/firestore";
 
 const Onboarding: NextPage = () => {
@@ -73,10 +65,7 @@ const Onboarding: NextPage = () => {
               {`Back`}
             </Button>
             {isLastStep ? (
-              // <TrackReposButton />
-              <Button disabled={!isComplete} onClick={incrementStep}>
-                {`Next`}
-              </Button>
+              <SubmitButton />
             ) : (
               <Button disabled={!isComplete} onClick={incrementStep}>
                 {`Next`}
@@ -108,30 +97,3 @@ const LoadingScreen = () => (
     </Box>
   </Stack>
 );
-
-const OnboardingConfetti = () => {
-  const router = useRouter();
-  const userId = useAuth();
-  const { width, height } = useWindowSize();
-
-  useEffect(
-    () => () => {
-      if (!userId) return;
-      setIsOnboarding(userId);
-    },
-    [userId]
-  );
-  return (
-    <Confetti
-      width={width}
-      height={height}
-      numberOfPieces={1000}
-      recycle={false}
-      onConfettiComplete={() => {
-        setTimeout(() => {
-          router.push("/");
-        }, 1000);
-      }}
-    />
-  );
-};
