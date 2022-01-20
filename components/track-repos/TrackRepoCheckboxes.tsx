@@ -93,7 +93,8 @@ export const SubmitButton = ({ repos, disabled }: Props) => {
     setIsLoading(true);
     repos.forEach(async (repo) => await trackRepo(userId, repo as string));
     setIsLoading(false);
-    toast.success(`Successfully tracked ${repos.length} repos`);
+    // TODO: Create toast for bulk adds
+    // toast.success(`Successfully tracked ${repos.length} repos`);
   };
 
   return isLoading ? (
