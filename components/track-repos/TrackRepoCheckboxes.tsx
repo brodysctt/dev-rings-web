@@ -6,34 +6,35 @@ import { useRepos } from "components/track-repos/hooks";
 
 export const TrackRepoCheckboxes = () => {
   const [untrackedRepos, trackedRepos] = useRepos();
-  const [reposLength, setReposLength] = useState(0);
-  const [checked, setChecked] = useState<Array<boolean>>([false]);
+  const [checked, setChecked] = useState<Array<string | null>>([null]);
 
   useEffect(() => {
     if (!untrackedRepos) {
       console.log("ayyy, you're tracking all your public repos");
       return;
     }
-    const reposLength = untrackedRepos.length;
-    const initState = Array(reposLength).fill(false);
+    const length = untrackedRepos.length;
+    const initState = Array(length).fill(null);
     setChecked(initState);
-    setReposLength(reposLength);
   }, []);
 
   // TODO: Handle this properly
   if (!untrackedRepos) return null;
 
+  console.log("here be the checked state");
   console.dir(checked);
 
   const handleCheckAll = (event: ChangeEvent<HTMLInputElement>) =>
-    setChecked(Array(reposLength).fill(event.target.checked));
+    setChecked(
+      event.target.checked
+        ? untrackedRepos
+        : Array(untrackedRepos.length).fill(null)
+    );
 
   const handleRepoCheck =
     (i: number) => (event: ChangeEvent<HTMLInputElement>) => {
-      console.log(`here be the index: ${i}`);
-      console.log(`here be the event boolean ${event.target.checked}`);
       let updatedState = [...checked];
-      updatedState[i] = event.target.checked;
+      updatedState[i] = event.target.checked ? untrackedRepos[i] : null;
       setChecked(updatedState);
     };
 
@@ -43,21 +44,23 @@ export const TrackRepoCheckboxes = () => {
         label="All public repos"
         control={
           <Checkbox
-            checked={checked.every((checked) => checked)}
-            indeterminate={checked.some((checked) => checked)}
+            checked={checked.every((checked) => Boolean(checked))}
+            indeterminate={checked.some((checked) => Boolean(checked))}
             onChange={handleCheckAll}
           />
         }
       />
       <Stack ml={3}>
         {untrackedRepos.map((repo, i) => {
-          console.log(`here be the checked boolean: ${checked[i]}`);
           return (
             <FormControlLabel
               id={`checkbox-${i}`}
               label={repo}
               control={
-                <Checkbox checked={checked[i]} onChange={handleRepoCheck(i)} />
+                <Checkbox
+                  checked={Boolean(checked[i])}
+                  onChange={handleRepoCheck(i)}
+                />
               }
             />
           );
