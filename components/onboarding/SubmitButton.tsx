@@ -5,15 +5,21 @@ import { trackRepo } from "../track-repos/trackRepo";
 interface Props {
   repos: string[];
   toLoadingScreen: () => void;
+  completeOnboarding: () => void;
 }
 
-export const SubmitButton = ({ repos, toLoadingScreen }: Props) => {
+export const SubmitButton = ({
+  repos,
+  toLoadingScreen,
+  completeOnboarding,
+}: Props) => {
   const userId = useAuth();
   if (!userId) return null;
 
   const handleClick = () => {
     toLoadingScreen();
     repos.forEach(async (repo) => await trackRepo(userId, repo));
+    completeOnboarding();
   };
 
   return (

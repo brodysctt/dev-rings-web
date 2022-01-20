@@ -16,7 +16,7 @@ import type { RepoEvent, Webhook } from "@lib/firebase/firestore";
 
 const Onboarding: NextPage = () => {
   const [activeStep, setActiveStep] = useState(0);
-  const events = useCollection("events") as RepoEvent[] | null;
+  const [isOnboarding, setIsOnboarding] = useState(true);
   const webhooks = useCollection("webhooks") as Webhook[] | null;
   const userData = useUserDoc();
   if (!userData) return null;
@@ -42,7 +42,6 @@ const Onboarding: NextPage = () => {
   const decrementStep = () => setActiveStep(activeStep - 1);
 
   // TODO: Does this still make sense?
-
   const [, isComplete] = steps[activeStep];
   const isFirstStep = activeStep === 0;
   const isLastStep = activeStep === steps.length - 1;
@@ -65,7 +64,11 @@ const Onboarding: NextPage = () => {
               {`Back`}
             </Button>
             {isLastStep ? (
-              <SubmitButton />
+              <SubmitButton
+                repos={["hmmmm"]}
+                toLoadingScreen={incrementStep}
+                completeOnboarding={() => setIsOnboarding(false)}
+              />
             ) : (
               <Button disabled={!isComplete} onClick={incrementStep}>
                 {`Next`}
@@ -80,20 +83,23 @@ const Onboarding: NextPage = () => {
 
 export default Onboarding;
 
-const LoadingScreen = () => (
-  <Stack justifyContent="center" alignItems="center">
-    <Stack direction="row">
-      <Typography
-        variant="h6"
-        color="text.secondary"
-        mb={-2}
-        mr={1}
-        sx={{ position: "relative", zIndex: 99 }}
-      >{`Creating webhooks and setting up your account`}</Typography>
-      <Image src={"/ablobjam.gif"} width={30} height={30} />
+const LoadingScreen = () => {
+  const webhooks = useCollection("webhooks") as Webhook[] | null;
+  return (
+    <Stack justifyContent="center" alignItems="center">
+      <Stack direction="row">
+        <Typography
+          variant="h6"
+          color="text.secondary"
+          mb={-2}
+          mr={1}
+          sx={{ position: "relative", zIndex: 99 }}
+        >{`Creating webhooks and setting up your account`}</Typography>
+        <Image src={"/ablobjam.gif"} width={30} height={30} />
+      </Stack>
+      <Box height={400} width={400} mb={-4}>
+        <Lottie loop animationData={loadingDotsJson} play />
+      </Box>
     </Stack>
-    <Box height={400} width={400} mb={-4}>
-      <Lottie loop animationData={loadingDotsJson} play />
-    </Box>
-  </Stack>
-);
+  );
+};

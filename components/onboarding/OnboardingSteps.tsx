@@ -41,7 +41,7 @@ export const OnboardingSteps = ({ activeStep, onSuccess }: Props) => {
           {` btw)`}
         </>
       ),
-      body: <TrackRepoCheckboxes onSuccess={onSuccess} />,
+      body: <TrackRepoCheckboxes />,
     },
   ];
 

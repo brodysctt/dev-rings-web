@@ -2,7 +2,7 @@ import type { NextPage } from "next";
 import Stack from "@mui/material/Stack";
 import { DevRing, GetStarted } from "components";
 import { NewTimezoneAlert } from "@lib/react-toastify";
-import { getRepos, useUserDoc, useCollection } from "@lib/firebase/firestore";
+import { useUserDoc, useCollection } from "@lib/firebase/firestore";
 import type { RepoEvent, Webhook } from "@lib/firebase/firestore";
 import { dayjs, getDayEvents } from "@lib/dayjs";
 

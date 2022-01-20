@@ -1,57 +1,68 @@
-import { useState, useEffect } from "react";
+import { useState, ChangeEvent, useEffect } from "react";
 import Stack from "@mui/material/Stack";
-import FormGroup from "@mui/material/FormGroup";
-import FormControlLabel from "@mui/material/FormControlLabel";
 import Checkbox from "@mui/material/Checkbox";
-import { useAuth } from "@lib/firebase/auth";
-import { getRepos, useCollection, Webhook } from "@lib/firebase/firestore";
-import { fetchPublicRepos } from "./fetchPublicRepos";
-import { trackRepo } from "./trackRepo";
+import FormControlLabel from "@mui/material/FormControlLabel";
+import { useRepos } from "components/track-repos/hooks";
 
-interface Props {
-  onSuccess?: () => void;
-}
-
-export const TrackRepoCheckboxes = ({ onSuccess }: Props) => {
-  const userId = useAuth();
-  const webhooks = useCollection("webhooks") as Webhook[] | null;
-  const [publicRepos, setPublicRepos] = useState<string[] | null>(null);
-  const [trackedRepos, setTrackedRepos] = useState<Array<string | null>>([]);
+export const TrackRepoCheckboxes = () => {
+  const [untrackedRepos, trackedRepos] = useRepos();
+  const [reposLength, setReposLength] = useState(0);
+  const [checked, setChecked] = useState<Array<boolean>>([false]);
 
   useEffect(() => {
-    (async () => {
-      if (!userId) return;
-      const repos = await fetchPublicRepos(userId);
-      if (repos) setPublicRepos(repos);
-      if (webhooks) setTrackedRepos(getRepos(webhooks, userId));
-    })();
-  }, [userId, webhooks]);
+    if (!untrackedRepos) {
+      console.log("ayyy, you're tracking all your public repos");
+      return;
+    }
+    const reposLength = untrackedRepos.length;
+    const initState = Array(reposLength).fill(false);
+    setChecked(initState);
+    setReposLength(reposLength);
+  }, []);
 
-  // TODO: Handle case where user has no public repos
-  if (!userId || !publicRepos) return null;
+  // TODO: Handle this properly
+  if (!untrackedRepos) return null;
+
+  console.dir(checked);
+
+  const handleCheckAll = (event: ChangeEvent<HTMLInputElement>) =>
+    setChecked(Array(reposLength).fill(event.target.checked));
+
+  const handleRepoCheck =
+    (i: number) => (event: ChangeEvent<HTMLInputElement>) => {
+      console.log(`here be the index: ${i}`);
+      console.log(`here be the event boolean ${event.target.checked}`);
+      let updatedState = [...checked];
+      updatedState[i] = event.target.checked;
+      setChecked(updatedState);
+    };
+
   return (
     <Stack>
-      <FormGroup>
-        <Stack direction="row" flexWrap="wrap" maxWidth="70vw">
-          {/* TODO: Handle case where user has a ton of repos*/}
-          {publicRepos.map((repo, i) => (
+      <FormControlLabel
+        label="All public repos"
+        control={
+          <Checkbox
+            checked={checked.every((checked) => checked)}
+            indeterminate={checked.some((checked) => checked)}
+            onChange={handleCheckAll}
+          />
+        }
+      />
+      <Stack ml={3}>
+        {untrackedRepos.map((repo, i) => {
+          console.log(`here be the checked boolean: ${checked[i]}`);
+          return (
             <FormControlLabel
-              key={i}
+              id={`checkbox-${i}`}
               label={repo}
               control={
-                <Checkbox
-                  checked={trackedRepos.includes(repo)}
-                  // TODO: Update this to handle deletes
-                  onChange={async () => {
-                    await trackRepo(userId, repo);
-                    if (onSuccess) onSuccess();
-                  }}
-                />
+                <Checkbox checked={checked[i]} onChange={handleRepoCheck(i)} />
               }
             />
-          ))}
-        </Stack>
-      </FormGroup>
+          );
+        })}
+      </Stack>
     </Stack>
   );
 };
