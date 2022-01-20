@@ -2,9 +2,8 @@ import type { FC } from "react";
 import Image from "next/image";
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
-import Button from "@mui/material/Button";
-import { SetGoalInput, TextLink, TrackRepoCheckboxes } from "components";
-import { toast } from "react-toastify";
+import { ConfirmTimezone, SetGoalInput, TrackRepoCheckboxes } from "components";
+import { TextLink } from "components";
 import { dayjs } from "@lib/dayjs";
 
 interface Props {
@@ -30,28 +29,7 @@ export const OnboardingSteps = ({ activeStep, onSuccess }: Props) => {
       ),
       blob: "/ablobdundundun.gif",
       subheader: `Is this the best timezone for tracking your daily goals?`,
-      body: (
-        <Stack direction="row">
-          <Button
-            variant="contained"
-            sx={{ mt: 3, mr: 1 }}
-            onClick={() => console.log("submit timezone")}
-          >{`Yes, nailed it`}</Button>
-          <Button
-            variant="contained"
-            color="secondary"
-            sx={{ mt: 3, mr: 1 }}
-            onClick={() =>
-              toast(
-                <Stack direction="row" alignItems="center">
-                  <Typography mr={1}>{`Well, toggle it off then`}</Typography>
-                  <Image src={"/blobfingerguns.png"} width={30} height={30} />
-                </Stack>
-              )
-            }
-          >{`No, I use a VPN`}</Button>
-        </Stack>
-      ),
+      body: <ConfirmTimezone {...{ onSuccess }} />,
     },
     {
       header: `Choose the repos you'd like to start tracking`,
@@ -64,18 +42,6 @@ export const OnboardingSteps = ({ activeStep, onSuccess }: Props) => {
         </>
       ),
       body: <TrackRepoCheckboxes onSuccess={onSuccess} />,
-    },
-    {
-      header: "Noice! Let's get started",
-      blob: "/blobyes.png",
-      // TODO: Create a get started function that handles account creation
-      body: (
-        <Button
-          variant="contained"
-          sx={{ mt: 3 }}
-          onClick={() => console.log("hi")}
-        >{`Get started`}</Button>
-      ),
     },
   ];
 

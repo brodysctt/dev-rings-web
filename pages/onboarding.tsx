@@ -11,15 +11,9 @@ import Stepper from "@mui/material/Stepper";
 import Step from "@mui/material/Step";
 import StepLabel from "@mui/material/StepLabel";
 import Lottie from "react-lottie-player";
-// @ts-ignore
-import lottieJson from "https://assets3.lottiefiles.com/packages/lf20_pwohahvd.json";
-// @ts-ignore
-import lottieJson2 from "https://assets7.lottiefiles.com/packages/lf20_ndqyrqfd.json";
-// @ts-ignore
-import mountainJson from "https://assets8.lottiefiles.com/packages/lf20_ntrhqntu.json";
 import loadingDotsJson from "public/loading-dots.json";
 import Confetti from "react-confetti";
-import { OnboardingSteps } from "components";
+import { OnboardingSteps, TrackReposButton } from "components";
 import { useAuth } from "@lib/firebase/auth";
 import {
   setIsOnboarding,
@@ -39,8 +33,8 @@ const Onboarding: NextPage = () => {
   const steps: Array<[string, boolean]> = [
     ["Set a daily commits goal", Boolean(dailyGoal)],
     ["Confirm timezone", Boolean(timezone)],
+    // TODO: make this button true if repos are checked
     ["Select repos to track", Boolean(webhooks)],
-    ["Submit", Boolean(events)],
   ];
 
   const StepsToComplete = () => (
@@ -55,36 +49,16 @@ const Onboarding: NextPage = () => {
   const incrementStep = () => setActiveStep(activeStep + 1);
   const decrementStep = () => setActiveStep(activeStep - 1);
 
-  //   <>
-  //          <Typography sx={{ mt: 2, mb: 1 }}>
-  //   {`Woo! You're ready to start building momentum with Dev Rings 🚀`}
-  //   </Typography>
-  //   <OnboardingConfetti />
-  // </>
+  // TODO: Does this still make sense?
 
+  const [, isComplete] = steps[activeStep];
+  const isFirstStep = activeStep === 0;
+  const isLastStep = activeStep === steps.length - 1;
   const onboardingComplete = activeStep === steps.length;
   return (
     <Stack justifyContent="center" alignItems="center" height="90vh">
       {onboardingComplete ? (
-        <Stack justifyContent="center" alignItems="center">
-          <Stack direction="row">
-            <Typography
-              variant="h6"
-              color="text.secondary"
-              mb={-2}
-              mr={1}
-              sx={{ position: "relative", zIndex: 99 }}
-            >{`Creating webhooks and setting up your account`}</Typography>
-            <Image src={"/ablobjam.gif"} width={30} height={30} />
-          </Stack>
-          <Box height={400} width={400} mb={-4}>
-            <Lottie loop animationData={loadingDotsJson} play speed={0.7} />
-          </Box>
-          {/* TODO: Lottie below could be sick for a 404 */}
-          {/* <Box height={400} width={400}>
-            <Lottie loop animationData={mountainJson} play speed={0.7} />
-          </Box> */}
-        </Stack>
+        <LoadingScreen />
       ) : (
         <>
           <StepsToComplete />
@@ -95,12 +69,19 @@ const Onboarding: NextPage = () => {
             pt={2}
             width="60%"
           >
-            <Button disabled={activeStep === 0} onClick={decrementStep}>
+            <Button disabled={isFirstStep} onClick={decrementStep}>
               {`Back`}
             </Button>
-            <Button disabled={!steps[activeStep][1]} onClick={incrementStep}>
-              {`Next`}
-            </Button>
+            {isLastStep ? (
+              // <TrackReposButton />
+              <Button disabled={!isComplete} onClick={incrementStep}>
+                {`Next`}
+              </Button>
+            ) : (
+              <Button disabled={!isComplete} onClick={incrementStep}>
+                {`Next`}
+              </Button>
+            )}
           </Stack>
         </>
       )}
@@ -109,6 +90,24 @@ const Onboarding: NextPage = () => {
 };
 
 export default Onboarding;
+
+const LoadingScreen = () => (
+  <Stack justifyContent="center" alignItems="center">
+    <Stack direction="row">
+      <Typography
+        variant="h6"
+        color="text.secondary"
+        mb={-2}
+        mr={1}
+        sx={{ position: "relative", zIndex: 99 }}
+      >{`Creating webhooks and setting up your account`}</Typography>
+      <Image src={"/ablobjam.gif"} width={30} height={30} />
+    </Stack>
+    <Box height={400} width={400} mb={-4}>
+      <Lottie loop animationData={loadingDotsJson} play />
+    </Box>
+  </Stack>
+);
 
 const OnboardingConfetti = () => {
   const router = useRouter();
