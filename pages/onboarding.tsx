@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import Image from "next/image";
 import { useRouter } from "next/router";
 import type { NextPage } from "next";
 import useWindowSize from "react-use/lib/useWindowSize";
@@ -36,9 +37,9 @@ const Onboarding: NextPage = () => {
   const [, { dailyGoal, timezone }] = userData;
 
   const steps: Array<[string, boolean]> = [
-    ["Select repos to track", Boolean(webhooks)],
-    ["Set a daily contributions goal", Boolean(dailyGoal)],
+    ["Set a daily commits goal", Boolean(dailyGoal)],
     ["Confirm timezone", Boolean(timezone)],
+    ["Select repos to track", Boolean(webhooks)],
     ["Submit", Boolean(events)],
   ];
 
@@ -66,17 +67,23 @@ const Onboarding: NextPage = () => {
     <Stack justifyContent="center" alignItems="center" height="90vh">
       {onboardingComplete ? (
         <Stack justifyContent="center" alignItems="center">
-          <Typography
-            color="text.secondary"
-            mb={-2}
-            sx={{ position: "relative", zIndex: 99 }}
-          >{`Building your account`}</Typography>
-          <Box height={100} width={100} mb={-4}>
+          <Stack direction="row">
+            <Typography
+              variant="h6"
+              color="text.secondary"
+              mb={-2}
+              mr={1}
+              sx={{ position: "relative", zIndex: 99 }}
+            >{`Creating webhooks and setting up your account`}</Typography>
+            <Image src={"/ablobjam.gif"} width={30} height={30} />
+          </Stack>
+          <Box height={400} width={400} mb={-4}>
             <Lottie loop animationData={loadingDotsJson} play speed={0.7} />
           </Box>
-          <Box height={400} width={400}>
+          {/* TODO: Lottie below could be sick for a 404 */}
+          {/* <Box height={400} width={400}>
             <Lottie loop animationData={mountainJson} play speed={0.7} />
-          </Box>
+          </Box> */}
         </Stack>
       ) : (
         <>

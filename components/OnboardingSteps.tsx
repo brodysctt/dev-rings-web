@@ -4,6 +4,7 @@ import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import { SetGoalInput, TextLink, TrackRepoCheckboxes } from "components";
+import { toast } from "react-toastify";
 import { dayjs } from "@lib/dayjs";
 
 interface Props {
@@ -13,18 +14,6 @@ interface Props {
 
 export const OnboardingSteps = ({ activeStep, onSuccess }: Props) => {
   const steps = [
-    {
-      header: `Choose a repo you'd like to start tracking`,
-      blob: "/blobclipboard.png",
-      subheader: (
-        <>
-          {`(This is done with `}
-          <TextLink href={GITHUB_WEBHOOKS_DOCS} text="a repository webhook" />
-          {` btw)`}
-        </>
-      ),
-      body: <TrackRepoCheckboxes onSuccess={onSuccess} />,
-    },
     {
       header: `To track progress, you must first set a goal`,
       blob: "/ablobnod.gif",
@@ -40,14 +29,41 @@ export const OnboardingSteps = ({ activeStep, onSuccess }: Props) => {
         </>
       ),
       blob: "/ablobdundundun.gif",
-      subheader: "Is this the best timezone for tracking your daily goals?",
+      subheader: `Is this the best timezone for tracking your daily goals?`,
       body: (
-        <Button
-          variant="contained"
-          sx={{ mt: 3 }}
-          onClick={() => console.log("submit timezone")}
-        >{`Confirm`}</Button>
+        <Stack direction="row">
+          <Button
+            variant="contained"
+            sx={{ mt: 3, mr: 1 }}
+            onClick={() => console.log("submit timezone")}
+          >{`Yes, nailed it`}</Button>
+          <Button
+            variant="contained"
+            color="secondary"
+            sx={{ mt: 3, mr: 1 }}
+            onClick={() =>
+              toast(
+                <Stack direction="row" alignItems="center">
+                  <Typography mr={1}>{`Well, toggle it off then`}</Typography>
+                  <Image src={"/blobfingerguns.png"} width={30} height={30} />
+                </Stack>
+              )
+            }
+          >{`No, I use a VPN`}</Button>
+        </Stack>
       ),
+    },
+    {
+      header: `Choose the repos you'd like to start tracking`,
+      blob: "/blobclipboard.png",
+      subheader: (
+        <>
+          {`(This is done with `}
+          <TextLink href={GITHUB_WEBHOOKS_DOCS} text="repository webhooks" />
+          {` btw)`}
+        </>
+      ),
+      body: <TrackRepoCheckboxes onSuccess={onSuccess} />,
     },
     {
       header: "Noice! Let's get started",
@@ -82,7 +98,7 @@ const Panel: FC<IProps> = ({ header, blob, subheader, children }) => (
       <Image src={blob} width={30} height={30} />
     </Stack>
     {subheader && (
-      <Typography color="text.secondary" mb={2}>
+      <Typography align="center" color="text.secondary" mb={2}>
         {subheader}
       </Typography>
     )}

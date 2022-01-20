@@ -9,8 +9,5 @@ export const trackReposToast = () =>
         {`Track as many repos as you'd like`}
       </Typography>
       <Image src="/blobbongos.gif" width={20} height={20} />
-    </Stack>,
-    {
-      hideProgressBar: true,
-    }
+    </Stack>
   );
