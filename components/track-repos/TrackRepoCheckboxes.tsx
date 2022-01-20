@@ -1,18 +1,18 @@
 import { useState, ChangeEvent, useEffect } from "react";
 import Stack from "@mui/material/Stack";
+import Button from "@mui/material/Button";
 import Checkbox from "@mui/material/Checkbox";
 import FormControlLabel from "@mui/material/FormControlLabel";
+import { useAuth } from "@lib/firebase/auth";
+import { trackRepo } from "components/track-repos/trackRepo";
 import { useRepos } from "components/track-repos/hooks";
 
 export const TrackRepoCheckboxes = () => {
-  const [untrackedRepos, trackedRepos] = useRepos();
+  const [untrackedRepos] = useRepos();
   const [checked, setChecked] = useState<Array<string | null>>([null]);
 
   useEffect(() => {
-    if (!untrackedRepos) {
-      console.log("ayyy, you're tracking all your public repos");
-      return;
-    }
+    if (!untrackedRepos) return;
     const length = untrackedRepos.length;
     const initState = Array(length).fill(null);
     setChecked(initState);
@@ -35,10 +35,12 @@ export const TrackRepoCheckboxes = () => {
       setChecked(updatedState);
     };
 
+  const reposToTrack = checked.filter((repo) => Boolean(repo));
+  const noReposSelected = reposToTrack.length < 1;
   return (
     <Stack>
       <FormControlLabel
-        label="All public repos"
+        label="Select all public repos"
         control={
           <Checkbox
             checked={checked.every((checked) => Boolean(checked))}
@@ -50,7 +52,8 @@ export const TrackRepoCheckboxes = () => {
           />
         }
       />
-      <Stack ml={3}>
+      <Stack ml={3} mb={2}>
+        {/* TODO: Handle case where user has a ton of public repos */}
         {untrackedRepos.map((repo, i) => {
           return (
             <FormControlLabel
@@ -66,6 +69,28 @@ export const TrackRepoCheckboxes = () => {
           );
         })}
       </Stack>
+      <SubmitButton repos={reposToTrack} disabled={noReposSelected} />
     </Stack>
+  );
+};
+
+interface Props {
+  repos: (string | null)[];
+  disabled: boolean;
+}
+
+export const SubmitButton = ({ repos, disabled }: Props) => {
+  const userId = useAuth();
+  if (!userId) return null;
+
+  const handleClick = () => {
+    if (disabled) return;
+    repos.forEach(async (repo) => await trackRepo(userId, repo as string));
+  };
+
+  return (
+    <Button variant="contained" disabled={disabled} onClick={handleClick}>
+      {`Track repos`}
+    </Button>
   );
 };
