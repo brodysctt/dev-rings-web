@@ -19,8 +19,7 @@ const Index: NextPage = () => {
     dayjs().format("YYYY-MM-DD")
   );
 
-  // TODO: Change back to !dayEvents
-  if (dayEvents)
+  if (!dayEvents)
     return (
       <Stack justifyContent="center" alignItems="center" height="80vh">
         <GetStarted />
