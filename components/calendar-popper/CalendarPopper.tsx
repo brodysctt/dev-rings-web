@@ -50,10 +50,11 @@ export const CalendarPopper = () => {
   };
 
   return (
+    // TODO: A light purple box shadow could be nice
     <PopIt
       id="View calendar"
       closeOnClick
-      paperSx={{ pt: 1 }}
+      paperSx={{ pt: 1, borderRadius: 6 }}
       icon={<CalendarSvg />}
     >
       <Container>

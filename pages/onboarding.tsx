@@ -1,22 +1,16 @@
 import { useState } from "react";
-import Image from "next/image";
 import type { NextPage } from "next";
 import Stack from "@mui/material/Stack";
-import Box from "@mui/material/Box";
-import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import Stepper from "@mui/material/Stepper";
 import Step from "@mui/material/Step";
 import StepLabel from "@mui/material/StepLabel";
-import Lottie from "react-lottie-player";
-import loadingDotsJson from "public/loading-dots.json";
-import { OnboardingSteps, SubmitButton } from "components";
+import { OnboardingConfetti, OnboardingSteps } from "components";
 import { useCollection, useUserDoc } from "@lib/firebase/firestore";
-import type { RepoEvent, Webhook } from "@lib/firebase/firestore";
+import type { Webhook } from "@lib/firebase/firestore";
 
 const Onboarding: NextPage = () => {
   const [activeStep, setActiveStep] = useState(0);
-  const [isOnboarding, setIsOnboarding] = useState(true);
   const webhooks = useCollection("webhooks") as Webhook[] | null;
   const userData = useUserDoc();
   if (!userData) return null;
@@ -25,8 +19,7 @@ const Onboarding: NextPage = () => {
   const steps: Array<[string, boolean]> = [
     ["Set a daily commits goal", Boolean(dailyGoal)],
     ["Confirm timezone", Boolean(timezone)],
-    // TODO: make this button true if repos are checked
-    ["Select repos to track", Boolean(webhooks)],
+    ["Select repos to track", false],
   ];
 
   const StepsToComplete = () => (
@@ -45,61 +38,23 @@ const Onboarding: NextPage = () => {
   const [, isComplete] = steps[activeStep];
   const isFirstStep = activeStep === 0;
   const isLastStep = activeStep === steps.length - 1;
-  const onboardingComplete = activeStep === steps.length;
   return (
     <Stack justifyContent="center" alignItems="center" height="90vh">
-      {onboardingComplete ? (
-        <LoadingScreen />
-      ) : (
-        <>
-          <StepsToComplete />
-          <OnboardingSteps activeStep={activeStep} onSuccess={incrementStep} />
-          <Stack
-            direction="row"
-            justifyContent="space-between"
-            pt={2}
-            width="60%"
-          >
-            <Button disabled={isFirstStep} onClick={decrementStep}>
-              {`Back`}
-            </Button>
-            {isLastStep ? (
-              <SubmitButton
-                repos={["hmmmm"]}
-                toLoadingScreen={incrementStep}
-                completeOnboarding={() => setIsOnboarding(false)}
-              />
-            ) : (
-              <Button disabled={!isComplete} onClick={incrementStep}>
-                {`Next`}
-              </Button>
-            )}
-          </Stack>
-        </>
-      )}
+      <StepsToComplete />
+      <OnboardingSteps activeStep={activeStep} onSuccess={incrementStep} />
+      <Stack direction="row" justifyContent="space-between" pt={2} width="60%">
+        <Button disabled={isFirstStep} onClick={decrementStep}>
+          {`Back`}
+        </Button>
+        {!isLastStep && (
+          <Button disabled={!isComplete} onClick={incrementStep}>
+            {`Next`}
+          </Button>
+        )}
+      </Stack>
+      {webhooks && <OnboardingConfetti />}
     </Stack>
   );
 };
 
 export default Onboarding;
-
-const LoadingScreen = () => {
-  const webhooks = useCollection("webhooks") as Webhook[] | null;
-  return (
-    <Stack justifyContent="center" alignItems="center">
-      <Stack direction="row">
-        <Typography
-          variant="h6"
-          color="text.secondary"
-          mb={-2}
-          mr={1}
-          sx={{ position: "relative", zIndex: 99 }}
-        >{`Creating webhooks and setting up your account`}</Typography>
-        <Image src={"/ablobjam.gif"} width={30} height={30} />
-      </Stack>
-      <Box height={400} width={400} mb={-4}>
-        <Lottie loop animationData={loadingDotsJson} play />
-      </Box>
-    </Stack>
-  );
-};

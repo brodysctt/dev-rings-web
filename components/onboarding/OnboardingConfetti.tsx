@@ -1,11 +1,11 @@
 import { useEffect } from "react";
 import { useRouter } from "next/router";
 import useWindowSize from "react-use/lib/useWindowSize";
-import Party from "react-confetti";
+import Confetti from "react-confetti";
 import { useAuth } from "@lib/firebase/auth";
 import { setIsOnboarding } from "@lib/firebase/firestore";
 
-export const Confetti = () => {
+export const OnboardingConfetti = () => {
   const router = useRouter();
   const userId = useAuth();
   const { width, height } = useWindowSize();
@@ -18,7 +18,7 @@ export const Confetti = () => {
     [userId]
   );
   return (
-    <Party
+    <Confetti
       width={width}
       height={height}
       numberOfPieces={1000}

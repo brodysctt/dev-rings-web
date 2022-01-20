@@ -61,7 +61,7 @@ export const TrackRepoCheckboxes = () => {
         {untrackedRepos.map((repo, i) => {
           return (
             <FormControlLabel
-              id={`checkbox-${i}`}
+              key={i}
               label={repo}
               control={
                 <Checkbox
