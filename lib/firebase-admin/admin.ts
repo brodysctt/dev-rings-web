@@ -7,7 +7,7 @@ if (!apps.length) {
   admin = initializeApp(
     {
       credential: cert({
-        projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID,
+        projectId: "dev-rings",
         clientEmail:
           process.env.NEXT_PUBLIC_FIREBASE_SERVICE_ACCOUNT_CLIENT_EMAIL,
         privateKey:
@@ -16,7 +16,7 @@ if (!apps.length) {
             "\n"
           ),
       }),
-      databaseURL: `https://${process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID}.firebaseio.com`,
+      databaseURL: `https://dev-rings.firebaseio.com`,
     },
     "dev-rings-admin"
   );
