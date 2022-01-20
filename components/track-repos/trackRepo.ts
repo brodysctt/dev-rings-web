@@ -10,6 +10,7 @@ export const trackRepo = async (
 ): Promise<number | void> => {
   try {
     const token = await fetchGitHubToken(userId);
+    console.log(`here be the repo: ${repo}`);
     const { status } = await axios.post(`${CREATE_WEBHOOK_URL}`, {
       user: userId,
       repo,
