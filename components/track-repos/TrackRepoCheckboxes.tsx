@@ -7,7 +7,6 @@ import FormControlLabel from "@mui/material/FormControlLabel";
 import { useAuth } from "@lib/firebase/auth";
 import { trackRepo } from "components/track-repos/trackRepo";
 import { useRepos } from "components/track-repos/hooks";
-import { toast } from "react-toastify";
 import Lottie from "react-lottie-player";
 import loadingDotsJson from "public/loading-dots.json";
 
