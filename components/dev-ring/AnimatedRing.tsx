@@ -1,5 +1,5 @@
+import Stack from "@mui/material/Stack";
 import { motion } from "framer-motion";
-import { Box } from "@mui/material";
 import { theme } from "styles";
 
 interface Props {
@@ -7,20 +7,12 @@ interface Props {
   isDayTile?: boolean;
 }
 
-export const CompletedRing = ({ size = 400, isDayTile = false }: Props) => {
+export const AnimatedRing = ({ size = 400, isDayTile = false }: Props) => {
   const checkStart = [size * 0.433, size * 0.516];
   const checkVertex = [size * 0.483, size * 0.566];
   const checkEnd = [size * 0.6, size * 0.45];
-
   return (
-    <Box
-      sx={{
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-        mt: -0.7,
-      }}
-    >
+    <Stack mt={-0.7}>
       <motion.svg
         width={size}
         height={size}
@@ -63,7 +55,7 @@ export const CompletedRing = ({ size = 400, isDayTile = false }: Props) => {
           variants={draw}
         />
       </motion.svg>
-    </Box>
+    </Stack>
   );
 };
 
