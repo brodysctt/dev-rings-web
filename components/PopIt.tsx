@@ -1,14 +1,11 @@
 import { useState, MouseEvent, FC } from "react";
-import {
-  Box,
-  Button,
-  Popper,
-  Paper,
-  ClickAwayListener,
-  Tooltip,
-} from "@mui/material";
+import Box from "@mui/material/Box";
+import Button from "@mui/material/Button";
+import Popper from "@mui/material/Popper";
+import Paper from "@mui/material/Paper";
+import ClickAwayListener from "@mui/material/ClickAwayListener";
+import Tooltip from "@mui/material/Tooltip";
 import type { SxProps } from "@mui/system";
-import { CommitSvg } from "components";
 
 interface Props {
   id: string;
@@ -40,13 +37,7 @@ export const PopIt: FC<Props> = ({
             }}
             sx={{ height: 60 }}
           >
-            {id === "View events" ? (
-              <Box sx={iconSx}>
-                <CommitSvg />
-              </Box>
-            ) : (
-              icon
-            )}
+            {icon}
           </Button>
         </Tooltip>
         <Popper
@@ -68,15 +59,4 @@ export const PopIt: FC<Props> = ({
       </Box>
     </ClickAwayListener>
   );
-};
-
-const iconSx = {
-  display: "flex",
-  justifyContent: "center",
-  alignItems: "center",
-  bgcolor: "primary.main",
-  borderRadius: 50,
-  height: 25,
-  px: 0.8,
-  py: 2,
 };

@@ -2,11 +2,25 @@ import { useState } from "react";
 import { useCollection, Log } from "@lib/firebase/firestore";
 import { dayjs, formatLogs, getMonthYear } from "@lib/dayjs";
 import type { MonthYear } from "@lib/dayjs";
-import { Grid, Box, Typography } from "@mui/material";
-import type { SxProps } from "@mui/system";
+import { PopIt } from "components";
+import { DayTile } from "./DayTile";
+import Grid from "@mui/material/Grid";
+import Stack from "@mui/material/Stack";
+import Button from "@mui/material/Button";
+import Typography from "@mui/material/Typography";
 import CalendarSvg from "@mui/icons-material/CalendarTodayRounded";
-import { ArrowButton, DayTile, PopIt } from "components";
-import { filterLogs, isFirstMonth } from "./helpers";
+import BackSvg from "@mui/icons-material/ArrowBackRounded";
+import NextSvg from "@mui/icons-material/ArrowForwardRounded";
+import { styled } from "@mui/material/styles";
+
+const Container = styled("div")(({ theme }) => ({
+  [theme.breakpoints.down("sm")]: {
+    width: "100%",
+  },
+  [theme.breakpoints.up("sm")]: {
+    width: 480,
+  },
+}));
 
 export const CalendarPopper = () => {
   const [monthInView, setMonthInView] = useState<MonthYear>(getMonthYear());
@@ -18,51 +32,74 @@ export const CalendarPopper = () => {
 
   const [month, year] = monthInView;
   const gridStart = dayjs(`${year}-${month}-01`).day();
+  const isFirst = isFirstMonth(logs as Log[], monthInView);
+
+  const back = () => {
+    if (month === 1) {
+      setMonthInView([12, year - 1]);
+      return;
+    }
+    setMonthInView([month - 1, year]);
+  };
+  const next = () => {
+    if (month === 12) {
+      setMonthInView([1, year + 1]);
+      return;
+    }
+    setMonthInView([month + 1, year]);
+  };
+
   return (
+    // TODO: A light purple box shadow could be nice
     <PopIt
       id="View calendar"
       closeOnClick
-      paperSx={{ pt: 1 }}
+      paperSx={{ pt: 1, borderRadius: 6 }}
       icon={<CalendarSvg />}
     >
-      <Box sx={containerSx}>
-        <Typography sx={{ fontSize: 12, color: "primary.main" }}>
-          {year}
-        </Typography>
-        <>
-          <Grid container justifyContent="center" sx={{ mb: 2 }}>
-            <ArrowButton
-              {...{ type: "previous", monthInView, setMonthInView }}
-              disabled={isFirstMonth(logs as Log[], monthInView)}
-            />
-            <Grid item xs={8}>
-              <Typography variant="h6" textAlign="center">
-                {dayjs.months()[month - 1]}
-              </Typography>
-            </Grid>
-            <ArrowButton
-              {...{ monthInView, setMonthInView, disabled: false }} // TODO: Update to monthInView !== currentMonth
-            />
-          </Grid>
-          <Grid container columns={7} gap={"3px"}>
-            {<Grid item xs={gridStart} sx={{ mr: "-3px" }} />}
+      <Container>
+        <Stack
+          alignItems="center"
+          p={1}
+          sx={{ border: "1px solid #DCDEE6", borderRadius: 6 }}
+        >
+          <Typography color="primary" sx={{ fontSize: 12 }}>
+            {year}
+          </Typography>
+          <Stack direction="row" width={1} mb={2}>
+            <Button onClick={back} startIcon={<BackSvg />} disabled={isFirst} />
+            <Typography variant="h6" textAlign="center" width="90%">
+              {dayjs.months()[month - 1]}
+            </Typography>
+            {/* TODO: Update disabled to monthInView !== currentMonth */}
+            <Button onClick={next} startIcon={<NextSvg />} disabled={false} />
+          </Stack>
+          <Grid container columns={7} xs={7} rowSpacing={0.5}>
+            {<Grid item xs={gridStart} mr={-0.4} />}
             {formattedLogs.map((log, i) => (
-              <DayTile key={i} log={log} />
+              <Grid key={i} item xs={1}>
+                <DayTile log={log} />
+              </Grid>
             ))}
           </Grid>
-        </>
-      </Box>
+        </Stack>
+      </Container>
     </PopIt>
   );
 };
 
-const containerSx = {
-  display: "flex",
-  flexDirection: "column",
-  alignItems: "center",
-  width: 480,
-  border: "2px solid #DCDEE6",
-  borderRadius: 10,
-  p: 2,
-  pt: 1,
-} as SxProps;
+const filterLogs = (logs: Log[], monthInView: MonthYear) => {
+  const [month, year] = monthInView;
+  // TODO: Test this! Gotta be airtight
+  const dateMatch = new RegExp(`${year}-${month < 10 ? "0" : ""}${month}-.*`);
+  return logs.filter((log) => {
+    const [dateString] = log;
+    return dateMatch.test(dateString);
+  });
+};
+
+const isFirstMonth = (logs: Log[], monthInView: MonthYear) => {
+  const firstLogDate = dayjs.min(logs.map(([dateString]) => dayjs(dateString)));
+  const firstMonth = getMonthYear(firstLogDate);
+  return !(JSON.stringify(monthInView) === JSON.stringify(firstMonth));
+};

@@ -1,29 +1,25 @@
 import { useState } from "react";
 import type { NextPage } from "next";
-import { useCollection, useUserDoc } from "@lib/firebase/firestore";
-import type { RepoEvent, Webhook } from "@lib/firebase/firestore";
-import Box from "@mui/material/Box";
-import Typography from "@mui/material/Typography";
+import Stack from "@mui/material/Stack";
 import Button from "@mui/material/Button";
 import Stepper from "@mui/material/Stepper";
 import Step from "@mui/material/Step";
 import StepLabel from "@mui/material/StepLabel";
-import type { SxProps } from "@mui/system";
 import { OnboardingConfetti, OnboardingSteps } from "components";
+import { useCollection, useUserDoc } from "@lib/firebase/firestore";
+import type { Webhook } from "@lib/firebase/firestore";
 
 const Onboarding: NextPage = () => {
   const [activeStep, setActiveStep] = useState(0);
-  const events = useCollection("events") as RepoEvent[] | null;
   const webhooks = useCollection("webhooks") as Webhook[] | null;
   const userData = useUserDoc();
   if (!userData) return null;
   const [, { dailyGoal, timezone }] = userData;
 
   const steps: Array<[string, boolean]> = [
-    ["Select repos to track", Boolean(webhooks)],
-    ["Set a daily contributions goal", Boolean(dailyGoal)],
+    ["Set a daily commits goal", Boolean(dailyGoal)],
     ["Confirm timezone", Boolean(timezone)],
-    ["Code", Boolean(events)],
+    ["Select repos to track", false],
   ];
 
   const StepsToComplete = () => (
@@ -35,52 +31,30 @@ const Onboarding: NextPage = () => {
       ))}
     </Stepper>
   );
-
   const incrementStep = () => setActiveStep(activeStep + 1);
   const decrementStep = () => setActiveStep(activeStep - 1);
 
-  const onboardingComplete = activeStep === steps.length;
-  if (onboardingComplete)
-    return (
-      <Box sx={containerSx}>
-        <StepsToComplete />
-        <Typography sx={{ mt: 2, mb: 1 }}>
-          {`Woo! You're ready to start building momentum with Dev Rings 🚀`}
-        </Typography>
-        <OnboardingConfetti />
-      </Box>
-    );
-
+  // TODO: Does this still make sense?
+  const [, isComplete] = steps[activeStep];
+  const isFirstStep = activeStep === 0;
+  const isLastStep = activeStep === steps.length - 1;
   return (
-    <Box sx={containerSx}>
+    <Stack justifyContent="center" alignItems="center" height="90vh">
       <StepsToComplete />
       <OnboardingSteps activeStep={activeStep} onSuccess={incrementStep} />
-      <Box sx={buttonsSx}>
-        <Button disabled={activeStep === 0} onClick={decrementStep}>
-          Back
+      <Stack direction="row" justifyContent="space-between" pt={2} width="60%">
+        <Button disabled={isFirstStep} onClick={decrementStep}>
+          {`Back`}
         </Button>
-        <Button disabled={!steps[activeStep][1]} onClick={incrementStep}>
-          Next
-        </Button>
-      </Box>
-    </Box>
+        {!isLastStep && (
+          <Button disabled={!isComplete} onClick={incrementStep}>
+            {`Next`}
+          </Button>
+        )}
+      </Stack>
+      {webhooks && <OnboardingConfetti />}
+    </Stack>
   );
 };
-
-const containerSx = {
-  display: "flex",
-  flexDirection: "column",
-  justifyContent: "center",
-  alignItems: "center",
-  width: 1,
-  height: "90vh",
-} as SxProps;
-
-const buttonsSx = {
-  display: "flex",
-  justifyContent: "space-between",
-  width: "60%",
-  pt: 2,
-} as SxProps;
 
 export default Onboarding;
