@@ -2,7 +2,12 @@ import type { FC } from "react";
 import Image from "next/image";
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
-import { ConfirmTimezone, SetGoalInput, TrackRepoCheckboxes } from "components";
+import {
+  ConfirmTimezone,
+  ManageReposCheckboxes,
+  SetGoalInput,
+} from "components";
+import { useRepos } from "components/manage-repos/hooks";
 import { TextLink } from "components";
 import { dayjs } from "@lib/dayjs";
 
@@ -41,7 +46,7 @@ export const OnboardingSteps = ({ activeStep, onSuccess }: Props) => {
           {` btw)`}
         </>
       ),
-      body: <TrackRepoCheckboxes />,
+      body: <AddRepos />,
     },
   ];
 
@@ -71,6 +76,13 @@ const Panel: FC<IProps> = ({ header, blob, subheader, children }) => (
     {children}
   </Stack>
 );
+
+const AddRepos = () => {
+  const [untrackedRepos] = useRepos();
+  // TODO: Return private repo url with explanation
+  if (!untrackedRepos) return <Typography>No public repos bruh</Typography>;
+  return <ManageReposCheckboxes repos={untrackedRepos} />;
+};
 
 const GITHUB_WEBHOOKS_DOCS =
   "https://docs.github.com/en/developers/webhooks-and-events/webhooks/about-webhooks";
