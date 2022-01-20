@@ -1,57 +1,113 @@
-import { useState, useEffect } from "react";
+import { useState, ChangeEvent, useEffect } from "react";
 import Stack from "@mui/material/Stack";
-import FormGroup from "@mui/material/FormGroup";
-import FormControlLabel from "@mui/material/FormControlLabel";
+import Box from "@mui/material/Box";
+import Button from "@mui/material/Button";
 import Checkbox from "@mui/material/Checkbox";
+import FormControlLabel from "@mui/material/FormControlLabel";
 import { useAuth } from "@lib/firebase/auth";
-import { getRepos, useCollection, Webhook } from "@lib/firebase/firestore";
-import { fetchPublicRepos } from "./fetchPublicRepos";
-import { trackRepo } from "./trackRepo";
+import { trackRepo } from "components/track-repos/trackRepo";
+import { useRepos } from "components/track-repos/hooks";
+import { toast } from "react-toastify";
+import Lottie from "react-lottie-player";
+import loadingDotsJson from "public/loading-dots.json";
 
-interface Props {
-  onSuccess?: () => void;
-}
-
-export const TrackRepoCheckboxes = ({ onSuccess }: Props) => {
-  const userId = useAuth();
-  const webhooks = useCollection("webhooks") as Webhook[] | null;
-  const [publicRepos, setPublicRepos] = useState<string[] | null>(null);
-  const [trackedRepos, setTrackedRepos] = useState<Array<string | null>>([]);
+export const TrackRepoCheckboxes = () => {
+  const [untrackedRepos] = useRepos();
+  const [checked, setChecked] = useState<Array<string | null>>([null]);
 
   useEffect(() => {
-    (async () => {
-      if (!userId) return;
-      const repos = await fetchPublicRepos(userId);
-      if (repos) setPublicRepos(repos);
-      if (webhooks) setTrackedRepos(getRepos(webhooks, userId));
-    })();
-  }, [userId, webhooks]);
+    if (!untrackedRepos) return;
+    const length = untrackedRepos.length;
+    const initState = Array(length).fill(null);
+    setChecked(initState);
+  }, []);
 
-  // TODO: Handle case where user has no public repos
-  if (!userId || !publicRepos) return null;
+  // TODO: Handle this properly
+  if (!untrackedRepos) return null;
+
+  const handleCheckAll = (event: ChangeEvent<HTMLInputElement>) =>
+    setChecked(
+      event.target.checked
+        ? untrackedRepos
+        : Array(untrackedRepos.length).fill(null)
+    );
+
+  const handleRepoCheck =
+    (i: number) => (event: ChangeEvent<HTMLInputElement>) => {
+      let updatedState = [...checked];
+      updatedState[i] = event.target.checked ? untrackedRepos[i] : null;
+      setChecked(updatedState);
+    };
+
+  const reposToTrack = checked.filter((repo) => Boolean(repo));
+  const noReposSelected = reposToTrack.length < 1;
   return (
     <Stack>
-      <FormGroup>
-        <Stack direction="row" flexWrap="wrap" maxWidth="70vw">
-          {/* TODO: Handle case where user has a ton of repos*/}
-          {publicRepos.map((repo, i) => (
+      <FormControlLabel
+        label="Select all public repos"
+        control={
+          <Checkbox
+            checked={checked.every((checked) => Boolean(checked))}
+            indeterminate={
+              !checked.every((checked) => Boolean(checked)) &&
+              checked.some((checked) => Boolean(checked))
+            }
+            onChange={handleCheckAll}
+          />
+        }
+      />
+      <Stack ml={3} mb={2}>
+        {/* TODO: Handle case where user has a ton of public repos */}
+        {untrackedRepos.map((repo, i) => {
+          return (
             <FormControlLabel
               key={i}
               label={repo}
               control={
                 <Checkbox
-                  checked={trackedRepos.includes(repo)}
-                  // TODO: Update this to handle deletes
-                  onChange={async () => {
-                    await trackRepo(userId, repo);
-                    if (onSuccess) onSuccess();
-                  }}
+                  checked={Boolean(checked[i])}
+                  onChange={handleRepoCheck(i)}
                 />
               }
             />
-          ))}
-        </Stack>
-      </FormGroup>
+          );
+        })}
+      </Stack>
+      <SubmitButton repos={reposToTrack} disabled={noReposSelected} />
     </Stack>
+  );
+};
+
+interface Props {
+  repos: (string | null)[];
+  disabled: boolean;
+}
+
+export const SubmitButton = ({ repos, disabled }: Props) => {
+  const [isLoading, setIsLoading] = useState(false);
+  const userId = useAuth();
+  if (!userId) return null;
+
+  const handleClick = () => {
+    if (disabled) return;
+    setIsLoading(true);
+    repos.forEach(async (repo) => await trackRepo(userId, repo as string));
+    setIsLoading(false);
+    toast.success(`Successfully tracked ${repos.length} repos`);
+  };
+
+  return isLoading ? (
+    <Box
+      height={83}
+      width={200}
+      mt={-6}
+      sx={{ position: "relative", zIndex: -1 }}
+    >
+      <Lottie loop animationData={loadingDotsJson} play />
+    </Box>
+  ) : (
+    <Button variant="contained" disabled={disabled} onClick={handleClick}>
+      {`Track repos`}
+    </Button>
   );
 };

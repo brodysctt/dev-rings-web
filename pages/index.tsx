@@ -2,7 +2,7 @@ import type { NextPage } from "next";
 import Stack from "@mui/material/Stack";
 import { DevRing, GetStarted } from "components";
 import { NewTimezoneAlert } from "@lib/react-toastify";
-import { getRepos, useUserDoc, useCollection } from "@lib/firebase/firestore";
+import { useUserDoc, useCollection } from "@lib/firebase/firestore";
 import type { RepoEvent, Webhook } from "@lib/firebase/firestore";
 import { dayjs, getDayEvents } from "@lib/dayjs";
 
@@ -12,7 +12,7 @@ const Index: NextPage = () => {
   const webhooks = useCollection("webhooks") as Webhook[] | null;
 
   if (!userData || !webhooks) return null;
-  const [userId, { dailyGoal: goal, timezone }] = userData;
+  const [, { dailyGoal: goal, timezone }] = userData;
 
   const dayEvents = getDayEvents(
     events as RepoEvent[],
@@ -22,7 +22,7 @@ const Index: NextPage = () => {
   if (!dayEvents)
     return (
       <Stack justifyContent="center" alignItems="center" height="80vh">
-        <GetStarted repos={getRepos(webhooks, userId)} />
+        <GetStarted />
         <NewTimezoneAlert tz={timezone} />
       </Stack>
     );
