@@ -4,6 +4,7 @@ import Link from "next/link";
 import Container from "@mui/material/Container";
 import Stack from "@mui/material/Stack";
 import Button from "@mui/material/Button";
+import IconButton from "@mui/material/IconButton";
 import Tooltip from "@mui/material/Tooltip";
 import SpeedDial from "@mui/material/SpeedDial";
 import SpeedDialAction from "@mui/material/SpeedDialAction";
@@ -36,7 +37,7 @@ export const Navbar = () => {
     { icon: <LogoutSvg />, name: "Sign out", onClick: signOutUser },
   ];
 
-  if (isOnboarding) return null;
+  if (isOnboarding) return <OnboardingNavbar />;
 
   return (
     <Container maxWidth="md">
@@ -72,6 +73,18 @@ export const Navbar = () => {
     </Container>
   );
 };
+
+const OnboardingNavbar = () => (
+  <Container maxWidth="md">
+    <Stack direction="row" justifyContent="flex-end" mt={3}>
+      <Tooltip title="Sign out">
+        <IconButton onClick={signOutUser}>
+          <LogoutSvg />
+        </IconButton>
+      </Tooltip>
+    </Stack>
+  </Container>
+);
 
 interface Props {
   href: string;

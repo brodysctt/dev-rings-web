@@ -40,9 +40,7 @@ export const ManageReposCheckboxes = ({ repos, variant = "add" }: Props) => {
   return (
     <Stack>
       <FormControlLabel
-        label={`Select all ${
-          isDelete ? "tracked, public" : "untracked, public"
-        } repos`}
+        label={`All public repos`}
         control={
           <Checkbox
             checked={checked.every((checked) => Boolean(checked))}
