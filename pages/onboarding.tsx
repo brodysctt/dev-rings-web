@@ -39,7 +39,7 @@ const Onboarding: NextPage = () => {
   const isFirstStep = activeStep === 0;
   const isLastStep = activeStep === steps.length - 1;
   return (
-    <Stack justifyContent="center" alignItems="center" height="90vh">
+    <Stack justifyContent="center" alignItems="center" height="100vh">
       <StepsToComplete />
       <OnboardingSteps activeStep={activeStep} onSuccess={incrementStep} />
       <Stack direction="row" justifyContent="space-between" pt={2} width="60%">
