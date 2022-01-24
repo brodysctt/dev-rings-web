@@ -17,43 +17,34 @@ export const ManageReposButton = ({
   current,
   publicRepos,
 }: IProps) => {
+  const userId = useAuth();
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
+    if (!userId) return;
+    if (!checked || !current) return;
     if (!isLoading) return;
-    (async () => await handleSubmit())();
-    setIsLoading(false);
-  }, [isLoading]);
 
-  const userId = useAuth();
-  if (!userId) return null;
+    const actions: RepoAction[] = checked
+      .map((newRepoState: boolean, i: number): RepoAction | undefined => {
+        if (newRepoState === current[i]) return;
+        if (newRepoState) return [publicRepos[i], "add"];
+        return [publicRepos[i], "delete"];
+      })
+      .filter(isRepoAction);
 
-  // TODO: obvs this is not chill, but just to start
-  if (!checked || !current) return null;
+    const reposToAdd = actions.filter(([, action]) => action === "add");
+    const reposToDelete = actions.filter(([, action]) => action === "delete");
 
-  const isRepoAction = (
-    action: RepoAction | undefined
-  ): action is RepoAction => {
-    return !!action;
-  };
-
-  const actions: RepoAction[] = checked
-    .map((newRepoState: boolean, i: number): RepoAction | undefined => {
-      if (newRepoState === current[i]) return;
-      if (newRepoState) return [publicRepos[i], "add"];
-      return [publicRepos[i], "delete"];
-    })
-    .filter(isRepoAction);
-
-  const reposToAdd = actions.filter(([, action]) => action === "add");
-  const reposToDelete = actions.filter(([, action]) => action === "delete");
-
-  const handleSubmit = () => {
-    if (!actions) return;
     reposToAdd.forEach(async ([repo]) => await trackRepo(userId, repo));
     reposToDelete.forEach(async ([repo]) => await deleteRepo(userId, repo));
+
+    setIsLoading(false);
     return;
-  };
+  }, [userId, checked, current, isLoading]);
+
+  // TODO: obvs this is not chill, but just to start
+  //
 
   return isLoading ? (
     <Box
@@ -80,3 +71,6 @@ export const ManageReposButton = ({
 };
 
 type RepoAction = [string, string];
+const isRepoAction = (action: RepoAction | undefined): action is RepoAction => {
+  return !!action;
+};
