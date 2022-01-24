@@ -24,7 +24,7 @@ export const ManageReposCheckboxes = () => {
 
     if (!trackedRepos) {
       setCurrent(checkAll(false));
-      setChecked(checkAll(true));
+      setChecked(checkAll(false)); // TODO: Update to have them all checked only in onboarding
       return;
     }
 

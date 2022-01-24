@@ -44,12 +44,20 @@ export const ManageReposButton = ({
     setIsLoading(true);
     // TODO: Create function that recognizes what to do based on the new state
 
-    actions.forEach(async ([repo, action]) => {
-      if (action === "delete") {
+    for (const action of actions) {
+      const [repo, todo] = action;
+      if (todo === "delete") {
         await deleteRepo(userId, repo);
       }
       await trackRepo(userId, repo);
-    });
+      return;
+    }
+    // actions.forEach(async ([repo, action]) => {
+    //   if (action === "delete") {
+    //     await deleteRepo(userId, repo);
+    //   }
+    //   await trackRepo(userId, repo);
+    // });
 
     setIsLoading(false);
     return;

@@ -75,15 +75,16 @@ export const incomingEventHandler = https.onRequest(async (req, res) => {
       }
 
       if (eventType === "meta") {
-        const { hook_id: hookId } = data;
-        const webhookId = hookId.toString();
+        const {
+          repository: { name: repo },
+        } = data;
         const webhooksRef = db
             .collection("users")
             .doc(userId)
             .collection("webhooks");
-        logger.log("This webhook was deleted. Deleting from db...");
-        await webhooksRef.doc(webhookId).delete();
-        logger.log(`Successfully deleted webhook ${webhookId} 🥲`);
+        logger.log("This webhook was deleted in GitHub. Deleting from db...");
+        await webhooksRef.doc(repo).delete();
+        logger.log(`Successfully deleted ${repo} webhook 🥲`);
         res.sendStatus(200);
         return;
       }
