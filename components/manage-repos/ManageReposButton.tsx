@@ -2,7 +2,7 @@ import { useState } from "react";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import { useAuth } from "@lib/firebase/auth";
-import { trackRepo } from "components/manage-repos/trackRepo";
+import { trackRepo, deleteRepo } from "components/manage-repos/manageRepos";
 import Lottie from "react-lottie-player";
 import loadingDotsJson from "public/loading-dots.json";
 
@@ -46,7 +46,7 @@ export const ManageReposButton = ({
 
     actions.forEach(async ([repo, action]) => {
       if (action === "delete") {
-        console.log(`deleting webhook for ${repo}`);
+        await deleteRepo(userId, repo);
       }
       await trackRepo(userId, repo);
     });
