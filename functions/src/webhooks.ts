@@ -17,7 +17,7 @@ export const createWebhookHandler = https.onRequest(async (req, res) => {
       const {
         data: { id },
       } = createWebhookResponse;
-      const webhookId = id.toString();
+      const hookId = id.toString();
 
       const webhooksRef = db
         .collection("users")
@@ -25,8 +25,8 @@ export const createWebhookHandler = https.onRequest(async (req, res) => {
         .collection("webhooks");
 
       logger.log("Storing webhook in Firestore...");
-      await webhooksRef.doc(webhookId).set({
-        repo,
+      await webhooksRef.doc(repo).set({
+        hookId,
       });
 
       logger.log("Webhook successfully created! Exiting function 🎉");
