@@ -27,7 +27,7 @@ export const useRepos = (): [Repos, Repos] => {
         setTrackedRepos(null);
         return;
       }
-      const trackedRepos = getRepos(webhooks, userId);
+      const trackedRepos = webhooks.map(([repo]) => repo);
       setTrackedRepos(trackedRepos);
       return;
     })();
@@ -66,13 +66,5 @@ const fetchPublicRepos = async (userId: string): Promise<string[] | void> => {
     return;
   }
 };
-
-const getRepos = (webhooks: Webhook[], userId: string) =>
-  // @ts-ignore
-  webhooks.map((webhook) => {
-    const re = new RegExp(`(?<=${userId}/).*(?=/hooks)`);
-    const match = webhook.url.match(re);
-    if (match) return match[0];
-  }) as string[];
 
 const GITHUB_BASE_URL = "https://api.github.com";

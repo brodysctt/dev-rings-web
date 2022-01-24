@@ -2,6 +2,7 @@ import type { Timestamp } from "firebase/firestore";
 
 export type CollectionName = "events" | "logs" | "webhooks";
 
+// TODO: Create a generic for this tuple pattern that can be used for Webhook as well
 export type Log = [
   string,
   {
@@ -18,8 +19,4 @@ export interface RepoEvent {
   url: string;
 }
 
-export interface Webhook {
-  createdAt: Timestamp;
-  pingUrl: string;
-  url: string;
-}
+export type Webhook = [string, string];

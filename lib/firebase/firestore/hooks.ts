@@ -10,7 +10,7 @@ export const useCollection = (name: CollectionName) => {
   const userId = useAuth();
   const userData = useUserDoc();
   const [data, setData] = useState<DocumentData[] | null>(null);
-  const isLogs = name === "logs";
+  const isEvents = name === "events";
 
   useEffect(() => {
     if (!userId || !userData) return;
@@ -23,9 +23,9 @@ export const useCollection = (name: CollectionName) => {
           if (!isOnboarding && name === "webhooks") router.push("/repos");
           return null;
         }
-        const updatedData = isLogs
-          ? snap.docs.map((doc) => [doc.id, doc.data()] as Log)
-          : snap.docs.map((doc) => doc.data() as RepoEvent | Webhook);
+        const updatedData = isEvents
+          ? snap.docs.map((doc) => doc.data() as RepoEvent)
+          : snap.docs.map((doc) => [doc.id, doc.data()] as Log | Webhook);
         setData(updatedData);
       }
     );

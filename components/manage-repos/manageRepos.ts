@@ -1,6 +1,6 @@
 import axios from "axios";
 import { toast } from "react-toastify";
-import { fetchGitHubToken } from "@lib/firebase/firestore";
+import { fetchGitHubToken, fetchHookId } from "@lib/firebase/firestore";
 
 const CREATE_WEBHOOK_URL = process.env.NEXT_PUBLIC_CREATE_WEBHOOK_URL;
 const DELETE_WEBHOOK_URL = process.env.NEXT_PUBLIC_DELETE_WEBHOOK_URL;
@@ -34,9 +34,11 @@ export const deleteRepo = async (
   try {
     const token = await fetchGitHubToken(userId);
     console.log(`here be the repo: ${repo}`);
+    const hookId = await fetchHookId(userId, repo);
     const { status } = await axios.post(`${DELETE_WEBHOOK_URL}`, {
       user: userId,
       repo,
+      hookId,
       token,
     });
 
