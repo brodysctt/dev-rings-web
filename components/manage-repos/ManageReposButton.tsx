@@ -21,30 +21,31 @@ export const ManageReposButton = ({
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
-    if (!userId) return;
-    if (!checked || !current) return;
-    if (!isLoading) return;
+    (async () => {
+      if (!userId) return;
+      if (!checked || !current) return;
+      if (!isLoading) return;
 
-    const actions: RepoAction[] = checked
-      .map((newRepoState: boolean, i: number): RepoAction | undefined => {
-        if (newRepoState === current[i]) return;
-        if (newRepoState) return [publicRepos[i], "add"];
-        return [publicRepos[i], "delete"];
-      })
-      .filter(isRepoAction);
+      const actions: RepoAction[] = checked
+        .map((newRepoState: boolean, i: number): RepoAction | undefined => {
+          if (newRepoState === current[i]) return;
+          if (newRepoState) return [publicRepos[i], "add"];
+          return [publicRepos[i], "delete"];
+        })
+        .filter(isRepoAction);
 
-    const reposToAdd = actions.filter(([, action]) => action === "add");
-    const reposToDelete = actions.filter(([, action]) => action === "delete");
+      const reposToAdd = actions.filter(([, action]) => action === "add");
+      const reposToDelete = actions.filter(([, action]) => action === "delete");
 
-    reposToAdd.forEach(async ([repo]) => await trackRepo(userId, repo));
-    reposToDelete.forEach(async ([repo]) => await deleteRepo(userId, repo));
+      await Promise.all([
+        reposToAdd.forEach(async ([repo]) => await trackRepo(userId, repo)),
+        reposToDelete.forEach(async ([repo]) => await deleteRepo(userId, repo)),
+      ]);
 
-    setIsLoading(false);
-    return;
+      setIsLoading(false);
+      return;
+    })();
   }, [userId, checked, current, isLoading]);
-
-  // TODO: obvs this is not chill, but just to start
-  //
 
   return isLoading ? (
     <Box
