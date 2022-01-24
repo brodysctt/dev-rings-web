@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import { useAuth } from "@lib/firebase/auth";
@@ -18,6 +18,13 @@ export const ManageReposButton = ({
   publicRepos,
 }: IProps) => {
   const [isLoading, setIsLoading] = useState(false);
+
+  useEffect(() => {
+    if (!isLoading) return;
+    (async () => await handleSubmit())();
+    setIsLoading(false);
+  }, [isLoading]);
+
   const userId = useAuth();
   if (!userId) return null;
 
@@ -38,32 +45,16 @@ export const ManageReposButton = ({
     })
     .filter(isRepoAction);
 
-  // TODO: Does handleSubmit need to be async?
-  const handleSubmit = async () => {
-    if (!actions) return; // make sure this can't happen with disable
-    setIsLoading(true);
-    // TODO: Create function that recognizes what to do based on the new state
+  const reposToAdd = actions.filter(([, action]) => action === "add");
+  const reposToDelete = actions.filter(([, action]) => action === "delete");
 
-    for (const action of actions) {
-      const [repo, todo] = action;
-      if (todo === "delete") {
-        await deleteRepo(userId, repo);
-      }
-      await trackRepo(userId, repo);
-      return;
-    }
-    // actions.forEach(async ([repo, action]) => {
-    //   if (action === "delete") {
-    //     await deleteRepo(userId, repo);
-    //   }
-    //   await trackRepo(userId, repo);
-    // });
-
-    setIsLoading(false);
+  const handleSubmit = () => {
+    if (!actions) return;
+    reposToAdd.forEach(async ([repo]) => await trackRepo(userId, repo));
+    reposToDelete.forEach(async ([repo]) => await deleteRepo(userId, repo));
     return;
   };
 
-  // TODO: Fix loading state
   return isLoading ? (
     <Box
       height={83}
@@ -76,11 +67,12 @@ export const ManageReposButton = ({
   ) : (
     // TODO: Is it possible to make this button dynamic based on the changes?
     // I.e. "Remove X repos" on a red bg, "Add Y repos" on a green bg
+    // TODO: Ensure button is disabled if there's no diff
     <Button
       variant="contained"
       color={"primary"}
       disabled={!checked}
-      onClick={handleSubmit}
+      onClick={() => setIsLoading(true)}
     >
       {`Update repos`}
     </Button>
