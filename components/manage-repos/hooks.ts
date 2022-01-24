@@ -9,35 +9,31 @@ type Repos = string[] | null;
 export const useRepos = (): [Repos, Repos] => {
   const userId = useAuth();
   const webhooks = useCollection("webhooks") as Webhook[] | null;
-  const [untrackedRepos, setUntrackedRepos] = useState<Repos>(null);
+  const [publicRepos, setPublicRepos] = useState<Repos>(null);
   const [trackedRepos, setTrackedRepos] = useState<Repos>(null);
 
   useEffect(() => {
     (async () => {
       if (!userId) return;
-      const publicRepos = await fetchPublicRepos(userId);
+      const repos = await fetchPublicRepos(userId);
 
-      if (!publicRepos) {
-        console.log("gotta handle this properly");
+      if (!repos) {
+        setPublicRepos(null);
         return;
       }
+      setPublicRepos(repos);
 
       if (!webhooks) {
-        setUntrackedRepos(publicRepos);
+        setTrackedRepos(null);
         return;
       }
-
       const trackedRepos = getRepos(webhooks, userId);
-      const untrackedRepos = publicRepos.filter(
-        (repo) => !trackedRepos.includes(repo)
-      );
       setTrackedRepos(trackedRepos);
-      setUntrackedRepos(untrackedRepos);
       return;
     })();
   }, [userId, webhooks]);
 
-  return [untrackedRepos, trackedRepos];
+  return [publicRepos, trackedRepos];
 };
 
 const fetchPublicRepos = async (userId: string): Promise<string[] | void> => {

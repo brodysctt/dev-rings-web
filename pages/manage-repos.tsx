@@ -9,13 +9,11 @@ import Tab from "@mui/material/Tab";
 import { useTheme } from "@mui/material/styles";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { ManageReposCheckboxes, TrackRepoInput } from "components";
-import { useRepos } from "components/manage-repos/hooks";
 
 const ManageRepos: NextPage = () => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
 
-  const [untrackedRepos, trackedRepos] = useRepos();
   const [value, setValue] = useState(0);
 
   const handleChange = (event: SyntheticEvent, newValue: number) =>
@@ -31,29 +29,19 @@ const ManageRepos: NextPage = () => {
               onChange={handleChange}
               aria-label="basic tabs example"
             >
-              <Tab label="Add Repos" />
+              <Tab label="Manage Repos" />
               <Tab label="Add private repo" />
-              <Tab label="Delete Repos" />
             </Tabs>
           </Box>
           <TabPanel value={value} index={0}>
-            {!untrackedRepos || untrackedRepos.length < 1 ? (
-              <Typography>Put lottie or blob here</Typography>
-            ) : (
-              <ManageReposCheckboxes repos={untrackedRepos} />
-            )}
+            <ManageReposCheckboxes />
           </TabPanel>
           <TabPanel value={value} index={1}>
-            <TrackRepoInput
-              sx={isMobile ? { ml: 0, mt: 0 } : { ml: 5, mt: 1 }}
-            />
-          </TabPanel>
-          <TabPanel value={value} index={2}>
-            {!trackedRepos || trackedRepos.length < 1 ? (
-              <Typography>Add a repo to get started</Typography>
-            ) : (
-              <ManageReposCheckboxes repos={trackedRepos} variant="delete" />
-            )}
+            <Box width={"60%"}>
+              <TrackRepoInput
+                sx={isMobile ? { ml: 0, mt: 0 } : { ml: 5, mt: 1 }}
+              />
+            </Box>
           </TabPanel>
         </Box>
       </Stack>

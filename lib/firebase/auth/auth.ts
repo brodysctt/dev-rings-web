@@ -11,7 +11,8 @@ import {
 export const auth = getAuth(firebaseApp);
 
 const githubProvider = new GithubAuthProvider();
-githubProvider.addScope("write:repo_hook");
+// githubProvider.addScope("write:repo_hook");
+githubProvider.addScope("admin:repo_hook");
 
 export const githubSignIn = async () => {
   try {
