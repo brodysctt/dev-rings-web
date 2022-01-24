@@ -11,16 +11,15 @@ import type { Webhook } from "@lib/firebase/firestore";
 
 const Onboarding: NextPage = () => {
   const [activeStep, setActiveStep] = useState(0);
-  const [isReady, setIsReady] = useState(false);
   const webhooks = useCollection("webhooks") as Webhook[] | null;
   const userData = useUserDoc();
   if (!userData) return null;
-  const [, { dailyGoal, timezone }] = userData;
+  const [, { dailyGoal }] = userData;
 
-  const steps: Array<[string, boolean]> = [
-    ["Motivation", isReady],
+  const steps: Array<[string, boolean | null]> = [
+    ["Motivation", null],
     ["Set a daily commits goal", Boolean(dailyGoal)],
-    ["Select repos to track", false],
+    ["Select repos to track", false], // TODO: what's up here?
   ];
 
   const StepsToComplete = () => (

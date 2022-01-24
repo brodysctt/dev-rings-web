@@ -2,7 +2,6 @@ import { useState, FC, SyntheticEvent } from "react";
 import type { NextPage } from "next";
 import Container from "@mui/material/Container";
 import Stack from "@mui/material/Stack";
-import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";

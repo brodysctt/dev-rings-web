@@ -3,7 +3,6 @@ import Image from "next/image";
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
 import { ManageReposCheckboxes, SetGoalInput } from "components";
-import { useRepos } from "components/manage-repos/hooks";
 import { TextLink } from "components";
 import { Button } from "@mui/material";
 
@@ -35,7 +34,7 @@ export const OnboardingSteps = ({ activeStep, onSuccess }: Props) => {
           {` btw)`}
         </>
       ),
-      body: <AddRepos />,
+      body: <ManageReposCheckboxes />,
     },
   ];
 
@@ -74,7 +73,7 @@ const Motivation = ({ onSuccess }: { onSuccess: () => void }) => (
       mt={2}
       mb={2}
       sx={{ whiteSpace: "pre-line" }}
-    >{`Here be the reasons why you should use the app:`}</Typography>{" "}
+    >{`Here be the reasons why you should use the app:`}</Typography>
     <Typography color="text.secondary" mb={3} sx={{ whiteSpace: "pre-line" }}>
       {`1. Contributions are timestamped according to your local time zone (not UTC).
         2. Commits main in branches outside a repo's default branch are counted
@@ -86,13 +85,6 @@ const Motivation = ({ onSuccess }: { onSuccess: () => void }) => (
     >{`True! let's get started`}</Button>
   </>
 );
-
-const AddRepos = () => {
-  const [untrackedRepos] = useRepos();
-  // TODO: Return private repo url with explanation
-  if (!untrackedRepos) return <Typography>No public repos bruh</Typography>;
-  return <ManageReposCheckboxes repos={untrackedRepos} />;
-};
 
 const GITHUB_WEBHOOKS_DOCS =
   "https://docs.github.com/en/developers/webhooks-and-events/webhooks/about-webhooks";
