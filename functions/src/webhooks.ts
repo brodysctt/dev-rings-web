@@ -20,9 +20,9 @@ export const createWebhookHandler = https.onRequest(async (req, res) => {
       } = createWebhookResponse;
 
       const webhooksRef = db
-        .collection("users")
-        .doc(user)
-        .collection("webhooks");
+          .collection("users")
+          .doc(user)
+          .collection("webhooks");
 
       const webhookId = id.toString();
       logger.log("Storing webhook in Firestore...");
@@ -33,8 +33,23 @@ export const createWebhookHandler = https.onRequest(async (req, res) => {
       });
 
       logger.log(
-        "Webhook was successfully created & stored! Exiting function 🎉"
+          "Webhook was successfully created & stored! Exiting function 🎉"
       );
+      await res.sendStatus(200);
+      return;
+    } catch (err) {
+      res.status(400).send(err);
+      return;
+    }
+  });
+});
+
+export const deleteWebhookHandler = https.onRequest(async (req, res) => {
+  corsMiddleware(req, res, async () => {
+    try {
+      const { user, repo, token } = req.body;
+      logger.log("Deleting webhook...");
+      await deleteWebhook(user, repo, token);
       await res.sendStatus(200);
       return;
     } catch (err) {
@@ -46,34 +61,28 @@ export const createWebhookHandler = https.onRequest(async (req, res) => {
 
 const createWebhook = async (user: string, repo: string, token: string) => {
   return await axios.post(
-    `${GITHUB_BASE_URL}/repos/${user}/${repo}/hooks`,
-    {
-      config: {
-        url: WEBHOOK_EVENTS_URL,
-        content_type: "json",
+      `${GITHUB_BASE_URL}/repos/${user}/${repo}/hooks`,
+      {
+        config: {
+          url: WEBHOOK_EVENTS_URL,
+          content_type: "json",
+        },
+        events: ["push", "meta"],
       },
-      events: ["push", "meta"],
-    },
-    {
-      headers: {
-        authorization: `Bearer ${token}`,
-        "Content-Type": "application/json",
-      },
-    }
+      {
+        headers: {
+          "authorization": `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      }
   );
 };
 
-// export const deleteWebhookHandler = https.onRequest(async (req, res) => {
-//   corsMiddleware(req, res, async () => {
-//     try {
-//       const { url, token } = req.body;
-//       logger.log("Deleting webhook...");
-//       await deleteWebhook(url, token);
-//       await res.sendStatus(200);
-//       return;
-//     } catch (err) {
-//       res.status(400).send(err);
-//       return;
-//     }
-//   });
-// });
+const deleteWebhook = async (user: string, repo: string, token: string) => {
+  return await axios.delete(`${GITHUB_BASE_URL}/repos/${user}/${repo}/hooks`, {
+    headers: {
+      "authorization": `Bearer ${token}`,
+      "Content-Type": "application/json",
+    },
+  });
+};
