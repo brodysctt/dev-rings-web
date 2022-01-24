@@ -24,7 +24,6 @@ export const ManageReposButton = ({
     (async () => {
       if (!userId) return;
       if (!checked || !current) return;
-      if (!isLoading) return;
 
       const actions: RepoAction[] = checked
         .map((newRepoState: boolean, i: number): RepoAction | undefined => {
@@ -40,6 +39,7 @@ export const ManageReposButton = ({
       await Promise.all([
         reposToAdd.forEach(async ([repo]) => await trackRepo(userId, repo)),
         reposToDelete.forEach(async ([repo]) => await deleteRepo(userId, repo)),
+        timeout(3000),
       ]);
 
       setIsLoading(false);
@@ -75,3 +75,6 @@ type RepoAction = [string, string];
 const isRepoAction = (action: RepoAction | undefined): action is RepoAction => {
   return !!action;
 };
+
+const timeout = (ms: number) =>
+  new Promise((resolve) => setTimeout(resolve, ms));
