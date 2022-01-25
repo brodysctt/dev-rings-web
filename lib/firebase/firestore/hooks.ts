@@ -20,7 +20,8 @@ export const useCollection = (name: CollectionName) => {
       (snap) => {
         const noData = !snap || !snap.docs.length;
         if (noData) {
-          if (!isOnboarding && name === "webhooks") router.push("/repos");
+          if (!isOnboarding && name === "webhooks")
+            router.push("/manage-repos");
           return null;
         }
         const updatedData = isEvents

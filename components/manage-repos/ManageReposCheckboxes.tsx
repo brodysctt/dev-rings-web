@@ -123,7 +123,6 @@ export const ManageReposCheckboxes = () => {
           {`Update repos`}
         </Button>
       )}
-      ;
     </Stack>
   );
 };
