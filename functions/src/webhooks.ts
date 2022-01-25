@@ -1,5 +1,4 @@
 import { https, logger } from "firebase-functions";
-import * as admin from "firebase-admin";
 import axios from "axios";
 import { db } from "./config";
 import { corsMiddleware } from "./middleware";
@@ -16,25 +15,36 @@ export const createWebhookHandler = https.onRequest(async (req, res) => {
       const createWebhookResponse = await createWebhook(user, repo, token);
 
       const {
-        data: { id, url, ping_url: pingUrl },
+        data: { id },
       } = createWebhookResponse;
+      const hookId = id.toString();
 
       const webhooksRef = db
           .collection("users")
           .doc(user)
           .collection("webhooks");
 
-      const webhookId = id.toString();
       logger.log("Storing webhook in Firestore...");
-      await webhooksRef.doc(webhookId).set({
-        createdAt: admin.firestore.Timestamp.fromDate(new Date()),
-        url,
-        pingUrl,
+      await webhooksRef.doc(repo).set({
+        hookId,
       });
 
-      logger.log(
-          "Webhook was successfully created & stored! Exiting function 🎉"
-      );
+      logger.log("Webhook successfully created! Exiting function 🎉");
+      await res.sendStatus(200);
+      return;
+    } catch (err) {
+      res.status(400).send(err);
+      return;
+    }
+  });
+});
+
+export const deleteWebhookHandler = https.onRequest(async (req, res) => {
+  corsMiddleware(req, res, async () => {
+    try {
+      const { user, repo, hookId, token } = req.body;
+      logger.log("Deleting webhook...");
+      await deleteWebhook(user, repo, hookId, token);
       await res.sendStatus(200);
       return;
     } catch (err) {
@@ -54,6 +64,23 @@ const createWebhook = async (user: string, repo: string, token: string) => {
         },
         events: ["push", "meta"],
       },
+      {
+        headers: {
+          "authorization": `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      }
+  );
+};
+
+const deleteWebhook = async (
+  user: string,
+  repo: string,
+  hookId: string,
+  token: string
+) => {
+  return await axios.delete(
+      `${GITHUB_BASE_URL}/repos/${user}/${repo}/hooks/${hookId}`,
       {
         headers: {
           "authorization": `Bearer ${token}`,

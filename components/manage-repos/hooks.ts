@@ -5,39 +5,39 @@ import { toast } from "react-toastify";
 import { fetchGitHubToken, useCollection } from "@lib/firebase/firestore";
 import type { Webhook } from "@lib/firebase/firestore";
 
-type Repos = string[] | null;
-export const useRepos = (): [Repos, Repos] => {
+type RepoState = [string, boolean];
+export const usePublicRepos = (): RepoState[] | null => {
   const userId = useAuth();
   const webhooks = useCollection("webhooks") as Webhook[] | null;
-  const [untrackedRepos, setUntrackedRepos] = useState<Repos>(null);
-  const [trackedRepos, setTrackedRepos] = useState<Repos>(null);
+  const [publicRepos, setPublicRepos] = useState<RepoState[] | null>(null);
 
   useEffect(() => {
     (async () => {
       if (!userId) return;
-      const publicRepos = await fetchPublicRepos(userId);
+      const repos = await fetchPublicRepos(userId);
 
-      if (!publicRepos) {
-        console.log("gotta handle this properly");
+      if (!repos) {
+        setPublicRepos(null);
         return;
       }
 
       if (!webhooks) {
-        setUntrackedRepos(publicRepos);
+        const state = repos.map((repo): RepoState => [repo, false]);
+        setPublicRepos(state);
         return;
       }
 
-      const trackedRepos = getRepos(webhooks, userId);
-      const untrackedRepos = publicRepos.filter(
-        (repo) => !trackedRepos.includes(repo)
+      const trackedRepos = webhooks.map(([repo]) => repo);
+
+      const state = repos.map(
+        (repo): RepoState => [repo, trackedRepos.includes(repo)]
       );
-      setTrackedRepos(trackedRepos);
-      setUntrackedRepos(untrackedRepos);
+      setPublicRepos(state);
       return;
     })();
   }, [userId, webhooks]);
 
-  return [untrackedRepos, trackedRepos];
+  return publicRepos;
 };
 
 const fetchPublicRepos = async (userId: string): Promise<string[] | void> => {
@@ -70,13 +70,5 @@ const fetchPublicRepos = async (userId: string): Promise<string[] | void> => {
     return;
   }
 };
-
-const getRepos = (webhooks: Webhook[], userId: string) =>
-  // @ts-ignore
-  webhooks.map((webhook) => {
-    const re = new RegExp(`(?<=${userId}/).*(?=/hooks)`);
-    const match = webhook.url.match(re);
-    if (match) return match[0];
-  }) as string[];
 
 const GITHUB_BASE_URL = "https://api.github.com";

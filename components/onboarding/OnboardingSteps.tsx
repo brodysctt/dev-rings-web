@@ -2,9 +2,9 @@ import type { FC } from "react";
 import Image from "next/image";
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
-import { ConfirmTimezone, SetGoalInput, TrackRepoCheckboxes } from "components";
+import { ManageReposCheckboxes, SetGoalInput } from "components";
 import { TextLink } from "components";
-import { dayjs } from "@lib/dayjs";
+import { Button } from "@mui/material";
 
 interface Props {
   activeStep: number;
@@ -14,22 +14,15 @@ interface Props {
 export const OnboardingSteps = ({ activeStep, onSuccess }: Props) => {
   const steps = [
     {
+      header: "Purpose",
+      blob: "/blobhighfive.png",
+      body: <Motivation {...{ onSuccess }} />,
+    },
+    {
       header: `To track progress, you must first set a goal`,
       blob: "/ablobnod.gif",
       subheader: "How many commits will you push in a given day?",
       body: <SetGoalInput onSuccess={onSuccess} />,
-    },
-    {
-      header: (
-        <>
-          {`According to `}
-          <TextLink href={`https://dayjs.gitee.io/en/`} text={`dayjs, `} />
-          {`you're located in ${dayjs.tz.guess()}`}
-        </>
-      ),
-      blob: "/ablobdundundun.gif",
-      subheader: `Is this the best timezone for tracking your daily goals?`,
-      body: <ConfirmTimezone {...{ onSuccess }} />,
     },
     {
       header: `Choose the repos you'd like to start tracking`,
@@ -41,7 +34,7 @@ export const OnboardingSteps = ({ activeStep, onSuccess }: Props) => {
           {` btw)`}
         </>
       ),
-      body: <TrackRepoCheckboxes />,
+      body: <ManageReposCheckboxes />,
     },
   ];
 
@@ -70,6 +63,27 @@ const Panel: FC<IProps> = ({ header, blob, subheader, children }) => (
     )}
     {children}
   </Stack>
+);
+
+const Motivation = ({ onSuccess }: { onSuccess: () => void }) => (
+  <>
+    <Typography
+      align="center"
+      color="text.secondary"
+      mt={2}
+      mb={2}
+      sx={{ whiteSpace: "pre-line" }}
+    >{`Here be the reasons why you should use the app:`}</Typography>
+    <Typography color="text.secondary" mb={3} sx={{ whiteSpace: "pre-line" }}>
+      {`1. Contributions are timestamped according to your local time zone (not UTC).
+        2. Commits main in branches outside a repo's default branch are counted
+        3. Commits made in forks are counted towards your daily goal`}
+    </Typography>
+    <Button
+      variant="contained"
+      onClick={() => onSuccess()}
+    >{`True! let's get started`}</Button>
+  </>
 );
 
 const GITHUB_WEBHOOKS_DOCS =

@@ -4,6 +4,7 @@ import Link from "next/link";
 import Container from "@mui/material/Container";
 import Stack from "@mui/material/Stack";
 import Button from "@mui/material/Button";
+import IconButton from "@mui/material/IconButton";
 import Tooltip from "@mui/material/Tooltip";
 import SpeedDial from "@mui/material/SpeedDial";
 import SpeedDialAction from "@mui/material/SpeedDialAction";
@@ -35,21 +36,22 @@ export const Navbar = () => {
     },
     { icon: <LogoutSvg />, name: "Sign out", onClick: signOutUser },
   ];
+
+  if (isOnboarding) return <OnboardingNavbar />;
+
   return (
     <Container maxWidth="md">
       <Stack direction="row" justifyContent="space-between" pt={3}>
-        {!isOnboarding && (
-          <Stack direction="row">
-            <NavbarItem href="/" tooltip="View today's progress">
-              <ProgressRing isIcon values={[0, 1]} />
-            </NavbarItem>
-            <CalendarPopper />
-            <NavbarItem href="/manage-repos" tooltip="Manage repos">
-              <Image src="/repo-icon.png" width={32} height={32} />
-            </NavbarItem>
-            <SetGoalInput />
-          </Stack>
-        )}
+        <Stack direction="row">
+          <NavbarItem href="/" tooltip="View today's progress">
+            <ProgressRing isIcon values={[0, 1]} />
+          </NavbarItem>
+          <CalendarPopper />
+          <NavbarItem href="/manage-repos" tooltip="Manage repos">
+            <Image src="/repo-icon.png" width={32} height={32} />
+          </NavbarItem>
+          <SetGoalInput />
+        </Stack>
         <Stack height={60} p={1} pr={2}>
           <SpeedDial
             ariaLabel="speed-dial"
@@ -71,6 +73,18 @@ export const Navbar = () => {
     </Container>
   );
 };
+
+const OnboardingNavbar = () => (
+  <Container maxWidth="md">
+    <Stack direction="row" justifyContent="flex-end" mt={3}>
+      <Tooltip title="Sign out">
+        <IconButton onClick={signOutUser}>
+          <LogoutSvg />
+        </IconButton>
+      </Tooltip>
+    </Stack>
+  </Container>
+);
 
 interface Props {
   href: string;
