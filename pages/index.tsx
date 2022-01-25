@@ -1,6 +1,6 @@
 import type { NextPage } from "next";
 import Stack from "@mui/material/Stack";
-import { DevRing, GetStarted } from "components";
+import { DevRing, GetStarted, UpgradedRing } from "components";
 import { NewTimezoneAlert } from "@lib/react-toastify";
 import { useUserDoc, useCollection } from "@lib/firebase/firestore";
 import type { RepoEvent, Webhook } from "@lib/firebase/firestore";
@@ -29,10 +29,11 @@ const Index: NextPage = () => {
 
   const actual = dayEvents.length;
   return (
-    <>
-      <DevRing events={dayEvents} values={[actual, goal]} />
+    <Stack direction="row">
+      {/* <DevRing events={dayEvents} values={[actual, goal]} /> */}
+      <UpgradedRing />
       <NewTimezoneAlert tz={timezone} />
-    </>
+    </Stack>
   );
 };
 
