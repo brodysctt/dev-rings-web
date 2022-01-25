@@ -9,6 +9,7 @@ import loadingDotsJson from "public/loading-dots.json";
 import { usePublicRepos } from "components/manage-repos/hooks";
 import { useAuth } from "@lib/firebase/auth";
 import { trackRepo, deleteRepo } from "components/manage-repos/manageRepos";
+import { breakpoints } from "@mui/system";
 
 type CheckedEvent = ChangeEvent<HTMLInputElement>;
 
@@ -27,24 +28,24 @@ export const ManageReposCheckboxes = () => {
 
   useEffect(() => {
     (async () => {
-      if (!userId || !isLoading || !checked) return;
+      if (!userId || !checked || !isLoading) return;
+      console.log("in use effect");
 
       for (const update of checked) {
         const [repo, , action] = update;
-        if (!action) return;
         if (action === "delete") {
           await deleteRepo(userId, repo);
-          return;
         }
-        await trackRepo(userId, repo);
-        return;
+        if (action === "add") {
+          await deleteRepo(userId, repo);
+        }
       }
 
       await timeout(2000);
       setIsLoading(false);
       return;
     })();
-  }, [userId, isLoading]);
+  }, [userId, checked, isLoading]);
 
   if (!userId || !repos || !checked) return null; // TODO: Render component for no repos case
 
