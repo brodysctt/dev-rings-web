@@ -5,12 +5,11 @@ import { toast } from "react-toastify";
 import { fetchGitHubToken, useCollection } from "@lib/firebase/firestore";
 import type { Webhook } from "@lib/firebase/firestore";
 
-type Repos = string[] | null;
-export const useRepos = (): [Repos, Repos] => {
+type RepoState = [string, boolean];
+export const usePublicRepos = (): RepoState[] | null => {
   const userId = useAuth();
   const webhooks = useCollection("webhooks") as Webhook[] | null;
-  const [publicRepos, setPublicRepos] = useState<Repos>(null);
-  const [trackedRepos, setTrackedRepos] = useState<Repos>(null);
+  const [publicRepos, setPublicRepos] = useState<RepoState[] | null>(null);
 
   useEffect(() => {
     (async () => {
@@ -21,19 +20,24 @@ export const useRepos = (): [Repos, Repos] => {
         setPublicRepos(null);
         return;
       }
-      setPublicRepos(repos);
 
       if (!webhooks) {
-        setTrackedRepos(null);
+        const state = repos.map((repo): RepoState => [repo, false]);
+        setPublicRepos(state);
         return;
       }
+
       const trackedRepos = webhooks.map(([repo]) => repo);
-      setTrackedRepos(trackedRepos);
+
+      const state = repos.map(
+        (repo): RepoState => [repo, trackedRepos.includes(repo)]
+      );
+      setPublicRepos(state);
       return;
     })();
   }, [userId, webhooks]);
 
-  return [publicRepos, trackedRepos];
+  return publicRepos;
 };
 
 const fetchPublicRepos = async (userId: string): Promise<string[] | void> => {

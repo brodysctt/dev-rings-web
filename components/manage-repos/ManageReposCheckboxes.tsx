@@ -1,50 +1,73 @@
 import { useState, useEffect, ChangeEvent } from "react";
 import Stack from "@mui/material/Stack";
+import Box from "@mui/material/Box";
+import Button from "@mui/material/Button";
 import Checkbox from "@mui/material/Checkbox";
 import FormControlLabel from "@mui/material/FormControlLabel";
-import { ManageReposButton } from "components/manage-repos/ManageReposButton";
-import { useRepos } from "components/manage-repos/hooks";
+import Lottie from "react-lottie-player";
+import loadingDotsJson from "public/loading-dots.json";
+import { usePublicRepos } from "components/manage-repos/hooks";
+import { useAuth } from "@lib/firebase/auth";
+import { trackRepo, deleteRepo } from "components/manage-repos/manageRepos";
 
 type CheckedEvent = ChangeEvent<HTMLInputElement>;
 
-export const ManageReposCheckboxes = () => {
-  const [publicRepos, trackedRepos] = useRepos();
-  const [current, setCurrent] = useState<boolean[] | null>(null);
-  const [checked, setChecked] = useState<boolean[] | null>(null);
+type RepoAction = [string, boolean, string | null];
 
-  const checkAll = (checked: boolean) => {
-    // TODO: Is this chill?
-    if (!publicRepos) return null;
-    return Array(publicRepos.length).fill(checked);
-  };
+export const ManageReposCheckboxes = () => {
+  const userId = useAuth();
+  const repos = usePublicRepos();
+  const [checked, setChecked] = useState<RepoAction[] | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
-    // TODO: How do I render private repos in this component?
-    if (!publicRepos) return;
+    if (!repos) return;
+    setChecked(repos.map(([repo, state]): RepoAction => [repo, state, null])); // TODO: Check all during onboarding
+  }, [repos]);
 
-    if (!trackedRepos) {
-      setCurrent(checkAll(false));
-      setChecked(checkAll(false)); // TODO: Update to have them all checked only in onboarding
+  useEffect(() => {
+    (async () => {
+      if (!userId || !isLoading || !checked) return;
+
+      for (const update of checked) {
+        const [repo, , action] = update;
+        if (!action) return;
+        if (action === "delete") {
+          await deleteRepo(userId, repo);
+          return;
+        }
+        await trackRepo(userId, repo);
+        return;
+      }
+
+      await timeout(2000);
+      setIsLoading(false);
       return;
-    }
+    })();
+  }, [userId, isLoading]);
 
-    const initState = publicRepos.map((repo) => trackedRepos.includes(repo));
-    setChecked(initState);
-    setCurrent(initState);
-  }, [publicRepos, trackedRepos]);
+  if (!userId || !repos || !checked) return null; // TODO: Render component for no repos case
 
-  const handleCheckAll = (event: CheckedEvent) =>
-    event.target.checked
-      ? setChecked(checkAll(true))
-      : setChecked(checkAll(false));
-
-  const handleRepoCheck = (i: number) => (event: CheckedEvent) => {
-    // TODO: Is this early return chill?
-    if (!checked) return;
-    let update = [...checked];
-    update[i] = event.target.checked;
-    setChecked(update);
+  const handleCheckAll = (event: CheckedEvent) => {
+    const allChecked = repos.map(
+      ([repo, tracked]): RepoAction => [repo, true, !tracked ? "add" : null]
+    );
+    const noneChecked = repos.map(
+      ([repo, tracked]): RepoAction => [repo, false, tracked ? "delete" : null]
+    );
+    event.target.checked ? setChecked(allChecked) : setChecked(noneChecked);
   };
+
+  const handleRepoCheck =
+    (repo: string, tracked: boolean, i: number) => (event: CheckedEvent) => {
+      const check = event.target.checked;
+      const action =
+        check && !tracked ? "add" : !check && tracked ? "delete" : null;
+
+      let update = [...checked];
+      update[i] = [repo, check, action];
+      setChecked(update);
+    };
 
   return (
     <Stack>
@@ -52,14 +75,10 @@ export const ManageReposCheckboxes = () => {
         label={`Select all public repos`}
         control={
           <Checkbox
-            checked={
-              checked ? checked.every((checked) => Boolean(checked)) : false
-            }
+            checked={checked.every(([, check]) => check)}
             indeterminate={
-              checked
-                ? !checked.every((checked) => Boolean(checked)) &&
-                  checked.some((checked) => Boolean(checked))
-                : false
+              !checked.every(([, check]) => check) &&
+              checked.some(([, check]) => check)
             }
             onChange={handleCheckAll}
           />
@@ -67,25 +86,47 @@ export const ManageReposCheckboxes = () => {
       />
       <Stack ml={3} mb={2}>
         {/* TODO: Handle case where user has a ton of repos */}
-        {publicRepos &&
-          publicRepos.map((repo, i) => {
-            return (
-              <FormControlLabel
-                key={i}
-                label={repo}
-                control={
-                  <Checkbox
-                    checked={checked ? Boolean(checked[i]) : false}
-                    onChange={handleRepoCheck(i)}
-                  />
-                }
-              />
-            );
-          })}
+        {repos.map(([repo, tracked], i) => {
+          return (
+            <FormControlLabel
+              key={i}
+              label={repo}
+              control={
+                <Checkbox
+                  checked={checked[i][1]}
+                  onChange={handleRepoCheck(repo, tracked, i)}
+                />
+              }
+            />
+          );
+        })}
       </Stack>
-      {publicRepos && (
-        <ManageReposButton {...{ checked, current, publicRepos }} />
+      {isLoading ? (
+        <Box
+          height={83}
+          width={200}
+          mt={-6}
+          sx={{ position: "relative", zIndex: -1 }}
+        >
+          <Lottie loop animationData={loadingDotsJson} play />
+        </Box>
+      ) : (
+        // TODO: Is it possible to make this button dynamic based on the changes?
+        // I.e. "Remove X repos" on a red bg, "Add Y repos" on a green bg
+        // TODO: Ensure button is disabled if there's no diff
+        <Button
+          variant="contained"
+          color={"primary"}
+          disabled={!checked}
+          onClick={() => setIsLoading(true)}
+        >
+          {`Update repos`}
+        </Button>
       )}
+      ;
     </Stack>
   );
 };
+
+const timeout = (ms: number) =>
+  new Promise((resolve) => setTimeout(resolve, ms));
