@@ -9,7 +9,6 @@ import loadingDotsJson from "public/loading-dots.json";
 import { usePublicRepos } from "components/manage-repos/hooks";
 import { useAuth } from "@lib/firebase/auth";
 import { trackRepo, deleteRepo } from "components/manage-repos/manageRepos";
-import { breakpoints } from "@mui/system";
 
 type CheckedEvent = ChangeEvent<HTMLInputElement>;
 
@@ -37,7 +36,7 @@ export const ManageReposCheckboxes = () => {
           await deleteRepo(userId, repo);
         }
         if (action === "add") {
-          await deleteRepo(userId, repo);
+          await trackRepo(userId, repo);
         }
       }
 
