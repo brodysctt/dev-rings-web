@@ -1,6 +1,6 @@
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
-import { PopIt, ProgressRing } from "components";
+import { PopIt, UpgradedRing } from "components";
 import { EventsTimeline } from "./EventsTimeline";
 import { dayjs } from "@lib/dayjs";
 import type { RepoEvent } from "@lib/firebase/firestore";
@@ -17,7 +17,8 @@ export const DevRing = ({ dateString, events, values }: Props) => (
       <Typography color="text.secondary" sx={{ mb: 6 }}>
         {dayjs(dateString).format("LL")}
       </Typography>
-      <ProgressRing values={values} />
+      {/* <ProgressRing values={values} /> */}
+      <UpgradedRing values={values} />
       <PopIt
         id="View events"
         sx={{ mt: 4 }}

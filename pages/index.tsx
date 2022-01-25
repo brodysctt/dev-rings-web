@@ -29,9 +29,9 @@ const Index: NextPage = () => {
 
   const actual = dayEvents.length;
   return (
-    <Stack direction="row">
-      {/* <DevRing events={dayEvents} values={[actual, goal]} /> */}
-      <UpgradedRing />
+    <Stack direction="row" justifyContent="center">
+      <DevRing events={dayEvents} values={[actual, goal]} />
+      {/* <UpgradedRing /> */}
       <NewTimezoneAlert tz={timezone} />
     </Stack>
   );
