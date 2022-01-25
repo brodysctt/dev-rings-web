@@ -1,24 +1,23 @@
 import Box from "@mui/material/Box";
 import Stack from "@mui/material/Stack";
-
 import { motion } from "framer-motion";
 
-export const UpgradedRing = () => {
+interface Props {
+  size?: number;
+  // isDayTile?: boolean;
+}
+
+export const UpgradedRing = ({ size = 400 }: Props) => {
   const stroke = "#556cd6";
-  const emptyStroke = stroke;
-  const emptyStrokeOpacity = 0.25;
-  const duration = 3;
-  const delay = 0.5;
-  const size = 100;
-  const strokeWidth = 6;
+  const strokeWidth = 10;
 
   const radius = 45;
   const circumference = Math.ceil(2 * Math.PI * radius);
   const fillPercents = Math.abs(Math.ceil((circumference / 100) * (69 - 100)));
 
   const transition = {
-    duration: duration,
-    delay: delay,
+    duration: 3,
+    delay: 0.5,
     ease: "easeIn",
   };
 
@@ -36,21 +35,16 @@ export const UpgradedRing = () => {
   return (
     <Stack>
       <Box height={size}>
-        <svg
-          viewBox="0 0 100 100"
-          version="1.1"
-          xmlns="http://www.w3.org/2000/svg"
-          width={size}
-          height={size}
-        >
+        <svg viewBox="0 0 100 100" width={size} height={size}>
           <circle
             cx="50"
             cy="50"
             r={radius}
             className="circle"
             strokeWidth={strokeWidth}
-            stroke={emptyStroke}
-            strokeOpacity={emptyStrokeOpacity}
+            stroke={stroke}
+            strokeOpacity={0.25}
+            strokeLinecap="round"
             fill="transparent"
           />
         </svg>
@@ -62,7 +56,7 @@ export const UpgradedRing = () => {
             position: "absolute",
             transform: "rotate(-90deg)",
             overflow: "visible",
-            marginLeft: -size,
+            marginLeft: -size, // TODO: Note that this is what makes circles overlap
           }}
         >
           <motion.circle
@@ -74,6 +68,7 @@ export const UpgradedRing = () => {
             fill="transparent"
             strokeDashoffset={fillPercents}
             strokeDasharray={circumference}
+            strokeLinecap="round"
             variants={variants}
             initial="hidden"
             animate="show"
