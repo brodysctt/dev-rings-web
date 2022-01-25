@@ -24,6 +24,7 @@ export const ManageReposButton = ({
     (async () => {
       if (!userId) return;
       if (!checked || !current) return;
+      if (!isLoading) return;
 
       const actions: RepoAction[] = checked
         .map((newRepoState: boolean, i: number): RepoAction | undefined => {
