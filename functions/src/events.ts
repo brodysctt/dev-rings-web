@@ -29,7 +29,7 @@ export const incomingEventHandler = https.onRequest(async (req, res) => {
         return;
       }
       const {
-        goals: { commitsGoal, prsGoal },
+        dailyGoals: { commits: commitsGoal, prs: prsGoal },
         timezone,
       } = userDoc.data() as admin.firestore.DocumentData;
       const date = new Date();

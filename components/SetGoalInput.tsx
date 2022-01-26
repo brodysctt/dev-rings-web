@@ -2,20 +2,26 @@ import Button from "@mui/material/Button";
 import InputBase from "@mui/material/InputBase";
 import Tooltip from "@mui/material/Tooltip";
 import { useForm, SubmitHandler } from "react-hook-form";
-import { setDailyGoal, useUserDoc } from "@lib/firebase/firestore";
+import { setGoal, useUserDoc } from "@lib/firebase/firestore";
 import { toast } from "react-toastify";
 
 interface Props {
   color?: string;
   onSuccess?: () => void;
+  goalType: "commits" | "prs";
 }
 
-export const SetGoalInput = ({ color = "primary.main", onSuccess }: Props) => {
+export const SetGoalInput = ({
+  color = "primary.main",
+  onSuccess,
+  goalType,
+}: Props) => {
+  const isCommits = goalType === "commits";
   const { register, handleSubmit } = useForm<{ goal: number }>();
 
   const userData = useUserDoc();
   if (!userData) return null;
-  const [userId, { dailyGoal, isOnboarding }] = userData;
+  const [userId, { dailyGoals, isOnboarding }] = userData;
 
   const onSubmit: SubmitHandler<{ goal: string }> = async ({ goal }) => {
     const isOnlyNumbers = /^[1-9].*$/.test(goal);
@@ -23,8 +29,7 @@ export const SetGoalInput = ({ color = "primary.main", onSuccess }: Props) => {
       toast.error("Goal must be a number 1 or greater 🎯");
       return;
     }
-    await setDailyGoal(userId, Number(goal));
-    toast.success(`Goal is now ${goal} 🏔️`);
+    await setGoal(userId, Number(goal), goalType);
     if (onSuccess) onSuccess();
   };
   return (
@@ -32,7 +37,9 @@ export const SetGoalInput = ({ color = "primary.main", onSuccess }: Props) => {
       <Button disableRipple variant="text" sx={{ height: 60 }}>
         <InputBase
           {...register("goal")}
-          placeholder={dailyGoal ? dailyGoal : 3}
+          placeholder={
+            !dailyGoals ? 3 : isCommits ? dailyGoals.commits : dailyGoals.prs
+          }
           sx={{
             width: 32,
             fontSize: 30,
