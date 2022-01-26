@@ -17,7 +17,6 @@ export const UpgradedRing = ({
   isDayTile = false,
   size = 400,
   values,
-  date,
 }: Props) => {
   const [showLottie, setShowLottie] = useState(false);
   useEffect(() => {
