@@ -28,8 +28,10 @@ export const incomingEventHandler = https.onRequest(async (req, res) => {
         res.sendStatus(200);
         return;
       }
-      const { dailyGoal: goal, timezone } =
-        userDoc.data() as admin.firestore.DocumentData;
+      const {
+        goals: { commitsGoal, prsGoal },
+        timezone,
+      } = userDoc.data() as admin.firestore.DocumentData;
       const date = new Date();
       const createdAt = admin.firestore.Timestamp.fromDate(date);
       const dateString = dayjs(date).tz(timezone).format("YYYY-MM-DD");
@@ -63,8 +65,10 @@ export const incomingEventHandler = https.onRequest(async (req, res) => {
         logger.log(`Updating ring for ${dateString}...`);
         await logsRef.doc(dateString).set(
             {
-              actual: admin.firestore.FieldValue.increment(commits.length),
-              goal,
+              commits: {
+                actual: admin.firestore.FieldValue.increment(commits.length),
+                goal: commitsGoal,
+              },
             },
             { merge: true }
         );
@@ -103,8 +107,10 @@ export const incomingEventHandler = https.onRequest(async (req, res) => {
         logger.log(`Updating ring for ${dateString}...`);
         await logsRef.doc(dateString).set(
             {
-              actual: admin.firestore.FieldValue.increment(1),
-              goal,
+              prs: {
+                actual: admin.firestore.FieldValue.increment(1),
+                goal: prsGoal,
+              },
             },
             { merge: true }
         );
