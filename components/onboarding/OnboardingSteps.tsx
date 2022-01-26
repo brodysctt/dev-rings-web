@@ -22,7 +22,12 @@ export const OnboardingSteps = ({ activeStep, onSuccess }: Props) => {
       header: `To track progress, you must first set a goal`,
       blob: "/ablobnod.gif",
       subheader: "How many commits will you push in a given day?",
-      body: <SetGoalInput onSuccess={onSuccess} />,
+      body: (
+        <Stack direction="row">
+          <SetGoalInput onSuccess={onSuccess} goalType="commits" />
+          <SetGoalInput onSuccess={onSuccess} goalType="prs" />
+        </Stack>
+      ),
     },
     {
       header: `Choose the repos you'd like to start tracking`,
