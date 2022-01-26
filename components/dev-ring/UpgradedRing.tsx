@@ -1,3 +1,4 @@
+import { useState, useEffect } from "react";
 import Box from "@mui/material/Box";
 import { motion } from "framer-motion";
 
@@ -7,12 +8,23 @@ import checkmarkLottie from "public/checkmark-lottie.json";
 export type RingValues = [[number, number], [number, number]];
 
 interface Props {
+  isDayTile?: boolean;
   size?: number;
   values: RingValues;
-  // isDayTile?: boolean;
+  date: string;
 }
 
-export const UpgradedRing = ({ size = 400, values }: Props) => {
+export const UpgradedRing = ({
+  isDayTile = false,
+  size = 400,
+  values,
+  date,
+}: Props) => {
+  const [showLottie, setShowLottie] = useState(false);
+  useEffect(() => {
+    // TODO: Relate this to transition duration when cleaning this component up (i.e. duration * 1.3)
+    setTimeout(() => setShowLottie(true), 3300);
+  });
   const [[commitsActual, commitsGoal], [prsActual, prsGoal]] = values;
 
   // const outerStroke = "#556cd6";
@@ -28,18 +40,22 @@ export const UpgradedRing = ({ size = 400, values }: Props) => {
   const commitsRadius = 45;
   const commitsCircumference = Math.ceil(2 * Math.PI * commitsRadius);
   const commitsPct = (commitsActual / commitsGoal) * 100;
+  const hitCommitsGoal = commitsPct >= 100;
   console.log(`here be the percent: ${commitsPct}`);
-  const commitsFillPct = Math.abs(
-    Math.ceil((commitsCircumference / 100) * (commitsPct - 100))
-  );
+  const commitsFillPct = hitCommitsGoal
+    ? 0
+    : Math.abs(Math.ceil((commitsCircumference / 100) * (commitsPct - 100)));
+  console.log(`on ${date}, the commits pct is: ${commitsFillPct}`);
 
   const prsRadius = 30;
   const prsCircumference = Math.ceil(2 * Math.PI * prsRadius);
   const prsPct = (prsActual / prsGoal) * 100;
+  const hitPRsGoal = prsPct >= 100;
   console.log(`here be the percent: ${prsPct}`);
-  const prsFillPct = Math.abs(
-    Math.ceil((prsCircumference / 100) * (prsPct - 100))
-  );
+  const prsFillPct = hitPRsGoal
+    ? 0
+    : Math.abs(Math.ceil((prsCircumference / 100) * (prsPct - 100)));
+  console.log(`on ${date}, the prs pct is: ${prsFillPct}`);
 
   const transition = {
     duration: 3,
@@ -48,12 +64,17 @@ export const UpgradedRing = ({ size = 400, values }: Props) => {
   };
 
   const variants = {
+    container: {
+      transition: {
+        staggerChildren: 4,
+      },
+    },
     hideCommits: {
       strokeDashoffset: commitsCircumference,
       transition,
     },
     showCommits: {
-      strokeDashoffset: commitsPct,
+      strokeDashoffset: commitsFillPct,
       transition,
     },
     hidePRs: {
@@ -61,7 +82,7 @@ export const UpgradedRing = ({ size = 400, values }: Props) => {
       transition,
     },
     showPRs: {
-      strokeDashoffset: prsPct,
+      strokeDashoffset: prsFillPct,
       transition,
     },
   };
@@ -103,38 +124,48 @@ export const UpgradedRing = ({ size = 400, values }: Props) => {
           marginLeft: -size, // TODO: Note that this is what makes circles overlap
         }}
       >
-        <motion.circle
-          cx="50"
-          cy="50"
-          r={commitsRadius}
-          strokeWidth={strokeWidth}
-          stroke={outerStroke2}
-          fill="transparent"
-          strokeDashoffset={commitsFillPct}
-          strokeDasharray={commitsCircumference}
-          strokeLinecap="round"
-          variants={variants}
-          initial="hideCommits"
-          animate="showCommits"
-        />
-        <motion.circle
-          cx="50"
-          cy="50"
-          r={prsRadius}
-          strokeWidth={strokeWidth}
-          stroke={middleStroke2}
-          fill="transparent"
-          strokeDashoffset={prsFillPct}
-          strokeDasharray={prsCircumference}
-          strokeLinecap="round"
-          variants={variants}
-          initial="hidePRs"
-          animate="showPRs"
-        />
+        {Boolean(commitsPct) && (
+          <motion.circle
+            cx="50"
+            cy="50"
+            r={commitsRadius}
+            strokeWidth={strokeWidth}
+            stroke={outerStroke2}
+            fill="transparent"
+            strokeDashoffset={commitsFillPct}
+            strokeDasharray={commitsCircumference}
+            strokeLinecap="round"
+            variants={variants}
+            initial="hideCommits"
+            animate="showCommits"
+          />
+        )}
+        {Boolean(prsPct) && (
+          <motion.circle
+            cx="50"
+            cy="50"
+            r={prsRadius}
+            strokeWidth={strokeWidth}
+            stroke={middleStroke2}
+            fill="transparent"
+            strokeDashoffset={prsFillPct}
+            strokeDasharray={prsCircumference}
+            strokeLinecap="round"
+            variants={variants}
+            initial="hidePRs"
+            animate="showPRs"
+          />
+        )}
       </svg>
       {/* TODO: Delay the framer animation, conditionally render for isRingComplete */}
-      <Box mt={-50.9}>
-        <Lottie loop={false} animationData={checkmarkLottie} play speed={0.7} />
+
+      <Box mt={isDayTile ? -5.9 : -50.9}>
+        <Lottie
+          loop={false}
+          animationData={checkmarkLottie}
+          play={showLottie && hitCommitsGoal} //&& hitPRsGoal
+          speed={0.7}
+        />
       </Box>
     </Box>
   );

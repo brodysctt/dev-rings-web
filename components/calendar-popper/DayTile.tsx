@@ -3,7 +3,7 @@ import { useState } from "react";
 import { useAuth } from "@lib/firebase/auth";
 import type { Log } from "@lib/firebase/firestore";
 import { dayjs } from "@lib/dayjs";
-import { AnimatedRing, ProgressRing } from "components";
+import { UpgradedRing } from "components";
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
 import ButtonBase from "@mui/material/ButtonBase";
@@ -13,9 +13,8 @@ export const DayTile = ({ log }: { log: Log }) => {
   const userId = useAuth();
   if (!userId) return null;
 
-  const [dateString, { actual, goal }] = log;
-  const isDayOff = !actual && !goal;
-  const hitGoal = !isDayOff && actual >= goal;
+  const [dateString, { commits, prs }] = log;
+  const isDayOff = !commits && !prs;
   const isToday = dateString === dayjs().format("YYYY-MM-DD");
 
   const dayHref = {
@@ -29,25 +28,31 @@ export const DayTile = ({ log }: { log: Log }) => {
         borderRadius={3}
         maxHeight={60}
         maxWidth={60}
-        pt={0.5}
+        pt={0.2}
+        pb={0.5}
       >
-        <Typography mr={1} sx={{ fontSize: 10, alignSelf: "flex-end" }}>
+        <Typography
+          mr={0.5}
+          mb={-1}
+          sx={{ fontSize: 10, alignSelf: "flex-end" }}
+        >
           {dayjs(dateString).date()}
         </Typography>
         <ButtonBase
           onMouseEnter={() => setHover(true)}
           onMouseLeave={() => setHover(false)}
           disabled={isDayOff}
-          sx={{ bgcolor: hover ? "#F5F6FD" : null }}
+          sx={{ bgcolor: hover ? "#F5F6FD" : null, mt: 0.2 }}
         >
-          {hitGoal ? (
-            <AnimatedRing size={40} isDayTile />
-          ) : (
-            <ProgressRing
-              values={isDayOff ? [0, 1] : [actual, goal]}
-              size={30}
-            />
-          )}
+          <UpgradedRing
+            isDayTile
+            size={35}
+            values={[
+              commits ? [commits.actual, commits.goal] : [0, 1],
+              prs ? [prs.actual, prs.goal] : [0, 1],
+            ]}
+            date={dateString}
+          />
         </ButtonBase>
       </Stack>
     </Link>
