@@ -51,7 +51,6 @@ export const DayTile = ({ log }: { log: Log }) => {
               commits ? [commits.actual, commits.goal] : [0, 1],
               prs ? [prs.actual, prs.goal] : [0, 1],
             ]}
-            date={dateString}
           />
         </ButtonBase>
       </Stack>

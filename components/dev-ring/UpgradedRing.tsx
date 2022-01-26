@@ -11,7 +11,6 @@ interface Props {
   isDayTile?: boolean;
   size?: number;
   values: RingValues;
-  date: string;
 }
 
 export const UpgradedRing = ({
@@ -163,7 +162,7 @@ export const UpgradedRing = ({
         <Lottie
           loop={false}
           animationData={checkmarkLottie}
-          play={showLottie && hitCommitsGoal} //&& hitPRsGoal
+          play={showLottie && hitCommitsGoal && hitPRsGoal}
           speed={0.7}
         />
       </Box>
