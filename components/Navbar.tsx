@@ -51,8 +51,8 @@ export const Navbar = () => {
             <Image src="/repo-icon.png" width={32} height={32} />
           </NavbarItem>
           {/* TODO: Track separate PR goal */}
-          <SetGoalInput color="#4DD0E1" variant="commits" />
-          <SetGoalInput variant="prs" />
+          <SetGoalInput color="#4DD0E1" goalType="commits" />
+          <SetGoalInput goalType="prs" />
         </Stack>
         <Stack height={60} p={1} pr={2}>
           <SpeedDial
