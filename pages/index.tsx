@@ -1,6 +1,6 @@
 import type { NextPage } from "next";
 import Stack from "@mui/material/Stack";
-import { DevRing, GetStarted, UpgradedRing } from "components";
+import { DevRing, GetStarted } from "components";
 import { NewTimezoneAlert } from "@lib/react-toastify";
 import { useUserDoc, useCollection } from "@lib/firebase/firestore";
 import type { RepoEvent, Webhook } from "@lib/firebase/firestore";

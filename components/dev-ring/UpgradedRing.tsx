@@ -13,13 +13,13 @@ interface Props {
 export const UpgradedRing = ({ size = 400, values }: Props) => {
   const [actual, goal] = values;
 
-  const outerStroke = "#556cd6";
-  const middleStroke = "#111033"; //"#7E55D6";
-  const innerStroke = "#4DD0E1"; //"#4DB6AC";
+  // const outerStroke = "#556cd6";
+  // const middleStroke = "#111033"; //"#7E55D6";
+  // const innerStroke = "#4DD0E1"; //"#4DB6AC";
 
   const outerStroke2 = "#4DD0E1"; // "#556cd6";
   const middleStroke2 = "#556cd6"; //"#7E55D6";
-  const innerStroke2 = "#111033"; //"#4DB6AC";
+  // const innerStroke2 = "#111033"; //"#4DB6AC";
 
   const strokeWidth = 10;
 
