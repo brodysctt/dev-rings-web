@@ -114,8 +114,8 @@ export const UpgradedRing = ({ size = 400, values }: Props) => {
           strokeDasharray={commitsCircumference}
           strokeLinecap="round"
           variants={variants}
-          initial="hidden"
-          animate="show"
+          initial="hideCommits"
+          animate="showCommits"
         />
         <motion.circle
           cx="50"
@@ -128,8 +128,8 @@ export const UpgradedRing = ({ size = 400, values }: Props) => {
           strokeDasharray={prsCircumference}
           strokeLinecap="round"
           variants={variants}
-          initial="hidden"
-          animate="show"
+          initial="hidePRs"
+          animate="showPRs"
         />
       </svg>
       {/* TODO: Delay the framer animation, conditionally render for isRingComplete */}
