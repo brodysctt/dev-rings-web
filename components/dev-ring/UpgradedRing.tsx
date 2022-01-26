@@ -43,7 +43,6 @@ export const UpgradedRing = ({
   const commitsFillPct = hitCommitsGoal
     ? 0
     : Math.abs(Math.ceil((commitsCircumference / 100) * (commitsPct - 100)));
-  console.log(`on ${date}, the commits pct is: ${commitsFillPct}`);
 
   const prsRadius = 30;
   const prsCircumference = Math.ceil(2 * Math.PI * prsRadius);
@@ -53,7 +52,6 @@ export const UpgradedRing = ({
   const prsFillPct = hitPRsGoal
     ? 0
     : Math.abs(Math.ceil((prsCircumference / 100) * (prsPct - 100)));
-  console.log(`on ${date}, the prs pct is: ${prsFillPct}`);
 
   const transition = {
     duration: 3,
