@@ -6,8 +6,14 @@ export type CollectionName = "events" | "logs" | "webhooks";
 export type Log = [
   string,
   {
-    actual: number;
-    goal: number;
+    commits?: {
+      actual: number;
+      goal: number;
+    };
+    prs?: {
+      actual: number;
+      goal: number;
+    };
   }
 ];
 

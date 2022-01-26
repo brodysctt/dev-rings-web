@@ -4,14 +4,16 @@ import { motion } from "framer-motion";
 import Lottie from "react-lottie-player";
 import checkmarkLottie from "public/checkmark-lottie.json";
 
+export type RingValues = [[number, number], [number, number]];
+
 interface Props {
   size?: number;
-  values: [number, number];
+  values: RingValues;
   // isDayTile?: boolean;
 }
 
 export const UpgradedRing = ({ size = 400, values }: Props) => {
-  const [actual, goal] = values;
+  const [[commitsActual, commitsGoal], [prsActual, prsGoal]] = values;
 
   // const outerStroke = "#556cd6";
   // const middleStroke = "#111033"; //"#7E55D6";
@@ -23,18 +25,21 @@ export const UpgradedRing = ({ size = 400, values }: Props) => {
 
   const strokeWidth = 10;
 
-  const radius = 45;
-  const circumference = Math.ceil(2 * Math.PI * radius);
-
-  const percent = (actual / goal) * 100;
-  console.log(`here be the percent: ${percent}`);
-
-  const fillPercent = Math.abs(
-    Math.ceil((circumference / 100) * (percent - 100))
+  const commitsRadius = 45;
+  const commitsCircumference = Math.ceil(2 * Math.PI * commitsRadius);
+  const commitsPct = (commitsActual / commitsGoal) * 100;
+  console.log(`here be the percent: ${commitsPct}`);
+  const commitsFillPct = Math.abs(
+    Math.ceil((commitsCircumference / 100) * (commitsPct - 100))
   );
 
-  console.log(`here be the percent: ${percent}`);
-  console.log(`here be the stroke offset: ${100 - percent}`);
+  const prsRadius = 30;
+  const prsCircumference = Math.ceil(2 * Math.PI * prsRadius);
+  const prsPct = (prsActual / prsGoal) * 100;
+  console.log(`here be the percent: ${prsPct}`);
+  const prsFillPct = Math.abs(
+    Math.ceil((prsCircumference / 100) * (prsPct - 100))
+  );
 
   const transition = {
     duration: 3,
@@ -42,24 +47,22 @@ export const UpgradedRing = ({ size = 400, values }: Props) => {
     ease: "easeIn",
   };
 
-  const lottieTransition = {
-    duration: 3,
-    delay: 2,
-    ease: "easeIn",
-  };
-
   const variants = {
-    hidden: {
-      strokeDashoffset: circumference,
+    hideCommits: {
+      strokeDashoffset: commitsCircumference,
       transition,
     },
-    show: {
-      strokeDashoffset: fillPercent,
+    showCommits: {
+      strokeDashoffset: commitsPct,
       transition,
     },
-    lottie: {
-      strokeDashoffset: fillPercent,
-      lottieTransition,
+    hidePRs: {
+      strokeDashoffset: prsCircumference,
+      transition,
+    },
+    showPRs: {
+      strokeDashoffset: prsPct,
+      transition,
     },
   };
 
@@ -69,7 +72,7 @@ export const UpgradedRing = ({ size = 400, values }: Props) => {
         <circle
           cx="50"
           cy="50"
-          r={radius}
+          r={commitsRadius}
           className="circle"
           strokeWidth={strokeWidth}
           stroke={outerStroke2}
@@ -80,7 +83,7 @@ export const UpgradedRing = ({ size = 400, values }: Props) => {
         <circle
           cx="50"
           cy="50"
-          r={30}
+          r={prsRadius}
           className="circle"
           strokeWidth={strokeWidth}
           stroke={middleStroke2}
@@ -103,12 +106,12 @@ export const UpgradedRing = ({ size = 400, values }: Props) => {
         <motion.circle
           cx="50"
           cy="50"
-          r={radius}
+          r={commitsRadius}
           strokeWidth={strokeWidth}
           stroke={outerStroke2}
           fill="transparent"
-          strokeDashoffset={fillPercent}
-          strokeDasharray={circumference}
+          strokeDashoffset={commitsFillPct}
+          strokeDasharray={commitsCircumference}
           strokeLinecap="round"
           variants={variants}
           initial="hidden"
@@ -117,12 +120,12 @@ export const UpgradedRing = ({ size = 400, values }: Props) => {
         <motion.circle
           cx="50"
           cy="50"
-          r={30}
+          r={prsRadius}
           strokeWidth={strokeWidth}
           stroke={middleStroke2}
           fill="transparent"
-          strokeDashoffset={fillPercent}
-          strokeDasharray={circumference}
+          strokeDashoffset={prsFillPct}
+          strokeDasharray={prsCircumference}
           strokeLinecap="round"
           variants={variants}
           initial="hidden"
@@ -130,16 +133,9 @@ export const UpgradedRing = ({ size = 400, values }: Props) => {
         />
       </svg>
       {/* TODO: Delay the framer animation, conditionally render for isRingComplete */}
-      <motion.div initial="hidden" animate="lottie">
-        <Box mt={-50.9}>
-          <Lottie
-            loop={false}
-            animationData={checkmarkLottie}
-            play
-            speed={0.7}
-          />
-        </Box>
-      </motion.div>
+      <Box mt={-50.9}>
+        <Lottie loop={false} animationData={checkmarkLottie} play speed={0.7} />
+      </Box>
     </Box>
   );
 };
