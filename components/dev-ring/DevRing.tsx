@@ -18,7 +18,9 @@ export const DevRing = ({ dateString, events, values }: Props) => (
         {dayjs(dateString).format("LL")}
       </Typography>
       {/* <ProgressRing values={values} /> */}
-      <UpgradedRing values={values} />
+      <Stack direction="row">
+        <UpgradedRing values={values} />
+      </Stack>
       <PopIt
         id="View events"
         sx={{ mt: 4 }}
