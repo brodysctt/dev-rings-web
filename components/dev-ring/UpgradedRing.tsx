@@ -88,17 +88,6 @@ export const UpgradedRing = ({ size = 400, values }: Props) => {
           strokeLinecap="round"
           fill="transparent"
         />
-        <circle
-          cx="50"
-          cy="50"
-          r={14}
-          className="circle"
-          strokeWidth={strokeWidth}
-          stroke={innerStroke2}
-          strokeOpacity={0.25}
-          strokeLinecap="round"
-          fill="transparent"
-        />
       </svg>
       <svg
         viewBox="0 0 100 100"
@@ -131,20 +120,6 @@ export const UpgradedRing = ({ size = 400, values }: Props) => {
           r={30}
           strokeWidth={strokeWidth}
           stroke={middleStroke2}
-          fill="transparent"
-          strokeDashoffset={fillPercent}
-          strokeDasharray={circumference}
-          strokeLinecap="round"
-          variants={variants}
-          initial="hidden"
-          animate="show"
-        />
-        <motion.circle
-          cx="50"
-          cy="50"
-          r={14}
-          strokeWidth={strokeWidth}
-          stroke={innerStroke2}
           fill="transparent"
           strokeDashoffset={fillPercent}
           strokeDasharray={circumference}

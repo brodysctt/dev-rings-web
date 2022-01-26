@@ -6,10 +6,11 @@ import { setDailyGoal, useUserDoc } from "@lib/firebase/firestore";
 import { toast } from "react-toastify";
 
 interface Props {
+  color?: string;
   onSuccess?: () => void;
 }
 
-export const SetGoalInput = ({ onSuccess }: Props) => {
+export const SetGoalInput = ({ color = "primary.main", onSuccess }: Props) => {
   const { register, handleSubmit } = useForm<{ goal: number }>();
 
   const userData = useUserDoc();
@@ -35,7 +36,7 @@ export const SetGoalInput = ({ onSuccess }: Props) => {
           sx={{
             width: 32,
             fontSize: 30,
-            color: "primary.main",
+            color,
             input: { textAlign: "center" },
           }}
           onKeyPress={(kp) => {
