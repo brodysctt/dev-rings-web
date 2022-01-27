@@ -15,8 +15,13 @@ const Enter = () => {
   if (!userId || !userData)
     return (
       <Stack justifyContent="center" alignItems="center" height="100vh">
-        <ProgressRing values={[1, 1]} />
-        <Typography variant="h4" sx={{ mt: 3, mb: 5, color: "primary.main" }}>
+        <ProgressRing
+          values={[
+            [1, 1],
+            [1, 1],
+          ]}
+        />
+        <Typography variant="h4" sx={{ my: 5, color: "primary.main" }}>
           {`Build momentum on your coding journey`}
         </Typography>
         <SignInButton />

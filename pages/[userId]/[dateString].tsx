@@ -7,14 +7,17 @@ import Cookies from "cookies";
 
 const Day: NextPage<{ log: Log }> = ({ log }) => {
   const events = useCollection("events") as RepoEvent[] | null;
-  const [dateString, { actual, goal }] = log;
+  const [dateString, { commits, prs }] = log;
   const dayEvents = getDayEvents(events, dateString);
   if (!dayEvents) return null;
   return (
     <DevRing
       dateString={dateString}
       events={dayEvents}
-      values={[actual, goal]}
+      values={[
+        commits ? [commits.actual, commits.goal] : [0, 1],
+        prs ? [prs.actual, prs.goal] : [0, 1],
+      ]}
     />
   );
 };
