@@ -1,2 +1,2 @@
-export { createWebhookHandler } from "./webhooks";
+export { createWebhookHandler, deleteWebhookHandler } from "./webhooks";
 export { incomingEventHandler } from "./events";

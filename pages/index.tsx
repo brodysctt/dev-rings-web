@@ -12,7 +12,7 @@ const Index: NextPage = () => {
   const webhooks = useCollection("webhooks") as Webhook[] | null;
 
   if (!userData || !webhooks) return null;
-  const [, { dailyGoal: goal, timezone }] = userData;
+  const [, { dailyGoals, timezone }] = userData;
 
   const dayEvents = getDayEvents(
     events as RepoEvent[],
@@ -27,12 +27,24 @@ const Index: NextPage = () => {
       </Stack>
     );
 
-  const actual = dayEvents.length;
+  const commitsActual = dayEvents.filter(
+    ({ eventType }) => eventType === "push"
+  ).length;
+  const prsActual = dayEvents.filter(
+    ({ eventType }) => eventType === "pull_request"
+  ).length;
+
   return (
-    <>
-      <DevRing events={dayEvents} values={[actual, goal]} />
+    <Stack direction="row" justifyContent="center">
+      <DevRing
+        events={dayEvents}
+        values={[
+          [commitsActual, dailyGoals.commits],
+          [prsActual, dailyGoals.prs],
+        ]}
+      />
       <NewTimezoneAlert tz={timezone} />
-    </>
+    </Stack>
   );
 };
 
