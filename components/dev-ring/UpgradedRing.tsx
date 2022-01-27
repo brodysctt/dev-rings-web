@@ -18,7 +18,7 @@ export const UpgradedRing = ({
 }: Props) => {
   const [showLottie, setShowLottie] = useState(false);
 
-  const duration = 3;
+  const duration = 2;
   useEffect(() => {
     setTimeout(() => setShowLottie(true), duration * 1000 * 1.3);
   });
