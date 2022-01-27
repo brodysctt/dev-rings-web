@@ -32,10 +32,10 @@ export const AvatarCarousel = ({ onSuccess }: { onSuccess?: () => void }) => {
   const [, { avatarId }] = userData;
   return (
     <Grid container spacing={2} wrap="nowrap" pt={1} px={3}>
-      {AVATARS.map(([id, lottieJson]) => {
+      {AVATARS.map(([id, lottieJson], i) => {
         const isCurrentAvatar = id === avatarId;
         return (
-          <Grid item>
+          <Grid item key={i}>
             <Stack alignItems="center">
               <Button
                 disableRipple
