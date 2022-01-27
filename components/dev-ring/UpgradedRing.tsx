@@ -20,7 +20,7 @@ export const UpgradedRing = ({
 
   const duration = 2;
   useEffect(() => {
-    setTimeout(() => setShowLottie(true), duration * 1000 * 1.3);
+    setTimeout(() => setShowLottie(true), duration * 1000 * 2);
   });
   const [[commitsActual, commitsGoal], [prsActual, prsGoal]] = values;
 
