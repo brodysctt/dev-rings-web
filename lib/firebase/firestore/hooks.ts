@@ -40,17 +40,15 @@ export const useUserDoc = () => {
   const userId = useAuth();
   const [data, setData] = useState<[string, DocumentData] | null>(null);
   useEffect(() => {
-    if (userId) {
-      const unsub = onSnapshot(doc(db, "users", userId), {
-        next: (userDoc) => {
-          if (userDoc.exists()) {
-            setData([userId, userDoc.data()]);
-            return;
-          }
-        },
-      });
-      return unsub;
-    }
+    if (!userId) return;
+    const unsubscribe = onSnapshot(doc(db, "users", userId), (userDoc) => {
+      if (userDoc.exists()) {
+        setData([userId, userDoc.data()]);
+        return;
+      }
+    });
+
+    return () => unsubscribe();
   }, [userId]);
   return data;
 };

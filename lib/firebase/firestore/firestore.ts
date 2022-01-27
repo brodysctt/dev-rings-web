@@ -51,7 +51,7 @@ export const fetchHookId = async (userId: string, repo: string) => {
 
 export const setAvatar = async (userId: string, avatarId: string) => {
   await updateDoc(doc(db, "users", userId), {
-    avatar: avatarId,
+    avatarId,
   });
   toast.success(`Avatar successfully updated ${avatarId}`);
 };
