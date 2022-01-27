@@ -28,8 +28,10 @@ export const incomingEventHandler = https.onRequest(async (req, res) => {
         res.sendStatus(200);
         return;
       }
-      const { dailyGoal: goal, timezone } =
-        userDoc.data() as admin.firestore.DocumentData;
+      const {
+        dailyGoals: { commits: commitsGoal, prs: prsGoal },
+        timezone,
+      } = userDoc.data() as admin.firestore.DocumentData;
       const date = new Date();
       const createdAt = admin.firestore.Timestamp.fromDate(date);
       const dateString = dayjs(date).tz(timezone).format("YYYY-MM-DD");
@@ -63,13 +65,56 @@ export const incomingEventHandler = https.onRequest(async (req, res) => {
         logger.log(`Updating ring for ${dateString}...`);
         await logsRef.doc(dateString).set(
             {
-              actual: admin.firestore.FieldValue.increment(commits.length),
-              goal,
+              commits: {
+                actual: admin.firestore.FieldValue.increment(commits.length),
+                goal: commitsGoal,
+              },
             },
             { merge: true }
         );
         logger.log(`Successfully updated ring for ${dateString} 🎉`);
 
+        res.sendStatus(200);
+        return;
+      }
+
+      if (eventType === "pull_request") {
+        const { action } = data;
+        if (action !== "closed") {
+          logger.log(
+              `PR event for ${action} action - this event won't be stored 🙅‍♂️`
+          );
+          res.sendStatus(200);
+          return;
+        }
+        const {
+          pull_request: { id, title: message, html_url: url },
+          repository: { name: repo },
+        } = data;
+        const eventId = id.toString();
+
+        logger.log(`Storing ${eventType} event...`);
+        await eventsRef.doc(eventId).set({
+          createdAt,
+          dateString,
+          eventType,
+          repo,
+          message,
+          url,
+        });
+        logger.log(`Successfully stored event ${eventId} 🎉`);
+
+        logger.log(`Updating ring for ${dateString}...`);
+        await logsRef.doc(dateString).set(
+            {
+              prs: {
+                actual: admin.firestore.FieldValue.increment(1),
+                goal: prsGoal,
+              },
+            },
+            { merge: true }
+        );
+        logger.log(`Successfully updated ring for ${dateString} 🎉`);
         res.sendStatus(200);
         return;
       }

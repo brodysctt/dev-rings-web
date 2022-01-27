@@ -65,12 +65,20 @@ export const setGitHubToken = async (userId: string, token: string) => {
   toast.success("Successfully created account 🎉");
 };
 
-export const setDailyGoal = async (userId: string, dailyGoal: number) => {
-  console.log("Submitting goal...");
+export const setGoal = async (userId: string, goal: number, type: string) => {
+  const isCommits = type === "commits";
+  if (!isCommits) {
+    await updateDoc(doc(db, "users", userId), {
+      "dailyGoals.prs": goal,
+    });
+    toast.success(`Daily PRs goal is now ${goal} 🏔️`);
+    return;
+  }
+
   await updateDoc(doc(db, "users", userId), {
-    dailyGoal,
+    "dailyGoals.commits": goal,
   });
-  console.log("Sucessfully submitted goal 🎉");
+  toast.success(`Daily commits goal is now ${goal} 🏔️`);
 };
 
 export const setIsOnboarding = async (userId: string) => {

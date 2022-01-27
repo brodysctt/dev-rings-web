@@ -1,6 +1,6 @@
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
-import { PopIt, UpgradedRing } from "components";
+import { PopIt, UpgradedRing, RingValues } from "components";
 import { EventsTimeline } from "./EventsTimeline";
 import { dayjs } from "@lib/dayjs";
 import type { RepoEvent } from "@lib/firebase/firestore";
@@ -8,7 +8,7 @@ import type { RepoEvent } from "@lib/firebase/firestore";
 interface Props {
   dateString?: string | undefined;
   events: RepoEvent[];
-  values: [number, number];
+  values: RingValues;
 }
 
 export const DevRing = ({ dateString, events, values }: Props) => (
@@ -18,7 +18,9 @@ export const DevRing = ({ dateString, events, values }: Props) => (
         {dayjs(dateString).format("LL")}
       </Typography>
       {/* <ProgressRing values={values} /> */}
-      <UpgradedRing values={values} />
+      <Stack direction="row">
+        <UpgradedRing values={values} />
+      </Stack>
       <PopIt
         id="View events"
         sx={{ mt: 4 }}
@@ -36,7 +38,7 @@ export const DevRing = ({ dateString, events, values }: Props) => (
 
 const iconSx = {
   justifyContent: "center",
-  bgcolor: "primary.main",
+  bgcolor: "#111033", //"primary.main",
   borderRadius: 50,
   px: 0.8,
   py: 2,

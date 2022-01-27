@@ -1,44 +1,72 @@
+import { useState, useEffect } from "react";
 import Box from "@mui/material/Box";
 import { motion } from "framer-motion";
+import Lottie from "react-lottie-player";
+import checkmarkLottie from "public/checkmark-lottie.json";
 
+export type RingValues = [[number, number], [number, number]];
 interface Props {
+  isDayTile?: boolean;
   size?: number;
-  values: [number, number];
-  // isDayTile?: boolean;
+  values: RingValues;
 }
 
-export const UpgradedRing = ({ size = 400, values }: Props) => {
-  const [actual, goal] = values;
+export const UpgradedRing = ({
+  isDayTile = false,
+  size = 400,
+  values,
+}: Props) => {
+  const [showLottie, setShowLottie] = useState(false);
 
-  const stroke = "#556cd6";
+  const duration = 3;
+  useEffect(() => {
+    setTimeout(() => setShowLottie(true), duration * 1000 * 1.3);
+  });
+  const [[commitsActual, commitsGoal], [prsActual, prsGoal]] = values;
+
+  const outerStroke = "#4DD0E1";
+  const middleStroke = "#556cd6";
   const strokeWidth = 10;
 
-  const radius = 45;
-  const circumference = Math.ceil(2 * Math.PI * radius);
+  const commitsRadius = 45;
+  const commitsCircumference = Math.ceil(2 * Math.PI * commitsRadius);
+  const commitsPct = (commitsActual / commitsGoal) * 100;
+  const hitCommitsGoal = commitsPct >= 100;
+  console.log(`here be the percent: ${commitsPct}`);
+  const commitsFillPct = hitCommitsGoal
+    ? 0
+    : Math.abs(Math.ceil((commitsCircumference / 100) * (commitsPct - 100)));
 
-  const percent = (actual / goal) * 100;
-  console.log(`here be the percent: ${percent}`);
-
-  const fillPercent = Math.abs(
-    Math.ceil((circumference / 100) * (percent - 100))
-  );
-
-  console.log(`here be the percent: ${percent}`);
-  console.log(`here be the stroke offset: ${100 - percent}`);
+  const prsRadius = 30;
+  const prsCircumference = Math.ceil(2 * Math.PI * prsRadius);
+  const prsPct = (prsActual / prsGoal) * 100;
+  const hitPRsGoal = prsPct >= 100;
+  console.log(`here be the percent: ${prsPct}`);
+  const prsFillPct = hitPRsGoal
+    ? 0
+    : Math.abs(Math.ceil((prsCircumference / 100) * (prsPct - 100)));
 
   const transition = {
-    duration: 3,
+    duration,
     delay: 0.5,
     ease: "easeIn",
   };
 
   const variants = {
-    hidden: {
-      strokeDashoffset: circumference,
+    hideCommits: {
+      strokeDashoffset: commitsCircumference,
       transition,
     },
-    show: {
-      strokeDashoffset: fillPercent,
+    showCommits: {
+      strokeDashoffset: commitsFillPct,
+      transition,
+    },
+    hidePRs: {
+      strokeDashoffset: prsCircumference,
+      transition,
+    },
+    showPRs: {
+      strokeDashoffset: prsFillPct,
       transition,
     },
   };
@@ -49,10 +77,21 @@ export const UpgradedRing = ({ size = 400, values }: Props) => {
         <circle
           cx="50"
           cy="50"
-          r={radius}
+          r={commitsRadius}
           className="circle"
           strokeWidth={strokeWidth}
-          stroke={stroke}
+          stroke={outerStroke}
+          strokeOpacity={0.25}
+          strokeLinecap="round"
+          fill="transparent"
+        />
+        <circle
+          cx="50"
+          cy="50"
+          r={prsRadius}
+          className="circle"
+          strokeWidth={strokeWidth}
+          stroke={middleStroke}
           strokeOpacity={0.25}
           strokeLinecap="round"
           fill="transparent"
@@ -66,24 +105,50 @@ export const UpgradedRing = ({ size = 400, values }: Props) => {
           position: "absolute",
           transform: "rotate(-90deg)",
           overflow: "visible",
-          marginLeft: -size, // TODO: Note that this is what makes circles overlap
+          marginLeft: -size,
         }}
       >
-        <motion.circle
-          cx="50"
-          cy="50"
-          r={radius}
-          strokeWidth={strokeWidth}
-          stroke={stroke}
-          fill="transparent"
-          strokeDashoffset={fillPercent}
-          strokeDasharray={circumference}
-          strokeLinecap="round"
-          variants={variants}
-          initial="hidden"
-          animate="show"
-        />
+        {Boolean(commitsPct) && (
+          <motion.circle
+            cx="50"
+            cy="50"
+            r={commitsRadius}
+            strokeWidth={strokeWidth}
+            stroke={outerStroke}
+            fill="transparent"
+            strokeDashoffset={commitsFillPct}
+            strokeDasharray={commitsCircumference}
+            strokeLinecap="round"
+            variants={variants}
+            initial="hideCommits"
+            animate="showCommits"
+          />
+        )}
+        {Boolean(prsPct) && (
+          <motion.circle
+            cx="50"
+            cy="50"
+            r={prsRadius}
+            strokeWidth={strokeWidth}
+            stroke={middleStroke}
+            fill="transparent"
+            strokeDashoffset={prsFillPct}
+            strokeDasharray={prsCircumference}
+            strokeLinecap="round"
+            variants={variants}
+            initial="hidePRs"
+            animate="showPRs"
+          />
+        )}
       </svg>
+      <Box mt={isDayTile ? -5.9 : -50.9}>
+        <Lottie
+          loop={false}
+          animationData={checkmarkLottie}
+          play={showLottie && hitCommitsGoal && hitPRsGoal}
+          speed={0.7}
+        />
+      </Box>
     </Box>
   );
 };

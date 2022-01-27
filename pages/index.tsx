@@ -1,6 +1,6 @@
 import type { NextPage } from "next";
 import Stack from "@mui/material/Stack";
-import { DevRing, GetStarted, UpgradedRing } from "components";
+import { DevRing, GetStarted } from "components";
 import { NewTimezoneAlert } from "@lib/react-toastify";
 import { useUserDoc, useCollection } from "@lib/firebase/firestore";
 import type { RepoEvent, Webhook } from "@lib/firebase/firestore";
@@ -12,7 +12,7 @@ const Index: NextPage = () => {
   const webhooks = useCollection("webhooks") as Webhook[] | null;
 
   if (!userData || !webhooks) return null;
-  const [, { dailyGoal: goal, timezone }] = userData;
+  const [, { dailyGoals, timezone }] = userData;
 
   const dayEvents = getDayEvents(
     events as RepoEvent[],
@@ -27,10 +27,23 @@ const Index: NextPage = () => {
       </Stack>
     );
 
-  const actual = dayEvents.length;
+  const commitsActual = dayEvents.filter(
+    ({ eventType }) => eventType === "push"
+  ).length;
+  const prsActual = dayEvents.filter(
+    ({ eventType }) => eventType === "pull_request"
+  ).length;
+
   return (
     <Stack direction="row" justifyContent="center">
-      <DevRing events={dayEvents} values={[actual, goal]} />
+      {/* <DevRing events={dayEvents} values={[actual, goal]} /> */}
+      <DevRing
+        events={dayEvents}
+        values={[
+          [commitsActual, dailyGoals.commits],
+          [prsActual, dailyGoals.prs],
+        ]}
+      />
       {/* <UpgradedRing /> */}
       <NewTimezoneAlert tz={timezone} />
     </Stack>
