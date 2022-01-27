@@ -49,6 +49,13 @@ export const fetchHookId = async (userId: string, repo: string) => {
   return hookId;
 };
 
+export const setAvatar = async (userId: string, avatarId: string) => {
+  await updateDoc(doc(db, "users", userId), {
+    avatar: avatarId,
+  });
+  toast.success(`Avatar successfully updated ${avatarId}`);
+};
+
 export const setGitHubToken = async (userId: string, token: string) => {
   const docRef = doc(db, "users", userId);
   const docSnap = await getDoc(docRef);

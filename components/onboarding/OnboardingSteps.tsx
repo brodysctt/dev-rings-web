@@ -1,8 +1,13 @@
 import type { FC } from "react";
 import Image from "next/image";
+import Grid from "@mui/material/Grid";
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
-import { ManageReposCheckboxes, SetGoalInput } from "components";
+import {
+  AvatarCarousel,
+  ManageReposCheckboxes,
+  SetGoalInput,
+} from "components";
 import { TextLink } from "components";
 import { Button } from "@mui/material";
 
@@ -19,13 +24,19 @@ export const OnboardingSteps = ({ activeStep, onSuccess }: Props) => {
       body: <Motivation {...{ onSuccess }} />,
     },
     {
+      header: `It's your journey, may as well be the main character`,
+      subheader: "Select an avatar to continue",
+      blob: "/blobpopcorn.png",
+      body: <AvatarCarousel {...{ onSuccess }} />,
+    },
+    {
       header: `To track progress, you must first set a goal`,
       blob: "/ablobnod.gif",
       subheader: "How many commits will you push in a given day?",
       body: (
         <Stack direction="row">
-          <SetGoalInput onSuccess={onSuccess} goalType="commits" />
-          <SetGoalInput onSuccess={onSuccess} goalType="prs" />
+          <SetGoalInput goalType="commits" {...{ onSuccess }} />
+          <SetGoalInput goalType="prs" {...{ onSuccess }} />
         </Stack>
       ),
     },
@@ -44,31 +55,47 @@ export const OnboardingSteps = ({ activeStep, onSuccess }: Props) => {
   ];
 
   const { header, blob, subheader, body } = steps[activeStep];
-  return <Panel {...{ header, blob, subheader }}>{body}</Panel>;
+  return <Panel {...{ activeStep, header, blob, subheader }}>{body}</Panel>;
 };
 
 interface IProps {
+  activeStep: number;
   header: string | JSX.Element;
   blob: string;
   subheader?: string | JSX.Element;
 }
 
-const Panel: FC<IProps> = ({ header, blob, subheader, children }) => (
-  <Stack justifyContent="center" alignItems="center" height="50vh">
-    <Stack direction="row">
-      <Typography variant="h6" color="primary" sx={{ mr: 1 }}>
-        {header}
-      </Typography>
-      <Image src={blob} width={30} height={30} />
+const Panel: FC<IProps> = (props) => {
+  const { activeStep, header, blob, subheader, children } = props;
+  const isAvatarCarousel = activeStep === 1;
+  return (
+    <Stack
+      justifyContent="center"
+      alignItems="center"
+      height="65vh"
+      width="100%"
+    >
+      <Stack direction="row">
+        <Typography variant="h6" color="primary" sx={{ mr: 1 }}>
+          {header}
+        </Typography>
+        <Image src={blob} width={30} height={30} />
+      </Stack>
+      {subheader && (
+        <Typography align="center" color="text.secondary" mb={2}>
+          {subheader}
+        </Typography>
+      )}
+      {isAvatarCarousel ? (
+        <Grid overflow="scroll" width="100%">
+          {children}
+        </Grid>
+      ) : (
+        children
+      )}
     </Stack>
-    {subheader && (
-      <Typography align="center" color="text.secondary" mb={2}>
-        {subheader}
-      </Typography>
-    )}
-    {children}
-  </Stack>
-);
+  );
+};
 
 const Motivation = ({ onSuccess }: { onSuccess: () => void }) => (
   <>
@@ -81,8 +108,8 @@ const Motivation = ({ onSuccess }: { onSuccess: () => void }) => (
     >{`Here be the reasons why you should use the app:`}</Typography>
     <Typography color="text.secondary" mb={3} sx={{ whiteSpace: "pre-line" }}>
       {`1. Contributions are timestamped according to your local time zone (not UTC).
-        2. Commits main in branches outside a repo's default branch are counted
-        3. Commits made in forks are counted towards your daily goal`}
+        2. Commits made in branches outside a repo's default branch (i.e. main) are counted
+        3. Commits made in forks are counted as well`}
     </Typography>
     <Button
       variant="contained"

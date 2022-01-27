@@ -2,6 +2,7 @@ export * from "./calendar-popper";
 export * from "./dev-ring";
 export * from "./onboarding";
 export * from "./manage-repos";
+export * from "./AvatarCarousel";
 export * from "./GetStarted";
 export * from "./Navbar";
 export * from "./PopIt";

@@ -18,6 +18,7 @@ const Onboarding: NextPage = () => {
 
   const steps: Array<[string, boolean | null]> = [
     ["Motivation", null],
+    ["Choose an avatar", null],
     ["Set a daily commits goal", Boolean(dailyGoal)],
     ["Select repos to track", false], // TODO: what's up here?
   ];
