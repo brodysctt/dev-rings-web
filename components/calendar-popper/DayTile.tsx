@@ -3,7 +3,7 @@ import { useState } from "react";
 import { useAuth } from "@lib/firebase/auth";
 import type { Log } from "@lib/firebase/firestore";
 import { dayjs } from "@lib/dayjs";
-import { UpgradedRing } from "components";
+import { ProgressRing } from "components";
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
 import ButtonBase from "@mui/material/ButtonBase";
@@ -44,7 +44,7 @@ export const DayTile = ({ log }: { log: Log }) => {
           disabled={isDayOff}
           sx={{ bgcolor: hover ? "#F5F6FD" : null, mt: 0.2 }}
         >
-          <UpgradedRing
+          <ProgressRing
             isDayTile
             size={35}
             values={[

@@ -44,7 +44,13 @@ export const Navbar = () => {
       <Stack direction="row" justifyContent="space-between" pt={3}>
         <Stack direction="row">
           <NavbarItem href="/" tooltip="View today's progress">
-            <ProgressRing isIcon values={[0, 1]} />
+            <ProgressRing
+              size={35}
+              values={[
+                [0, 1],
+                [0, 1],
+              ]}
+            />
           </NavbarItem>
           <CalendarPopper />
           <NavbarItem href="/manage-repos" tooltip="Manage repos">
@@ -96,7 +102,7 @@ interface Props {
 const NavbarItem: FC<Props> = ({ href, tooltip, children }) => (
   <Link href={href} passHref>
     <Tooltip title={tooltip}>
-      <Button sx={{ p: 2, height: 60 }}>{children}</Button>
+      <Button sx={{ p: 2, height: 60, width: 60 }}>{children}</Button>
     </Tooltip>
   </Link>
 );

@@ -3,7 +3,7 @@ import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import GitHubIcon from "@mui/icons-material/GitHub";
-import { UpgradedRing } from "components";
+import { ProgressRing } from "components";
 import { githubSignIn, useAuth } from "@lib/firebase/auth";
 import { useUserDoc } from "@lib/firebase/firestore";
 
@@ -15,7 +15,7 @@ const Enter = () => {
   if (!userId || !userData)
     return (
       <Stack justifyContent="center" alignItems="center" height="100vh">
-        <UpgradedRing
+        <ProgressRing
           values={[
             [1, 1],
             [1, 1],

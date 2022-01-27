@@ -36,7 +36,6 @@ const Index: NextPage = () => {
 
   return (
     <Stack direction="row" justifyContent="center">
-      {/* <DevRing events={dayEvents} values={[actual, goal]} /> */}
       <DevRing
         events={dayEvents}
         values={[
@@ -44,7 +43,6 @@ const Index: NextPage = () => {
           [prsActual, dailyGoals.prs],
         ]}
       />
-      {/* <UpgradedRing /> */}
       <NewTimezoneAlert tz={timezone} />
     </Stack>
   );
