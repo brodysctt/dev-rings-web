@@ -1,12 +1,10 @@
 import { useState, useEffect } from "react";
 import Box from "@mui/material/Box";
 import { motion } from "framer-motion";
-
 import Lottie from "react-lottie-player";
 import checkmarkLottie from "public/checkmark-lottie.json";
 
 export type RingValues = [[number, number], [number, number]];
-
 interface Props {
   isDayTile?: boolean;
   size?: number;
@@ -19,20 +17,15 @@ export const UpgradedRing = ({
   values,
 }: Props) => {
   const [showLottie, setShowLottie] = useState(false);
+
+  const duration = 3;
   useEffect(() => {
-    // TODO: Relate this to transition duration when cleaning this component up (i.e. duration * 1.3)
-    setTimeout(() => setShowLottie(true), 3300);
+    setTimeout(() => setShowLottie(true), duration * 1000 * 1.3);
   });
   const [[commitsActual, commitsGoal], [prsActual, prsGoal]] = values;
 
-  // const outerStroke = "#556cd6";
-  // const middleStroke = "#111033"; //"#7E55D6";
-  // const innerStroke = "#4DD0E1"; //"#4DB6AC";
-
-  const outerStroke2 = "#4DD0E1"; // "#556cd6";
-  const middleStroke2 = "#556cd6"; //"#7E55D6";
-  // const innerStroke2 = "#111033"; //"#4DB6AC";
-
+  const outerStroke = "#4DD0E1";
+  const middleStroke = "#556cd6";
   const strokeWidth = 10;
 
   const commitsRadius = 45;
@@ -54,17 +47,12 @@ export const UpgradedRing = ({
     : Math.abs(Math.ceil((prsCircumference / 100) * (prsPct - 100)));
 
   const transition = {
-    duration: 3,
+    duration,
     delay: 0.5,
     ease: "easeIn",
   };
 
   const variants = {
-    container: {
-      transition: {
-        staggerChildren: 4,
-      },
-    },
     hideCommits: {
       strokeDashoffset: commitsCircumference,
       transition,
@@ -92,7 +80,7 @@ export const UpgradedRing = ({
           r={commitsRadius}
           className="circle"
           strokeWidth={strokeWidth}
-          stroke={outerStroke2}
+          stroke={outerStroke}
           strokeOpacity={0.25}
           strokeLinecap="round"
           fill="transparent"
@@ -103,7 +91,7 @@ export const UpgradedRing = ({
           r={prsRadius}
           className="circle"
           strokeWidth={strokeWidth}
-          stroke={middleStroke2}
+          stroke={middleStroke}
           strokeOpacity={0.25}
           strokeLinecap="round"
           fill="transparent"
@@ -117,7 +105,7 @@ export const UpgradedRing = ({
           position: "absolute",
           transform: "rotate(-90deg)",
           overflow: "visible",
-          marginLeft: -size, // TODO: Note that this is what makes circles overlap
+          marginLeft: -size,
         }}
       >
         {Boolean(commitsPct) && (
@@ -126,7 +114,7 @@ export const UpgradedRing = ({
             cy="50"
             r={commitsRadius}
             strokeWidth={strokeWidth}
-            stroke={outerStroke2}
+            stroke={outerStroke}
             fill="transparent"
             strokeDashoffset={commitsFillPct}
             strokeDasharray={commitsCircumference}
@@ -142,7 +130,7 @@ export const UpgradedRing = ({
             cy="50"
             r={prsRadius}
             strokeWidth={strokeWidth}
-            stroke={middleStroke2}
+            stroke={middleStroke}
             fill="transparent"
             strokeDashoffset={prsFillPct}
             strokeDasharray={prsCircumference}
@@ -153,8 +141,6 @@ export const UpgradedRing = ({
           />
         )}
       </svg>
-      {/* TODO: Delay the framer animation, conditionally render for isRingComplete */}
-
       <Box mt={isDayTile ? -5.9 : -50.9}>
         <Lottie
           loop={false}
