@@ -8,26 +8,24 @@ import {
   ManageReposCheckboxes,
   SetGoalInput,
 } from "components";
-import { TextLink } from "components";
 import { Button } from "@mui/material";
 
 interface Props {
   activeStep: number;
-  onSuccess: () => void;
+  onSubmit?: () => void;
 }
 
-export const OnboardingSteps = ({ activeStep, onSuccess }: Props) => {
+export const OnboardingSteps = ({ activeStep, onSubmit }: Props) => {
   const steps = [
     {
-      header: "Purpose",
+      header: "Here be the reasons why you should be using Dev Rings:",
       blob: "/blobhighfive.png",
-      body: <Motivation {...{ onSuccess }} />,
+      body: <Motivation {...{ onSubmit }} />,
     },
     {
-      header: `It's your journey, may as well be the main character`,
-      subheader: "Select an avatar to continue",
-      blob: "/blobpopcorn.png",
-      body: <AvatarCarousel {...{ onSuccess }} />,
+      // header: `It's your journey, may as well be the main character`,
+      // blob: "/blobpopcorn.png",
+      body: <AvatarCarousel />,
     },
     {
       header: `To track progress, you must first set a goal`,
@@ -35,21 +33,14 @@ export const OnboardingSteps = ({ activeStep, onSuccess }: Props) => {
       subheader: "How many commits will you push in a given day?",
       body: (
         <Stack direction="row">
-          <SetGoalInput goalType="commits" {...{ onSuccess }} />
-          <SetGoalInput goalType="prs" {...{ onSuccess }} />
+          <SetGoalInput color="#4DD0E1" goalType="commits" />
+          <SetGoalInput goalType="prs" />
         </Stack>
       ),
     },
     {
       header: `Choose the repos you'd like to start tracking`,
       blob: "/blobclipboard.png",
-      subheader: (
-        <>
-          {`(This is done with `}
-          <TextLink href={GITHUB_WEBHOOKS_DOCS} text="repository webhooks" />
-          {` btw)`}
-        </>
-      ),
       body: <ManageReposCheckboxes />,
     },
   ];
@@ -60,8 +51,8 @@ export const OnboardingSteps = ({ activeStep, onSuccess }: Props) => {
 
 interface IProps {
   activeStep: number;
-  header: string | JSX.Element;
-  blob: string;
+  header?: string | JSX.Element;
+  blob?: string;
   subheader?: string | JSX.Element;
 }
 
@@ -75,12 +66,14 @@ const Panel: FC<IProps> = (props) => {
       height="65vh"
       width="100%"
     >
-      <Stack direction="row">
-        <Typography variant="h6" color="primary" sx={{ mr: 1 }}>
-          {header}
-        </Typography>
-        <Image src={blob} width={30} height={30} />
-      </Stack>
+      {header && (
+        <Stack direction="row">
+          <Typography variant="h6" color="primary" sx={{ mr: 1 }}>
+            {header}
+          </Typography>
+          {blob && <Image src={blob} width={30} height={30} />}
+        </Stack>
+      )}
       {subheader && (
         <Typography align="center" color="text.secondary" mb={2}>
           {subheader}
@@ -97,23 +90,18 @@ const Panel: FC<IProps> = (props) => {
   );
 };
 
-const Motivation = ({ onSuccess }: { onSuccess: () => void }) => (
+const Motivation = ({ onSubmit }: { onSubmit?: () => void }) => (
   <>
-    <Typography
-      align="center"
-      color="text.secondary"
-      mt={2}
-      mb={2}
-      sx={{ whiteSpace: "pre-line" }}
-    >{`Here be the reasons why you should use the app:`}</Typography>
-    <Typography color="text.secondary" mb={3} sx={{ whiteSpace: "pre-line" }}>
+    <Typography color="text.secondary" my={3} sx={{ whiteSpace: "pre-line" }}>
       {`1. Contributions are timestamped according to your local time zone (not UTC).
         2. Commits made in branches outside a repo's default branch (i.e. main) are counted
         3. Commits made in forks are counted as well`}
     </Typography>
     <Button
       variant="contained"
-      onClick={() => onSuccess()}
+      onClick={() => {
+        if (onSubmit) onSubmit();
+      }}
     >{`True! let's get started`}</Button>
   </>
 );

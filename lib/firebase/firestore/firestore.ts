@@ -53,7 +53,8 @@ export const setAvatar = async (userId: string, avatarId: string) => {
   await updateDoc(doc(db, "users", userId), {
     avatarId,
   });
-  toast.success(`Avatar successfully updated ${avatarId}`);
+  // TODO: Only show if not onboarding
+  // toast.success(`Avatar successfully updated ${avatarId}`);
 };
 
 export const setGitHubToken = async (userId: string, token: string) => {
@@ -78,7 +79,8 @@ export const setGoal = async (userId: string, goal: number, type: string) => {
     await updateDoc(doc(db, "users", userId), {
       "dailyGoals.prs": goal,
     });
-    toast.success(`Daily PRs goal is now ${goal} 🏔️`);
+    // TODO: Only show if not onboarding
+    // toast.success(`Daily PRs goal is now ${goal} 🏔️`);
     return;
   }
 

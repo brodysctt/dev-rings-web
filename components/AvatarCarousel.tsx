@@ -25,7 +25,7 @@ export const AVATARS = [
   ["👩🏿‍💻", zenFemaleDeveloperJson],
 ];
 
-export const AvatarCarousel = ({ onSuccess }: { onSuccess?: () => void }) => {
+export const AvatarCarousel = () => {
   const userId = useAuth();
   const userData = useUserDoc();
   if (!userId || !userData) return null;
@@ -40,10 +40,7 @@ export const AvatarCarousel = ({ onSuccess }: { onSuccess?: () => void }) => {
               <Button
                 disableRipple
                 variant={isCurrentAvatar ? "outlined" : "text"}
-                onClick={async () => {
-                  await setAvatar(userId, id);
-                  if (onSuccess) onSuccess();
-                }}
+                onClick={async () => await setAvatar(userId, id)}
               >
                 <Stack>
                   <Box height={400} width={400}>
