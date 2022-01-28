@@ -1,4 +1,5 @@
 import type { FC } from "react";
+import { useRouter } from "next/router";
 import Image from "next/image";
 import Link from "next/link";
 import Container from "@mui/material/Container";
@@ -12,12 +13,14 @@ import ChatSvg from "@mui/icons-material/Chat";
 import GitHubSvg from "@mui/icons-material/GitHub";
 import LogoutSvg from "@mui/icons-material/Logout";
 import MenuSvg from "@mui/icons-material/Menu";
+import AvatarSvg from "@mui/icons-material/AccountCircle";
 import { useAuth, signOutUser } from "@lib/firebase/auth";
 import { useUserDoc } from "@lib/firebase/firestore";
 import { CalendarPopper, ProgressRing, SetGoalInput } from "components";
 import { openUrl } from "utils";
 
 export const Navbar = () => {
+  const router = useRouter();
   const userId = useAuth();
   const userData = useUserDoc();
   if (!userId || !userData) return null;
@@ -33,6 +36,11 @@ export const Navbar = () => {
       icon: <ChatSvg />,
       name: "Leave feedback",
       onClick: openUrl(ISSUES_URL),
+    },
+    {
+      icon: <AvatarSvg />,
+      name: "Change avatar",
+      onClick: () => router.push("/select-avatar"),
     },
     { icon: <LogoutSvg />, name: "Sign out", onClick: signOutUser },
   ];

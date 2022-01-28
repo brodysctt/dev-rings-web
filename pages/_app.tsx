@@ -23,7 +23,7 @@ const App = (props: Props) => {
       <ThemeProvider theme={theme}>
         <CssBaseline />
         <Head>
-          <title>sup wastemans mcgee</title>
+          <title>dev rings</title>
         </Head>
         <AuthProvider>
           <Navbar />

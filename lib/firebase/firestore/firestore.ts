@@ -49,6 +49,14 @@ export const fetchHookId = async (userId: string, repo: string) => {
   return hookId;
 };
 
+export const setAvatar = async (userId: string, avatarId: string) => {
+  await updateDoc(doc(db, "users", userId), {
+    avatarId,
+  });
+  // TODO: Only show if not onboarding
+  // toast.success(`Avatar successfully updated ${avatarId}`);
+};
+
 export const setGitHubToken = async (userId: string, token: string) => {
   const docRef = doc(db, "users", userId);
   const docSnap = await getDoc(docRef);
@@ -71,7 +79,8 @@ export const setGoal = async (userId: string, goal: number, type: string) => {
     await updateDoc(doc(db, "users", userId), {
       "dailyGoals.prs": goal,
     });
-    toast.success(`Daily PRs goal is now ${goal} 🏔️`);
+    // TODO: Only show if not onboarding
+    // toast.success(`Daily PRs goal is now ${goal} 🏔️`);
     return;
   }
 

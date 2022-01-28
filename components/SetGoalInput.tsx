@@ -7,15 +7,10 @@ import { toast } from "react-toastify";
 
 interface Props {
   color?: string;
-  onSuccess?: () => void;
   goalType: "commits" | "prs";
 }
 
-export const SetGoalInput = ({
-  color = "primary.main",
-  onSuccess,
-  goalType,
-}: Props) => {
+export const SetGoalInput = ({ color = "primary.main", goalType }: Props) => {
   const isCommits = goalType === "commits";
   const { register, handleSubmit } = useForm<{ goal: number }>();
 
@@ -30,7 +25,6 @@ export const SetGoalInput = ({
       return;
     }
     await setGoal(userId, Number(goal), goalType);
-    if (onSuccess) onSuccess();
   };
   return (
     <Tooltip title={`${isOnboarding ? "Set" : "Update"} daily goal`}>
