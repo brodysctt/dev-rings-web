@@ -105,6 +105,3 @@ const Motivation = ({ onSubmit }: { onSubmit?: () => void }) => (
     >{`True! let's get started`}</Button>
   </>
 );
-
-const GITHUB_WEBHOOKS_DOCS =
-  "https://docs.github.com/en/developers/webhooks-and-events/webhooks/about-webhooks";
