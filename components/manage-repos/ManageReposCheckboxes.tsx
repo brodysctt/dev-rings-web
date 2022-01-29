@@ -71,17 +71,11 @@ export const ManageReposCheckboxes = () => {
     };
 
   const isStatusQuo = checked.every(([, , action]) => !Boolean(action));
-  const hasAdds = checked.some(([, , action]) => action === "add");
-  const hasDeletes = checked.some(([, , action]) => action === "delete");
   const isPureDelete =
     !isStatusQuo && checked.every(([, , action]) => action !== "add");
 
-  const numberOfAdds = checked.filter(
-    ([, , action]) => action === "add"
-  ).length;
-  const numberOfDeletes = checked.filter(
-    ([, , action]) => action === "delete"
-  ).length;
+  const adds = checked.filter(([, , action]) => action === "add").length;
+  const deletes = checked.filter(([, , action]) => action === "delete").length;
 
   return (
     <Stack>
@@ -134,17 +128,17 @@ export const ManageReposCheckboxes = () => {
             {isPureDelete ? `Remove repos` : `Update repos`}
           </Button>
           <Stack direction="row" mt={1} justifyContent="center">
-            {Boolean(numberOfAdds) && (
+            {Boolean(adds) && (
               <Typography
                 color="success.main"
                 sx={{ whiteSpace: "break-spaces" }}
-              >{`Add ${numberOfAdds} repo${numberOfAdds > 1 ? "s" : ""}${
-                Boolean(numberOfDeletes) ? `, ` : ""
+              >{`Add ${adds} repo${adds > 1 ? "s" : ""}${
+                Boolean(deletes) ? `, ` : ""
               }`}</Typography>
             )}
-            {Boolean(numberOfDeletes) && (
-              <Typography color="error">{`Remove ${numberOfDeletes} repo${
-                numberOfDeletes > 1 ? "s" : ""
+            {Boolean(deletes) && (
+              <Typography color="error">{`Remove ${deletes} repo${
+                deletes > 1 ? "s" : ""
               }`}</Typography>
             )}
           </Stack>
