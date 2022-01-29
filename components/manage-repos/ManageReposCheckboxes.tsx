@@ -1,6 +1,7 @@
 import { useState, useEffect, ChangeEvent } from "react";
 import Stack from "@mui/material/Stack";
 import Box from "@mui/material/Box";
+import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import Checkbox from "@mui/material/Checkbox";
 import FormControlLabel from "@mui/material/FormControlLabel";
@@ -40,6 +41,7 @@ export const ManageReposCheckboxes = () => {
       }
 
       await timeout(2000);
+      // TODO: add toast here
       setIsLoading(false);
       return;
     })();
@@ -67,6 +69,19 @@ export const ManageReposCheckboxes = () => {
       update[i] = [repo, check, action];
       setChecked(update);
     };
+
+  const isStatusQuo = checked.every(([, , action]) => !Boolean(action));
+  const hasAdds = checked.some(([, , action]) => action === "add");
+  const hasDeletes = checked.some(([, , action]) => action === "delete");
+  const isPureDelete =
+    !isStatusQuo && checked.every(([, , action]) => action !== "add");
+
+  const numberOfAdds = checked.filter(
+    ([, , action]) => action === "add"
+  ).length;
+  const numberOfDeletes = checked.filter(
+    ([, , action]) => action === "delete"
+  ).length;
 
   return (
     <Stack>
@@ -109,14 +124,31 @@ export const ManageReposCheckboxes = () => {
           <Lottie loop animationData={loadingDotsJson} play />
         </Box>
       ) : (
-        <Button
-          variant="contained"
-          color={"primary"}
-          disabled={!checked}
-          onClick={() => setIsLoading(true)}
-        >
-          {`Update repos`}
-        </Button>
+        <Stack>
+          <Button
+            variant="contained"
+            color={isPureDelete ? "error" : "primary"}
+            disabled={checked.every(([, , action]) => !Boolean(action))}
+            onClick={() => setIsLoading(true)}
+          >
+            {isPureDelete ? `Remove repos` : `Update repos`}
+          </Button>
+          <Stack direction="row" mt={1} justifyContent="center">
+            {Boolean(numberOfAdds) && (
+              <Typography
+                color="success.main"
+                sx={{ whiteSpace: "break-spaces" }}
+              >{`Add ${numberOfAdds} repo${numberOfAdds > 1 ? "s" : ""}${
+                Boolean(numberOfDeletes) ? `, ` : ""
+              }`}</Typography>
+            )}
+            {Boolean(numberOfDeletes) && (
+              <Typography color="error">{`Remove ${numberOfDeletes} repo${
+                numberOfDeletes > 1 ? "s" : ""
+              }`}</Typography>
+            )}
+          </Stack>
+        </Stack>
       )}
     </Stack>
   );
