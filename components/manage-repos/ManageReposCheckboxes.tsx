@@ -28,7 +28,6 @@ export const ManageReposCheckboxes = () => {
   useEffect(() => {
     (async () => {
       if (!userId || !checked || !isLoading) return;
-      console.log("in use effect");
 
       for (const update of checked) {
         const [repo, , action] = update;

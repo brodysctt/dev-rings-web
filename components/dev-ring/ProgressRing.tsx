@@ -32,7 +32,6 @@ export const ProgressRing = ({
   const commitsCircumference = Math.ceil(2 * Math.PI * commitsRadius);
   const commitsPct = (commitsActual / commitsGoal) * 100;
   const hitCommitsGoal = commitsPct >= 100;
-  console.log(`here be the percent: ${commitsPct}`);
   const commitsFillPct = hitCommitsGoal
     ? 0
     : Math.abs(Math.ceil((commitsCircumference / 100) * (commitsPct - 100)));
@@ -41,7 +40,6 @@ export const ProgressRing = ({
   const prsCircumference = Math.ceil(2 * Math.PI * prsRadius);
   const prsPct = (prsActual / prsGoal) * 100;
   const hitPRsGoal = prsPct >= 100;
-  console.log(`here be the percent: ${prsPct}`);
   const prsFillPct = hitPRsGoal
     ? 0
     : Math.abs(Math.ceil((prsCircumference / 100) * (prsPct - 100)));
