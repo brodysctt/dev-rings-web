@@ -22,7 +22,6 @@ export const trackRepo = async (
     return status;
   } catch (error) {
     toast.error("Webhook did not get created");
-    // TODO: Add Sentry
     return;
   }
 };
@@ -46,7 +45,6 @@ export const deleteRepo = async (
     return status;
   } catch (error) {
     toast.error("Webhook did not get deleted");
-    // TODO: Add Sentry
     return;
   }
 };

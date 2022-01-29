@@ -44,7 +44,6 @@ const fetchPublicRepos = async (userId: string): Promise<string[] | void> => {
   try {
     const token = await fetchGitHubToken(userId);
     if (!token) {
-      // TODO: Improve this w/ Sentry
       throw new Error("no token bruh");
     }
 
@@ -57,7 +56,6 @@ const fetchPublicRepos = async (userId: string): Promise<string[] | void> => {
 
     const { data } = await axiosClient.get(`/users/${userId}/repos`);
     if (data.length < 1) {
-      // TODO: Create custom toast with TrackRepoInput
       toast.warning(
         "Looks like you don't have any public repos. Either create one or try adding a private repo instead"
       );
@@ -65,7 +63,6 @@ const fetchPublicRepos = async (userId: string): Promise<string[] | void> => {
     }
     return data.map(({ name: repo }: any) => repo) as string[];
   } catch (error) {
-    // TODO: Add Sentry
     toast.error("Error fetching public repos");
     return;
   }

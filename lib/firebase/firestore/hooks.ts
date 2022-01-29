@@ -32,7 +32,6 @@ export const useCollection = (name: CollectionName) => {
     );
     return () => unsubscribe();
   }, [userId, userData]);
-  // TODO: Need to be 100% on this dependency array. setData? isLogs? Explain the whys
   return data;
 };
 

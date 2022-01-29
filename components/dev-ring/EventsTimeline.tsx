@@ -46,7 +46,6 @@ export const EventsTimeline = ({ events }: { events: RepoEvent[] }) => {
               </TimelineDot>
               <TimelineConnector />
             </TimelineSeparator>
-            {/* TODO: Move this to the node, animate it so it gets a lil bigger when you hover */}
             <TimelineContent sx={{ py: "12px", px: 2, cursor: "pointer" }}>
               {message.length < 100 ? (
                 <>

@@ -50,7 +50,6 @@ export const CalendarPopper = () => {
   };
 
   return (
-    // TODO: A light purple box shadow could be nice
     <PopIt
       id="View calendar"
       closeOnClick
@@ -90,7 +89,6 @@ export const CalendarPopper = () => {
 
 const filterLogs = (logs: Log[], monthInView: MonthYear) => {
   const [month, year] = monthInView;
-  // TODO: Test this! Gotta be airtight
   const dateMatch = new RegExp(`${year}-${month < 10 ? "0" : ""}${month}-.*`);
   return logs.filter((log) => {
     const [dateString] = log;

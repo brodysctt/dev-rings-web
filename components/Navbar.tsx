@@ -64,7 +64,6 @@ export const Navbar = () => {
           <NavbarItem href="/manage-repos" tooltip="Manage repos">
             <Image src="/repo-icon.png" width={32} height={32} />
           </NavbarItem>
-          {/* TODO: Track separate PR goal */}
           <SetGoalInput color="#4DD0E1" goalType="commits" />
           <SetGoalInput goalType="prs" />
         </Stack>

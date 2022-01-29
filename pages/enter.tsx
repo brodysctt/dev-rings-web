@@ -44,7 +44,6 @@ const SignInButton = () => (
     variant="contained"
     onClick={githubSignIn}
     size="large"
-    // TODO: Make this responsive
     sx={{
       display: "flex",
       justifyContent: "space-between",

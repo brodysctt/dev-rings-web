@@ -25,7 +25,6 @@ export const formatLogs = (logs: Log[], monthInView: MonthYear): Log[] => {
   }
 
   const [month, year] = monthInView;
-  // TODO: Triple check that month is right here
   const lastDayOfMonth = dayjs([year, month, 0]).date() - 1; // zero-indexed
   const daysOff = lastDayOfMonth - lastDay;
   if (daysOff > 0) {

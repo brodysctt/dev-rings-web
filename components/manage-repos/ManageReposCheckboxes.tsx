@@ -6,7 +6,7 @@ import Checkbox from "@mui/material/Checkbox";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Lottie from "react-lottie-player";
 import loadingDotsJson from "public/loading-dots.json";
-import { usePublicRepos } from "components/manage-repos/hooks";
+import { usePublicRepos } from "components/manage-repos/usePublicRepos";
 import { useAuth } from "@lib/firebase/auth";
 import { trackRepo, deleteRepo } from "components/manage-repos/manageRepos";
 
@@ -22,7 +22,7 @@ export const ManageReposCheckboxes = () => {
 
   useEffect(() => {
     if (!repos) return;
-    setChecked(repos.map(([repo, state]): RepoAction => [repo, state, null])); // TODO: Check all during onboarding
+    setChecked(repos.map(([repo, state]): RepoAction => [repo, state, null]));
   }, [repos]);
 
   useEffect(() => {
@@ -85,7 +85,6 @@ export const ManageReposCheckboxes = () => {
         }
       />
       <Stack ml={3} mb={2}>
-        {/* TODO: Handle case where user has a ton of repos */}
         {repos.map(([repo, tracked], i) => {
           return (
             <FormControlLabel
@@ -111,9 +110,6 @@ export const ManageReposCheckboxes = () => {
           <Lottie loop animationData={loadingDotsJson} play />
         </Box>
       ) : (
-        // TODO: Is it possible to make this button dynamic based on the changes?
-        // I.e. "Remove X repos" on a red bg, "Add Y repos" on a green bg
-        // TODO: Ensure button is disabled if there's no diff
         <Button
           variant="contained"
           color={"primary"}
