@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import Box from "@mui/material/Box";
+import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
 import Timeline from "@mui/lab/Timeline";
 import TimelineItem from "@mui/lab/TimelineItem";
@@ -14,7 +15,7 @@ import AccordionDetails from "@mui/material/AccordionDetails";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import { dayjs } from "@lib/dayjs";
 import type { RepoEvent } from "@lib/firebase/firestore";
-import { CommitSvg } from "components";
+import { CommitSvg, PRSvg } from "components/dev-ring/EventIcons";
 import { openUrl } from "utils";
 
 export const EventsTimeline = ({ events }: { events: RepoEvent[] }) => {
@@ -28,7 +29,8 @@ export const EventsTimeline = ({ events }: { events: RepoEvent[] }) => {
   return (
     <Timeline position="alternate">
       {events.map((event, i) => {
-        const { createdAt, repo, message, url } = event;
+        const { createdAt, eventType, repo, message, url } = event;
+        const isCommit = eventType === "push";
         return (
           <TimelineItem key={i}>
             <TimelineOppositeContent
@@ -36,26 +38,31 @@ export const EventsTimeline = ({ events }: { events: RepoEvent[] }) => {
               align="right"
               variant="body2"
               color="text.secondary"
+              minWidth="40vw"
             >
               {dayjs(createdAt.toDate()).format("LT")}
             </TimelineOppositeContent>
             <TimelineSeparator>
               <TimelineConnector />
-              <TimelineDot color="primary">
-                <CommitSvg />
+              {/* #4DD0E1 */}
+              <TimelineDot color={isCommit ? "primary" : "secondary"}>
+                {eventType === "push" ? <CommitSvg /> : <PRSvg />}
               </TimelineDot>
               <TimelineConnector />
             </TimelineSeparator>
-            <TimelineContent sx={{ py: "12px", px: 2, cursor: "pointer" }}>
+            <TimelineContent
+              sx={{ py: "12px", px: 2, cursor: "pointer" }}
+              minWidth="40vw"
+            >
               {message.length < 100 ? (
-                <>
+                <Stack onClick={openUrl(url)}>
                   <Typography color="primary">{repo}</Typography>
-                  <Typography color="text.secondary" onClick={openUrl(url)}>
+                  <Typography color="text.secondary" noWrap={true}>
                     {message}
                   </Typography>
-                </>
+                </Stack>
               ) : (
-                <TimelineAccordion {...{ repo, message, url }} />
+                <TimelineAccordion index={i} {...{ repo, message, url }} />
               )}
             </TimelineContent>
           </TimelineItem>
@@ -67,39 +74,53 @@ export const EventsTimeline = ({ events }: { events: RepoEvent[] }) => {
 };
 
 interface Props {
+  index: number;
   repo: string;
   message: string;
   url: string;
 }
 
-const TimelineAccordion = ({ repo, message, url }: Props) => {
+const TimelineAccordion = ({ index, repo, message, url }: Props) => {
   const [expanded, setExpanded] = useState(false);
   const handleChange = () => setExpanded(!expanded);
+  const isLeft = index % 2 > 0;
   return (
     <Accordion
       expanded={expanded}
       elevation={0}
       disableGutters
       onChange={handleChange}
+      sx={{
+        display: "flex",
+        flexDirection: "column",
+        alignItems: isLeft ? "flex-end" : "flex-start",
+      }}
     >
       <AccordionSummary
         expandIcon={
           <ArrowForwardIosIcon
-            sx={{
-              fontSize: 12,
-              transform: expanded ? "rotate(-90deg)" : "",
-            }}
+            sx={
+              isLeft
+                ? {
+                    fontSize: 12,
+                    transform: expanded ? "rotate(90deg)" : "rotate(180deg)",
+                  }
+                : {
+                    fontSize: 12,
+                    transform: expanded ? "rotate(90deg)" : "",
+                  }
+            }
           />
         }
         aria-controls="panel1a-content"
         id="panel1a-header"
         sx={{
-          flexDirection: "row-reverse",
+          flexDirection: isLeft ? "row" : "row-reverse",
           px: 0,
           mx: -0.5,
         }}
       >
-        <Typography color="primary" sx={{ ml: 0.5 }}>
+        <Typography color="primary" sx={{ ml: 0.5, pr: isLeft ? 1 : 0 }}>
           {repo}
         </Typography>
       </AccordionSummary>
