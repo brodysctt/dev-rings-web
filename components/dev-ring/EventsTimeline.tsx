@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import Box from "@mui/material/Box";
+import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
 import Timeline from "@mui/lab/Timeline";
 import TimelineItem from "@mui/lab/TimelineItem";
@@ -48,14 +49,12 @@ export const EventsTimeline = ({ events }: { events: RepoEvent[] }) => {
             </TimelineSeparator>
             <TimelineContent sx={{ py: "12px", px: 2, cursor: "pointer" }}>
               {message.length < 100 ? (
-                <>
+                <Stack onClick={openUrl(url)}>
                   <Typography color="primary">{repo}</Typography>
-                  <Typography color="text.secondary" onClick={openUrl(url)}>
-                    {message}
-                  </Typography>
-                </>
+                  <Typography color="text.secondary">{message}</Typography>
+                </Stack>
               ) : (
-                <TimelineAccordion {...{ repo, message, url }} />
+                <TimelineAccordion index={i} {...{ repo, message, url }} />
               )}
             </TimelineContent>
           </TimelineItem>
@@ -67,39 +66,53 @@ export const EventsTimeline = ({ events }: { events: RepoEvent[] }) => {
 };
 
 interface Props {
+  index: number;
   repo: string;
   message: string;
   url: string;
 }
 
-const TimelineAccordion = ({ repo, message, url }: Props) => {
+const TimelineAccordion = ({ index, repo, message, url }: Props) => {
   const [expanded, setExpanded] = useState(false);
   const handleChange = () => setExpanded(!expanded);
+  const isLeft = index % 2 > 0;
   return (
     <Accordion
       expanded={expanded}
       elevation={0}
       disableGutters
       onChange={handleChange}
+      sx={{
+        display: "flex",
+        flexDirection: "column",
+        alignItems: isLeft ? "flex-end" : "flex-start",
+      }}
     >
       <AccordionSummary
         expandIcon={
           <ArrowForwardIosIcon
-            sx={{
-              fontSize: 12,
-              transform: expanded ? "rotate(-90deg)" : "",
-            }}
+            sx={
+              isLeft
+                ? {
+                    fontSize: 12,
+                    transform: expanded ? "rotate(90deg)" : "rotate(180deg)",
+                  }
+                : {
+                    fontSize: 12,
+                    transform: expanded ? "rotate(90deg)" : "",
+                  }
+            }
           />
         }
         aria-controls="panel1a-content"
         id="panel1a-header"
         sx={{
-          flexDirection: "row-reverse",
+          flexDirection: isLeft ? "row" : "row-reverse",
           px: 0,
           mx: -0.5,
         }}
       >
-        <Typography color="primary" sx={{ ml: 0.5 }}>
+        <Typography color="primary" sx={{ ml: 0.5, pr: isLeft ? 1 : 0 }}>
           {repo}
         </Typography>
       </AccordionSummary>

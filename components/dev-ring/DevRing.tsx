@@ -37,7 +37,7 @@ export const DevRing = ({ dateString, events, values }: Props) => (
 
 const iconSx = {
   justifyContent: "center",
-  bgcolor: "#111033", //"primary.main",
+  bgcolor: "primary.main", // "#111033"
   borderRadius: 50,
   px: 0.8,
   py: 2,
