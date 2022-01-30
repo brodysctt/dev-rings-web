@@ -22,16 +22,16 @@ export const PRSvg = () => (
         r="48"
         fill="none"
         stroke="white"
-        stroke-linecap="round"
-        stroke-linejoin="round"
-        stroke-width="32"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth="32"
       />
       <path
         fill="none"
         stroke="white"
-        stroke-linecap="round"
-        stroke-linejoin="round"
-        stroke-width="32"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth="32"
         d="M128 144v224M288 160l-64-64 64-64"
       />
       <circle
@@ -40,9 +40,9 @@ export const PRSvg = () => (
         r="48"
         fill="none"
         stroke="white"
-        stroke-linecap="round"
-        stroke-linejoin="round"
-        stroke-width="32"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth="32"
       />
       <circle
         cx="384"
@@ -50,17 +50,17 @@ export const PRSvg = () => (
         r="48"
         fill="none"
         stroke="white"
-        stroke-linecap="round"
-        stroke-linejoin="round"
-        stroke-width="32"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth="32"
       />
       <path
         d="M240 96h84a60 60 0 0160 60v212"
         fill="none"
         stroke="white"
-        stroke-linecap="round"
-        stroke-linejoin="round"
-        stroke-width="32"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth="32"
       />
     </svg>
   </Stack>
