@@ -9,11 +9,9 @@ import Lottie from "react-lottie-player";
 import loadingDotsJson from "public/loading-dots.json";
 import { usePublicRepos } from "components/manage-repos/usePublicRepos";
 import { useAuth } from "@lib/firebase/auth";
-import { trackRepo, deleteRepo } from "components/manage-repos/manageRepos";
+import { manageRepos, RepoAction } from "components/manage-repos/manageRepos";
 
 type CheckedEvent = ChangeEvent<HTMLInputElement>;
-
-type RepoAction = [string, boolean, string | null];
 
 export const ManageReposCheckboxes = () => {
   const userId = useAuth();
@@ -25,27 +23,6 @@ export const ManageReposCheckboxes = () => {
     if (!repos) return;
     setChecked(repos.map(([repo, state]): RepoAction => [repo, state, null]));
   }, [repos]);
-
-  useEffect(() => {
-    (async () => {
-      if (!userId || !checked || !isLoading) return;
-
-      for (const update of checked) {
-        const [repo, , action] = update;
-        if (action === "delete") {
-          await deleteRepo(userId, repo);
-        }
-        if (action === "add") {
-          await trackRepo(userId, repo);
-        }
-      }
-
-      await timeout(2000);
-      // TODO: add toast here
-      setIsLoading(false);
-      return;
-    })();
-  }, [userId, checked, isLoading]);
 
   if (!userId || !repos || !checked) return null; // TODO: Render component for no repos case
 
@@ -111,21 +88,25 @@ export const ManageReposCheckboxes = () => {
         })}
       </Stack>
       {isLoading ? (
-        <Box
-          height={83}
-          width={200}
-          mt={-6}
-          sx={{ position: "relative", zIndex: -1 }}
-        >
-          <Lottie loop animationData={loadingDotsJson} play />
-        </Box>
+        <Stack alignItems="center">
+          <Box
+            height={83}
+            width={200}
+            mt={-6}
+            sx={{ position: "relative", zIndex: -1 }}
+          >
+            <Lottie loop animationData={loadingDotsJson} play />
+          </Box>
+        </Stack>
       ) : (
         <Stack>
           <Button
             variant="contained"
             color={isOnlyRemoves ? "error" : "primary"}
             disabled={checked.every(([, , action]) => !Boolean(action))}
-            onClick={() => setIsLoading(true)}
+            onClick={async () =>
+              await manageRepos(userId, checked, setIsLoading)
+            }
           >
             {isRemoveAll
               ? "Stop tracking all repos"
@@ -156,6 +137,3 @@ export const ManageReposCheckboxes = () => {
     </Stack>
   );
 };
-
-const timeout = (ms: number) =>
-  new Promise((resolve) => setTimeout(resolve, ms));
