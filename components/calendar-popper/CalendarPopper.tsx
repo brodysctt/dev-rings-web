@@ -33,6 +33,7 @@ export const CalendarPopper = () => {
   const [month, year] = monthInView;
   const gridStart = dayjs(`${year}-${month}-01`).day();
   const isFirst = isFirstMonth(logs as Log[], monthInView);
+  const isCurrentMonth = month === dayjs().month() + 1;
 
   const back = () => {
     if (month === 1) {
@@ -59,8 +60,12 @@ export const CalendarPopper = () => {
       <Container>
         <Stack
           alignItems="center"
-          p={1}
-          sx={{ border: "1px solid #DCDEE6", borderRadius: 6 }}
+          p={2}
+          pr={1}
+          sx={{
+            border: "1px solid #D5DAF5", //#DCDEE6",
+            borderRadius: 6,
+          }}
         >
           <Typography color="primary" sx={{ fontSize: 12 }}>
             {year}
@@ -70,8 +75,11 @@ export const CalendarPopper = () => {
             <Typography variant="h6" textAlign="center" width="90%">
               {dayjs.months()[month - 1]}
             </Typography>
-            {/* TODO: Update disabled to monthInView !== currentMonth */}
-            <Button onClick={next} startIcon={<NextSvg />} disabled={false} />
+            <Button
+              onClick={next}
+              startIcon={<NextSvg />}
+              disabled={isCurrentMonth}
+            />
           </Stack>
           <Grid container columns={7} xs={7} rowSpacing={0.5}>
             {<Grid item xs={gridStart} mr={-0.4} />}
