@@ -1,3 +1,4 @@
+import type { Dispatch, SetStateAction } from "react";
 import axios from "axios";
 import { toast } from "react-toastify";
 import { fetchGitHubToken, fetchHookId } from "@lib/firebase/firestore";
@@ -7,7 +8,7 @@ export type RepoAction = [string, boolean, string | null];
 export const manageRepos = async (
   userId: string,
   repoActions: RepoAction[],
-  setIsLoading: (isLoading: boolean) => void
+  setIsLoading: Dispatch<SetStateAction<boolean>>
 ) => {
   try {
     setIsLoading(true);

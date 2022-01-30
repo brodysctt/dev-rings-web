@@ -50,7 +50,7 @@ export const ManageReposCheckboxes = () => {
       setChecked(update);
     };
 
-  const isStatusQuo = checked.every(([, , action]) => !Boolean(action));
+  const isStatusQuo = checked.every(([, , action]) => !action);
   const isOnlyRemoves =
     !isStatusQuo && checked.every(([, , action]) => action !== "add");
 
@@ -106,7 +106,7 @@ export const ManageReposCheckboxes = () => {
           <Button
             variant="contained"
             color={isOnlyRemoves ? "error" : "primary"}
-            disabled={checked.every(([, , action]) => !Boolean(action))}
+            disabled={checked.every(([, , action]) => !action)}
             onClick={async () =>
               await manageRepos(userId, checked, setIsLoading)
             }
@@ -126,7 +126,7 @@ export const ManageReposCheckboxes = () => {
                 color="success.main"
                 sx={{ whiteSpace: "break-spaces" }}
               >{`Add ${adds} repo${adds > 1 ? "s" : ""}${
-                Boolean(deletes) ? `, ` : ""
+                deletes ? `, ` : ""
               }`}</Typography>
             )}
             {!isOnlyRemoves && Boolean(deletes) && (
