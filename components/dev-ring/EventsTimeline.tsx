@@ -37,6 +37,7 @@ export const EventsTimeline = ({ events }: { events: RepoEvent[] }) => {
               align="right"
               variant="body2"
               color="text.secondary"
+              minWidth="40vw"
             >
               {dayjs(createdAt.toDate()).format("LT")}
             </TimelineOppositeContent>
@@ -47,11 +48,16 @@ export const EventsTimeline = ({ events }: { events: RepoEvent[] }) => {
               </TimelineDot>
               <TimelineConnector />
             </TimelineSeparator>
-            <TimelineContent sx={{ py: "12px", px: 2, cursor: "pointer" }}>
+            <TimelineContent
+              sx={{ py: "12px", px: 2, cursor: "pointer" }}
+              minWidth="40vw"
+            >
               {message.length < 100 ? (
                 <Stack onClick={openUrl(url)}>
                   <Typography color="primary">{repo}</Typography>
-                  <Typography color="text.secondary">{message}</Typography>
+                  <Typography color="text.secondary" noWrap={true}>
+                    {message}
+                  </Typography>
                 </Stack>
               ) : (
                 <TimelineAccordion index={i} {...{ repo, message, url }} />
