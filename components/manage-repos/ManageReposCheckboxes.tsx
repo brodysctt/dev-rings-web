@@ -71,11 +71,13 @@ export const ManageReposCheckboxes = () => {
     };
 
   const isStatusQuo = checked.every(([, , action]) => !Boolean(action));
-  const isPureDelete =
+  const isOnlyRemoves =
     !isStatusQuo && checked.every(([, , action]) => action !== "add");
 
   const adds = checked.filter(([, , action]) => action === "add").length;
   const deletes = checked.filter(([, , action]) => action === "delete").length;
+  const isRemoveAll =
+    isOnlyRemoves && deletes === repos.filter(([, tracked]) => tracked).length;
 
   return (
     <Stack>
@@ -121,13 +123,20 @@ export const ManageReposCheckboxes = () => {
         <Stack>
           <Button
             variant="contained"
-            color={isPureDelete ? "error" : "primary"}
+            color={isOnlyRemoves ? "error" : "primary"}
             disabled={checked.every(([, , action]) => !Boolean(action))}
             onClick={() => setIsLoading(true)}
           >
-            {isPureDelete ? `Remove repos` : `Update repos`}
+            {isRemoveAll
+              ? "Stop tracking all repos"
+              : isOnlyRemoves
+              ? `Stop tracking ${deletes} repo${deletes > 1 ? "s" : ""}`
+              : `Save changes`}
           </Button>
           <Stack direction="row" mt={1} justifyContent="center">
+            {isRemoveAll && (
+              <Typography color="error">{`⚠️ Your Dev Rings will no longer be updated`}</Typography>
+            )}
             {Boolean(adds) && (
               <Typography
                 color="success.main"
@@ -136,8 +145,8 @@ export const ManageReposCheckboxes = () => {
                 Boolean(deletes) ? `, ` : ""
               }`}</Typography>
             )}
-            {Boolean(deletes) && (
-              <Typography color="error">{`Remove ${deletes} repo${
+            {!isOnlyRemoves && Boolean(deletes) && (
+              <Typography color="error">{`remove ${deletes} repo${
                 deletes > 1 ? "s" : ""
               }`}</Typography>
             )}
