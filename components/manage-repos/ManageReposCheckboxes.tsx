@@ -24,7 +24,10 @@ export const ManageReposCheckboxes = () => {
     setChecked(repos.map(([repo, state]): RepoAction => [repo, state, null]));
   }, [repos]);
 
-  if (!userId || !repos || !checked) return null; // TODO: Render component for no repos case
+  if (!userId || !repos || !checked)
+    return (
+      <Typography>{`You don't have any public repos! Create one to start tracking it`}</Typography>
+    );
 
   const handleCheckAll = (event: CheckedEvent) => {
     const allChecked = repos.map(
