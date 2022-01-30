@@ -1,6 +1,7 @@
 import { useState, FC, SyntheticEvent } from "react";
 import type { NextPage } from "next";
 import Container from "@mui/material/Container";
+import Typography from "@mui/material/Typography";
 import Stack from "@mui/material/Stack";
 import Box from "@mui/material/Box";
 import Tabs from "@mui/material/Tabs";
@@ -28,8 +29,8 @@ const ManageRepos: NextPage = () => {
               onChange={handleChange}
               aria-label="basic tabs example"
             >
-              <Tab label="Manage Repos" />
-              <Tab label="Add private repo" />
+              <Tab label="Manage public repos" />
+              <Tab label="Manage private repos" />
             </Tabs>
           </Box>
           <TabPanel value={value} index={0}>
@@ -37,10 +38,11 @@ const ManageRepos: NextPage = () => {
           </TabPanel>
           <TabPanel value={value} index={1}>
             <Box width={"60%"}>
-              <TrackRepoInput
-                sx={isMobile ? { ml: 0, mt: 0 } : { ml: 5, mt: 1 }}
-              />
+              <TrackRepoInput sx={isMobile ? { mt: 0 } : { mt: 1 }} />
             </Box>
+            <Typography color="text.secondary" mt={3}>
+              {`Note: To stop tracking a private repo, you must delete the Dev Rings webhook from that repo's settings within GitHub.`}
+            </Typography>
           </TabPanel>
         </Box>
       </Stack>
