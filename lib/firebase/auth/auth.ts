@@ -37,7 +37,6 @@ export const githubSignIn = async () => {
 export const signOutUser = async () => {
   try {
     await signOut(auth);
-    console.log("User signed out");
   } catch {
     console.error("There was an error signing out");
   }

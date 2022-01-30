@@ -1,17 +1,19 @@
 import { useState, FC, SyntheticEvent } from "react";
+import Image from "next/image";
 import type { NextPage } from "next";
 import Container from "@mui/material/Container";
+import Typography from "@mui/material/Typography";
 import Stack from "@mui/material/Stack";
 import Box from "@mui/material/Box";
 import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
-import { useTheme } from "@mui/material/styles";
-import useMediaQuery from "@mui/material/useMediaQuery";
-import { ManageReposCheckboxes, TrackRepoInput } from "components";
+// import { useTheme } from "@mui/material/styles";
+// import useMediaQuery from "@mui/material/useMediaQuery";
+import { ManageReposCheckboxes } from "components";
 
 const ManageRepos: NextPage = () => {
-  const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
+  // const theme = useTheme();
+  // const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
 
   const [value, setValue] = useState(0);
 
@@ -28,19 +30,20 @@ const ManageRepos: NextPage = () => {
               onChange={handleChange}
               aria-label="basic tabs example"
             >
-              <Tab label="Manage Repos" />
-              <Tab label="Add private repo" />
+              <Tab label="Manage public repos" />
+              <Tab label="Manage private repos" />
             </Tabs>
           </Box>
           <TabPanel value={value} index={0}>
             <ManageReposCheckboxes />
           </TabPanel>
           <TabPanel value={value} index={1}>
-            <Box width={"60%"}>
-              <TrackRepoInput
-                sx={isMobile ? { ml: 0, mt: 0 } : { ml: 5, mt: 1 }}
-              />
-            </Box>
+            <Stack direction="row">
+              <Typography variant="h6" color="text.secondary" sx={{ mr: 1 }}>
+                {`Coming soon`}
+              </Typography>
+              <Image src="/ablobjam.gif" width={30} height={30} />
+            </Stack>
           </TabPanel>
         </Box>
       </Stack>
