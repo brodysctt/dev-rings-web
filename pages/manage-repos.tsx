@@ -1,4 +1,5 @@
 import { useState, FC, SyntheticEvent } from "react";
+import Image from "next/image";
 import type { NextPage } from "next";
 import Container from "@mui/material/Container";
 import Typography from "@mui/material/Typography";
@@ -37,12 +38,12 @@ const ManageRepos: NextPage = () => {
             <ManageReposCheckboxes />
           </TabPanel>
           <TabPanel value={value} index={1}>
-            <Box width={"60%"}>
-              <TrackRepoInput sx={isMobile ? { mt: 0 } : { mt: 1 }} />
-            </Box>
-            <Typography color="text.secondary" mt={3}>
-              {`Note: To stop tracking a private repo, you must delete the Dev Rings webhook from that repo's settings within GitHub.`}
-            </Typography>
+            <Stack direction="row">
+              <Typography variant="h6" color="text.secondary" sx={{ mr: 1 }}>
+                {`Coming soon`}
+              </Typography>
+              <Image src="/ablobjam.gif" width={30} height={30} />
+            </Stack>
           </TabPanel>
         </Box>
       </Stack>
