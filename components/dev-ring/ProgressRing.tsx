@@ -24,8 +24,8 @@ export const ProgressRing = ({
   });
   const [[commitsActual, commitsGoal], [prsActual, prsGoal]] = values;
 
-  const outerStroke = "#4DD0E1";
-  const middleStroke = "#556cd6";
+  const outerStroke = "#556cd6";
+  const middleStroke = "#4DD0E1";
   const strokeWidth = 10;
 
   const commitsRadius = 45;

@@ -64,8 +64,8 @@ export const Navbar = () => {
           <NavbarItem href="/manage-repos" tooltip="Manage repos">
             <Image src="/repo-icon.png" width={32} height={32} />
           </NavbarItem>
-          <SetGoalInput color="#4DD0E1" goalType="commits" />
-          <SetGoalInput goalType="prs" />
+          <SetGoalInput goalType="commits" />
+          <SetGoalInput color="#4DD0E1" goalType="prs" />
         </Stack>
         <Stack height={60} p={1} pr={2}>
           <SpeedDial

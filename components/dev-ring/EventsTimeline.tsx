@@ -15,7 +15,7 @@ import AccordionDetails from "@mui/material/AccordionDetails";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import { dayjs } from "@lib/dayjs";
 import type { RepoEvent } from "@lib/firebase/firestore";
-import { CommitSvg } from "components";
+import { CommitSvg, PRSvg } from "components/dev-ring/EventIcons";
 import { openUrl } from "utils";
 
 export const EventsTimeline = ({ events }: { events: RepoEvent[] }) => {
@@ -29,7 +29,8 @@ export const EventsTimeline = ({ events }: { events: RepoEvent[] }) => {
   return (
     <Timeline position="alternate">
       {events.map((event, i) => {
-        const { createdAt, repo, message, url } = event;
+        const { createdAt, eventType, repo, message, url } = event;
+        const isCommit = eventType === "push";
         return (
           <TimelineItem key={i}>
             <TimelineOppositeContent
@@ -43,8 +44,9 @@ export const EventsTimeline = ({ events }: { events: RepoEvent[] }) => {
             </TimelineOppositeContent>
             <TimelineSeparator>
               <TimelineConnector />
-              <TimelineDot color="primary">
-                <CommitSvg />
+              {/* #4DD0E1 */}
+              <TimelineDot color={isCommit ? "primary" : "secondary"}>
+                {eventType === "push" ? <CommitSvg /> : <PRSvg />}
               </TimelineDot>
               <TimelineConnector />
             </TimelineSeparator>
