@@ -20,7 +20,7 @@ export const SetGoalInput = ({
 
   const userData = useUserDoc();
   if (!userData) return null;
-  const [userId, { dailyGoals, isOnboarding }] = userData;
+  const [userId, { dailyGoals }] = userData;
 
   const onSubmit: SubmitHandler<{ goal: string }> = async ({ goal }) => {
     const isOnlyNumbers = /^[1-9].*$/.test(goal);
