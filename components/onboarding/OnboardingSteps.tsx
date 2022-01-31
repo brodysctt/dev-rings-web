@@ -1,12 +1,8 @@
-import { useState, FC, SyntheticEvent } from "react";
+import type { FC } from "react";
 import Image from "next/image";
-import Container from "@mui/material/Container";
 import Grid from "@mui/material/Grid";
-import Box from "@mui/material/Box";
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
-import Tabs from "@mui/material/Tabs";
-import Tab from "@mui/material/Tab";
 import {
   AvatarCarousel,
   ManageReposCheckboxes,
