@@ -20,12 +20,13 @@ const Onboarding: NextPage = () => {
   const steps: Array<[string, boolean | null]> = [
     ["Motivation", null],
     ["Choose an avatar", Boolean(avatarId)],
-    ["Set a daily commits goal", Boolean(dailyGoals)],
+    ["Set a commits goal", Boolean(dailyGoals?.commits)],
+    ["Set a PRs goal", Boolean(dailyGoals?.prs)],
     ["Select repos to track", null],
   ];
 
   const StepsToComplete = () => (
-    <Stepper activeStep={activeStep} sx={{ width: "60%" }}>
+    <Stepper activeStep={activeStep} sx={{ width: "68%" }}>
       {steps.map(([label]) => (
         <Step key={label}>
           <StepLabel>{label}</StepLabel>

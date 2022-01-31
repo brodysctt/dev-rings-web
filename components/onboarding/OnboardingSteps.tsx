@@ -7,6 +7,7 @@ import {
   AvatarCarousel,
   ManageReposCheckboxes,
   SetGoalInput,
+  ProgressRing,
 } from "components";
 import { Button } from "@mui/material";
 
@@ -18,25 +19,24 @@ interface Props {
 export const OnboardingSteps = ({ activeStep, onSubmit }: Props) => {
   const steps = [
     {
-      header: "Here be the reasons why you should be using Dev Rings:",
-      blob: "/blobhighfive.png",
       body: <Motivation {...{ onSubmit }} />,
     },
     {
-      // header: `It's your journey, may as well be the main character`,
-      // blob: "/blobpopcorn.png",
+      header: `Every great developer needs a great avatar`,
+      blob: "/blobpopcorn.png",
       body: <AvatarCarousel />,
     },
     {
       header: `To track progress, you must first set a goal`,
       blob: "/ablobnod.gif",
       subheader: "How many commits will you push in a given day?",
-      body: (
-        <Stack direction="row">
-          <SetGoalInput color="#4DD0E1" goalType="commits" />
-          <SetGoalInput goalType="prs" />
-        </Stack>
-      ),
+      body: <SetGoalInput goalType="commits" />,
+    },
+    {
+      header: `To track even more progress, set a second goal`,
+      blob: "/ablobnod.gif",
+      subheader: "How many PRs will you merge in a given day?",
+      body: <SetGoalInput color="#4DD0E1" goalType="prs" />,
     },
     {
       header: `Choose the repos you'd like to start tracking`,
@@ -68,7 +68,7 @@ const Panel: FC<IProps> = (props) => {
     >
       {header && (
         <Stack direction="row">
-          <Typography variant="h6" color="primary" sx={{ mr: 1 }}>
+          <Typography variant="h5" color="primary" sx={{ mr: 1 }}>
             {header}
           </Typography>
           {blob && <Image src={blob} width={30} height={30} />}
@@ -91,17 +91,37 @@ const Panel: FC<IProps> = (props) => {
 };
 
 const Motivation = ({ onSubmit }: { onSubmit?: () => void }) => (
-  <>
-    <Typography color="text.secondary" my={3} sx={{ whiteSpace: "pre-line" }}>
-      {`1. Contributions are timestamped according to your local time zone (not UTC).
-        2. Commits made in branches outside a repo's default branch (i.e. main) are counted
-        3. Commits made in forks are counted as well`}
-    </Typography>
-    <Button
-      variant="contained"
-      onClick={() => {
-        if (onSubmit) onSubmit();
-      }}
-    >{`True! let's get started`}</Button>
-  </>
+  <Stack direction="row" alignItems="center">
+    <Stack alignItems="flex-start" mr={6}>
+      <Stack direction="row" mb={1}>
+        <Typography variant="h5" color="primary" sx={{ mr: 1 }}>
+          {`Close your Dev Rings, become a better developer`}
+        </Typography>
+        <Image src="/blobhighfive.png" width={30} height={30} />
+      </Stack>
+      <Typography
+        color="text.secondary"
+        mb={4}
+        sx={{ fontSize: 18, whiteSpace: "pre-line" }}
+      >
+        {`✔️ Set daily goals for commits and pull requests
+    ✔️ See visualizations that map perfectly to your life (no UTCs here)
+    ✔️ Track all your effort – contributions in non-main branches are counted too`}
+      </Typography>
+      <Button
+        variant="contained"
+        onClick={() => {
+          if (onSubmit) onSubmit();
+        }}
+      >{`True! Let's get started`}</Button>
+    </Stack>
+    <ProgressRing
+      isOnboarding
+      size={300}
+      values={[
+        [1, 1],
+        [1, 1],
+      ]}
+    />
+  </Stack>
 );
