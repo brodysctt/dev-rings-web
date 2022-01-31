@@ -20,8 +20,7 @@ const Onboarding: NextPage = () => {
   const steps: Array<[string, boolean | null]> = [
     ["Motivation", null],
     ["Choose an avatar", Boolean(avatarId)],
-    ["Set a commits goal", Boolean(dailyGoals?.commits)],
-    ["Set a PRs goal", Boolean(dailyGoals?.prs)],
+    ["Set daily goals", Boolean(dailyGoals)],
     ["Select repos to track", null],
   ];
 

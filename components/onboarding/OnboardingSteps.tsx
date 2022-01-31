@@ -1,8 +1,12 @@
-import type { FC } from "react";
+import { useState, FC, SyntheticEvent } from "react";
 import Image from "next/image";
+import Container from "@mui/material/Container";
 import Grid from "@mui/material/Grid";
+import Box from "@mui/material/Box";
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
+import Tabs from "@mui/material/Tabs";
+import Tab from "@mui/material/Tab";
 import {
   AvatarCarousel,
   ManageReposCheckboxes,
@@ -27,16 +31,26 @@ export const OnboardingSteps = ({ activeStep, onSubmit }: Props) => {
       body: <AvatarCarousel />,
     },
     {
-      header: `To track progress, you must first set a goal`,
+      header: `To track progress, you must first set some goals`,
       blob: "/ablobnod.gif",
-      subheader: "How many commits will you push in a given day?",
-      body: <SetGoalInput goalType="commits" />,
-    },
-    {
-      header: `To track even more progress, set a second goal`,
-      blob: "/ablobnod.gif",
-      subheader: "How many PRs will you merge in a given day?",
-      body: <SetGoalInput color="#4DD0E1" goalType="prs" />,
+      subheader: "How many contributions will you make in a given day?",
+      body: (
+        <Stack
+          direction="row"
+          justifyContent="space-between"
+          width={300}
+          mt={2}
+        >
+          <Stack>
+            <SetGoalInput goalType="commits" fontSize={50} />
+            <Typography color="primary">{`Commits`}</Typography>
+          </Stack>
+          <Stack>
+            <SetGoalInput color="#4DD0E1" goalType="prs" fontSize={50} />
+            <Typography color="secondary">{`Pull Requests`}</Typography>
+          </Stack>
+        </Stack>
+      ),
     },
     {
       header: `Choose the repos you'd like to start tracking`,

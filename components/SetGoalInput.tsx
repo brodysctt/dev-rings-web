@@ -1,6 +1,5 @@
 import Button from "@mui/material/Button";
 import InputBase from "@mui/material/InputBase";
-import Tooltip from "@mui/material/Tooltip";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { setGoal, useUserDoc } from "@lib/firebase/firestore";
 import { toast } from "react-toastify";
@@ -8,9 +7,14 @@ import { toast } from "react-toastify";
 interface Props {
   color?: string;
   goalType: "commits" | "prs";
+  fontSize?: number;
 }
 
-export const SetGoalInput = ({ color = "primary.main", goalType }: Props) => {
+export const SetGoalInput = ({
+  color = "primary.main",
+  goalType,
+  fontSize = 30,
+}: Props) => {
   const isCommits = goalType === "commits";
   const { register, handleSubmit } = useForm<{ goal: number }>();
 
@@ -27,27 +31,25 @@ export const SetGoalInput = ({ color = "primary.main", goalType }: Props) => {
     await setGoal(userId, Number(goal), goalType);
   };
   return (
-    <Tooltip title={`${isOnboarding ? "Set" : "Update"} daily goal`}>
-      <Button disableRipple variant="text" sx={{ height: 60 }}>
-        <InputBase
-          {...register("goal")}
-          placeholder={
-            !dailyGoals ? 3 : isCommits ? dailyGoals.commits : dailyGoals.prs
+    <Button disableRipple variant="text" sx={{ height: 60 }}>
+      <InputBase
+        {...register("goal")}
+        sx={{
+          width: 32,
+          fontSize,
+          color,
+          input: { textAlign: "center" },
+        }}
+        onKeyPress={(kp) => {
+          if (kp.key === "Enter") {
+            handleSubmit(onSubmit)();
+            kp.preventDefault();
           }
-          sx={{
-            width: 32,
-            fontSize: 30,
-            color,
-            input: { textAlign: "center" },
-          }}
-          onKeyPress={(kp) => {
-            if (kp.key === "Enter") {
-              handleSubmit(onSubmit)();
-              kp.preventDefault();
-            }
-          }}
-        />
-      </Button>
-    </Tooltip>
+        }}
+        {...(isCommits
+          ? { placeholder: dailyGoals.commits ? dailyGoals.commits : 1 }
+          : { placeholder: dailyGoals.prs ? dailyGoals.prs : 1 })}
+      />
+    </Button>
   );
 };
