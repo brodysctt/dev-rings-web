@@ -114,8 +114,8 @@ const Motivation = ({ onSubmit }: { onSubmit?: () => void }) => (
         mb={4}
         sx={{ fontSize: 18, whiteSpace: "pre-line" }}
       >
-        {`✔️ Set daily goals for commits and pull requests
-    ✔️ See visualizations that map perfectly to your life (no UTCs here)
+        {`✔️ Set your own goals for commits and pull requests
+    ✔️ Visualize progress every day, in whatever timezone you're coding from
     ✔️ Track all your effort – contributions in non-main branches are counted too`}
       </Typography>
       <Button
