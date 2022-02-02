@@ -9,7 +9,7 @@ import { AVATARS } from "components";
 export const GetStarted = () => {
   const userData = useUserDoc();
   if (!userData) return null;
-  const [, { avatarId }] = userData;
+  const { avatarId } = userData;
   return (
     <Stack alignItems="center">
       <Stack direction="row">

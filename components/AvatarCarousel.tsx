@@ -29,7 +29,7 @@ export const AvatarCarousel = () => {
   const userId = useAuth();
   const userData = useUserDoc();
   if (!userId || !userData) return null;
-  const [, { avatarId }] = userData;
+  const { avatarId } = userData;
   return (
     <Grid container spacing={2} wrap="nowrap" pt={1} px={3}>
       {AVATARS.map(([id, lottieJson], i) => {

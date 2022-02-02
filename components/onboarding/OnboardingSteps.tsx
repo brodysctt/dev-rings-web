@@ -26,7 +26,7 @@ export const OnboardingSteps = ({ activeStep, onSubmit }: Props) => {
       body: <AvatarCarousel />,
     },
     {
-      header: `Dev Rings are simply visualizations of your goals`,
+      header: `Every day, a great developer will push commits and open pull requests`,
       blob: "/ablobnod.gif",
       subheader: "How many contributions will you make in a given day?",
       body: <ManageGoals />,

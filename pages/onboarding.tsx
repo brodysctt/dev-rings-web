@@ -15,7 +15,7 @@ const Onboarding: NextPage = () => {
   const webhooks = useCollection("webhooks") as Webhook[] | null;
   const userData = useUserDoc();
   if (!userData) return null;
-  const [, { avatarId, dailyGoals }] = userData;
+  const { avatarId, dailyGoals } = userData;
 
   const steps: Array<[string, boolean | null]> = [
     ["Motivation", null],

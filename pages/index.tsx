@@ -12,7 +12,7 @@ const Index: NextPage = () => {
   const webhooks = useCollection("webhooks") as Webhook[] | null;
 
   if (!userData || !webhooks) return null;
-  const [, { dailyGoals, timezone }] = userData;
+  const { dailyGoals, timezone } = userData;
 
   const dayEvents = getDayEvents(
     events as RepoEvent[],

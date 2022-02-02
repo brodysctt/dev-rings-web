@@ -1,62 +1,72 @@
-import { useState, ChangeEvent, Dispatch, SetStateAction } from "react";
+import { useState } from "react";
+import type { ChangeEvent, Dispatch, SetStateAction } from "react";
 import Stack from "@mui/material/Stack";
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
 import InputAdornment from "@mui/material/InputAdornment";
-// import { useForm, SubmitHandler } from "react-hook-form";
-// import { setGoal, useUserDoc } from "@lib/firebase/firestore";
 import { useAuth } from "@lib/firebase/auth";
-// import { setGoal } from "@lib/firebase/firestore";
+import { setGoal, useUserDoc } from "@lib/firebase/firestore";
 import { CommitSvg, PRSvg } from "components";
 
 type GoalState = number | null;
 
 export const ManageGoals = () => {
-  const [commitsGoal, setCommitsGoal] = useState<GoalState>(null);
-  const [prsGoal, setPrsGoal] = useState<GoalState>(null);
-  console.log(`here be the current commitsGoal state: ${commitsGoal}`);
-  console.log(`here be the current prsGoal state: ${prsGoal}`);
+  const [commits, setCommits] = useState<GoalState>(null);
+  const [prs, setPrs] = useState<GoalState>(null);
+  const userId = useAuth();
+
+  if (!userId) return null;
 
   return (
     <Stack justifyContent="space-between" alignItems="center" mt={2}>
-      <GoalInput goalType="commits" setGoalState={setCommitsGoal} />
-      <GoalInput
-        disabled={!commitsGoal}
-        goalType="prs"
-        setGoalState={setPrsGoal}
-      />
+      <Stack direction="row" justifyContent="space-between" width={250}>
+        <GoalInput autoFocus type="commits" setGoalState={setCommits} />
+        <GoalInput type="prs" setGoalState={setPrs} />
+      </Stack>
       <Button
-        disabled={!commitsGoal || !prsGoal}
+        disabled={!commits || !prs}
         variant="contained"
+        onClick={async () => {
+          await setGoal(userId, commits as number, "commits");
+          await setGoal(userId, prs as number, "prs");
+        }}
+        sx={{ width: 250 }}
       >{`Save goals`}</Button>
     </Stack>
   );
 };
 
 interface GoalInputProps {
+  autoFocus?: boolean;
   disabled?: boolean;
-  goalType: "commits" | "prs";
   setGoalState: Dispatch<SetStateAction<GoalState>>;
-  // fontSize?: number;
+  type: "commits" | "prs";
 }
 
 const GoalInput = ({
+  autoFocus = false,
   disabled = false,
-  goalType,
+  type,
   setGoalState,
 }: GoalInputProps) => {
+  const [error, setError] = useState(false);
   const userId = useAuth();
-  if (!userId) return null;
+  const userData = useUserDoc();
+  if (!userId || !userData) return null;
+  const [, { dailyGoals }] = userData;
+  console.dir(dailyGoals);
 
-  const isCommits = goalType === "commits";
+  const isCommits = type === "commits";
 
   const handleChange = async (event: ChangeEvent<HTMLInputElement>) => {
     const goal = event.target.value;
-    console.log(`here be the event as a string: ${goal}`);
-    const isOnlyNumbers = /^[1-9].*$/.test(goal);
-    if (!isOnlyNumbers) {
-      // TODO: set error state to true, render helper text
-      console.error("Goal must be a number 1 or greater 🎯");
+    if (goal === "0") {
+      setError(true);
+      return;
+    }
+    setError(false);
+    if (!goal) {
+      setGoalState(null);
       return;
     }
     await setGoalState(Number(goal));
@@ -64,21 +74,25 @@ const GoalInput = ({
 
   return (
     <TextField
+      onKeyPress={(kp) => {
+        if (!/[0-9].*/.test(kp.key)) kp.preventDefault();
+      }}
       disabled={disabled}
+      autoFocus={autoFocus}
       label={isCommits ? "Commits" : "Pull requests"}
       color={isCommits ? "primary" : "secondary"}
       onChange={handleChange}
-      placeholder="1"
-      focused
       fullWidth
-      // error
+      error={error}
+      helperText={error ? "Goal cannot be 0" : null}
+      FormHelperTextProps={{ sx: { width: "100%" } }}
       inputProps={{
         inputMode: "numeric",
         pattern: "[0-9]*",
         sx: { fontSize: 24, textAlign: "center" },
       }}
       InputProps={{
-        startAdornment: !disabled && (
+        startAdornment: (
           <InputAdornment position="start">
             {/* TODO: Make this a wrapper in EventsIcons */}
             <Stack
@@ -87,7 +101,7 @@ const GoalInput = ({
               height={25}
               sx={{
                 justifyContent: "center",
-                bgcolor: isCommits ? "primary.main" : "secondary.main", // "#111033"
+                bgcolor: isCommits ? "primary.main" : "secondary.main",
                 borderRadius: 50,
                 px: 0.8,
                 py: 2,
@@ -98,22 +112,10 @@ const GoalInput = ({
           </InputAdornment>
         ),
       }}
+      placeholder={
+        !dailyGoals ? null : isCommits ? dailyGoals.commits : dailyGoals.prs
+      }
       sx={{ width: 120, mb: 2 }}
     />
   );
 };
-
-// const { register, handleSubmit } = useForm<{ goal: number }>();
-
-// const userData = useUserDoc();
-// if (!userData) return null;
-// const [userId, { dailyGoals }] = userData;
-
-// const onSubmit: SubmitHandler<{ goal: string }> = async ({ goal }) => {
-//   const isOnlyNumbers = /^[1-9].*$/.test(goal);
-//   if (!isOnlyNumbers) {
-//     toast.error("Goal must be a number 1 or greater 🎯");
-//     return;
-//   }
-//   await setGoal(userId, Number(goal), goalType);
-// };

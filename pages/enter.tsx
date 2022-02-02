@@ -28,7 +28,7 @@ const Enter = () => {
       </Stack>
     );
 
-  const [, { isOnboarding }] = userData;
+  const { isOnboarding } = userData;
   if (isOnboarding) {
     router.push("/onboarding");
     return null;
