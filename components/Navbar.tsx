@@ -82,7 +82,7 @@ export const Navbar = () => {
 };
 
 const OnboardingNavbar = () => (
-  <Container maxWidth="md">
+  <Container>
     <Stack direction="row" justifyContent="flex-end" mt={3}>
       <Tooltip title="Sign out">
         <IconButton onClick={signOutUser}>

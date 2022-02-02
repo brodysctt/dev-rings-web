@@ -56,11 +56,16 @@ const Onboarding: NextPage = () => {
           pt={2}
           width="60%"
         >
-          <Button disabled={isFirstStep} onClick={decrementStep}>
+          <Button disabled={isFirstStep} onClick={decrementStep} size="large">
             {`Back`}
           </Button>
           {!isLastStep && (
-            <Button disabled={!isComplete} onClick={incrementStep}>
+            <Button
+              variant="contained"
+              disabled={!isComplete}
+              onClick={incrementStep}
+              size="large"
+            >
               {`Next`}
             </Button>
           )}
