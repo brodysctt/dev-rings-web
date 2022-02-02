@@ -1,6 +1,8 @@
+import Image from "next/image";
 import type { NextPage } from "next";
 import Stack from "@mui/material/Stack";
-import { DevRing, GetStarted } from "components";
+import Typography from "@mui/material/Typography";
+import { Avatar, DevRing } from "components";
 import { NewTimezoneAlert } from "@lib/react-toastify";
 import { useUserDoc, useCollection } from "@lib/firebase/firestore";
 import type { RepoEvent, Webhook } from "@lib/firebase/firestore";
@@ -12,7 +14,7 @@ const Index: NextPage = () => {
   const webhooks = useCollection("webhooks") as Webhook[] | null;
 
   if (!userData || !webhooks) return null;
-  const [, { dailyGoals, timezone }] = userData;
+  const { dailyGoals, timezone } = userData;
 
   const dayEvents = getDayEvents(
     events as RepoEvent[],
@@ -22,7 +24,17 @@ const Index: NextPage = () => {
   if (!dayEvents)
     return (
       <Stack justifyContent="center" alignItems="center" height="80vh">
-        <GetStarted />
+        <Stack alignItems="center">
+          <Stack direction="row">
+            <Typography align="center" variant="h6" color="primary" mr={1}>
+              {`Push a commit to kick off today's progress`}
+            </Typography>
+            <Stack>
+              <Image src="/blobhighfive.png" width={30} height={30} />
+            </Stack>
+          </Stack>
+          <Avatar />
+        </Stack>
         <NewTimezoneAlert tz={timezone} />
       </Stack>
     );

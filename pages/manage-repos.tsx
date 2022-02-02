@@ -25,11 +25,7 @@ const ManageRepos: NextPage = () => {
       <Stack alignItems="center">
         <Box sx={{ width: "90%" }}>
           <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
-            <Tabs
-              value={value}
-              onChange={handleChange}
-              aria-label="basic tabs example"
-            >
+            <Tabs value={value} onChange={handleChange}>
               <Tab label="Manage public repos" />
               <Tab label="Manage private repos" />
             </Tabs>

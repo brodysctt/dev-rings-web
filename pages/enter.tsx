@@ -15,12 +15,7 @@ const Enter = () => {
   if (!userId || !userData)
     return (
       <Stack justifyContent="center" alignItems="center" height="100vh">
-        <ProgressRing
-          values={[
-            [1, 1],
-            [1, 1],
-          ]}
-        />
+        <ProgressRing />
         <Typography variant="h4" sx={{ my: 5, color: "primary.main" }}>
           {`Build momentum on your coding journey`}
         </Typography>
@@ -28,7 +23,7 @@ const Enter = () => {
       </Stack>
     );
 
-  const [, { isOnboarding }] = userData;
+  const { isOnboarding } = userData;
   if (isOnboarding) {
     router.push("/onboarding");
     return null;

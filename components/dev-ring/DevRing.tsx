@@ -25,7 +25,18 @@ export const DevRing = ({ dateString, events, values }: Props) => (
         id="View events"
         sx={{ mt: 4 }}
         icon={
-          <Stack px={0.8} py={2} height={25} sx={iconSx}>
+          <Stack
+            px={0.8}
+            py={2}
+            height={25}
+            sx={{
+              justifyContent: "center",
+              bgcolor: "primary.main", // "#111033"
+              borderRadius: 50,
+              px: 0.8,
+              py: 2,
+            }}
+          >
             <CommitSvg />
           </Stack>
         }
@@ -35,11 +46,3 @@ export const DevRing = ({ dateString, events, values }: Props) => (
     </Stack>
   </Stack>
 );
-
-const iconSx = {
-  justifyContent: "center",
-  bgcolor: "primary.main", // "#111033"
-  borderRadius: 50,
-  px: 0.8,
-  py: 2,
-};

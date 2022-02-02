@@ -15,17 +15,17 @@ const Onboarding: NextPage = () => {
   const webhooks = useCollection("webhooks") as Webhook[] | null;
   const userData = useUserDoc();
   if (!userData) return null;
-  const [, { avatarId, dailyGoals }] = userData;
+  const { avatarId, dailyGoals } = userData;
 
   const steps: Array<[string, boolean | null]> = [
     ["Motivation", null],
     ["Choose an avatar", Boolean(avatarId)],
-    ["Set a daily commits goal", Boolean(dailyGoals)],
+    ["Set daily goals", Boolean(dailyGoals)],
     ["Select repos to track", null],
   ];
 
   const StepsToComplete = () => (
-    <Stepper activeStep={activeStep} sx={{ width: "60%" }}>
+    <Stepper activeStep={activeStep} sx={{ width: "68%" }}>
       {steps.map(([label]) => (
         <Step key={label}>
           <StepLabel>{label}</StepLabel>
@@ -56,11 +56,16 @@ const Onboarding: NextPage = () => {
           pt={2}
           width="60%"
         >
-          <Button disabled={isFirstStep} onClick={decrementStep}>
+          <Button disabled={isFirstStep} onClick={decrementStep} size="large">
             {`Back`}
           </Button>
           {!isLastStep && (
-            <Button disabled={!isComplete} onClick={incrementStep}>
+            <Button
+              variant="contained"
+              disabled={!isComplete}
+              onClick={incrementStep}
+              size="large"
+            >
               {`Next`}
             </Button>
           )}

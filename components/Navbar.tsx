@@ -16,7 +16,7 @@ import MenuSvg from "@mui/icons-material/Menu";
 import AvatarSvg from "@mui/icons-material/AccountCircle";
 import { useAuth, signOutUser } from "@lib/firebase/auth";
 import { useUserDoc } from "@lib/firebase/firestore";
-import { CalendarPopper, ProgressRing, SetGoalInput } from "components";
+import { CalendarPopper, ProgressRing } from "components";
 import { openUrl } from "utils";
 
 export const Navbar = () => {
@@ -24,7 +24,7 @@ export const Navbar = () => {
   const userId = useAuth();
   const userData = useUserDoc();
   if (!userId || !userData) return null;
-  const [, { isOnboarding }] = userData;
+  const { isOnboarding } = userData;
 
   const speedDialActions = [
     {
@@ -52,20 +52,12 @@ export const Navbar = () => {
       <Stack direction="row" justifyContent="space-between" pt={3}>
         <Stack direction="row">
           <NavbarItem href="/" tooltip="View today's progress">
-            <ProgressRing
-              size={35}
-              values={[
-                [0, 1],
-                [0, 1],
-              ]}
-            />
+            <ProgressRing size={35} />
           </NavbarItem>
           <CalendarPopper />
           <NavbarItem href="/manage-repos" tooltip="Manage repos">
             <Image src="/repo-icon.png" width={32} height={32} />
           </NavbarItem>
-          <SetGoalInput goalType="commits" />
-          <SetGoalInput color="#4DD0E1" goalType="prs" />
         </Stack>
         <Stack height={60} p={1} pr={2}>
           <SpeedDial
@@ -90,7 +82,7 @@ export const Navbar = () => {
 };
 
 const OnboardingNavbar = () => (
-  <Container maxWidth="md">
+  <Container>
     <Stack direction="row" justifyContent="flex-end" mt={3}>
       <Tooltip title="Sign out">
         <IconButton onClick={signOutUser}>

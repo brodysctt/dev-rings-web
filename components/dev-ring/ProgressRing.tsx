@@ -6,21 +6,22 @@ import checkmarkLottie from "public/checkmark-lottie.json";
 
 export type RingValues = [[number, number], [number, number]];
 interface Props {
-  isDayTile?: boolean;
   size?: number;
-  values: RingValues;
+  values?: RingValues;
 }
 
 export const ProgressRing = ({
-  isDayTile = false,
   size = 400,
-  values,
+  values = [
+    [1, 1],
+    [1, 1],
+  ],
 }: Props) => {
   const [showLottie, setShowLottie] = useState(false);
 
   const duration = 2;
   useEffect(() => {
-    setTimeout(() => setShowLottie(true), duration * 1000 * 2);
+    setTimeout(() => setShowLottie(true), duration * 1000 * 1.5);
   });
   const [[commitsActual, commitsGoal], [prsActual, prsGoal]] = values;
 
@@ -139,7 +140,7 @@ export const ProgressRing = ({
           />
         )}
       </svg>
-      <Box mt={isDayTile ? -5.9 : -50.9}>
+      <Box mt={size < 50 ? size * -0.1685 : size * -0.128}>
         <Lottie
           loop={false}
           animationData={checkmarkLottie}
