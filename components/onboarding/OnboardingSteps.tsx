@@ -1,16 +1,15 @@
 import type { FC } from "react";
-import Image from "next/image";
 import Grid from "@mui/material/Grid";
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
 import {
   AvatarCarousel,
+  BlobHeader,
   ManageReposCheckboxes,
   ManageGoals,
   ProgressRing,
 } from "components";
 import { Button } from "@mui/material";
-import AccountSvg from "@mui/icons-material/AccountCircle";
 
 interface Props {
   activeStep: number;
@@ -20,103 +19,102 @@ interface Props {
 export const OnboardingSteps = ({ activeStep, onSubmit }: Props) => {
   const steps = [
     {
-      body: <Motivation {...{ onSubmit }} />,
+      body: (
+        <Stack alignItems="flex-start" mr={6}>
+          <BlobHeader
+            text="Close your Dev Rings, become a better developer"
+            blob="/blobhighfive.png"
+          />
+          <Typography
+            color="text.secondary"
+            mt={2}
+            mb={4}
+            sx={{ fontSize: 18, whiteSpace: "pre-line" }}
+          >
+            {`✔️ Set your own goals for commits and pull requests
+              ✔️ Visualize progress every day, in whatever timezone you're coding from
+              ✔️ Track all your effort – contributions in non-main branches are counted too`}
+          </Typography>
+          <Button
+            variant="contained"
+            size="large"
+            onClick={() => {
+              if (onSubmit) onSubmit();
+            }}
+          >{`True! Let's get started`}</Button>
+        </Stack>
+      ),
+      hero: <ProgressRing isOnboarding size={300} />,
     },
     {
-      header: "Every great developer needs a great avatar",
-      blob: "/blobhero.png",
       body: <AvatarCarousel size={300} />,
     },
     {
-      header: `Push commits and merge PRs to become a better developer `,
-      subheader: "How many contributions will you make in a given day?",
-      body: <ManageGoals />,
+      body: (
+        <>
+          <BlobHeader
+            text={`Push commits and merge PRs to become a better developer`}
+            blob="/blobhero.png"
+          />
+          <Typography align="center" color="text.secondary" mb={2}>
+            {`How many contributions will you make in a given day?`}
+          </Typography>
+          <ManageGoals />
+        </>
+      ),
     },
     {
-      header: `Choose the repos you'd like to start tracking`,
-      blob: "/blobclipboard.png",
-      body: <ManageReposCheckboxes />,
+      body: (
+        <>
+          <BlobHeader
+            text={`Choose the repos you'd like to start tracking`}
+            blob="/blobclipboard.png"
+          />
+          <ManageReposCheckboxes />
+        </>
+      ),
     },
   ];
 
-  const { header, blob, subheader, body } = steps[activeStep];
-  return <Panel {...{ activeStep, header, blob, subheader }}>{body}</Panel>;
+  const { body, hero } = steps[activeStep];
+  return <Panel {...{ activeStep, hero }}>{body}</Panel>;
 };
 
 interface IProps {
   activeStep: number;
-  header?: string | JSX.Element;
-  blob?: string;
-  subheader?: string | JSX.Element;
+  hero?: JSX.Element;
 }
 
-const Panel: FC<IProps> = (props) => {
-  const { activeStep, header, blob, subheader, children } = props;
-  const isAvatarCarousel = activeStep === 1;
+const Panel: FC<IProps> = ({ activeStep, hero, children }) => {
+  const isAvatarSelect = activeStep === 1;
   return (
     <Stack
+      direction="row"
       justifyContent="center"
       alignItems="center"
       height="65vh"
       width="100%"
     >
-      {header && (
-        <Stack direction="row">
-          <Typography variant="h5" color="primary" sx={{ mr: 1 }}>
-            {header}
-          </Typography>
-          {blob && <Image src={blob} width={30} height={30} />}
+      {isAvatarSelect ? (
+        <AvatarSelect>{children}</AvatarSelect>
+      ) : (
+        <Stack justifyContent="center" alignItems="center">
+          {children}
         </Stack>
       )}
-      {subheader && (
-        <Typography align="center" color="text.secondary" mb={2}>
-          {subheader}
-        </Typography>
-      )}
-      {isAvatarCarousel ? (
-        <Grid overflow="scroll" width="100%">
-          {children}
-        </Grid>
-      ) : (
-        children
-      )}
+      {hero && hero}
     </Stack>
   );
 };
 
-const Motivation = ({ onSubmit }: { onSubmit?: () => void }) => (
-  <Stack direction="row" alignItems="center">
-    <Stack alignItems="flex-start" mr={6}>
-      <Stack direction="row" mb={1}>
-        <Typography variant="h5" color="primary" sx={{ mr: 1 }}>
-          {`Close your Dev Rings, become a better developer`}
-        </Typography>
-        <Image src="/blobhighfive.png" width={30} height={30} />
-      </Stack>
-      <Typography
-        color="text.secondary"
-        mb={4}
-        sx={{ fontSize: 18, whiteSpace: "pre-line" }}
-      >
-        {`✔️ Set your own goals for commits and pull requests
-    ✔️ Visualize progress every day, in whatever timezone you're coding from
-    ✔️ Track all your effort – contributions in non-main branches are counted too`}
-      </Typography>
-      <Button
-        variant="contained"
-        size="large"
-        onClick={() => {
-          if (onSubmit) onSubmit();
-        }}
-      >{`True! Let's get started`}</Button>
-    </Stack>
-    <ProgressRing
-      isOnboarding
-      size={300}
-      values={[
-        [1, 1],
-        [1, 1],
-      ]}
+const AvatarSelect: FC = ({ children }) => (
+  <Stack alignItems="center" width="100%">
+    <BlobHeader
+      text={`Every great developer needs a great avatar`}
+      blob="/blobhero.png"
     />
+    <Grid overflow="scroll" width="100%">
+      {children}
+    </Grid>
   </Stack>
 );

@@ -9,14 +9,17 @@ interface Props {
   isDayTile?: boolean;
   isOnboarding?: boolean;
   size?: number;
-  values: RingValues;
+  values?: RingValues;
 }
 
 export const ProgressRing = ({
   isOnboarding = false,
   isDayTile = false,
   size = 400,
-  values,
+  values = [
+    [1, 1],
+    [1, 1],
+  ],
 }: Props) => {
   const [showLottie, setShowLottie] = useState(false);
 

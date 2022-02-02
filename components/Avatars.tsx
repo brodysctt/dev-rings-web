@@ -25,6 +25,18 @@ export const AVATARS = [
   ["👩🏿‍💻", zenFemaleDeveloperJson],
 ];
 
+export const Avatar = ({ avatarId }: { avatarId: string }) => {
+  const [lottieJson] = AVATARS.filter(([id]) => id === avatarId).map(
+    ([, lottieJson]) => lottieJson
+  );
+  return (
+    <Box height={500} width={500}>
+      <Lottie loop animationData={lottieJson} play speed={0.7} />
+    </Box>
+  );
+};
+
+// TODO: This needs to use the Avatar component
 export const AvatarCarousel = ({ size = 400 }: { size?: number }) => {
   const userId = useAuth();
   const userData = useUserDoc();

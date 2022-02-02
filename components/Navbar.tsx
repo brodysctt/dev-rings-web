@@ -52,13 +52,7 @@ export const Navbar = () => {
       <Stack direction="row" justifyContent="space-between" pt={3}>
         <Stack direction="row">
           <NavbarItem href="/" tooltip="View today's progress">
-            <ProgressRing
-              size={35}
-              values={[
-                [0, 1],
-                [0, 1],
-              ]}
-            />
+            <ProgressRing size={35} />
           </NavbarItem>
           <CalendarPopper />
           <NavbarItem href="/manage-repos" tooltip="Manage repos">
