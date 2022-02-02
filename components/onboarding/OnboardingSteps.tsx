@@ -10,6 +10,7 @@ import {
   ProgressRing,
 } from "components";
 import { Button } from "@mui/material";
+import AccountSvg from "@mui/icons-material/AccountCircle";
 
 interface Props {
   activeStep: number;
@@ -22,12 +23,12 @@ export const OnboardingSteps = ({ activeStep, onSubmit }: Props) => {
       body: <Motivation {...{ onSubmit }} />,
     },
     {
-      header: `Every great developer needs a great avatar`,
-      body: <AvatarCarousel />,
+      header: "Every great developer needs a great avatar",
+      blob: "/blobhero.png",
+      body: <AvatarCarousel size={300} />,
     },
     {
-      header: `Every day, a great developer will push commits and open pull requests`,
-      blob: "/ablobnod.gif",
+      header: `Push commits and merge PRs to become a better developer `,
       subheader: "How many contributions will you make in a given day?",
       body: <ManageGoals />,
     },
@@ -103,6 +104,7 @@ const Motivation = ({ onSubmit }: { onSubmit?: () => void }) => (
       </Typography>
       <Button
         variant="contained"
+        size="large"
         onClick={() => {
           if (onSubmit) onSubmit();
         }}

@@ -25,13 +25,13 @@ export const AVATARS = [
   ["👩🏿‍💻", zenFemaleDeveloperJson],
 ];
 
-export const AvatarCarousel = () => {
+export const AvatarCarousel = ({ size = 400 }: { size?: number }) => {
   const userId = useAuth();
   const userData = useUserDoc();
   if (!userId || !userData) return null;
   const { avatarId } = userData;
   return (
-    <Grid container spacing={2} wrap="nowrap" pt={1} px={3}>
+    <Grid container spacing={2} wrap="nowrap" pt={1} px={3} mt={3}>
       {AVATARS.map(([id, lottieJson], i) => {
         const isCurrentAvatar = id === avatarId;
         return (
@@ -39,11 +39,14 @@ export const AvatarCarousel = () => {
             <Stack alignItems="center">
               <Button
                 disableRipple
-                variant={isCurrentAvatar ? "outlined" : "text"}
                 onClick={async () => await setAvatar(userId, id)}
+                sx={{
+                  border: 1,
+                  borderColor: isCurrentAvatar ? "primary.main" : "white",
+                }}
               >
                 <Stack>
-                  <Box height={400} width={400}>
+                  <Box height={size} width={size}>
                     <Lottie loop animationData={lottieJson} play speed={0.7} />
                   </Box>
                 </Stack>
