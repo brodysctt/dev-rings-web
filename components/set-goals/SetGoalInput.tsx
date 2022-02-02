@@ -14,7 +14,7 @@ interface Props {
   // fontSize?: number;
 }
 
-export const NewGoalInput = ({ disabled = false, goalType }: Props) => {
+export const SetGoalInput = ({ disabled = false, goalType }: Props) => {
   const isCommits = goalType === "commits";
   // const { register, handleSubmit } = useForm<{ goal: number }>();
 
