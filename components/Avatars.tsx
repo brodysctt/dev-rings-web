@@ -25,12 +25,15 @@ export const AVATARS = [
   ["👩🏿‍💻", zenFemaleDeveloperJson],
 ];
 
-export const Avatar = ({ avatarId }: { avatarId: string }) => {
+export const Avatar = ({ size = 500 }: { size?: number }) => {
+  const userData = useUserDoc();
+  if (!userData) return null;
+  const { avatarId } = userData;
   const [lottieJson] = AVATARS.filter(([id]) => id === avatarId).map(
     ([, lottieJson]) => lottieJson
   );
   return (
-    <Box height={500} width={500}>
+    <Box height={size} width={size}>
       <Lottie loop animationData={lottieJson} play speed={0.7} />
     </Box>
   );

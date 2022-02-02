@@ -3,6 +3,7 @@ import Grid from "@mui/material/Grid";
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
 import {
+  Avatar,
   AvatarCarousel,
   Header,
   ManageReposCheckboxes,
@@ -22,8 +23,8 @@ export const OnboardingSteps = ({ activeStep, onSubmit }: Props) => {
       body: (
         <Stack alignItems="flex-start" mr={6}>
           <Header
-            icon="/blobhighfive.png"
             text="Close your Dev Rings, become a better developer"
+            icon="/blobhighfive.png"
             variant="h5"
           />
           <Typography
@@ -32,9 +33,9 @@ export const OnboardingSteps = ({ activeStep, onSubmit }: Props) => {
             mb={4}
             sx={{ fontSize: 18, whiteSpace: "pre-line" }}
           >
-            {`✔️ Set your own goals for commits and pull requests
-              ✔️ Visualize progress every day, in whatever timezone you're coding from
-              ✔️ Track all your effort – contributions in non-main branches are counted too`}
+            {`✔️ Set daily goals for both commits and pull requests
+              ✔️ Visualize contributions by day or month, according to your timezone
+              ✔️ Track all your effort – changes in non-main branches count too`}
           </Typography>
           <Button
             variant="contained"
@@ -54,15 +55,17 @@ export const OnboardingSteps = ({ activeStep, onSubmit }: Props) => {
       body: (
         <>
           <Header
-            text={`Push commits and merge PRs to become a better developer`}
-            icon={<ProgressRing size={35} />}
+            text={`If you code consistently, you will improve`}
+            icon="/blobhighfive.png"
+            // TODO: Add progress ring as icon once it cooperates
           />
           <Typography align="center" color="text.secondary" mb={2}>
-            {`How many contributions will you make in a given day?`}
+            {`How many contributions will you make in a typical day?`}
           </Typography>
           <ManageGoals />
         </>
       ),
+      hero: <Avatar size={400} />,
     },
     {
       body: (
@@ -74,6 +77,7 @@ export const OnboardingSteps = ({ activeStep, onSubmit }: Props) => {
           <ManageReposCheckboxes />
         </>
       ),
+      hero: <Avatar size={400} />,
     },
   ];
 
@@ -99,7 +103,7 @@ const Panel: FC<IProps> = ({ activeStep, hero, children }) => {
       {isAvatarSelect ? (
         <AvatarSelect>{children}</AvatarSelect>
       ) : (
-        <Stack justifyContent="center" alignItems="center">
+        <Stack justifyContent="center" alignItems="flex-start" mr={3}>
           {children}
         </Stack>
       )}
