@@ -7,6 +7,7 @@ import {
   AvatarCarousel,
   ManageReposCheckboxes,
   SetGoalInput,
+  NewGoalInput,
   ProgressRing,
 } from "components";
 import { Button } from "@mui/material";
@@ -23,28 +24,16 @@ export const OnboardingSteps = ({ activeStep, onSubmit }: Props) => {
     },
     {
       header: `Every great developer needs a great avatar`,
-      blob: "/blobpopcorn.png",
       body: <AvatarCarousel />,
     },
     {
-      header: `To track progress, you must first set some goals`,
+      header: `Dev Rings are visualizations of your daily goals`,
       blob: "/ablobnod.gif",
       subheader: "How many contributions will you make in a given day?",
       body: (
-        <Stack
-          direction="row"
-          justifyContent="space-between"
-          width={300}
-          mt={2}
-        >
-          <Stack>
-            <SetGoalInput goalType="commits" fontSize={50} />
-            <Typography color="primary">{`Commits`}</Typography>
-          </Stack>
-          <Stack>
-            <SetGoalInput color="#4DD0E1" goalType="prs" fontSize={50} />
-            <Typography color="secondary">{`Pull Requests`}</Typography>
-          </Stack>
+        <Stack justifyContent="space-between" height={200} mt={2}>
+          <NewGoalInput goalType="commits" />
+          <NewGoalInput disabled goalType="prs" />
         </Stack>
       ),
     },

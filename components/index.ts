@@ -8,3 +8,4 @@ export * from "./Navbar";
 export * from "./PopIt";
 export * from "./SetGoalInput";
 export * from "./TextLink";
+export * from "./NewGoalInput";
