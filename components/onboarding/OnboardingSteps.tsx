@@ -4,7 +4,7 @@ import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
 import {
   AvatarCarousel,
-  BlobHeader,
+  Header,
   ManageReposCheckboxes,
   ManageGoals,
   ProgressRing,
@@ -21,9 +21,10 @@ export const OnboardingSteps = ({ activeStep, onSubmit }: Props) => {
     {
       body: (
         <Stack alignItems="flex-start" mr={6}>
-          <BlobHeader
+          <Header
+            icon="/blobhighfive.png"
             text="Close your Dev Rings, become a better developer"
-            blob="/blobhighfive.png"
+            variant="h5"
           />
           <Typography
             color="text.secondary"
@@ -52,9 +53,9 @@ export const OnboardingSteps = ({ activeStep, onSubmit }: Props) => {
     {
       body: (
         <>
-          <BlobHeader
+          <Header
             text={`Push commits and merge PRs to become a better developer`}
-            blob="/blobhero.png"
+            icon="/blobhero.png"
           />
           <Typography align="center" color="text.secondary" mb={2}>
             {`How many contributions will you make in a given day?`}
@@ -66,9 +67,9 @@ export const OnboardingSteps = ({ activeStep, onSubmit }: Props) => {
     {
       body: (
         <>
-          <BlobHeader
+          <Header
             text={`Choose the repos you'd like to start tracking`}
-            blob="/blobclipboard.png"
+            icon="/blobclipboard.png"
           />
           <ManageReposCheckboxes />
         </>
@@ -109,9 +110,9 @@ const Panel: FC<IProps> = ({ activeStep, hero, children }) => {
 
 const AvatarSelect: FC = ({ children }) => (
   <Stack alignItems="center" width="100%">
-    <BlobHeader
+    <Header
       text={`Every great developer needs a great avatar`}
-      blob="/blobhero.png"
+      icon="/blobhero.png"
     />
     <Grid overflow="scroll" width="100%">
       {children}
