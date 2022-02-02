@@ -6,8 +6,7 @@ import Typography from "@mui/material/Typography";
 import {
   AvatarCarousel,
   ManageReposCheckboxes,
-  SetGoalInput,
-  NewGoalInput,
+  ManageGoals,
   ProgressRing,
 } from "components";
 import { Button } from "@mui/material";
@@ -27,15 +26,10 @@ export const OnboardingSteps = ({ activeStep, onSubmit }: Props) => {
       body: <AvatarCarousel />,
     },
     {
-      header: `Dev Rings are visualizations of your daily goals`,
+      header: `Dev Rings are simply visualizations of your goals`,
       blob: "/ablobnod.gif",
       subheader: "How many contributions will you make in a given day?",
-      body: (
-        <Stack justifyContent="space-between" height={200} mt={2}>
-          <NewGoalInput goalType="commits" />
-          <NewGoalInput disabled goalType="prs" />
-        </Stack>
-      ),
+      body: <ManageGoals />,
     },
     {
       header: `Choose the repos you'd like to start tracking`,

@@ -14,7 +14,7 @@ interface Props {
   // fontSize?: number;
 }
 
-export const SetGoalInput = ({ disabled = false, goalType }: Props) => {
+export const GoalInput = ({ disabled = false, goalType }: Props) => {
   const isCommits = goalType === "commits";
   // const { register, handleSubmit } = useForm<{ goal: number }>();
 
@@ -64,7 +64,7 @@ export const SetGoalInput = ({ disabled = false, goalType }: Props) => {
           </InputAdornment>
         ),
       }}
-      sx={{ width: 120, textAlign: "center" }}
+      sx={{ width: 120, mb: 2 }}
     />
   );
 };
@@ -75,7 +75,7 @@ interface OGProps {
   fontSize?: number;
 }
 
-const SetGoalInput = ({
+const OGGoalInput = ({
   color = "primary.main",
   goalType,
   fontSize = 30,
