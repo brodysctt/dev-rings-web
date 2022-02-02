@@ -53,7 +53,7 @@ const GoalInput = ({
   const userId = useAuth();
   const userData = useUserDoc();
   if (!userId || !userData) return null;
-  const [, { dailyGoals }] = userData;
+  const { dailyGoals } = userData;
   console.dir(dailyGoals);
 
   const isCommits = type === "commits";
