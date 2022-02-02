@@ -45,7 +45,7 @@ export const OnboardingSteps = ({ activeStep, onSubmit }: Props) => {
           >{`True! Let's get started`}</Button>
         </Stack>
       ),
-      hero: <ProgressRing isOnboarding size={300} />,
+      hero: <ProgressRing size={300} />,
     },
     {
       body: <AvatarCarousel size={300} />,
@@ -55,7 +55,7 @@ export const OnboardingSteps = ({ activeStep, onSubmit }: Props) => {
         <>
           <Header
             text={`Push commits and merge PRs to become a better developer`}
-            icon="/blobhero.png"
+            icon={<ProgressRing size={35} />}
           />
           <Typography align="center" color="text.secondary" mb={2}>
             {`How many contributions will you make in a given day?`}

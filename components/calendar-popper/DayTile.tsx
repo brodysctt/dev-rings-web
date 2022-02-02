@@ -43,7 +43,6 @@ export const DayTile = ({ log }: { log: Log }) => {
         </Typography>
         <ButtonBase disabled={isDayOff} sx={{ mt: 0.2 }}>
           <ProgressRing
-            isDayTile
             size={35}
             values={[
               commits ? [commits.actual, commits.goal] : [0, 1],

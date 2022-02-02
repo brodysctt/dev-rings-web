@@ -6,15 +6,11 @@ import checkmarkLottie from "public/checkmark-lottie.json";
 
 export type RingValues = [[number, number], [number, number]];
 interface Props {
-  isDayTile?: boolean;
-  isOnboarding?: boolean;
   size?: number;
   values?: RingValues;
 }
 
 export const ProgressRing = ({
-  isOnboarding = false,
-  isDayTile = false,
   size = 400,
   values = [
     [1, 1],
@@ -144,7 +140,7 @@ export const ProgressRing = ({
           />
         )}
       </svg>
-      <Box mt={isDayTile ? -5.9 : isOnboarding ? -38.5 : -50.9}>
+      <Box mt={size < 50 ? size * -0.1685 : size * -0.128}>
         <Lottie
           loop={false}
           animationData={checkmarkLottie}
