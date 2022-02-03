@@ -5,6 +5,7 @@ import { fetchGitHubToken, fetchHookId } from "@lib/firebase/firestore";
 
 export type RepoAction = [string, boolean, string | null];
 
+// TODO: Consider 🪓'ing checked boolean from RepoAction
 export const manageRepos = async (
   userId: string,
   repoActions: RepoAction[],

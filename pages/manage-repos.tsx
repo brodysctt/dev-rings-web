@@ -2,14 +2,14 @@ import { useState, FC, SyntheticEvent } from "react";
 import Image from "next/image";
 import type { NextPage } from "next";
 import Container from "@mui/material/Container";
-import Typography from "@mui/material/Typography";
+// import Typography from "@mui/material/Typography";
 import Stack from "@mui/material/Stack";
 import Box from "@mui/material/Box";
 import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
 // import { useTheme } from "@mui/material/styles";
 // import useMediaQuery from "@mui/material/useMediaQuery";
-import { ManageReposCheckboxes } from "components";
+import { ManagePrivateRepos, ManageReposCheckboxes } from "components";
 
 const ManageRepos: NextPage = () => {
   // const theme = useTheme();
@@ -35,10 +35,7 @@ const ManageRepos: NextPage = () => {
           </TabPanel>
           <TabPanel value={value} index={1}>
             <Stack direction="row">
-              <Typography variant="h6" color="text.secondary" sx={{ mr: 1 }}>
-                {`Coming soon`}
-              </Typography>
-              <Image src="/ablobjam.gif" width={30} height={30} />
+              <ManagePrivateRepos />
             </Stack>
           </TabPanel>
         </Box>
