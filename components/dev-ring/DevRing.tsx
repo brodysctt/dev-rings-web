@@ -1,4 +1,5 @@
 import type { FC } from "react";
+import Grid from "@mui/material/Grid";
 import Stack from "@mui/material/Stack";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
@@ -23,23 +24,25 @@ export const DevRing: FC<Props> = (props) => {
       justifyContent="center"
       alignItems="center"
       height="80vh"
-      width="90%"
+      width="100%"
     >
-      <Stack direction="row" alignItems="center">
-        {isToday && (
-          <Box
-            p={2}
-            sx={{
-              border: 1,
-              borderColor: "#EAEDFA",
-              borderRadius: 6,
-              boxShadow: "1px 2px #EAEDFA",
-            }}
-          >
-            <ManageGoals />
-          </Box>
-        )}
-
+      <Stack direction="row" justifyContent="center" alignItems="center">
+        <Box
+          p={2}
+          sx={{
+            ...(isToday
+              ? {
+                  width: 298,
+                  border: 1,
+                  borderColor: "#EAEDFA",
+                  borderRadius: 6,
+                  boxShadow: "1px 2px #EAEDFA",
+                }
+              : { width: 398 }),
+          }}
+        >
+          {isToday && <ManageGoals />}
+        </Box>
         <Stack alignItems="center" mx={8}>
           <Typography color="text.secondary" sx={{ mb: 6 }}>
             {dayjs(dateString).format("LL")}
@@ -70,15 +73,15 @@ export const DevRing: FC<Props> = (props) => {
             <EventsTimeline events={events} />
           </PopIt>
         </Stack>
-        <Stack>
+        <Stack alignItems="flex-start">
           <Typography
             variant="h4"
             color="primary"
-          >{`${commitsActual}/${commitsGoal} commits`}</Typography>
+          >{`${commitsActual}/${commitsGoal} Commits`}</Typography>
           <Typography
             variant="h4"
             color="secondary"
-          >{`${prsActual}/${prsGoal} pull requests`}</Typography>
+          >{`${prsActual}/${prsGoal} Pull requests`}</Typography>
         </Stack>
       </Stack>
     </Stack>
