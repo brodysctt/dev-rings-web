@@ -50,6 +50,7 @@ const Index: NextPage = () => {
     <Stack direction="row" justifyContent="center">
       <DevRing
         events={dayEvents}
+        isToday
         values={[
           [commitsActual, dailyGoals.commits],
           [prsActual, dailyGoals.prs],

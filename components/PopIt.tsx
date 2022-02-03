@@ -6,6 +6,7 @@ import Paper from "@mui/material/Paper";
 import ClickAwayListener from "@mui/material/ClickAwayListener";
 import Tooltip from "@mui/material/Tooltip";
 import type { SxProps } from "@mui/system";
+import type { PopperPlacementType } from "@mui/core/Popper";
 
 interface Props {
   id: string;
@@ -13,10 +14,18 @@ interface Props {
   sx?: SxProps;
   paperSx?: SxProps;
   close?: boolean;
+  placement?: PopperPlacementType;
 }
 
-export const PopIt: FC<Props> = (props) => {
-  const { id, children, close = false, icon, sx, paperSx } = props;
+export const PopIt: FC<Props> = ({
+  id,
+  children,
+  close = false,
+  icon,
+  sx,
+  paperSx,
+  placement = "bottom",
+}) => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl) && !close;
   return (
@@ -44,6 +53,7 @@ export const PopIt: FC<Props> = (props) => {
               enabled: false,
             },
           ]}
+          placement={placement}
         >
           <Paper elevation={0} sx={paperSx}>
             {children}
