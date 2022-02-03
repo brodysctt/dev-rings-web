@@ -4,6 +4,8 @@ import { useForm, SubmitHandler } from "react-hook-form";
 import Input from "@mui/material/Input";
 import FormControl from "@mui/material/FormControl";
 import Tooltip from "@mui/material/Tooltip";
+import Divider from "@mui/material/Divider";
+import Chip from "@mui/material/Chip";
 import Box from "@mui/material/Box";
 import { toast } from "react-toastify";
 import { useAuth } from "@lib/firebase/auth";
@@ -11,6 +13,8 @@ import { manageRepos, RepoAction } from "components/manage-repos/manageRepos";
 import Lottie from "react-lottie-player";
 import loadingDotsJson from "public/loading-dots.json";
 import GitHubSvg from "@mui/icons-material/GitHub";
+import IconButton from "@mui/material/IconButton";
+import AddIcon from "@mui/icons-material/AddCircleOutline";
 
 export const ManagePrivateRepos = () => {
   return (
@@ -22,6 +26,7 @@ export const ManagePrivateRepos = () => {
 
 const TrackRepoInput = () => {
   const { register, handleSubmit } = useForm<{ repoUrl: string }>();
+  const [value, setValue] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
 
   const userId = useAuth();
@@ -55,39 +60,68 @@ const TrackRepoInput = () => {
     // TODO: Improve TypeScript here
     const repoAction = [repo as string, false, "add"] as RepoAction;
     await manageRepos(userId, [repoAction], setIsLoading);
+    setValue("");
   };
 
-  return isLoading ? (
-    <Stack alignItems="center">
-      <Box
-        height={83}
-        width={200}
-        mt={-6}
-        sx={{ position: "relative", zIndex: -1 }}
-      >
-        <Lottie loop animationData={loadingDotsJson} play />
-      </Box>
-    </Stack>
-  ) : (
-    <Stack direction="row">
-      <GitHubSvg fontSize="large" color="primary" sx={{ mr: 1 }} />
-      <Tooltip title="Paste a private repo here to start tracking it">
-        <FormControl variant="standard">
-          <Input
-            {...register("repoUrl")}
-            id="repoUrl"
-            type="text"
-            placeholder={"https://github.com/you/your-awesome-repo.git"}
-            onKeyPress={(kp) => {
-              if (kp.key === "Enter") {
-                handleSubmit(onSubmit)();
-                kp.preventDefault();
-              }
-            }}
-            sx={{ width: 350 }}
-          />
-        </FormControl>
-      </Tooltip>
+  console.log(value);
+
+  return (
+    <Stack>
+      {isLoading ? (
+        <Stack alignItems="center">
+          <Box
+            height={83}
+            width={200}
+            mt={-6}
+            sx={{ position: "relative", zIndex: -1 }}
+          >
+            <Lottie loop animationData={loadingDotsJson} play />
+          </Box>
+        </Stack>
+      ) : (
+        <Stack justifyContent="center">
+          <Stack direction="row" alignItems="center" mb={3}>
+            <GitHubSvg fontSize="large" color="primary" sx={{ mr: 1 }} />
+            <Tooltip title="Paste a private repo here to start tracking it">
+              <FormControl variant="standard">
+                <Input
+                  {...register("repoUrl")}
+                  value={value}
+                  id="repoUrl"
+                  type="text"
+                  placeholder={"https://github.com/you/your-awesome-repo.git"}
+                  onKeyPress={(kp) => {
+                    if (kp.key !== "Enter") {
+                      kp.preventDefault();
+                      return;
+                    }
+                    handleSubmit(onSubmit)();
+                  }}
+                  sx={{ width: 350 }}
+                />
+              </FormControl>
+            </Tooltip>
+            <IconButton
+              color="primary"
+              size="large"
+              sx={{ p: 1 }}
+              onClick={handleSubmit(onSubmit)}
+            >
+              <AddIcon />
+            </IconButton>
+          </Stack>
+          <Stack justifyContent="center">
+            <Divider sx={{ width: "50vw", maxWidth: "md" }}>
+              <Chip
+                label="Current private repos"
+                variant="filled"
+                color="primary"
+                sx={{ mb: -2 }}
+              />
+            </Divider>
+          </Stack>
+        </Stack>
+      )}
     </Stack>
   );
 };
