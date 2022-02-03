@@ -14,20 +14,11 @@ export const fetchGitHubToken = async (userId: string) => {
   const docRef = doc(db, "users", userId);
   const docSnap = await getDoc(docRef);
 
-  if (!docSnap) {
-    console.log("No such document exists bruh");
-    return;
-  }
-
+  if (!docSnap) return;
   const data = docSnap.data();
 
-  if (!data) {
-    console.log("Document exists, but data be undefined bruh");
-    return;
-  }
-
+  if (!data) return;
   const { token } = data;
-  console.log(`here lies the token: ${token}`);
   return token;
 };
 
@@ -35,16 +26,10 @@ export const fetchHookId = async (userId: string, repo: string) => {
   const docRef = doc(db, "users", userId, "webhooks", repo);
   const docSnap = await getDoc(docRef);
 
-  if (!docSnap) {
-    console.log("No such document exists bruh");
-    return;
-  }
+  if (!docSnap) return;
   const data = docSnap.data();
-  if (!data) {
-    console.log("Document exists, but data be undefined bruh");
-    return;
-  }
 
+  if (!data) return;
   const { hookId } = data;
   return hookId;
 };

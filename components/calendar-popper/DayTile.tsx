@@ -30,6 +30,9 @@ export const DayTile = ({ log }: { log: Log }) => {
         maxWidth={60}
         pt={0.2}
         pb={0.5}
+        onMouseEnter={() => setHover(true)}
+        onMouseLeave={() => setHover(false)}
+        sx={{ bgcolor: hover && !isDayOff ? "#F5F6FD" : null }}
       >
         <Typography
           mr={0.5}
@@ -38,14 +41,8 @@ export const DayTile = ({ log }: { log: Log }) => {
         >
           {dayjs(dateString).date()}
         </Typography>
-        <ButtonBase
-          onMouseEnter={() => setHover(true)}
-          onMouseLeave={() => setHover(false)}
-          disabled={isDayOff}
-          sx={{ bgcolor: hover ? "#F5F6FD" : null, mt: 0.2 }}
-        >
+        <ButtonBase disabled={isDayOff} sx={{ mt: 0.2 }}>
           <ProgressRing
-            isDayTile
             size={35}
             values={[
               commits ? [commits.actual, commits.goal] : [0, 1],

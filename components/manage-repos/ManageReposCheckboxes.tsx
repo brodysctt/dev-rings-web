@@ -1,18 +1,17 @@
 import { useState, useEffect, ChangeEvent } from "react";
 import Stack from "@mui/material/Stack";
 import Box from "@mui/material/Box";
+import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import Checkbox from "@mui/material/Checkbox";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Lottie from "react-lottie-player";
 import loadingDotsJson from "public/loading-dots.json";
-import { usePublicRepos } from "components/manage-repos/hooks";
+import { usePublicRepos } from "components/manage-repos/usePublicRepos";
 import { useAuth } from "@lib/firebase/auth";
-import { trackRepo, deleteRepo } from "components/manage-repos/manageRepos";
+import { manageRepos, RepoAction } from "components/manage-repos/manageRepos";
 
 type CheckedEvent = ChangeEvent<HTMLInputElement>;
-
-type RepoAction = [string, boolean, string | null];
 
 export const ManageReposCheckboxes = () => {
   const userId = useAuth();
@@ -22,31 +21,13 @@ export const ManageReposCheckboxes = () => {
 
   useEffect(() => {
     if (!repos) return;
-    setChecked(repos.map(([repo, state]): RepoAction => [repo, state, null])); // TODO: Check all during onboarding
+    setChecked(repos.map(([repo, state]): RepoAction => [repo, state, null]));
   }, [repos]);
 
-  useEffect(() => {
-    (async () => {
-      if (!userId || !checked || !isLoading) return;
-      console.log("in use effect");
-
-      for (const update of checked) {
-        const [repo, , action] = update;
-        if (action === "delete") {
-          await deleteRepo(userId, repo);
-        }
-        if (action === "add") {
-          await trackRepo(userId, repo);
-        }
-      }
-
-      await timeout(2000);
-      setIsLoading(false);
-      return;
-    })();
-  }, [userId, checked, isLoading]);
-
-  if (!userId || !repos || !checked) return null; // TODO: Render component for no repos case
+  if (!userId || !repos || !checked)
+    return (
+      <Typography>{`You don't have any public repos! Create one to start tracking it`}</Typography>
+    );
 
   const handleCheckAll = (event: CheckedEvent) => {
     const allChecked = repos.map(
@@ -69,6 +50,15 @@ export const ManageReposCheckboxes = () => {
       setChecked(update);
     };
 
+  const isStatusQuo = checked.every(([, , action]) => !action);
+  const isOnlyRemoves =
+    !isStatusQuo && checked.every(([, , action]) => action !== "add");
+
+  const adds = checked.filter(([, , action]) => action === "add").length;
+  const deletes = checked.filter(([, , action]) => action === "delete").length;
+  const isRemoveAll =
+    isOnlyRemoves && deletes === repos.filter(([, tracked]) => tracked).length;
+
   return (
     <Stack>
       <FormControlLabel
@@ -85,7 +75,6 @@ export const ManageReposCheckboxes = () => {
         }
       />
       <Stack ml={3} mb={2}>
-        {/* TODO: Handle case where user has a ton of repos */}
         {repos.map(([repo, tracked], i) => {
           return (
             <FormControlLabel
@@ -102,30 +91,52 @@ export const ManageReposCheckboxes = () => {
         })}
       </Stack>
       {isLoading ? (
-        <Box
-          height={83}
-          width={200}
-          mt={-6}
-          sx={{ position: "relative", zIndex: -1 }}
-        >
-          <Lottie loop animationData={loadingDotsJson} play />
-        </Box>
+        <Stack alignItems="center">
+          <Box
+            height={83}
+            width={200}
+            mt={-6}
+            sx={{ position: "relative", zIndex: -1 }}
+          >
+            <Lottie loop animationData={loadingDotsJson} play />
+          </Box>
+        </Stack>
       ) : (
-        // TODO: Is it possible to make this button dynamic based on the changes?
-        // I.e. "Remove X repos" on a red bg, "Add Y repos" on a green bg
-        // TODO: Ensure button is disabled if there's no diff
-        <Button
-          variant="contained"
-          color={"primary"}
-          disabled={!checked}
-          onClick={() => setIsLoading(true)}
-        >
-          {`Update repos`}
-        </Button>
+        <Stack>
+          <Button
+            variant="contained"
+            color={isOnlyRemoves ? "error" : "primary"}
+            disabled={checked.every(([, , action]) => !action)}
+            onClick={async () =>
+              await manageRepos(userId, checked, setIsLoading)
+            }
+          >
+            {isRemoveAll
+              ? "Stop tracking all repos"
+              : isOnlyRemoves
+              ? `Stop tracking ${deletes} repo${deletes > 1 ? "s" : ""}`
+              : `Save changes`}
+          </Button>
+          <Stack direction="row" mt={1} justifyContent="center">
+            {isRemoveAll && (
+              <Typography color="error">{`⚠️ Your Dev Rings will no longer be updated`}</Typography>
+            )}
+            {Boolean(adds) && (
+              <Typography
+                color="success.main"
+                sx={{ whiteSpace: "break-spaces" }}
+              >{`Add ${adds} repo${adds > 1 ? "s" : ""}${
+                deletes ? `, ` : ""
+              }`}</Typography>
+            )}
+            {!isOnlyRemoves && Boolean(deletes) && (
+              <Typography color="error">{`remove ${deletes} repo${
+                deletes > 1 ? "s" : ""
+              }`}</Typography>
+            )}
+          </Stack>
+        </Stack>
       )}
     </Stack>
   );
 };
-
-const timeout = (ms: number) =>
-  new Promise((resolve) => setTimeout(resolve, ms));

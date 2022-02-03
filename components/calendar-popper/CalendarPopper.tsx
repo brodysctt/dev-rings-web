@@ -24,6 +24,7 @@ const Container = styled("div")(({ theme }) => ({
 
 export const CalendarPopper = () => {
   const [monthInView, setMonthInView] = useState<MonthYear>(getMonthYear());
+  const [close, setClose] = useState(false);
   const logs = useCollection("logs");
   if (!logs) return null;
 
@@ -32,7 +33,8 @@ export const CalendarPopper = () => {
 
   const [month, year] = monthInView;
   const gridStart = dayjs(`${year}-${month}-01`).day();
-  const isFirst = isFirstMonth(logs as Log[], monthInView);
+  const isFirstMonth = checkFirstMonth(logs as Log[], monthInView);
+  const isCurrentMonth = month === dayjs().month() + 1;
 
   const back = () => {
     if (month === 1) {
@@ -50,34 +52,44 @@ export const CalendarPopper = () => {
   };
 
   return (
-    // TODO: A light purple box shadow could be nice
     <PopIt
+      close={close}
       id="View calendar"
-      closeOnClick
       paperSx={{ pt: 1, borderRadius: 6 }}
       icon={<CalendarSvg />}
     >
       <Container>
         <Stack
           alignItems="center"
-          p={1}
-          sx={{ border: "1px solid #DCDEE6", borderRadius: 6 }}
+          p={2}
+          pr={1}
+          sx={{
+            border: "1px solid #D5DAF5", //#DCDEE6",
+            borderRadius: 6,
+          }}
         >
           <Typography color="primary" sx={{ fontSize: 12 }}>
             {year}
           </Typography>
           <Stack direction="row" width={1} mb={2}>
-            <Button onClick={back} startIcon={<BackSvg />} disabled={isFirst} />
+            <Button
+              onClick={back}
+              startIcon={<BackSvg />}
+              disabled={isFirstMonth}
+            />
             <Typography variant="h6" textAlign="center" width="90%">
               {dayjs.months()[month - 1]}
             </Typography>
-            {/* TODO: Update disabled to monthInView !== currentMonth */}
-            <Button onClick={next} startIcon={<NextSvg />} disabled={false} />
+            <Button
+              onClick={next}
+              startIcon={<NextSvg />}
+              disabled={isCurrentMonth}
+            />
           </Stack>
           <Grid container columns={7} xs={7} rowSpacing={0.5}>
             {<Grid item xs={gridStart} mr={-0.4} />}
             {formattedLogs.map((log, i) => (
-              <Grid key={i} item xs={1}>
+              <Grid key={i} item xs={1} onClick={() => setClose(true)}>
                 <DayTile log={log} />
               </Grid>
             ))}
@@ -90,7 +102,6 @@ export const CalendarPopper = () => {
 
 const filterLogs = (logs: Log[], monthInView: MonthYear) => {
   const [month, year] = monthInView;
-  // TODO: Test this! Gotta be airtight
   const dateMatch = new RegExp(`${year}-${month < 10 ? "0" : ""}${month}-.*`);
   return logs.filter((log) => {
     const [dateString] = log;
@@ -98,8 +109,8 @@ const filterLogs = (logs: Log[], monthInView: MonthYear) => {
   });
 };
 
-const isFirstMonth = (logs: Log[], monthInView: MonthYear) => {
+const checkFirstMonth = (logs: Log[], monthInView: MonthYear) => {
   const firstLogDate = dayjs.min(logs.map(([dateString]) => dayjs(dateString)));
   const firstMonth = getMonthYear(firstLogDate);
-  return !(JSON.stringify(monthInView) === JSON.stringify(firstMonth));
+  return JSON.stringify(monthInView) === JSON.stringify(firstMonth);
 };

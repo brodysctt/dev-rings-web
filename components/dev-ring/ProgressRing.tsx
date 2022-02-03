@@ -6,33 +6,33 @@ import checkmarkLottie from "public/checkmark-lottie.json";
 
 export type RingValues = [[number, number], [number, number]];
 interface Props {
-  isDayTile?: boolean;
   size?: number;
-  values: RingValues;
+  values?: RingValues;
 }
 
 export const ProgressRing = ({
-  isDayTile = false,
   size = 400,
-  values,
+  values = [
+    [1, 1],
+    [1, 1],
+  ],
 }: Props) => {
   const [showLottie, setShowLottie] = useState(false);
 
   const duration = 2;
   useEffect(() => {
-    setTimeout(() => setShowLottie(true), duration * 1000 * 2);
+    setTimeout(() => setShowLottie(true), duration * 1000 * 1.5);
   });
   const [[commitsActual, commitsGoal], [prsActual, prsGoal]] = values;
 
-  const outerStroke = "#4DD0E1";
-  const middleStroke = "#556cd6";
+  const outerStroke = "#556cd6";
+  const middleStroke = "#4DD0E1";
   const strokeWidth = 10;
 
   const commitsRadius = 45;
   const commitsCircumference = Math.ceil(2 * Math.PI * commitsRadius);
   const commitsPct = (commitsActual / commitsGoal) * 100;
   const hitCommitsGoal = commitsPct >= 100;
-  console.log(`here be the percent: ${commitsPct}`);
   const commitsFillPct = hitCommitsGoal
     ? 0
     : Math.abs(Math.ceil((commitsCircumference / 100) * (commitsPct - 100)));
@@ -41,7 +41,6 @@ export const ProgressRing = ({
   const prsCircumference = Math.ceil(2 * Math.PI * prsRadius);
   const prsPct = (prsActual / prsGoal) * 100;
   const hitPRsGoal = prsPct >= 100;
-  console.log(`here be the percent: ${prsPct}`);
   const prsFillPct = hitPRsGoal
     ? 0
     : Math.abs(Math.ceil((prsCircumference / 100) * (prsPct - 100)));
@@ -141,7 +140,7 @@ export const ProgressRing = ({
           />
         )}
       </svg>
-      <Box mt={isDayTile ? -5.9 : -50.9}>
+      <Box mt={size < 50 ? size * -0.1685 : size * -0.128}>
         <Lottie
           loop={false}
           animationData={checkmarkLottie}

@@ -2,7 +2,6 @@ import type { Dayjs } from "dayjs";
 import { dayjs } from "@lib/dayjs";
 import type { RepoEvent } from "@lib/firebase/firestore";
 
-// TODO: Any refactors that can be made here boss?
 export const getDayEvents = (
   events: RepoEvent[] | null,
   dateString: string

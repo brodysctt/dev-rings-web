@@ -14,7 +14,7 @@ export const useCollection = (name: CollectionName) => {
 
   useEffect(() => {
     if (!userId || !userData) return;
-    const [, { isOnboarding }] = userData;
+    const { isOnboarding } = userData;
     const unsubscribe = onSnapshot(
       collection(db, "users", userId, name),
       (snap) => {
@@ -32,22 +32,20 @@ export const useCollection = (name: CollectionName) => {
     );
     return () => unsubscribe();
   }, [userId, userData]);
-  // TODO: Need to be 100% on this dependency array. setData? isLogs? Explain the whys
   return data;
 };
 
 export const useUserDoc = () => {
   const userId = useAuth();
-  const [data, setData] = useState<[string, DocumentData] | null>(null);
+  const [data, setData] = useState<DocumentData | null>(null);
   useEffect(() => {
     if (!userId) return;
     const unsubscribe = onSnapshot(doc(db, "users", userId), (userDoc) => {
       if (userDoc.exists()) {
-        setData([userId, userDoc.data()]);
+        setData(userDoc.data());
         return;
       }
     });
-
     return () => unsubscribe();
   }, [userId]);
   return data;

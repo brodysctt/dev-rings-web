@@ -12,19 +12,13 @@ interface Props {
   icon?: JSX.Element;
   sx?: SxProps;
   paperSx?: SxProps;
-  closeOnClick?: boolean;
+  close?: boolean;
 }
 
-export const PopIt: FC<Props> = ({
-  id,
-  children,
-  closeOnClick = false,
-  icon,
-  sx,
-  paperSx,
-}) => {
+export const PopIt: FC<Props> = (props) => {
+  const { id, children, close = false, icon, sx, paperSx } = props;
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-  const open = Boolean(anchorEl);
+  const open = Boolean(anchorEl) && !close;
   return (
     <ClickAwayListener onClickAway={() => setAnchorEl(null)}>
       <Box sx={sx}>
@@ -44,7 +38,6 @@ export const PopIt: FC<Props> = ({
           id={open ? id : undefined}
           open={open}
           anchorEl={anchorEl}
-          onClick={closeOnClick ? () => setAnchorEl(null) : () => {}}
           modifiers={[
             {
               name: "flip",
