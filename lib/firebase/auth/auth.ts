@@ -1,5 +1,5 @@
 import firebaseApp from "@lib/firebase/app";
-import { setGitHubToken } from "@lib/firebase/firestore";
+import { setGitHubAvatar, setGitHubToken } from "@lib/firebase/firestore";
 import {
   getAuth,
   GithubAuthProvider,
@@ -18,7 +18,7 @@ export const githubSignIn = async () => {
   try {
     const result = await signInWithPopup(auth, githubProvider);
     const { user } = result;
-    const userId = getUserId(user);
+    const userId = await getUserId(user);
 
     const credential = GithubAuthProvider.credentialFromResult(result);
     if (!credential) {
@@ -43,9 +43,12 @@ export const signOutUser = async () => {
 };
 
 export const getUserId = (user: User) => {
+  console.log("here be the user");
+  console.dir(user);
   const {
     // @ts-ignore
-    reloadUserInfo: { screenName: userId },
+    reloadUserInfo: { screenName: userId, photoUrl: githubAvatarUrl },
   } = user;
+  (async () => await setGitHubAvatar(userId, githubAvatarUrl))();
   return userId;
 };

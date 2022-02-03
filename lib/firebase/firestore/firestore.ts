@@ -34,12 +34,18 @@ export const fetchHookId = async (userId: string, repo: string) => {
   return hookId;
 };
 
-export const setAvatar = async (userId: string, avatarId: string) => {
+export const setAvatarId = async (userId: string, avatarId: string) => {
   await updateDoc(doc(db, "users", userId), {
     avatarId,
   });
   // TODO: Only show if not onboarding
   // toast.success(`Avatar successfully updated ${avatarId}`);
+};
+
+export const setGitHubAvatar = async (userId: string, url: string) => {
+  await updateDoc(doc(db, "users", userId), {
+    githubAvatarUrl: url,
+  });
 };
 
 export const setGitHubToken = async (userId: string, token: string) => {

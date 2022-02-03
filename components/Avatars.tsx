@@ -8,7 +8,7 @@ import Lottie from "react-lottie-player";
 import zenDeveloperJson from "https://assets9.lottiefiles.com/packages/lf20_9e8yoqkm.json";
 import zenFemaleDeveloperJson from "public/avatar-female.json";
 import { useAuth } from "@lib/firebase/auth";
-import { setAvatar, useUserDoc } from "@lib/firebase/firestore";
+import { setAvatarId, useUserDoc } from "@lib/firebase/firestore";
 
 export const AVATARS = [
   ["👨‍💻", zenDeveloperJson],
@@ -54,7 +54,7 @@ export const AvatarCarousel = ({ size = 400 }: { size?: number }) => {
             <Stack alignItems="center">
               <Button
                 disableRipple
-                onClick={async () => await setAvatar(userId, id)}
+                onClick={async () => await setAvatarId(userId, id)}
                 sx={{
                   border: 1,
                   borderColor: isCurrentAvatar ? "primary.main" : "white",
