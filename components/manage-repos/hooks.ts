@@ -5,6 +5,34 @@ import { toast } from "react-toastify";
 import { fetchGitHubToken, useCollection } from "@lib/firebase/firestore";
 import type { Webhook } from "@lib/firebase/firestore";
 
+export const usePrivateRepos = (): string[] | null => {
+  const userId = useAuth();
+  const webhooks = useCollection("webhooks") as Webhook[] | null;
+  const [privateRepos, setPrivateRepos] = useState<string[] | null>(null);
+
+  useEffect(() => {
+    (async () => {
+      if (!userId || !webhooks) return;
+
+      const publicRepos = await fetchPublicRepos(userId);
+      const trackedRepos = webhooks.map(([repo]) => repo);
+
+      if (!publicRepos) {
+        setPrivateRepos(trackedRepos);
+        return;
+      }
+
+      const privateRepos = trackedRepos.filter(
+        (repo) => !publicRepos.includes(repo)
+      );
+      setPrivateRepos(privateRepos);
+      return;
+    })();
+  }, [userId, webhooks]);
+
+  return privateRepos;
+};
+
 type RepoState = [string, boolean];
 export const usePublicRepos = (): RepoState[] | null => {
   const userId = useAuth();
@@ -40,7 +68,9 @@ export const usePublicRepos = (): RepoState[] | null => {
   return publicRepos;
 };
 
-const fetchPublicRepos = async (userId: string): Promise<string[] | void> => {
+export const fetchPublicRepos = async (
+  userId: string
+): Promise<string[] | void> => {
   try {
     const token = await fetchGitHubToken(userId);
     if (!token) {

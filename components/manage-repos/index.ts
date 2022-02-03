@@ -1,2 +1,3 @@
-export * from "./usePublicRepos";
+export * from "./hooks";
 export * from "./ManageReposCheckboxes";
+export * from "./ManagePrivateRepos";
