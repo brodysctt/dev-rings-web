@@ -94,13 +94,4 @@ const TrackRepoInput = () => {
   );
 };
 
-const containerSx = {
-  display: "flex",
-  flexDirection: "column",
-  justifyContent: "center",
-  alignItems: "start",
-  width: 400,
-  ml: 5,
-} as SxProps;
-
 const githubUrl = new RegExp(`https://github.com/(.*)/(.*)[.]git`);

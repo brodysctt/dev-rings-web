@@ -1,5 +1,4 @@
 import { useState, FC, SyntheticEvent } from "react";
-import Image from "next/image";
 import type { NextPage } from "next";
 import Container from "@mui/material/Container";
 // import Typography from "@mui/material/Typography";
