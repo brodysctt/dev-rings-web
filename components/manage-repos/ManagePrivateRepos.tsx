@@ -70,7 +70,7 @@ const TrackRepoInput = () => {
   return (
     <Stack>
       <Stack justifyContent="center">
-        {isLoading ? (
+        {isLoading && !repoToDelete ? (
           <Stack alignItems="center" height={60}>
             <Box
               height={83}
