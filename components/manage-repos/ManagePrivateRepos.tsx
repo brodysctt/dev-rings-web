@@ -1,6 +1,5 @@
 import { useState } from "react";
 import Stack from "@mui/material/Stack";
-// import Typography from "@mui/material/Typography";
 import { useForm, SubmitHandler } from "react-hook-form";
 import Input from "@mui/material/Input";
 import FormControl from "@mui/material/FormControl";
@@ -8,7 +7,6 @@ import Tooltip from "@mui/material/Tooltip";
 import Box from "@mui/material/Box";
 import { toast } from "react-toastify";
 import { useAuth } from "@lib/firebase/auth";
-import type { SxProps } from "@mui/system";
 import { manageRepos, RepoAction } from "components/manage-repos/manageRepos";
 import Lottie from "react-lottie-player";
 import loadingDotsJson from "public/loading-dots.json";
