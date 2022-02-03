@@ -56,7 +56,12 @@ export const CalendarPopper = () => {
       close={close}
       id="View calendar"
       paperSx={{ pt: 1, borderRadius: 6 }}
-      icon={<CalendarSvg />}
+      icon={
+        <Stack direction="row">
+          <CalendarSvg />
+          <Typography ml={1.5}>{`Calendar`}</Typography>
+        </Stack>
+      }
     >
       <Container>
         <Stack

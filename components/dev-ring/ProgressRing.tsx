@@ -8,6 +8,7 @@ export type RingValues = [[number, number], [number, number]];
 interface Props {
   size?: number;
   values?: RingValues;
+  noLottie?: boolean;
 }
 
 export const ProgressRing = ({
@@ -16,6 +17,7 @@ export const ProgressRing = ({
     [1, 1],
     [1, 1],
   ],
+  noLottie = false,
 }: Props) => {
   const [showLottie, setShowLottie] = useState(false);
 
@@ -140,14 +142,16 @@ export const ProgressRing = ({
           />
         )}
       </svg>
-      <Box mt={size < 50 ? size * -0.1685 : size * -0.128}>
-        <Lottie
-          loop={false}
-          animationData={checkmarkLottie}
-          play={showLottie && hitCommitsGoal && hitPRsGoal}
-          speed={0.7}
-        />
-      </Box>
+      {!noLottie && (
+        <Box mt={size < 50 ? size * -0.1685 : size * -0.128}>
+          <Lottie
+            loop={false}
+            animationData={checkmarkLottie}
+            play={showLottie && hitCommitsGoal && hitPRsGoal}
+            speed={0.7}
+          />
+        </Box>
+      )}
     </Box>
   );
 };
