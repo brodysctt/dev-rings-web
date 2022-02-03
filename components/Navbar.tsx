@@ -60,10 +60,8 @@ export const Navbar = () => {
           <NavbarItem
             icon={<ProgressRing noLottie size={35} />}
             href="/"
-            tooltip="View today's progress"
-          >
-            <Typography>{`View today`}</Typography>
-          </NavbarItem>
+            tooltip="View today"
+          />
           <Divider
             orientation="vertical"
             sx={{ mr: 1, color: "primary", height: 30, width: "2px" }}
