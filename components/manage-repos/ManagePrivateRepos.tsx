@@ -145,6 +145,7 @@ const TrackRepoInput = () => {
                     const repoAction = [repo, true, "delete"] as RepoAction;
                     setRepoToDelete(repo);
                     await manageRepos(userId, [repoAction], setIsLoading);
+                    setRepoToDelete(null);
                   }}
                   deleteIcon={<DeleteIcon />}
                 />
