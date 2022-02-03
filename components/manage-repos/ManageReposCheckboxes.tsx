@@ -7,7 +7,7 @@ import Checkbox from "@mui/material/Checkbox";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Lottie from "react-lottie-player";
 import loadingDotsJson from "public/loading-dots.json";
-import { usePublicRepos } from "components/manage-repos/usePublicRepos";
+import { usePublicRepos } from "components/manage-repos/hooks";
 import { useAuth } from "@lib/firebase/auth";
 import { manageRepos, RepoAction } from "components/manage-repos/manageRepos";
 

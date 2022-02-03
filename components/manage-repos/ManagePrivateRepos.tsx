@@ -8,6 +8,7 @@ import Divider from "@mui/material/Divider";
 import Chip from "@mui/material/Chip";
 import Box from "@mui/material/Box";
 import { toast } from "react-toastify";
+import { usePrivateRepos } from "components/manage-repos/hooks";
 import { useAuth } from "@lib/firebase/auth";
 import { manageRepos, RepoAction } from "components/manage-repos/manageRepos";
 import Lottie from "react-lottie-player";
@@ -15,6 +16,7 @@ import loadingDotsJson from "public/loading-dots.json";
 import GitHubSvg from "@mui/icons-material/GitHub";
 import IconButton from "@mui/material/IconButton";
 import AddIcon from "@mui/icons-material/AddCircleOutline";
+import DeleteIcon from "@mui/icons-material/Delete";
 
 export const ManagePrivateRepos = () => {
   return (
@@ -25,9 +27,12 @@ export const ManagePrivateRepos = () => {
 };
 
 const TrackRepoInput = () => {
+  const repos = usePrivateRepos();
   const { register, handleSubmit } = useForm<{ repoUrl: string }>();
-  const [value, setValue] = useState<string | null>(null);
+  // TODO: Clear input value by returning a cleanup function in a useEffect
+  // const [value, setValue] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [repoToDelete, setRepoToDelete] = useState<string | null>(null);
 
   const userId = useAuth();
   if (!userId) return null;
@@ -60,33 +65,29 @@ const TrackRepoInput = () => {
     // TODO: Improve TypeScript here
     const repoAction = [repo as string, false, "add"] as RepoAction;
     await manageRepos(userId, [repoAction], setIsLoading);
-    setValue("");
   };
-
-  console.log(value);
 
   return (
     <Stack>
-      {isLoading ? (
-        <Stack alignItems="center">
-          <Box
-            height={83}
-            width={200}
-            mt={-6}
-            sx={{ position: "relative", zIndex: -1 }}
-          >
-            <Lottie loop animationData={loadingDotsJson} play />
-          </Box>
-        </Stack>
-      ) : (
-        <Stack justifyContent="center">
+      <Stack justifyContent="center">
+        {isLoading ? (
+          <Stack alignItems="center" height={60}>
+            <Box
+              height={83}
+              width={200}
+              mt={-6}
+              sx={{ position: "relative", zIndex: -1 }}
+            >
+              <Lottie loop animationData={loadingDotsJson} play />
+            </Box>
+          </Stack>
+        ) : (
           <Stack direction="row" alignItems="center" mb={3}>
             <GitHubSvg fontSize="large" color="primary" sx={{ mr: 1 }} />
             <Tooltip title="Paste a private repo here to start tracking it">
               <FormControl variant="standard">
                 <Input
                   {...register("repoUrl")}
-                  value={value}
                   id="repoUrl"
                   type="text"
                   placeholder={"https://github.com/you/your-awesome-repo.git"}
@@ -110,18 +111,48 @@ const TrackRepoInput = () => {
               <AddIcon />
             </IconButton>
           </Stack>
+        )}
+        {repos && (
           <Stack justifyContent="center">
-            <Divider sx={{ width: "50vw", maxWidth: "md" }}>
+            <Divider sx={{ width: "50vw", maxWidth: "md", mb: 3 }}>
               <Chip
-                label="Current private repos"
+                label="CURRENT PRIVATE REPOS"
                 variant="filled"
                 color="primary"
                 sx={{ mb: -2 }}
               />
             </Divider>
+            {repos.map((repo, i) => {
+              if (isLoading && repoToDelete === repo)
+                return (
+                  <Stack alignItems="center" height={60}>
+                    <Box
+                      height={83}
+                      width={200}
+                      mt={-6}
+                      sx={{ position: "relative", zIndex: -1 }}
+                    >
+                      <Lottie loop animationData={loadingDotsJson} play />
+                    </Box>
+                  </Stack>
+                );
+              return (
+                <Chip
+                  key={i}
+                  label={repo}
+                  sx={{ width: 150 }}
+                  onDelete={async () => {
+                    const repoAction = [repo, true, "delete"] as RepoAction;
+                    setRepoToDelete(repo);
+                    await manageRepos(userId, [repoAction], setIsLoading);
+                  }}
+                  deleteIcon={<DeleteIcon />}
+                />
+              );
+            })}
           </Stack>
-        </Stack>
-      )}
+        )}
+      </Stack>
     </Stack>
   );
 };
