@@ -4,22 +4,20 @@ import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import Lottie from "react-lottie-player";
-import maleDev from "public/maleDev.json";
-import femaleDev from "public/femaleDev.json";
-import maleHoodyDev from "public/man-hoody.json";
-import femaleHoodyDev from "public/female-hoody.json";
+import maleHoodieDev from "public/maleHoodieDev.json";
+import femaleHoodieDev from "public/femaleHoodieDev.json";
 import { useAuth } from "@lib/firebase/auth";
 import { setAvatarId, useUserDoc } from "@lib/firebase/firestore";
 
 export const AVATARS = [
-  ["👨‍💻", maleHoodyDev],
-  ["👩‍💻", femaleHoodyDev],
-  ["👨🏻‍💻", maleDev],
-  ["👩🏻‍💻", femaleDev],
-  ["🧑🏼‍💻", maleHoodyDev],
-  ["👩🏼‍💻", femaleHoodyDev],
-  ["👨🏽‍💻", maleDev],
-  ["👩🏽‍💻", femaleDev],
+  ["👨‍💻", maleHoodieDev],
+  ["👩‍💻", femaleHoodieDev],
+  ["👨🏻‍💻", maleHoodieDev],
+  ["👩🏻‍💻", femaleHoodieDev],
+  ["🧑🏼‍💻", maleHoodieDev],
+  ["👩🏼‍💻", femaleHoodieDev],
+  ["👨🏽‍💻", maleHoodieDev],
+  ["👩🏽‍💻", femaleHoodieDev],
   // ["👨🏾‍💻", ],
   // ["👩🏾‍💻", ],
   // ["👨🏿‍💻", ],
