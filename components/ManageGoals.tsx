@@ -7,6 +7,7 @@ import InputAdornment from "@mui/material/InputAdornment";
 import { useAuth } from "@lib/firebase/auth";
 import { setGoal, useUserDoc } from "@lib/firebase/firestore";
 import { CommitSvg, PRSvg } from "components";
+import { toast } from "react-toastify";
 
 type GoalState = number | null;
 
@@ -32,6 +33,7 @@ export const ManageGoals = ({ isToday = false }: { isToday?: boolean }) => {
         onClick={async () => {
           await setGoal(userId, commits as number, "commits");
           await setGoal(userId, prs as number, "prs");
+          toast.success(`Goals successfully saved`);
         }}
         sx={{ width: 250 }}
       >{`Save goals`}</Button>
