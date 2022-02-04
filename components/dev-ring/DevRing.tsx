@@ -23,7 +23,7 @@ export const DevRing: FC<Props> = (props) => {
   return (
     <Container>
       <Grid container alignItems="center" height="80vh">
-        <Grid item>
+        <Grid item xs={3}>
           {isToday && (
             <Box
               sx={{
