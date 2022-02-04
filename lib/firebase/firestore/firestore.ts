@@ -78,7 +78,8 @@ export const setGoal = async (userId: string, goal: number, type: string) => {
   await updateDoc(doc(db, "users", userId), {
     "dailyGoals.commits": goal,
   });
-  toast.success(`Daily commits goal is now ${goal} 🏔️`);
+  // TODO: Only show if not onboarding
+  // toast.success(`Daily commits goal is now ${goal} 🏔️`);
 };
 
 export const setIsOnboarding = async (userId: string) => {
