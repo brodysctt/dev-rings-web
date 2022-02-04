@@ -1,3 +1,3 @@
 export * from "./hooks";
-export * from "./ManageReposCheckboxes";
+export * from "./ManagePublicRepos";
 export * from "./ManagePrivateRepos";

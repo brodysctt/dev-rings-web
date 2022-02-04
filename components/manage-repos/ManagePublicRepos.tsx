@@ -13,7 +13,7 @@ import { manageRepos, RepoAction } from "components/manage-repos/manageRepos";
 
 type CheckedEvent = ChangeEvent<HTMLInputElement>;
 
-export const ManageReposCheckboxes = () => {
+export const ManagePublicRepos = () => {
   const userId = useAuth();
   const repos = usePublicRepos();
   const [checked, setChecked] = useState<RepoAction[] | null>(null);
@@ -74,7 +74,7 @@ export const ManageReposCheckboxes = () => {
           />
         }
       />
-      <Stack ml={3} mb={2}>
+      <Stack ml={3} mb={2} maxHeight={350} sx={{ overflowY: "scroll" }}>
         {repos.map(([repo, tracked], i) => {
           return (
             <FormControlLabel

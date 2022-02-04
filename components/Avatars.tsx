@@ -4,25 +4,24 @@ import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import Lottie from "react-lottie-player";
-// @ts-ignore
-import zenDeveloperJson from "https://assets9.lottiefiles.com/packages/lf20_9e8yoqkm.json";
-import zenFemaleDeveloperJson from "public/avatar-female.json";
+import maleHoodieDev from "public/maleHoodieDev.json";
+import femaleHoodieDev from "public/femaleHoodieDev.json";
 import { useAuth } from "@lib/firebase/auth";
 import { setAvatarId, useUserDoc } from "@lib/firebase/firestore";
 
 export const AVATARS = [
-  ["👨‍💻", zenDeveloperJson],
-  ["👩‍💻", zenFemaleDeveloperJson],
-  ["👨🏻‍💻", zenDeveloperJson],
-  ["👩🏻‍💻", zenFemaleDeveloperJson],
-  ["🧑🏼‍💻", zenDeveloperJson],
-  ["👩🏼‍💻", zenFemaleDeveloperJson],
-  ["👨🏽‍💻", zenDeveloperJson],
-  ["👩🏽‍💻", zenFemaleDeveloperJson],
-  ["👨🏾‍💻", zenDeveloperJson],
-  ["👩🏾‍💻", zenFemaleDeveloperJson],
-  ["👨🏿‍💻", zenDeveloperJson],
-  ["👩🏿‍💻", zenFemaleDeveloperJson],
+  ["👨‍💻", maleHoodieDev],
+  ["👩‍💻", femaleHoodieDev],
+  ["👨🏻‍💻", maleHoodieDev],
+  ["👩🏻‍💻", femaleHoodieDev],
+  ["🧑🏼‍💻", maleHoodieDev],
+  ["👩🏼‍💻", femaleHoodieDev],
+  ["👨🏽‍💻", maleHoodieDev],
+  ["👩🏽‍💻", femaleHoodieDev],
+  // ["👨🏾‍💻", ],
+  // ["👩🏾‍💻", ],
+  // ["👨🏿‍💻", ],
+  // ["👩🏿‍💻", ],
 ];
 
 export const Avatar = ({ size = 500 }: { size?: number }) => {
@@ -34,6 +33,8 @@ export const Avatar = ({ size = 500 }: { size?: number }) => {
   );
   return (
     <Box height={size} width={size}>
+      {/*
+      // @ts-ignore */}
       <Lottie loop animationData={lottieJson} play speed={0.7} />
     </Box>
   );
@@ -54,7 +55,7 @@ export const AvatarCarousel = ({ size = 400 }: { size?: number }) => {
             <Stack alignItems="center">
               <Button
                 disableRipple
-                onClick={async () => await setAvatarId(userId, id)}
+                onClick={async () => await setAvatarId(userId, id as string)}
                 sx={{
                   border: 1,
                   borderColor: isCurrentAvatar ? "primary.main" : "white",
@@ -62,6 +63,8 @@ export const AvatarCarousel = ({ size = 400 }: { size?: number }) => {
               >
                 <Stack>
                   <Box height={size} width={size}>
+                    {/*
+                    // @ts-ignore */}
                     <Lottie loop animationData={lottieJson} play speed={0.7} />
                   </Box>
                 </Stack>
