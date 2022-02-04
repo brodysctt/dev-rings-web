@@ -74,7 +74,7 @@ export const ManagePublicRepos = () => {
           />
         }
       />
-      <Stack ml={3} mb={2}>
+      <Stack ml={3} mb={2} maxHeight={400} sx={{ overflowY: "scroll" }}>
         {repos.map(([repo, tracked], i) => {
           return (
             <FormControlLabel
