@@ -22,8 +22,6 @@ export const githubSignIn = async () => {
       reloadUserInfo: { screenName: userId, photoUrl: githubAvatarUrl },
     } = user;
 
-    await setGitHubAvatar(userId, githubAvatarUrl);
-
     const credential = GithubAuthProvider.credentialFromResult(result);
     if (!credential) {
       throw new Error("the credential returned is null");
@@ -33,6 +31,7 @@ export const githubSignIn = async () => {
       return;
     }
     await setGitHubToken(userId, githubToken);
+    await setGitHubAvatar(userId, githubAvatarUrl);
   } catch (error) {
     console.error(error);
   }
