@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useCollection, Log } from "@lib/firebase/firestore";
 import { dayjs, formatLogs, getMonthYear } from "@lib/dayjs";
 import type { MonthYear } from "@lib/dayjs";
@@ -24,12 +24,22 @@ const Container = styled("div")(({ theme }) => ({
 
 export const CalendarPopper = () => {
   const [monthInView, setMonthInView] = useState<MonthYear>(getMonthYear());
+  const [days, setDays] = useState<JSX.Element[] | null>(null);
   const [close, setClose] = useState(false);
   const logs = useCollection("logs");
-  if (!logs) return null;
 
-  const logsInView = filterLogs(logs as Log[], monthInView);
-  const formattedLogs = formatLogs(logsInView, monthInView);
+  useEffect(() => {
+    if (!logs) return;
+    const logsInView = filterLogs(logs as Log[], monthInView);
+    const days = formatLogs(logsInView, monthInView).map((log) => (
+      <Grid key={log[0]} item xs={1} onClick={() => setClose(true)}>
+        <DayTile log={log} />
+      </Grid>
+    ));
+    setDays(days);
+  }, [logs, monthInView]);
+
+  if (!logs) return null;
 
   const [month, year] = monthInView;
   const gridStart = dayjs(`${year}-${month}-01`).day();
@@ -93,11 +103,7 @@ export const CalendarPopper = () => {
           </Stack>
           <Grid container columns={7} xs={7} rowSpacing={0.5}>
             {<Grid item xs={gridStart} mr={-0.4} />}
-            {formattedLogs.map((log, i) => (
-              <Grid key={i} item xs={1} onClick={() => setClose(true)}>
-                <DayTile log={log} />
-              </Grid>
-            ))}
+            {days?.map((day) => day)}
           </Grid>
         </Stack>
       </Container>
