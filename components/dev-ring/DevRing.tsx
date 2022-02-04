@@ -40,7 +40,7 @@ export const DevRing: FC<Props> = (props) => {
               : { width: 398 }),
           }}
         >
-          {isToday && <ManageGoals />}
+          {isToday && <ManageGoals isToday />}
         </Box>
         <Stack alignItems="center" mx={8}>
           <Typography color="text.secondary" sx={{ mb: 6 }}>

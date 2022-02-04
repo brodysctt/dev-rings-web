@@ -10,17 +10,20 @@ import { CommitSvg, PRSvg } from "components";
 
 type GoalState = number | null;
 
-export const ManageGoals = () => {
+export const ManageGoals = ({ isToday = false }: { isToday?: boolean }) => {
   const [commits, setCommits] = useState<GoalState>(null);
   const [prs, setPrs] = useState<GoalState>(null);
   const userId = useAuth();
-
   if (!userId) return null;
 
   return (
     <Stack justifyContent="space-between" alignItems="center" mt={2}>
       <Stack direction="row" justifyContent="space-between" width={250}>
-        <GoalInput autoFocus type="commits" setGoalState={setCommits} />
+        <GoalInput
+          autoFocus={!isToday}
+          type="commits"
+          setGoalState={setCommits}
+        />
         <GoalInput type="prs" setGoalState={setPrs} />
       </Stack>
       <Button
