@@ -6,7 +6,7 @@ import {
   Avatar,
   AvatarCarousel,
   Header,
-  ManageReposCheckboxes,
+  ManagePublicRepos,
   ManageGoals,
   ProgressRing,
 } from "components";
@@ -74,7 +74,7 @@ export const OnboardingSteps = ({ activeStep, onSubmit }: Props) => {
             text={`Choose the repos you'd like to start tracking`}
             icon="/blobclipboard.png"
           />
-          <ManageReposCheckboxes />
+          <ManagePublicRepos />
         </>
       ),
       hero: <Avatar size={400} />,

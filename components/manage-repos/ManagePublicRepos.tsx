@@ -13,7 +13,7 @@ import { manageRepos, RepoAction } from "components/manage-repos/manageRepos";
 
 type CheckedEvent = ChangeEvent<HTMLInputElement>;
 
-export const ManageReposCheckboxes = () => {
+export const ManagePublicRepos = () => {
   const userId = useAuth();
   const repos = usePublicRepos();
   const [checked, setChecked] = useState<RepoAction[] | null>(null);

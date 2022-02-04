@@ -8,7 +8,7 @@ import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
 // import { useTheme } from "@mui/material/styles";
 // import useMediaQuery from "@mui/material/useMediaQuery";
-import { ManagePrivateRepos, ManageReposCheckboxes } from "components";
+import { ManagePrivateRepos, ManagePublicRepos } from "components";
 
 const ManageRepos: NextPage = () => {
   // const theme = useTheme();
@@ -30,7 +30,7 @@ const ManageRepos: NextPage = () => {
             </Tabs>
           </Box>
           <TabPanel value={value} index={0}>
-            <ManageReposCheckboxes />
+            <ManagePublicRepos />
           </TabPanel>
           <TabPanel value={value} index={1}>
             <Stack direction="row">
