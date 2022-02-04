@@ -27,7 +27,7 @@ export const EventsTimeline = ({ events }: { events: RepoEvent[] }) => {
       });
   }, [ref]);
   return (
-    <Timeline position="alternate">
+    <Timeline position="alternate" sx={{ ml: -1 }}>
       {events.map((event, i) => {
         const { createdAt, eventType, repo, message, url } = event;
         const isCommit = eventType === "push";
