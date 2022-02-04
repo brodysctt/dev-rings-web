@@ -76,8 +76,9 @@ export const CalendarPopper = () => {
       <Container>
         <Stack
           alignItems="center"
-          p={2}
+          pl={2}
           pr={1}
+          py={3}
           sx={{
             border: "1px solid #D5DAF5", //#DCDEE6",
             borderRadius: 6,
