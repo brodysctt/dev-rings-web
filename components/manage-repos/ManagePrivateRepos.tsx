@@ -122,35 +122,37 @@ const TrackRepoInput = () => {
                 sx={{ mb: -2 }}
               />
             </Divider>
-            {repos.map((repo, i) => {
-              if (isLoading && repoToDelete === repo)
+            <Stack maxHeight={350} sx={{ overflowY: "scroll" }}>
+              {repos.map((repo, i) => {
+                if (isLoading && repoToDelete === repo)
+                  return (
+                    <Stack alignItems="center" height={60}>
+                      <Box
+                        height={83}
+                        width={200}
+                        mt={-6}
+                        sx={{ position: "relative", zIndex: -1 }}
+                      >
+                        <Lottie loop animationData={loadingDotsJson} play />
+                      </Box>
+                    </Stack>
+                  );
                 return (
-                  <Stack alignItems="center" height={60}>
-                    <Box
-                      height={83}
-                      width={200}
-                      mt={-6}
-                      sx={{ position: "relative", zIndex: -1 }}
-                    >
-                      <Lottie loop animationData={loadingDotsJson} play />
-                    </Box>
-                  </Stack>
+                  <Chip
+                    key={i}
+                    label={repo}
+                    sx={{ width: 150 }}
+                    onDelete={async () => {
+                      const repoAction = [repo, true, "delete"] as RepoAction;
+                      setRepoToDelete(repo);
+                      await manageRepos(userId, [repoAction], setIsLoading);
+                      setRepoToDelete(null);
+                    }}
+                    deleteIcon={<DeleteIcon />}
+                  />
                 );
-              return (
-                <Chip
-                  key={i}
-                  label={repo}
-                  sx={{ width: 150 }}
-                  onDelete={async () => {
-                    const repoAction = [repo, true, "delete"] as RepoAction;
-                    setRepoToDelete(repo);
-                    await manageRepos(userId, [repoAction], setIsLoading);
-                    setRepoToDelete(null);
-                  }}
-                  deleteIcon={<DeleteIcon />}
-                />
-              );
-            })}
+              })}
+            </Stack>
           </Stack>
         )}
       </Stack>
