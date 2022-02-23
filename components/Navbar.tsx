@@ -64,11 +64,12 @@ export const Navbar = () => {
               sx={{ mr: 1, color: "primary", height: 30, width: "2px" }}
             />
             <CalendarPopper />
-            <Divider
-              orientation="vertical"
-              sx={{ ml: 1, color: "primary", height: 30, width: "2px" }}
-            />
-            <Divider orientation="vertical" color="primary" />
+            {<CalendarPopper /> && (
+              <Divider
+                orientation="vertical"
+                sx={{ ml: 1, color: "primary", height: 30, width: "2px" }}
+              />
+            )}
             <NavbarItem
               icon={<Image src="/repo-icon.png" width={30} height={30} />}
               href="/manage-repos"

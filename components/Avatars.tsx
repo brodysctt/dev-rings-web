@@ -4,24 +4,26 @@ import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import Lottie from "react-lottie-player";
-import maleHoodieDev from "public/maleHoodieDev.json";
-import femaleHoodieDev from "public/femaleHoodieDev.json";
+import maleDev0 from "public/maleDev0.json";
+import femaleDev0 from "public/femaleDev0.json";
+import maleDev1 from "public/maleDev1.json";
+import femaleDev1 from "public/femaleDev1.json";
+import maleDev2 from "public/maleDev2.json";
+import femaleDev2 from "public/femaleDev2.json";
+import maleDev3 from "public/maleDev3.json";
+import femaleDev3 from "public/femaleDev3.json";
 import { useAuth } from "@lib/firebase/auth";
 import { setAvatarId, useUserDoc } from "@lib/firebase/firestore";
 
 export const AVATARS = [
-  ["👨‍💻", maleHoodieDev],
-  ["👩‍💻", femaleHoodieDev],
-  ["👨🏻‍💻", maleHoodieDev],
-  ["👩🏻‍💻", femaleHoodieDev],
-  ["🧑🏼‍💻", maleHoodieDev],
-  ["👩🏼‍💻", femaleHoodieDev],
-  ["👨🏽‍💻", maleHoodieDev],
-  ["👩🏽‍💻", femaleHoodieDev],
-  // ["👨🏾‍💻", ],
-  // ["👩🏾‍💻", ],
-  // ["👨🏿‍💻", ],
-  // ["👩🏿‍💻", ],
+  ["👨🏻‍💻", maleDev0],
+  ["👩🏻‍💻", femaleDev0],
+  ["👨🏽‍💻", maleDev1],
+  ["👩🏽‍💻", femaleDev1],
+  ["👨🏾‍💻", maleDev2],
+  ["👩🏾‍💻", femaleDev2],
+  ["👨🏿‍💻", maleDev3],
+  ["👩🏿‍💻", femaleDev3],
 ];
 
 export const Avatar = ({ size = 500 }: { size?: number }) => {
