@@ -122,7 +122,13 @@ const GoalInput = ({
       placeholder={
         !dailyGoals ? null : isCommits ? dailyGoals.commits : dailyGoals.prs
       }
-      sx={{ width: 120, mb: 2 }}
+      sx={{
+        width: 120,
+        mb: 2,
+        "& .MuiFormLabel-root": {
+          zIndex: 0,
+        },
+      }}
     />
   );
 };
