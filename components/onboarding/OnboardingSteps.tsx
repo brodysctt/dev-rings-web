@@ -101,7 +101,7 @@ const Panel: FC<IProps> = ({ activeStep, hero, children }) => {
       width="100%"
     >
       {isAvatarSelect ? (
-        <AvatarSelect>{children}</AvatarSelect>
+        <AvatarSelectPanel>{children}</AvatarSelectPanel>
       ) : (
         <Stack justifyContent="center" alignItems="flex-start" mr={3}>
           {children}
@@ -112,7 +112,7 @@ const Panel: FC<IProps> = ({ activeStep, hero, children }) => {
   );
 };
 
-const AvatarSelect: FC = ({ children }) => (
+const AvatarSelectPanel: FC = ({ children }) => (
   <Stack alignItems="center" width="100%">
     <Header
       text={`Every great developer needs a great avatar`}
