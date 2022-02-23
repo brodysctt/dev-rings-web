@@ -6,4 +6,5 @@ export * from "./Avatars";
 export * from "./Header";
 export * from "./Navbar";
 export * from "./ManageGoals";
+export * from "./NewTimezoneAlert";
 export * from "./PopIt";
