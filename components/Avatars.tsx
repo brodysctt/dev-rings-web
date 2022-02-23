@@ -4,26 +4,36 @@ import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import Lottie from "react-lottie-player";
-import maleDev0 from "public/maleDev0.json";
-import femaleDev0 from "public/femaleDev0.json";
-import maleDev1 from "public/maleDev1.json";
-import femaleDev1 from "public/femaleDev1.json";
-import maleDev2 from "public/maleDev2.json";
-import femaleDev2 from "public/femaleDev2.json";
-import maleDev3 from "public/maleDev3.json";
-import femaleDev3 from "public/femaleDev3.json";
+import avatar0 from "public/avatar0.json";
+import avatar1 from "public/avatar1.json";
+import avatar2 from "public/avatar2.json";
+import avatar3 from "public/avatar3.json";
+import avatar4 from "public/avatar4.json";
+import avatar5 from "public/avatar5.json";
+import avatar6 from "public/avatar6.json";
+import avatar7 from "public/avatar7.json";
 import { useAuth } from "@lib/firebase/auth";
 import { setAvatarId, useUserDoc } from "@lib/firebase/firestore";
 
-export const AVATARS = [
-  ["👨🏻‍💻", maleDev0],
-  ["👩🏻‍💻", femaleDev0],
-  ["👨🏽‍💻", maleDev1],
-  ["👩🏽‍💻", femaleDev1],
-  ["👨🏾‍💻", maleDev2],
-  ["👩🏾‍💻", femaleDev2],
-  ["👨🏿‍💻", maleDev3],
-  ["👩🏿‍💻", femaleDev3],
+type AvatarJson =
+  | typeof avatar0
+  | typeof avatar1
+  | typeof avatar2
+  | typeof avatar3
+  | typeof avatar4
+  | typeof avatar5
+  | typeof avatar6
+  | typeof avatar7;
+
+export const AVATARS: Array<[string, AvatarJson]> = [
+  ["avatar0", avatar0],
+  ["avatar1", avatar1],
+  ["avatar2", avatar2],
+  ["avatar3", avatar3],
+  ["avatar4", avatar4],
+  ["avatar5", avatar5],
+  ["avatar6", avatar6],
+  ["avatar7", avatar7],
 ];
 
 export const Avatar = ({ size = 500 }: { size?: number }) => {
@@ -35,15 +45,12 @@ export const Avatar = ({ size = 500 }: { size?: number }) => {
   );
   return (
     <Box height={size} width={size}>
-      {/*
-      // @ts-ignore */}
       <Lottie loop animationData={lottieJson} play speed={0.7} />
     </Box>
   );
 };
 
-// TODO: This needs to use the Avatar component
-export const AvatarCarousel = ({ size = 400 }: { size?: number }) => {
+export const AvatarSelect = ({ size = 400 }: { size?: number }) => {
   const userId = useAuth();
   const userData = useUserDoc();
   if (!userId || !userData) return null;
@@ -57,7 +64,7 @@ export const AvatarCarousel = ({ size = 400 }: { size?: number }) => {
             <Stack alignItems="center">
               <Button
                 disableRipple
-                onClick={async () => await setAvatarId(userId, id as string)}
+                onClick={async () => await setAvatarId(userId, id)}
                 sx={{
                   border: 1,
                   borderColor: isCurrentAvatar ? "primary.main" : "white",
@@ -65,8 +72,6 @@ export const AvatarCarousel = ({ size = 400 }: { size?: number }) => {
               >
                 <Stack>
                   <Box height={size} width={size}>
-                    {/*
-                    // @ts-ignore */}
                     <Lottie loop animationData={lottieJson} play speed={0.7} />
                   </Box>
                 </Stack>

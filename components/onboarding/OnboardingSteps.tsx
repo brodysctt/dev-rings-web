@@ -4,7 +4,7 @@ import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
 import {
   Avatar,
-  AvatarCarousel,
+  AvatarSelect,
   Header,
   ManagePublicRepos,
   ManageGoals,
@@ -49,7 +49,7 @@ export const OnboardingSteps = ({ activeStep, onSubmit }: Props) => {
       hero: <ProgressRing size={300} />,
     },
     {
-      body: <AvatarCarousel size={300} />,
+      body: <AvatarSelect size={300} />,
     },
     {
       body: (
