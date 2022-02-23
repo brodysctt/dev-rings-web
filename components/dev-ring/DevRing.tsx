@@ -39,7 +39,7 @@ export const DevRing: FC<Props> = (props) => {
                 boxShadow: "1px 2px #EAEDFA",
               }}
             >
-              <ManageGoals isToday />
+              <ManageGoals />
             </Box>
           )}
         </Grid>

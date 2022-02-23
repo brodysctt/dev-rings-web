@@ -62,7 +62,7 @@ export const OnboardingSteps = ({ activeStep, onSubmit }: Props) => {
           <Typography align="center" color="text.secondary" mb={2}>
             {`How many contributions will you make in a typical day?`}
           </Typography>
-          <ManageGoals />
+          <ManageGoals isOnboarding />
         </>
       ),
       hero: <Avatar size={400} />,
