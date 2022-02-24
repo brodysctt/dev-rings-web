@@ -21,9 +21,8 @@ export const ManageGoals = ({ isOnboarding = false }: Props) => {
   if (!userId) return null;
 
   const handleGoalsSubmit = async () => {
-    if (!commits || !prs) return;
-    await setGoal(userId, commits, "commits");
-    await setGoal(userId, prs, "prs");
+    if (commits) await setGoal(userId, commits, "commits");
+    if (prs) await setGoal(userId, prs, "prs");
     toast.success(`Goals successfully saved`);
   };
 
@@ -38,7 +37,7 @@ export const ManageGoals = ({ isOnboarding = false }: Props) => {
         <GoalInput type="prs" setGoalState={setPrs} />
       </Stack>
       <Button
-        disabled={!commits || !prs}
+        disabled={!commits && !prs}
         variant="contained"
         onClick={handleGoalsSubmit}
         sx={{ width: 250 }}
