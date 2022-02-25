@@ -10,31 +10,36 @@ import { CommitSvg, PRSvg } from "components";
 import { toast } from "react-toastify";
 
 type GoalState = number | null;
+interface Props {
+  isOnboarding?: boolean;
+}
 
-export const ManageGoals = ({ isToday = false }: { isToday?: boolean }) => {
+export const ManageGoals = ({ isOnboarding = false }: Props) => {
   const [commits, setCommits] = useState<GoalState>(null);
   const [prs, setPrs] = useState<GoalState>(null);
   const userId = useAuth();
   if (!userId) return null;
 
+  const handleGoalsSubmit = async () => {
+    if (commits) await setGoal(userId, commits, "commits");
+    if (prs) await setGoal(userId, prs, "prs");
+    toast.success(`Goals successfully saved`);
+  };
+
   return (
     <Stack justifyContent="space-between" alignItems="center" mt={2}>
       <Stack direction="row" justifyContent="space-between" width={250}>
         <GoalInput
-          autoFocus={!isToday}
+          autoFocus={isOnboarding}
           type="commits"
           setGoalState={setCommits}
         />
         <GoalInput type="prs" setGoalState={setPrs} />
       </Stack>
       <Button
-        disabled={!commits || !prs}
+        disabled={!commits && !prs}
         variant="contained"
-        onClick={async () => {
-          await setGoal(userId, commits as number, "commits");
-          await setGoal(userId, prs as number, "prs");
-          toast.success(`Goals successfully saved`);
-        }}
+        onClick={handleGoalsSubmit}
         sx={{ width: 250 }}
       >{`Save goals`}</Button>
     </Stack>
@@ -43,14 +48,12 @@ export const ManageGoals = ({ isToday = false }: { isToday?: boolean }) => {
 
 interface GoalInputProps {
   autoFocus?: boolean;
-  disabled?: boolean;
   setGoalState: Dispatch<SetStateAction<GoalState>>;
   type: "commits" | "prs";
 }
 
 const GoalInput = ({
   autoFocus = false,
-  disabled = false,
   type,
   setGoalState,
 }: GoalInputProps) => {
@@ -59,7 +62,6 @@ const GoalInput = ({
   const userData = useUserDoc();
   if (!userId || !userData) return null;
   const { dailyGoals } = userData;
-  console.dir(dailyGoals);
 
   const isCommits = type === "commits";
 
@@ -82,7 +84,6 @@ const GoalInput = ({
       onKeyPress={(kp) => {
         if (!/[0-9].*/.test(kp.key)) kp.preventDefault();
       }}
-      disabled={disabled}
       autoFocus={autoFocus}
       label={isCommits ? "Commits" : "Pull requests"}
       color={isCommits ? "primary" : "secondary"}
@@ -120,7 +121,13 @@ const GoalInput = ({
       placeholder={
         !dailyGoals ? null : isCommits ? dailyGoals.commits : dailyGoals.prs
       }
-      sx={{ width: 120, mb: 2 }}
+      sx={{
+        width: 120,
+        mb: 2,
+        "& .MuiFormLabel-root": {
+          zIndex: 0,
+        },
+      }}
     />
   );
 };

@@ -1,8 +1,10 @@
 import { useEffect } from "react";
 import Image from "next/image";
 import { toast } from "react-toastify";
-import { Box, Typography, Button } from "@mui/material";
-import type { SxProps } from "@mui/system";
+import Box from "@mui/material/Box";
+import Stack from "@mui/material/Stack";
+import Typography from "@mui/material/Typography";
+import Button from "@mui/material/Button";
 import { dayjs, isNewTimezone } from "@lib/dayjs";
 import { useAuth } from "@lib/firebase/auth";
 import { setTimezone } from "@lib/firebase/firestore";
@@ -13,7 +15,7 @@ export const NewTimezoneAlert = ({ tz }: { tz: string }) => {
     if (!userId) return;
     if (isNewTimezone(tz)) {
       toast(
-        <Box sx={containerSx}>
+        <Stack>
           <Box sx={{ display: "flex", alignItems: "center", mb: 2 }}>
             <Typography color="primary.main" sx={{ mr: 0.5 }}>
               {`New timezone detected`}
@@ -24,7 +26,7 @@ export const NewTimezoneAlert = ({ tz }: { tz: string }) => {
             variant="contained"
             onClick={() => setTimezone(userId, dayjs.tz.guess())}
           >{`change to ${dayjs.tz.guess()}`}</Button>
-        </Box>,
+        </Stack>,
         {
           autoClose: false,
           hideProgressBar: true,
@@ -34,10 +36,3 @@ export const NewTimezoneAlert = ({ tz }: { tz: string }) => {
   }, []);
   return null;
 };
-
-const containerSx = {
-  display: "flex",
-  flexDirection: "column",
-  justifyContent: "center",
-  alignItems: "center",
-} as SxProps;

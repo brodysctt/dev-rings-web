@@ -4,7 +4,7 @@ import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
 import {
   Avatar,
-  AvatarCarousel,
+  AvatarSelect,
   Header,
   ManagePublicRepos,
   ManageGoals,
@@ -49,7 +49,7 @@ export const OnboardingSteps = ({ activeStep, onSubmit }: Props) => {
       hero: <ProgressRing size={300} />,
     },
     {
-      body: <AvatarCarousel size={300} />,
+      body: <AvatarSelect size={300} />,
     },
     {
       body: (
@@ -62,7 +62,7 @@ export const OnboardingSteps = ({ activeStep, onSubmit }: Props) => {
           <Typography align="center" color="text.secondary" mb={2}>
             {`How many contributions will you make in a typical day?`}
           </Typography>
-          <ManageGoals />
+          <ManageGoals isOnboarding />
         </>
       ),
       hero: <Avatar size={400} />,
@@ -101,7 +101,7 @@ const Panel: FC<IProps> = ({ activeStep, hero, children }) => {
       width="100%"
     >
       {isAvatarSelect ? (
-        <AvatarSelect>{children}</AvatarSelect>
+        <AvatarSelectPanel>{children}</AvatarSelectPanel>
       ) : (
         <Stack justifyContent="center" alignItems="flex-start" mr={3}>
           {children}
@@ -112,7 +112,7 @@ const Panel: FC<IProps> = ({ activeStep, hero, children }) => {
   );
 };
 
-const AvatarSelect: FC = ({ children }) => (
+const AvatarSelectPanel: FC = ({ children }) => (
   <Stack alignItems="center" width="100%">
     <Header
       text={`Every great developer needs a great avatar`}

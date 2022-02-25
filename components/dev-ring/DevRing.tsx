@@ -28,8 +28,6 @@ export const DevRing: FC<Props> = (props) => {
             <Box
               sx={{
                 display: "inline-block",
-                position: "relative",
-                zIndex: -1,
                 alignSelf: "flex-end",
                 p: 2,
                 width: "auto",
@@ -39,7 +37,7 @@ export const DevRing: FC<Props> = (props) => {
                 boxShadow: "1px 2px #EAEDFA",
               }}
             >
-              <ManageGoals isToday />
+              <ManageGoals />
             </Box>
           )}
         </Grid>
