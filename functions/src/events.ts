@@ -3,13 +3,13 @@ import * as admin from "firebase-admin";
 import utc from "dayjs/plugin/utc";
 import timezone from "dayjs/plugin/timezone";
 import { db } from "./config";
-import { corsMiddleware } from "./middleware";
+import { cors } from "./cors";
 import dayjs from "dayjs";
 dayjs.extend(utc);
 dayjs.extend(timezone);
 
 export const incomingEventHandler = https.onRequest(async (req, res) => {
-  corsMiddleware(req, res, async () => {
+  cors(req, res, async () => {
     try {
       const eventType = req.header("X-GitHub-Event");
 

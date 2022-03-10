@@ -122,7 +122,13 @@ const TrackRepoInput = () => {
                 sx={{ mb: -2 }}
               />
             </Divider>
-            <Stack maxHeight={350} sx={{ overflowY: "scroll" }}>
+            <Stack
+              direction="row"
+              width="100%"
+              maxHeight={350}
+              mt={3}
+              sx={{ flexWrap: "wrap", overflowY: "scroll" }}
+            >
               {repos.map((repo, i) => {
                 if (isLoading && repoToDelete === repo)
                   return (
@@ -141,7 +147,12 @@ const TrackRepoInput = () => {
                   <Chip
                     key={i}
                     label={repo}
-                    sx={{ width: 150 }}
+                    sx={{
+                      justifyContent: "space-between",
+                      width: 160,
+                      mr: 1,
+                      mb: 1,
+                    }}
                     onDelete={async () => {
                       const repoAction = [repo, true, "delete"] as RepoAction;
                       setRepoToDelete(repo);
