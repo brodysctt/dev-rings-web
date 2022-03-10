@@ -1,14 +1,14 @@
 import { https, logger } from "firebase-functions";
 import axios from "axios";
 import { db } from "./config";
-import { corsMiddleware } from "./middleware";
+import { cors } from "./cors";
 
 const GITHUB_BASE_URL = "https://api.github.com";
 const WEBHOOK_EVENTS_URL =
   "https://us-central1-dev-rings.cloudfunctions.net/incomingEventHandler";
 
 export const createWebhookHandler = https.onRequest(async (req, res) => {
-  corsMiddleware(req, res, async () => {
+  cors(req, res, async () => {
     try {
       const { user, repo, token } = req.body;
       logger.log("Creating webhook...");
@@ -40,7 +40,7 @@ export const createWebhookHandler = https.onRequest(async (req, res) => {
 });
 
 export const deleteWebhookHandler = https.onRequest(async (req, res) => {
-  corsMiddleware(req, res, async () => {
+  cors(req, res, async () => {
     try {
       const { user, repo, hookId, token } = req.body;
       logger.log("Deleting webhook...");
