@@ -31,6 +31,8 @@ export const CalendarPopper = () => {
   useEffect(() => {
     if (!logs) return;
     const logsInView = filterLogs(logs as Log[], monthInView);
+    if (!logsInView.length) return;
+
     const days = formatLogs(logsInView, monthInView).map((log) => (
       <Grid key={log[0]} item xs={1} onClick={() => setClose(true)}>
         <DayTile log={log} />
