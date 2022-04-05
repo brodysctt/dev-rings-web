@@ -20,7 +20,11 @@ const Enter = () => {
   if (!userId || !userData)
     return (
       <Container>
-        <Stack height="90vh">
+        <Stack
+          justifyContent="center"
+          alignItems="center"
+          height={isMobile ? "80vh" : "100vh"}
+        >
           <ProgressRing size={isMobile ? 300 : 400} />
           <Typography
             variant={isMobile ? "h5" : "h4"}
