@@ -13,7 +13,7 @@ export const MobileGate = ({ children }: { children: ReactNode }) => {
 
   if (userId && isMobile)
     return (
-      <Stack justifyContent="center" alignItems="center" height="90vh">
+      <Stack justifyContent="center" alignItems="center" height="60vh">
         <Avatar size={320} />
         <Typography
           color="primary"
