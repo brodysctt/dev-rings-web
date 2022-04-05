@@ -1,6 +1,7 @@
 import { useRouter } from "next/router";
 import { useTheme } from "@mui/material/styles";
 import useMediaQuery from "@mui/material/useMediaQuery";
+import Container from "@mui/material/Container";
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
@@ -18,36 +19,33 @@ const Enter = () => {
 
   if (!userId || !userData)
     return (
-      <Stack
-        justifyContent="center"
-        alignItems="center"
-        height="100vh"
-        overflow="hidden"
-      >
-        <ProgressRing size={isMobile ? 300 : 400} />
-        <Typography
-          variant={isMobile ? "h5" : "h4"}
-          align="center"
-          sx={{ my: 5, color: "primary.main" }}
-        >
-          {`Build momentum on your coding journey`}
-        </Typography>
-        <Button
-          variant="contained"
-          onClick={githubSignIn}
-          size="large"
-          sx={{
-            display: "flex",
-            justifyContent: "space-between",
-            alignItems: "center",
-            height: 60,
-            width: 250,
-          }}
-        >
-          <GitHubIcon fontSize="large" />
-          <Typography fontSize={14}> Sign in with GitHub </Typography>
-        </Button>
-      </Stack>
+      <Container>
+        <Stack height="90vh">
+          <ProgressRing size={isMobile ? 300 : 400} />
+          <Typography
+            variant={isMobile ? "h5" : "h4"}
+            align="center"
+            sx={{ my: 5, color: "primary.main" }}
+          >
+            {`Build momentum on your coding journey`}
+          </Typography>
+          <Button
+            variant="contained"
+            onClick={githubSignIn}
+            size="large"
+            sx={{
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+              height: 60,
+              width: 250,
+            }}
+          >
+            <GitHubIcon fontSize="large" />
+            <Typography fontSize={14}> Sign in with GitHub </Typography>
+          </Button>
+        </Stack>
+      </Container>
     );
 
   const { isOnboarding } = userData;
