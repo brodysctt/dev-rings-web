@@ -4,6 +4,7 @@ export * from "./manage-repos";
 export * from "./onboarding";
 export * from "./Avatars";
 export * from "./Header";
+export * from "./MobileGate";
 export * from "./Navbar";
 export * from "./ManageGoals";
 export * from "./NewTimezoneAlert";

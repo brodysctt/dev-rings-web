@@ -4,7 +4,7 @@ import { ThemeProvider } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
 import { CacheProvider, EmotionCache } from "@emotion/react";
 import { theme, createEmotionCache } from "styles";
-import { Navbar } from "components";
+import { MobileGate, Navbar } from "components";
 import { AuthProvider } from "@lib/firebase/auth";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -27,7 +27,9 @@ const App = (props: Props) => {
         </Head>
         <AuthProvider>
           <Navbar />
-          <Component {...pageProps} />
+          <MobileGate>
+            <Component {...pageProps} />
+          </MobileGate>
           <ToastContainer position="top-center" hideProgressBar />
         </AuthProvider>
       </ThemeProvider>
