@@ -1,20 +1,29 @@
 import { useState } from "react";
+import Image from "next/image";
 import type { NextPage } from "next";
+import { useTheme } from "@mui/material/styles";
+import useMediaQuery from "@mui/material/useMediaQuery";
 import Stack from "@mui/material/Stack";
 import Box from "@mui/material/Box";
+import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import Stepper from "@mui/material/Stepper";
 import Step from "@mui/material/Step";
 import StepLabel from "@mui/material/StepLabel";
-import { OnboardingConfetti, OnboardingSteps } from "components";
+import { Avatar, OnboardingConfetti, OnboardingSteps } from "components";
 import { useCollection, useUserDoc } from "@lib/firebase/firestore";
 import type { Webhook } from "@lib/firebase/firestore";
 
 const Onboarding: NextPage = () => {
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down("md"));
   const [activeStep, setActiveStep] = useState(0);
   const webhooks = useCollection("webhooks") as Webhook[] | null;
   const userData = useUserDoc();
+
+  if (isMobile) return <MobileGate />;
   if (!userData) return null;
+
   const { avatarId, dailyGoals } = userData;
 
   const steps: Array<[string, boolean | null]> = [
@@ -77,3 +86,24 @@ const Onboarding: NextPage = () => {
 };
 
 export default Onboarding;
+
+const MobileGate = () => (
+  <Stack justifyContent="center" alignItems="center" height="80vh">
+    <Avatar size={320} />
+    <Typography
+      color="primary"
+      variant="h6"
+      align="center"
+      sx={{ whiteSpace: "pre-line" }}
+    >{`Dev Rings is optimized for desktop.`}</Typography>
+    <Stack flexDirection="row">
+      <Typography
+        color="primary"
+        variant="h6"
+        align="center"
+        sx={{ pr: 1 }}
+      >{`Log in there to get started`}</Typography>
+      <Image src="/blobhighfive.png" width={30} height={30} />
+    </Stack>
+  </Stack>
+);
