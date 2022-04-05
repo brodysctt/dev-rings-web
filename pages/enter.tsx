@@ -22,7 +22,7 @@ const Enter = () => {
         justifyContent="center"
         alignItems="center"
         height="100vh"
-        maxHeight="100vh"
+        overflow="hidden"
       >
         <ProgressRing size={isMobile ? 300 : 400} />
         <Typography
