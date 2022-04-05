@@ -1,4 +1,6 @@
 import { useRouter } from "next/router";
+import { useTheme } from "@mui/material/styles";
+import useMediaQuery from "@mui/material/useMediaQuery";
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
@@ -11,15 +13,35 @@ const Enter = () => {
   const router = useRouter();
   const userId = useAuth();
   const userData = useUserDoc();
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down("md"));
 
   if (!userId || !userData)
     return (
       <Stack justifyContent="center" alignItems="center" height="100vh">
-        <ProgressRing />
-        <Typography variant="h4" sx={{ my: 5, color: "primary.main" }}>
+        <ProgressRing size={isMobile ? 300 : 400} />
+        <Typography
+          variant={isMobile ? "h5" : "h4"}
+          align="center"
+          sx={{ my: 5, color: "primary.main" }}
+        >
           {`Build momentum on your coding journey`}
         </Typography>
-        <SignInButton />
+        <Button
+          variant="contained"
+          onClick={githubSignIn}
+          size="large"
+          sx={{
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+            height: 60,
+            width: 250,
+          }}
+        >
+          <GitHubIcon fontSize="large" />
+          <Typography fontSize={14}> Sign in with GitHub </Typography>
+        </Button>
       </Stack>
     );
 
@@ -33,21 +55,3 @@ const Enter = () => {
 };
 
 export default Enter;
-
-const SignInButton = () => (
-  <Button
-    variant="contained"
-    onClick={githubSignIn}
-    size="large"
-    sx={{
-      display: "flex",
-      justifyContent: "space-between",
-      alignItems: "center",
-      height: 60,
-      width: 250,
-    }}
-  >
-    <GitHubIcon fontSize="large" />
-    <Typography fontSize={14}> Sign in with GitHub </Typography>
-  </Button>
-);
