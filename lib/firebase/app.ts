@@ -1,4 +1,5 @@
 import { initializeApp } from "firebase/app";
+import { getAnalytics } from "firebase/analytics";
 
 const firebaseApp = initializeApp(
   {
@@ -12,5 +13,10 @@ const firebaseApp = initializeApp(
   },
   "dev-rings-client"
 );
+
+export const analytics = () => {
+  if (typeof window === "undefined") return null;
+  return getAnalytics(firebaseApp);
+};
 
 export default firebaseApp;

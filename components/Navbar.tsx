@@ -2,6 +2,7 @@ import type { FC } from "react";
 import { useRouter } from "next/router";
 import Image from "next/image";
 import Link from "next/link";
+import { useMobileBreakpoint } from "styles";
 import Container from "@mui/material/Container";
 import Grid from "@mui/material/Grid";
 import Stack from "@mui/material/Stack";
@@ -26,6 +27,8 @@ export const Navbar = () => {
   const router = useRouter();
   const userId = useAuth();
   const userData = useUserDoc();
+  const isMobile = useMobileBreakpoint();
+
   if (!userId || !userData) return null;
   const { isOnboarding, githubAvatarUrl } = userData;
 
@@ -48,7 +51,7 @@ export const Navbar = () => {
     { icon: <LogoutSvg />, name: "Sign out", onClick: signOutUser },
   ];
 
-  if (isOnboarding) return <OnboardingNavbar />;
+  if (isOnboarding || isMobile) return <SignOutNavbar />;
   return (
     <Container maxWidth="lg">
       <Grid container direction="row" mt={2}>
@@ -104,7 +107,7 @@ export const Navbar = () => {
   );
 };
 
-const OnboardingNavbar = () => (
+const SignOutNavbar = () => (
   <Container>
     <Stack direction="row" justifyContent="flex-end" mt={3}>
       <Tooltip title="Sign out">

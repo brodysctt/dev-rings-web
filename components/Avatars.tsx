@@ -39,6 +39,13 @@ export const AVATARS: Array<[string, AvatarJson]> = [
 export const Avatar = ({ size = 500 }: { size?: number }) => {
   const userData = useUserDoc();
   if (!userData) return null;
+  if (!userData.avatarId)
+    return (
+      <Box height={size} width={size}>
+        <Lottie loop animationData={avatar3} play speed={0.7} />
+      </Box>
+    );
+
   const { avatarId } = userData;
   const [lottieJson] = AVATARS.filter(([id]) => id === avatarId).map(
     ([, lottieJson]) => lottieJson
