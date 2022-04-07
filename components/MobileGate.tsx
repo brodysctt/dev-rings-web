@@ -1,6 +1,5 @@
 import type { ReactNode } from "react";
-import { useTheme } from "@mui/material/styles";
-import useMediaQuery from "@mui/material/useMediaQuery";
+import { useMobileBreakpoint } from "styles";
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
 import { useAuth } from "@lib/firebase/auth";
@@ -8,7 +7,7 @@ import { Avatar, Header } from "components";
 
 export const MobileGate = ({ children }: { children: ReactNode }) => {
   const userId = useAuth();
-  const isMobile = useMobileGate();
+  const isMobile = useMobileBreakpoint();
 
   if (userId && isMobile)
     return (
@@ -28,10 +27,4 @@ export const MobileGate = ({ children }: { children: ReactNode }) => {
     );
 
   return <>{children}</>;
-};
-
-export const useMobileGate = () => {
-  const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down("md"));
-  return isMobile;
 };

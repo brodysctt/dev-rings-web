@@ -2,6 +2,7 @@ import type { FC } from "react";
 import { useRouter } from "next/router";
 import Image from "next/image";
 import Link from "next/link";
+import { useMobileBreakpoint } from "styles";
 import Container from "@mui/material/Container";
 import Grid from "@mui/material/Grid";
 import Stack from "@mui/material/Stack";
@@ -16,7 +17,7 @@ import LogoutSvg from "@mui/icons-material/Logout";
 import AvatarSvg from "@mui/icons-material/AccountCircle";
 import { useAuth, signOutUser } from "@lib/firebase/auth";
 import { useUserDoc } from "@lib/firebase/firestore";
-import { CalendarPopper, ProgressRing, useMobileGate } from "components";
+import { CalendarPopper, ProgressRing } from "components";
 import { openUrl } from "utils";
 import Typography from "@mui/material/Typography";
 import Avatar from "@mui/material/Avatar";
@@ -26,7 +27,7 @@ export const Navbar = () => {
   const router = useRouter();
   const userId = useAuth();
   const userData = useUserDoc();
-  const isMobile = useMobileGate();
+  const isMobile = useMobileBreakpoint();
 
   if (!userId || !userData) return null;
   const { isOnboarding, githubAvatarUrl } = userData;

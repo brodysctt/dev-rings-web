@@ -1,6 +1,5 @@
 import { useRouter } from "next/router";
-import { useTheme } from "@mui/material/styles";
-import useMediaQuery from "@mui/material/useMediaQuery";
+import { useMobileBreakpoint } from "styles";
 import Container from "@mui/material/Container";
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
@@ -14,8 +13,7 @@ const Enter = () => {
   const router = useRouter();
   const userId = useAuth();
   const userData = useUserDoc();
-  const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down("md"));
+  const isMobile = useMobileBreakpoint();
 
   if (!userId || !userData)
     return (
