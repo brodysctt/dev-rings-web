@@ -16,7 +16,7 @@ import LogoutSvg from "@mui/icons-material/Logout";
 import AvatarSvg from "@mui/icons-material/AccountCircle";
 import { useAuth, signOutUser } from "@lib/firebase/auth";
 import { useUserDoc } from "@lib/firebase/firestore";
-import { CalendarPopper, ProgressRing } from "components";
+import { CalendarPopper, ProgressRing, useMobileGate } from "components";
 import { openUrl } from "utils";
 import Typography from "@mui/material/Typography";
 import Avatar from "@mui/material/Avatar";
@@ -26,6 +26,8 @@ export const Navbar = () => {
   const router = useRouter();
   const userId = useAuth();
   const userData = useUserDoc();
+  const isMobile = useMobileGate();
+
   if (!userId || !userData) return null;
   const { isOnboarding, githubAvatarUrl } = userData;
 
@@ -48,7 +50,7 @@ export const Navbar = () => {
     { icon: <LogoutSvg />, name: "Sign out", onClick: signOutUser },
   ];
 
-  if (isOnboarding) return <OnboardingNavbar />;
+  if (isOnboarding || isMobile) return <SignOutNavbar />;
   return (
     <Container maxWidth="lg">
       <Grid container direction="row" mt={2}>
@@ -104,7 +106,7 @@ export const Navbar = () => {
   );
 };
 
-const OnboardingNavbar = () => (
+const SignOutNavbar = () => (
   <Container>
     <Stack direction="row" justifyContent="flex-end" mt={3}>
       <Tooltip title="Sign out">

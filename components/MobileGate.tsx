@@ -8,8 +8,7 @@ import { Avatar, Header } from "components";
 
 export const MobileGate = ({ children }: { children: ReactNode }) => {
   const userId = useAuth();
-  const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down("md"));
+  const isMobile = useMobileGate();
 
   if (userId && isMobile)
     return (
@@ -29,4 +28,10 @@ export const MobileGate = ({ children }: { children: ReactNode }) => {
     );
 
   return <>{children}</>;
+};
+
+export const useMobileGate = () => {
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down("md"));
+  return isMobile;
 };
